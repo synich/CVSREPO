@@ -1,0 +1,212 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.8
+date	2017.10.07.07.38.10;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.10.02.16.26.35;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.10.01.16.33.26;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.09.30.15.16.48;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.09.27.15.53.17;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.09.25.16.26.26;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.09.24.16.33.49;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.24.14.50.45;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@INSERT: add struct support
+@
+text
+@/* Reverse polish notation calculator. */
+
+%{
+#include <stdio.h>
+#include "fsm.h"
+
+int yylex();
+extern int yylineno;
+
+void yyerror(const char* str){
+  printf("\nParse error at line:%d, %s\n",yylineno, str);
+}
+
+%}
+
+%union {
+  char* val;
+}
+
+%token <val> T_BGRPC T_EDRPC T_METHOD T_RESULT
+%token <val> T_VARNAME T_NULL T_INT T_DIMEN T_STRUCT
+
+%type <val> block params declvars onevar
+
+%% /* Grammar rules and actions follow */
+
+block: T_BGRPC T_METHOD params T_RESULT params T_EDRPC  {
+  p2a_reach(9);
+  }
+;
+
+params: '{' declvars '}' { }
+      | T_NULL { }
+;
+
+declvars: onevar {}
+        | declvars onevar {}
+;
+
+onevar: T_INT T_VARNAME ';' {p2a_reach(1);}
+      | T_INT T_VARNAME T_DIMEN ';' {p2a_reach(2);}
+      | T_STRUCT '{' declvars '}' ';' {p2a_reach(531);}
+;
+%%
+@
+
+
+1.7
+log
+@INSERT: support char[N] as string
+@
+text
+@d21 1
+a21 1
+%token <val> T_VARNAME T_NULL T_INT T_DIMEN
+d42 1
+@
+
+
+1.6
+log
+@UPDATE: add in/out param, can produce rough output
+@
+text
+@d21 1
+a21 1
+%token <val> T_VARNAME T_NULL T_INT
+d41 1
+@
+
+
+1.5
+log
+@UPDATE: control lua with macro, use function instead of hardcord script name, extend js parse
+@
+text
+@d21 1
+a21 1
+%token <val> T_VARNAME T_INT T_CHAR
+d28 1
+a28 1
+  p2a_reachState(9);
+d32 2
+a33 2
+params: '{' declvars '}' { p2a_reachState(2);}
+      | '{' '}' { p2a_reachState(2);}
+d40 1
+a40 2
+onevar: T_INT T_VARNAME ';' {p2a_reachState(1);}
+      | T_CHAR T_VARNAME ';' {}
+@
+
+
+1.4
+log
+@UPDATE: pass flex token to script, bison parse to trigger script, drop script fini
+@
+text
+@d32 2
+a33 2
+params: '{' declvars '}' { $$ = $2;}
+      | '{' '}' {}
+@
+
+
+1.3
+log
+@UPDATE: add lua/js script interactive
+@
+text
+@d20 2
+a21 1
+%token <val> T_BGRPC T_METHOD T_RESULT T_VARNAME T_INT T_CHAR T_EDRPC
+d28 1
+a28 2
+    p2a_findBlock($2);
+    free($2);
+d40 1
+a40 1
+onevar: T_INT T_VARNAME ';' {free($1);free($2);}
+@
+
+
+1.2
+log
+@UPDATE: 1.add deal option 2.add proto result parse
+@
+text
+@d5 1
+d26 4
+a29 1
+block: T_BGRPC T_METHOD params T_RESULT params T_EDRPC  {puts("P2A PARSING DONE");}
+d40 1
+a40 1
+onevar: T_INT T_VARNAME ';' {}
+@
+
+
+1.1
+log
+@INSERT: Init release, Minimal Valuable Product
+@
+text
+@d10 1
+a10 1
+  printf("\nBison error at line:%d, %s\n",yylineno, str);
+d19 1
+a19 1
+%token <val> T_BGRPC T_METHOD T_VARNAME T_INT T_CHAR T_EDRPC
+d25 1
+a25 1
+block: T_BGRPC T_METHOD params T_EDRPC  {puts("P2A PARING DONE");}
+d29 1
+@
+

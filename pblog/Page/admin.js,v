@@ -1,0 +1,66 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2020.05.30.05.27.24;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	bf75ed1eebc0000;
+
+1.1
+date	2019.11.14.13.22.36;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@UPDATE: repo rebuild
+@
+text
+@//////////////////// admin edit ////////////////////////////
+/// get markdown original text
+function getBlog(whichDay, editId, tagId){
+  var eday = document.getElementById(whichDay);
+  var md = document.getElementById(editId);
+  var tag = document.getElementById(tagId);
+  getHttp("/blog/edit/"+eday.value, '', function(data, status){
+    var json = eval('('+data+')');
+    md.value = json[0];//.slice(1);//Dont why has a \n before,strip it
+    tag.value = json[1];
+  });
+}
+
+//\param[in] whichDay like 170518, editId blog content, tagId tag
+function saveBlog(whichDay, editId, tagId){
+  var eday = document.getElementById(whichDay);
+  var md = document.getElementById(editId);
+  var tag = document.getElementById(tagId);
+  var mdText = md.value;
+  var tagText = tag.value;
+  postHttp("/admin/article/"+eday.value,
+    { ctx : mdText, tag : tagText },
+    function(data, status){ alert(data); }
+  );
+}
+
+@
+
+
+1.1
+log
+@INSERT: init release html and js
+@
+text
+@a1 1
+
+@
+

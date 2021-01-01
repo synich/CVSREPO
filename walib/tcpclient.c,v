@@ -1,0 +1,333 @@
+head	1.9;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.9
+date	2019.01.17.16.17.37;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2019.01.02.22.49.56;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.12.30.13.24.24;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.12.30.11.54.30;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.12.25.13.49.03;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.12.23.03.16.40;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.11.29.12.29.58;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.11.19.15.27.34;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.11.18.12.23.26;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@UPDATE: fix windows fd will stay CLOSE_WAIT state bug
+@
+text
+@#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#else
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#endif
+#include <unistd.h>
+#include "walib.h"
+
+int initsock(){
+  int err = 0;
+#ifdef _WIN32
+  WORD wVersionRequested;
+  WSADATA wsaData;
+  wVersionRequested = MAKEWORD( 2, 2 );
+  err = WSAStartup( wVersionRequested, &wsaData );
+#endif
+  return err;
+}
+
+void finisock(){
+#ifdef _WIN32
+  WSACleanup();
+#endif
+}
+
+int opentcp(char* ip, unsigned short port){
+	int clientSocket;
+	struct sockaddr_in serverAddr;
+	if((clientSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	{
+		perror("create socket fail");
+		return -1;
+	}
+
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(port);
+	serverAddr.sin_addr.s_addr = inet_addr(ip);
+	if(connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+	{
+		perror("connect fail");
+		return -1;
+	}
+
+  return clientSocket;
+}
+
+struct stTcpOption {
+	int rcvtimeo;
+};
+
+static struct stTcpOption sv;
+
+void wa_settcpopt(int rcvtimeo){
+	if (rcvtimeo>0) {
+		sv.rcvtimeo = rcvtimeo;
+	}
+}
+
+static int httpreq(int fd, char* sendbuf, char* recvbuf, int len){
+  int iDataNum;
+  int iTotalNum = 0;
+  char tmpBuf[256];
+
+  send(fd, sendbuf, strlen(sendbuf), 0);
+  recvbuf[0] = 0;
+  fd_set set;
+  struct timeval tout;
+  tout.tv_sec = 1;
+  tout.tv_usec = 0;
+  if (sv.rcvtimeo != 0) {
+	tout.tv_sec = sv.rcvtimeo;
+  }
+  while(1){
+	FD_ZERO(&set);
+	FD_SET(fd, &set);
+	int sr = select(fd+1, &set, NULL, NULL, &tout);
+	if ( 0<sr ) {
+	  if ( FD_ISSET(fd, &set) ) {
+		iDataNum = recv(fd, tmpBuf, sizeof(tmpBuf)-1, 0);
+		tmpBuf[iDataNum] = 0;
+		iTotalNum += iDataNum;
+		if ( iDataNum <= 0) {
+		  break;
+		}
+		if (iTotalNum < len) {
+		  strncat(recvbuf, tmpBuf, iDataNum);
+		} else {
+		  strncat(recvbuf, tmpBuf, len-strlen(recvbuf)-1);
+		  break;
+		}
+	  } else {
+		break;
+	  }
+	} else {//sr<=0 is error, either timeout or other error
+		return sr-1;
+	}
+  }
+  return strlen(recvbuf);
+}
+
+int http10(char* ip, int port, char* mthurl, char* header, char* body,
+  char* recvbuf, int len){
+  int fd = opentcp(ip, (unsigned short)port);
+  int ret = -1;
+  int bodylen = body?strlen(body):0;
+  if (fd != -1) {
+    int sndlen = strlen(mthurl)+ (header?strlen(header):0) + bodylen;
+    char* sendbuf = malloc(sndlen+128);
+	/*Some server response but not close sock, so use read timeout
+	struct timeval tout;
+	tout.tv_sec = 2;
+	tout.tv_usec = 0;
+	setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (void*)&tout, sizeof(tout) );*/
+    sprintf(sendbuf, "%s HTTP/1.0\r\nHost: %s:%d\r\nContent-Length: %d\r\nConnection: Close\r\n%s\r\n%s",
+      mthurl, ip, port, bodylen, header?header:"", body?body:"");
+    ret = httpreq(fd, sendbuf, recvbuf, len);
+    free(sendbuf);
+    shutdown(fd, 2);/*windows close not terminate TCP state, use shutdown */
+    close(fd);
+  }
+  return ret;
+}
+@
+
+
+1.8
+log
+@UPDATE: not read when select timeout, avoid some crash situation
+@
+text
+@d122 1
+@
+
+
+1.7
+log
+@UPDATE: remove read hint
+@
+text
+@d58 3
+a60 1
+	sv.rcvtimeo = rcvtimeo;
+d71 6
+d80 3
+a82 8
+	struct timeval tout;
+	tout.tv_sec = 1;
+	if (sv.rcvtimeo != 0) {
+		tout.tv_sec = sv.rcvtimeo;
+	}
+	tout.tv_usec = 0;
+	select(fd+1, &set, NULL, NULL, &tout);
+    if ( FD_ISSET(fd, &set) ) {
+d95 1
+a95 1
+	} else {
+d97 3
+a100 1
+    
+@
+
+
+1.6
+log
+@UPDATE: SO_RCVTIMEO make win7 crash sometimes, use select instead
+@
+text
+@a80 1
+		printf("recv:%d\n", iDataNum);
+@
+
+
+1.5
+log
+@UPDATE: fixed http server not close socket, req in endless loop
+@
+text
+@d6 1
+a9 2
+#include <stdio.h>
+#include <string.h>
+d51 10
+d68 1
+d70 27
+a96 13
+    /*will block when long connection*/
+    iDataNum = recv(fd, tmpBuf, sizeof(tmpBuf)-1, 0);
+    tmpBuf[iDataNum] = 0;
+    iTotalNum += iDataNum;
+    if ( iDataNum <= 0) {
+      break;
+    }
+    if (iTotalNum < len) {
+      strncat(recvbuf, tmpBuf, iDataNum);
+    } else {
+      strncat(recvbuf, tmpBuf, len-strlen(recvbuf)-1);
+      break;
+    }
+d109 1
+a109 1
+	/*Some server response but not close sock, so use read timeout*/
+d113 1
+a113 1
+	setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (void*)&tout, sizeof(tout) );
+@
+
+
+1.4
+log
+@UPDATE: add _WIN32
+@
+text
+@d36 1
+a36 1
+		perror("socket");
+d45 1
+a45 1
+		perror("connect");
+d85 5
+a94 3
+    return ret;
+  } else {
+    return ret;
+d96 1
+@
+
+
+1.3
+log
+@UPDATE: make available in c++
+@
+text
+@d15 2
+a18 1
+  int err;
+d21 1
+d26 1
+d28 1
+@
+
+
+1.2
+log
+@UPDATE: rename to http10 and optimize
+@
+text
+@d12 1
+@
+
+
+1.1
+log
+@INSERT: release my c lib
+@
+text
+@d47 1
+a47 1
+int httpreq(int fd, char* sendbuf, char* recvbuf, int len){
+d55 1
+d72 2
+a73 1
+int httpShort(char* ip, int port, char* sendbuf, char* recvbuf, int len){
+d76 1
+d78 4
+d83 1
+@
+

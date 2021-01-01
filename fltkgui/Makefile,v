@@ -1,0 +1,38 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2018.12.16.06.54.47;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: add fltk gui scaffold
+@
+text
+@CXX=g++
+CFLAGS=-c -ID:\code\op3rd\include
+# -mwindows
+LDFLAGS=-LD:\code\op3rd\lib64 -lfltk -lole32 -lcomctl32 -luuid -lgdi32 -lcomdlg32
+OBJS=obj/cbfunc.o obj/main.o
+ICON=ico.res
+
+all: ${OBJS}
+	${CXX} ${OBJS} ${ICON} ${LDFLAGS}
+
+obj/%.o : %.cpp
+	$(CXX) $(CFLAGS) -o $@@ $<
+
+${ICON} : ico.rc
+	windres -i ico.rc -o $@@ -O coff
+@

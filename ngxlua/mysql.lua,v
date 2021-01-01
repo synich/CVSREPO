@@ -1,0 +1,65 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2019.06.22.09.57.28;	author WIN7;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.06.11.14.21.56;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@UPDATE: make insert handy
+@
+text
+@local mysql_pool = require 'applua/mysql_pool'
+local _M = {}
+
+_M.query = function ()
+  local ok, res, state = mysql_pool:query("SELECT name FROM beauty WHERE id=1;")
+  if not ok then return res end
+  local ret = ''
+  for k,v in ipairs(res) do
+    ret = ret .. k .. ' : '..v.name.. "\n"
+  end
+  return ret
+end
+
+_M.exec = function ()
+  local val = {name= 'haha' }
+  local ok, res, state = mysql_pool:insert( 'beauty', val )
+  if not ok then return res end
+  local ret = ''
+  for k,v in pairs(res) do
+    ret = ret .. k .. ' : '..v.. "\n"
+  end
+  return ret
+end
+
+return _M
+@
+
+
+1.1
+log
+@UPDATE: seperate function code and route code
+@
+text
+@d15 2
+a16 1
+  local ok, res, state = mysql_pool:query("INSERT INTO beauty(name) VALUES('wahaha');")
+@
+

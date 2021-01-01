@@ -1,0 +1,110 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@// @;
+
+
+1.1
+date	2018.12.16.06.54.47;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: add fltk gui scaffold
+@
+text
+@//
+// "$Id: texteditor-simple.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+//
+//	A simple example of Fl_Text_Editor
+//
+//	Fl_Text_Editor is unlike other FLTK widgets in that
+//	to work correctly, it must be assigned to an instance of an
+//	Fl_Text_Buffer.  The below shows using buffer() to connect
+//	the two classes together.
+//
+//	Note that the example can also be used to demonstrate
+//	Fl_Text_Display; just replace all instances of
+//	Fl_Text_Editor with Fl_Text_Display and rebuild.
+//
+
+#include "cbfunc.h"
+static stLogin sv_login;
+
+#define TRIMLINE(buf, fd) fgets(buf, sizeof(buf), fd);\
+  buf[strlen(buf)-1]=='\n'?buf[strlen(buf)-1]=0:0;
+
+void fl_layout(){
+  char ip[32] = {0};
+  char port[8] = {0};
+  char username[16] = {0};
+  char password[16] = {0};
+  FILE *fd = fopen("./address.txt", "r");
+
+  if (fd) {
+    TRIMLINE(ip, fd);
+    TRIMLINE(port, fd);
+    TRIMLINE(username, fd);
+    TRIMLINE(password, fd);
+    puts(ip);
+    fclose(fd);
+  }
+
+  Fl_Double_Window *win  = new Fl_Double_Window(800 , 600, "VideoCloudUrl");
+  Fl_Input        *wip   = new Fl_Input(10, 10, 120, 20);
+  Fl_Input        *wport = new Fl_Input(140, 10, 50, 20);
+  Fl_Input    *wusername = new Fl_Input(200, 10, 80, 20);
+  Fl_Input    *wpassword = new Fl_Input(290, 10, 90, 20);
+  Fl_Check_Button  *wlog = new Fl_Check_Button(390, 10, 40, 20, "login");
+  Fl_Choice        *wsel = new Fl_Choice(440, 10, 50, 20);
+  // Input
+  Fl_Text_Buffer   *buff = new Fl_Text_Buffer();
+  Fl_Text_Editor   *edit = new Fl_Text_Editor(10, 40, 740, 220);
+  // Output
+  Fl_Text_Buffer   *dbuff = new Fl_Text_Buffer();
+  Fl_Text_Display  *wdsp = new Fl_Text_Display(10, 270, 740, 320);
+  Fl_Button     *runbtn = new Fl_Button(760, 320, 30, 160, "run");
+
+  wip->value(ip);
+  wport->value(port);
+  wusername->value(username);
+  wpassword->value(password);
+  wlog->value(0);  // init is uncheck
+  wsel->add("RootOrg|Region");
+  edit->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
+  buff->text("Input HTTP request here\n");
+  edit->buffer(buff);		// attach the text buffer to our editor widget
+  wdsp->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
+  dbuff->text("response display here");
+  wdsp->buffer(dbuff);
+
+  sv_login.ip = wip;
+  sv_login.port = wport;
+  sv_login.user = wusername;
+  sv_login.passwd = wpassword;
+  sv_login.in = buff;
+  sv_login.out = dbuff;
+  wlog->callback(gf_cblogin, &sv_login);
+  wsel->callback(gf_cbselect, &sv_login);
+  runbtn->callback(gf_cbrun, &sv_login);
+
+  win->resizable(*edit);
+  win->show();
+}
+
+int main() {
+  fl_layout();
+  return(Fl::run());
+}
+
+//
+// End of "$Id: texteditor-simple.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+//
+@

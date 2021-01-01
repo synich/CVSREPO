@@ -1,0 +1,598 @@
+head	1.13;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.13
+date	2018.08.12.06.18.26;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.08.12.03.12.01;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.08.12.02.10.22;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.08.11.05.11.40;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.08.11.04.42.27;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.08.06.15.18.28;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.07.22.14.00.33;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.07.22.07.41.02;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.07.22.03.39.48;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.07.21.15.59.39;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.06.17.12.06.09;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.06.17.11.36.58;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.06.17.10.26.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@UPDATE: combine output to err into function
+@
+text
+@#include <stdio.h>
+#include <string.h>
+#include "forward.h"
+
+/* 1-lua 2-mujs */
+#define USE_SCRIPT 2
+
+#if USE_SCRIPT == 1
+#include "lauxlib.h"
+#include "lualib.h"
+#elif USE_SCRIPT == 2
+#include "mujs.h"
+#include "jslib.c"
+#endif
+
+static void put2err(const char* str){
+  fputs(str, stderr);
+  fputs("\n", stderr);
+}
+
+void scriptPush(void* vm, int major, const char* val){
+  int err = 0;
+#if USE_SCRIPT == 1
+  lua_State *L = (lua_State*)vm;
+  lua_getglobal(L, "push");
+  lua_pushinteger(L, major);
+  lua_pushstring(L, val);
+  err = lua_pcall(L, 2, 0, 0);
+  if (err) {
+    put2err(lua_tostring(L, 1));
+  }
+#elif USE_SCRIPT == 2
+  js_State *J = (js_State*)vm;
+  js_getglobal(J, "push");
+  js_pushnull(J);
+  js_pushnumber(J, (double)major);
+  js_pushstring(J, val);
+  err = js_pcall(J, 2);
+  if (err) {
+    put2err(js_trystring(J, -1, "call push error"));
+  }
+#endif
+}
+
+void scriptReduce(void* vm, int action){
+  int err = 0;
+#if USE_SCRIPT == 1
+  lua_State *L = (lua_State*)vm;
+  lua_getglobal(L, "reduce");
+  lua_pushinteger(L, action);
+  err = lua_pcall(L, 1, 0, 0);
+  if (err) {
+    put2err(lua_tostring(L, 1));
+  }
+#elif USE_SCRIPT == 2
+  js_State *J = (js_State*)vm;
+  js_getglobal(J, "reduce");
+  js_pushnull(J);
+  js_pushnumber(J, (double)action);
+  err = js_pcall(J, 1);
+  if (err) {
+    put2err(js_trystring(J, -1, "call reduce error"));
+  }
+#endif
+}
+
+void* scriptInit(int *err){
+#if USE_SCRIPT == 1
+  lua_State *L = (lua_State*)malloc(sizeof(lua_State*));
+
+  L = luaL_newstate();
+  luaL_openlibs(L);
+#ifdef AS_RELEASE
+#include "script_lua.c"
+  *err = luaL_dostring(L, s_script_lua_str);
+#else
+  *err = luaL_dofile(L, "script.lua");
+#endif
+  return (void*)L;
+
+#elif USE_SCRIPT == 2
+    js_State *J = (js_State*)malloc(sizeof(js_State*));
+    J = js_newstate(NULL, NULL, JS_STRICT);
+    js_openlibs(J);
+#ifdef AS_RELEASE
+#include "script_js.c"
+  *err = js_ploadstring(J, s_script_js_str);
+#else
+  *err = js_ploadfile(J, "script.js");
+#endif
+  if (0==*err) {
+    js_pushundefined(J);
+    *err = js_pcall(J, 0);
+    if (*err) {
+      put2err(js_trystring(J, -1, "JS Call Error"));
+    }
+  } else {
+    put2err(js_trystring(J, -1, "JS Load Error"));
+  }
+    return (void*)J;
+#endif
+}
+
+void scriptClean(void* vm){
+#if USE_SCRIPT == 1
+  lua_State *L = (lua_State*)vm;
+  lua_close(L);
+  free(vm);
+#elif USE_SCRIPT == 2
+  js_State *J = (js_State*)vm;
+  js_freestate(J);
+  free(vm);
+#endif
+}
+
+// Thanks to wren source file.
+// Reads the contents of the file at [path] and returns it as a heap allocated
+// string.
+//
+// Returns `NULL` if the path could not be found. Exits if it was found but
+// could not be read.
+static char* readFile(const char* path)
+{
+  FILE* file = fopen(path, "rb");
+  if (file == NULL) return NULL;
+
+  // Find out how big the file is.
+  fseek(file, 0L, SEEK_END);
+  size_t fileSize = ftell(file);
+  rewind(file);
+
+  // Allocate a buffer for it.
+  char* buffer = (char*)malloc(fileSize + 1);
+  if (buffer == NULL)
+  {
+    fprintf(stderr, "Could not read file \"%s\".\n", path);
+    exit(74);
+  }
+
+  // Read the entire file.
+  size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
+  if (bytesRead < fileSize)
+  {
+    fprintf(stderr, "Could not read file \"%s\".\n", path);
+    exit(74);
+  }
+
+  // Terminate the string.
+  buffer[bytesRead] = '\0';
+
+  fclose(file);
+  return buffer;
+}
+
+static void parseFile(const char* fname) {
+  char* src;
+  src = readFile(fname);
+  leleEvalString(src);
+  free(src);
+}
+
+static void usage(char* ename){
+  puts("Parser 2 Any. Use Lex & Lemon & Script");
+#ifndef AS_RELEASE
+  printf("Prepare a script.lua or script.js beside %s\n", ename);
+#endif
+  printf("Usage: %s [option] ParseFile\n", ename);
+  printf("Usage: %s [option] -e ParseString\n", ename);
+  exit(45);
+}
+
+int main(int argc, char** argv){
+  int i = 1;
+  if (argc <= 1) {
+    usage(argv[0]);
+  }
+
+  while (i < argc) {
+    if (0 == strcmp(argv[i], "-e")) {
+      i++;
+      leleEvalString(argv[i]);
+    } else {
+      parseFile(argv[i]);
+    }
+    i++;
+  }
+  return 0;
+}
+@
+
+
+1.12
+log
+@UPDATE: change to pcall, avoid of uncatch exception
+@
+text
+@d16 5
+d30 1
+a30 2
+    fputs(lua_tostring(L, 1), stderr);
+    fputs("\n", stderr);
+d40 1
+a40 2
+    fputs(js_trystring(J, -1, "call push error"), stderr);
+    fputs("\n", stderr);
+d53 1
+a53 2
+    fputs("call reduce error", stderr);
+    fputs("\n", stderr);
+d62 1
+a62 2
+    fputs(js_trystring(J, -1, "call reduce error"), stderr);
+    fputs("\n", stderr);
+d95 1
+a95 1
+      printf("call:%s\n", js_trystring(J, -1, "call Error"));
+d98 1
+a98 1
+    printf("load:%s\n", js_trystring(J, -1, "load Error"));
+@
+
+
+1.11
+log
+@INSERT: support use js
+@
+text
+@d17 1
+d23 5
+a27 1
+  lua_call(L, 2, 0);
+d34 5
+a38 1
+  js_call(J, 2);
+d43 1
+d48 5
+a52 1
+  lua_call(L, 1, 0);
+d58 5
+a62 1
+  js_call(J, 1);
+d86 1
+a86 1
+  *err = js_dostring(J, s_script_js_str);
+d88 1
+a88 1
+  *err = js_dofile(J, "script.js");
+d90 9
+@
+
+
+1.10
+log
+@UPDATE: support -e option eval string
+@
+text
+@d5 2
+a6 2
+/* 1-lua 2-duktape */
+#define USE_SCRIPT 1
+d12 2
+a13 1
+
+d24 6
+a29 1
+
+d40 5
+a44 1
+
+d48 1
+a48 1
+void* scriptInit(const char* fname, int *err){
+d58 1
+a58 1
+  *err = luaL_dofile(L, fname);
+d61 1
+d63 10
+a72 1
+
+d82 3
+a84 1
+
+@
+
+
+1.9
+log
+@UPDATE: move pasre and script function into lex, use parse string instead of file. and export parse string entry
+@
+text
+@d2 1
+d4 1
+d114 1
+d116 3
+a118 1
+  printf("Usage: %s [option] NeedParseFile\n", ename);
+d123 1
+d128 9
+a136 1
+  parseFile(argv[1]);
+@
+
+
+1.8
+log
+@UPDATE: support embed script into binary file, and first use sequenece target in Makefile
+@
+text
+@d36 1
+a36 8
+static void usage(char* ename){
+  puts("Parser 2 Any. Use Lex & Lemon & Script");
+  printf("Prepare a script.lua or script.js beside %s\n", ename);
+  printf("Usage: %s [option] NeedParseFile\n", ename);
+  exit(45);
+}
+
+static void* scriptInit(const char* fname, int *err){
+d54 1
+a54 1
+static void scriptClean(void* vm){
+d64 39
+d104 11
+a114 31
+  FILE* f;
+  void* scanner; /* yyscan_t */
+  void* parser;
+  void* vm; /* script lang vm */
+  struct LexExtra lexCont;
+  int err;
+
+  /*Init lex&parse&script */
+  f = fopen(fname, "r");
+  yylex_init( &scanner );
+  parser = p2aAlloc(malloc);
+  vm = scriptInit("script.lua", &err);
+  if (0 != err) {
+    puts("Script language is error");
+    goto ERR_VM;
+  }
+  yyset_in(f, scanner);
+  lexCont.parser = parser;
+  lexCont.vm = vm;
+  yyset_extra(&lexCont, scanner);
+
+  /*lex drive loop, parse end*/
+  yylex(scanner);
+  p2a(parser, 0, 0, vm);
+
+ERR_VM:
+  /*Clean script&parse&lex */
+  scriptClean(vm);
+  p2aFree(parser, free);
+  yylex_destroy(scanner);
+  fclose(f);
+@
+
+
+1.7
+log
+@UPDATE: add script file syntax error check
+@
+text
+@d49 4
+d54 1
+@
+
+
+1.6
+log
+@UPDATE: change script function name
+@
+text
+@d43 1
+a43 1
+static void* scriptInit(const char* fname){
+d49 1
+a49 2
+  luaL_dofile(L, fname);
+
+d72 1
+d78 5
+a82 1
+  vm = scriptInit("script.lua");
+d92 1
+@
+
+
+1.5
+log
+@UPDATE: make dynamic language reentrant
+@
+text
+@d13 1
+a13 1
+void p2aPush(void* vm, int major, const char* val){
+d25 1
+a25 1
+void p2aReduce(void* vm, int action){
+@
+
+
+1.4
+log
+@UPDATE: encapsulate parse file into one function
+@
+text
+@a8 1
+static lua_State *L;
+d13 1
+a13 1
+void p2aPush(int major, const char* val){
+d15 1
+d25 1
+a25 1
+void p2aReduce(int action){
+d27 1
+d43 1
+a43 1
+static void scriptInit(const char* fname){
+d45 2
+d50 2
+d57 1
+a57 1
+static void scriptClean(){
+d59 1
+d61 1
+d71 2
+d78 1
+a78 1
+  scriptInit("script.lua");
+d80 3
+a82 1
+  yyset_extra(parser, scanner);
+d86 1
+a86 1
+  p2a(parser, 0, 0);
+d89 1
+a89 1
+  scriptClean();
+@
+
+
+1.3
+log
+@INSERT: add usage
+@
+text
+@a13 17
+void usage(char* ename){
+  puts("Parser 2 Any. Use Lex & Lemon & Script");
+  printf("Prepare a script.lua or script.js beside %s\n", ename);
+  printf("Usage: %s [option] NeedParseFile\n", ename);
+  exit(45);
+}
+
+void p2aPrepare(const char* fname){
+#if USE_SCRIPT == 1
+  L = luaL_newstate();
+  luaL_openlibs(L);
+  luaL_dofile(L, fname);
+#elif USE_SCRIPT == 2
+
+#endif
+}
+
+d35 18
+a52 1
+void p2aClean(){
+d60 1
+a60 1
+int main(int argc, char** argv){
+d65 2
+a66 5
+  if (argc <= 1) {
+    usage(argv[0]);
+  }
+
+  f = fopen(argv[1], "r");
+d69 1
+a69 1
+  p2aPrepare("script.lua");
+d73 1
+d77 2
+a78 1
+  p2aClean();
+d82 8
+@
+
+
+1.2
+log
+@INSERT: add lua script support
+@
+text
+@d14 1
+a14 1
+void usage(){
+d16 2
+d66 1
+a66 1
+    usage();
+@
+
+
+1.1
+log
+@INSERT: initial upload
+@
+text
+@d3 10
+d19 39
+d70 1
+d77 1
+@
+

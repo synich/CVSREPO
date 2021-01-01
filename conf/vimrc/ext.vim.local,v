@@ -1,0 +1,26 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.36.49;	author android;	state Exp;
+branches;
+next	;
+commitid	62b35ec7f1910000;
+
+
+desc
+@@
+
+
+1.1
+log
+@vimrc file
+@
+text
+@Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asynctasks.vim'
+
+@

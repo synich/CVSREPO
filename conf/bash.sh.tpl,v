@@ -1,0 +1,526 @@
+head	1.19;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.19
+date	2020.12.31.15.41.52;	author android;	state Exp;
+branches;
+next	1.18;
+commitid	1005FEDF1400F32F5A7;
+
+1.18
+date	2020.12.28.13.02.06;	author android;	state Exp;
+branches;
+next	1.17;
+commitid	1005FE9D74E124E0B3E;
+
+1.17
+date	2020.12.22.05.05.50;	author android;	state Exp;
+branches;
+next	1.16;
+commitid	1005FE17EAD3890CA62;
+
+1.16
+date	2020.10.09.16.01.26;	author alarm;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2020.10.08.07.51.11;	author alarm;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2020.10.06.07.50.33;	author alarm;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2020.10.06.07.22.17;	author alarm;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2020.10.05.16.18.59;	author alarm;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2020.10.01.14.57.35;	author alarm;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2020.10.01.08.22.47;	author alarm;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2020.10.01.07.49.29;	author alarm;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2020.10.01.07.26.14;	author FOTEN;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2020.05.30.14.25.46;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	17095ed26cea0000;
+
+1.6
+date	2020.05.30.05.44.27;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	cf25ed1f2bb0000;
+
+1.5
+date	2020.05.24.15.24.32;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	14e35eca91b00000;
+
+1.4
+date	2020.05.24.14.25.09;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	12e95eca83c50000;
+
+1.3
+date	2020.05.22.16.49.26;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	66355ec802960000;
+
+1.2
+date	2020.05.22.16.07.10;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	64fb5ec7f8ae0000;
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.19
+log
+@make bash.sh reentry
+@
+text
+@# avoid init interative
+case "$-" in
+    *i*) ;;
+    *) return
+esac
+
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
+
+alias ls="ls --color"
+alias ll="ls -lAh"
+alias la="ls -A"
+alias rmf="rm -rf"
+if [ -x "$(command -v strace)" ]; then
+  alias strace="strace -s 128"
+fi
+if [ -x "$(command -v pstree)" ]; then
+  alias pstree="pstree -p"
+fi
+
+bind '"\C-t": backward-word'
+
+# add . and ~/.FAVORITE_DIRNAME/bin into PATH if not exists
+case :$PATH: in
+    *:.:*) ;;
+    *) export PATH=".:$PATH" ;;
+esac
+case :$PATH: in
+    *:~/.FAVORITE_DIRNAME/bin:*) ;;
+    *) export PATH="~/.FAVORITE_DIRNAME/bin:$PATH"
+esac
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# Allow <C-s> to pass through to shell and programs
+stty -ixon -ixoff
+
+if [ -x "$(command -v lua)" ]; then
+    eval "$(lua ~/.FAVORITE_DIRNAME/bin/z.lua  --init bash)"
+fi
+
+# "ff diff % %" will change to "ff diff $(fzf) $(fzf)"
+if [ -x "$(command -v fzf)" ]; then
+export FZF_DEFAULT_OPTS="--layout=reverse --height 50%"
+ff() {
+  declare -i num=$#
+  if [ $num -le 1 ]; then
+      echo must have least 2 param
+      return
+  fi
+  cmd=""
+  for ((i=0; i<$num; i++))
+  do
+    if [ "$1" = "%" ]; then
+      cmd=$cmd" ""\$(fzf)"
+    else
+      cmd=$cmd" ""$1"
+    fi
+    shift
+  done
+  eval $cmd
+}
+else
+# toy fake fzf
+fzf() {
+    read -p "Input path divide with 1 space: " name
+    real=${name// /.*}
+    find | grep -i --color "$real"
+}
+fi
+
+# use `p [num]' instead of "cd .." easy, use `p d` choose dir quickly
+p() {
+    if [ $# -eq 0 ]; then
+        eval cd ..
+    elif [ $1 = 'd' ]; then
+        dirlst=`find -maxdepth 1 -type d ! -path '.'`
+        arrdir=($dirlst)
+        dircnt=${#arrdir[@@]}
+        if [ $dircnt -eq 1 ]; then  # only one dir
+            cd $dirlst
+        elif [ $dircnt -gt 1 ]; then
+            echo $dirlst | tr ' ' '\n' | nl
+            read -p "Which dir to enter? " idx
+            todir=`echo $dirlst| tr ' ' '\n'|sed -n "${idx}p"`
+            cd $todir
+        fi
+    elif [ $1 -gt 0 ]; then
+        for ((i=0; i<$1; i++))
+        do
+            eval cd ..
+        done
+    fi
+}
+
+# use `h fuzzyword' to call recent history command
+h() {
+  if [ $# -lt 1 ]; then
+      return 1
+  fi
+  expandkwd=`echo $1|sed -e 's/\(.\)/\1.*/g'`
+  cmd=`history|grep -i "$expandkwd"|awk '$2 !~ /^h$/{$1="";print}'|sort|uniq|nl`
+  if [ -z "$cmd" ]; then
+      return 1
+  fi
+  num=`echo "$cmd" | wc -l`
+  if [ $num -gt 1 ]; then
+      echo "$cmd"
+      read -p "which action prefer[Enter=>last]: " lineno
+      if [ -z "$lineno" ]; then
+          lineno=$num
+      fi
+      cmd=`echo "$cmd"|grep "^ *$lineno\t"`
+  fi
+  eval `echo "$cmd"|awk '{$1="";print}'`
+}
+
+inspectpid() {
+  if [ "$1" -gt 0 ] 2>/dev/null; then
+    echo cmdline: `cat -A /proc/$1/cmdline`
+    ll /proc/$1/cwd
+    ll /proc/$1/exe
+    cat /proc/$1/status | sed -n '/\(^Vm\|^Threads\)/p'
+    cat /proc/$1/stat | awk '{print("UserTime:", $14, "SysTime:", $15)}'
+    head -1 /proc/$1/net/sockstat
+    cpuuse=`ps p $1 -o %cpu= 2>/dev/null`
+    if [ $? -eq 0 ];then
+        echo "CPU usage: $cpuuse"
+    else
+        echo "CPU usage: Not support"
+    fi
+  else
+    ps aux | grep $1
+  fi
+}
+
+# show favorite params default, arg1 is number show detail, if t show tree, otherwise search
+psp() {
+  if [ $# -eq 0 ]; then
+    ps -eo pid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes
+  else
+    if [ "$1" -ge 0 ] 2>/dev/null ; then
+      echo -e "PID\tTID\tPPID\t%CPU\t%MEM\tNLWP\tSTAT\tWCHAN\tCMD\tELAPSED"
+      ps -Leo pid,tid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes | grep -i "$*"
+    elif [ "$1" = t ]; then
+      ps -ejHly
+    else
+      echo -e "PID\tPPID\t%CPU\t%MEM\tNLWP\tSTAT\tWCHAN\tCMD\tELAPSED"
+      ps -eo pid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes | grep -i "$*"
+    fi
+  fi
+}
+@
+
+
+1.18
+log
+@make p implement more elegance
+@
+text
+@d1 1
+a1 6
+#Avoid multi init
+if [ -z "$_INIT_SH_LOADED" ]; then
+    _INIT_SH_LOADED=1
+else
+    return
+fi
+d13 6
+a18 2
+alias strace="strace -s 128"
+alias pstree="pstree -p"
+d22 1
+a22 1
+# add . into PATH if not exists
+d25 5
+a29 1
+    *) PATH=".:$PATH" ;;
+a30 1
+export PATH="~/.FAVORITE_DIRNAME/bin:$PATH"
+@
+
+
+1.17
+log
+@p support d subcommand
+@
+text
+@d75 9
+a83 10
+        if [ -n "$dirlst" ]; then
+          dircnt=`echo $dirlst | tr ' ' '\n'|wc -l`
+          if [[ $dircnt -eq 1 ]]; then  # only one dir
+              cd $dirlst
+          else
+              echo $dirlst | tr ' ' '\n' | nl
+              read -p "Which dir to enter? " idx
+              todir=`echo $dirlst| tr ' ' '\n'|sed -n "${idx}p"`
+              cd $todir
+          fi
+@
+
+
+1.16
+log
+@UPDATE: show last errcode in PS1
+@
+text
+@d12 1
+a12 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]2$?\[\033[01;34m\]\W\[\033[00m\]\$ '
+d69 1
+a69 1
+# use `p [num]' instead of "cd .." easy
+d73 14
+a86 1
+    else
+@
+
+
+1.15
+log
+@UPDATE: remove function keyword, because ash not support
+@
+text
+@d12 1
+a12 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]2\[\033[01;34m\]\W\[\033[00m\]\$ '
+d17 1
+@
+
+
+1.14
+log
+@UPDATE: psp use 1 param
+@
+text
+@d41 1
+a41 1
+function ff() {
+d61 1
+a61 1
+function fzf() {
+d69 1
+a69 1
+function p() {
+d81 1
+a81 1
+function h() {
+d102 1
+a102 1
+function inspectpid() {
+d122 1
+a122 1
+function psp() {
+@
+
+
+1.13
+log
+@INSERT: when pid add thread id
+@
+text
+@d121 1
+a121 1
+# show favorite params default, 1 arg show tree, 2 arg above to search
+a124 2
+  elif [ $# -eq 1 ]; then
+    ps -ejHly
+a125 1
+    shift
+d129 2
+@
+
+
+1.12
+log
+@UPDATE: ps only show process,not thread
+@
+text
+@d129 7
+a135 2
+    echo -e "PID\tPPID\t%CPU\t%MEM\tNLWP\tSTAT\tWCHAN\tCMD\tELAPSED"
+    ps -eo pid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes | grep -i "$*"
+@
+
+
+1.11
+log
+@INSERT: more alias
+@
+text
+@d124 1
+a124 1
+    ps -Leo pid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes
+d130 1
+a130 1
+    ps -Leo pid,ppid,pcpu,pmem,nlwp,stat,wchan:20,cmd,etimes | grep -i "$*"
+@
+
+
+1.10
+log
+@UPDATE: fix ps grep bug
+@
+text
+@d17 2
+@
+
+
+1.9
+log
+@UPDATE: ver up to 2
+@
+text
+@d119 1
+d126 2
+@
+
+
+1.8
+log
+@INSERT: shell if, git https, ps handy command
+@
+text
+@d12 1
+a12 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]1\[\033[01;34m\]\W\[\033[00m\]\$ '
+@
+
+
+1.7
+log
+@UPDATE: add pid cpu usage(except busybox)
+@
+text
+@d119 9
+@
+
+
+1.6
+log
+@UPDATE: use yellow display config version
+@
+text
+@d108 6
+@
+
+
+1.5
+log
+@UPDATE: add ver in PS1
+@
+text
+@d12 1
+a12 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h-1:\[\033[01;34m\]\W\[\033[00m\]\$ '
+@
+
+
+1.4
+log
+@INSERT: inspectpid for simple proc view
+@
+text
+@d12 1
+a12 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h:\[\033[01;34m\]\W\[\033[00m\]\$ '
+a104 1
+    echo "memory & threads number:"
+d106 2
+a107 3
+    echo "socket stat:"
+    cat /proc/$1/net/sockstat
+    cat /proc/$1/net/sockstat6
+@
+
+
+1.3
+log
+@DELETE: ctrl i is same as Tab, not change
+@
+text
+@d100 15
+@
+
+
+1.2
+log
+@add forward and backward jump in bash
+@
+text
+@a18 1
+bind '"\C-i": forward-word'
+@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d18 3
+@
+

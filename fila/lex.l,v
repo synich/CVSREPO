@@ -1,0 +1,595 @@
+head	1.16;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.16
+date	2018.09.24.14.51.05;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.09.24.09.12.58;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.09.24.07.27.57;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.09.23.13.55.08;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.23.07.14.48;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.23.05.50.43;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.23.03.03.53;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.22.16.05.42;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.13.40.03;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.22.05.32.20;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.21.15.58.41;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.20.17.17.26;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.20.15.06.18;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.19.16.33.30;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.19.15.06.21;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.17.15.24.42;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.16
+log
+@INSERT: implement mod
+@
+text
+@%option nounistd
+%option reentrant
+%option nounput
+
+%{
+#include <string.h>
+#include <io.h>
+#include "forward.h"
+#include "elem.h"
+
+int fileno(FILE*);/*Make compiler happy*/
+
+#include "parse.h"
+// Must larger than the max of parse define
+#define Y_PLIST 20
+// Make Compiler happy
+#define YY_NO_INPUT 1
+
+// lex call p2a, so it contain p2a first and fourth param
+struct LexExtra
+{
+  void *parser;
+  struct Y_Ex yv;
+};
+
+#define YYTEXT yyget_text(yyscanner)
+/*YYP with Lex, only use in last p2a*/
+#define CALL_YYPWL(l, major, minor) \
+        struct LexExtra *le=(struct LexExtra*)yyget_extra(l);\
+        p2a(le->parser, major, rh_dupstr(minor), &le->yv)
+/*use in lex context, must has yyscanner*/
+#define CALL_YYP(major, minor) CALL_YYPWL(yyscanner, major, minor)
+
+#define PRE_YV struct LexExtra *lx=(struct LexExtra*)yyget_extra(yyscanner);struct Y_Ex*yv=&lx->yv
+
+#define INS_ARG  if (yv->pidx<4) {\
+        char pn[4]={0};\
+        sprintf(pn, "_%d", yv->pidx);\
+        rh_rpstbl(&yv->l2y, pn, YYTEXT);\
+        yv->pidx++;}  break
+
+#define DEBUG_TOKEN() \
+/*printf("LexStr: %s,%d\n", YYTEXT, strlen(YYTEXT))*/
+%}
+
+DIGIT   [0-9]
+LETTER  [_A-Za-z0-3]
+SPACE   [ \t]
+%%
+
+#.*|{SPACE}+ {/*discard comment*/}
+\n {PRE_YV; yv->line++;}
+
+if {CALL_YYP(Y_IF, NULL);}
+fi {CALL_YYP(Y_FI, NULL);}
+fn {PRE_YV; yv->step=Y_FN; CALL_YYP(Y_FN, NULL);}
+>{LETTER}+ {CALL_YYP(Y_FRET, YYTEXT);}
+go {PRE_YV; yv->step=Y_GO; yv->pidx=0; CALL_YYP(Y_GO, NULL);}
+while {CALL_YYP(Y_WHILE, NULL);}
+break {CALL_YYP(Y_BREAK, NULL);}
+
+[_A-Za-z]{LETTER}* {   /*VAR deal*/
+    PRE_YV;
+    switch (yv->step){
+      case Y_FN: {     /*val after FN is funcname*/
+        rh_rpstbl(&yv->l2y, "funcname", YYTEXT);
+        rhi_meetfn(yv->vm, YYTEXT);
+        yv->step=Y_VAR;
+        break;
+      }
+      case Y_GO: {
+        yv->step=Y_PLIST;
+        break;
+      }
+      case Y_PLIST: {
+        INS_ARG;
+      }
+      default: {
+      }
+    }
+    /*after switch, any VAR will into parser*/
+    CALL_YYP(Y_VAR, YYTEXT);
+}
+
+{DIGIT}+ {  /*INTEGER deal*/
+  PRE_YV;
+  switch (yv->step){
+    case Y_PLIST: {
+      INS_ARG;
+    }
+    default: {}
+  }
+  CALL_YYP(Y_INTEGER, YYTEXT);
+}
+
+\'[^']*\'|\"[^"]*\" {  /*STRING deal*/
+  PRE_YV;
+  switch (yv->step){
+    case Y_PLIST: {
+      INS_ARG;
+    }
+    default: {}
+  }
+  CALL_YYP(Y_STRING, YYTEXT);
+}
+
+== {CALL_YYP(Y_EQUAL, NULL);}
+!= {CALL_YYP(Y_NOTEQ, NULL);}
+=  {CALL_YYP(Y_ASSIGN, NULL);}
+
+\+ {CALL_YYP(Y_PLUS, NULL);}
+\- {CALL_YYP(Y_MINUS, NULL);}
+\* {CALL_YYP(Y_MULTIPY, NULL);}
+\/ {CALL_YYP(Y_DIVIDE, NULL);}
+\% {CALL_YYP(Y_MOD, NULL);}
+
+\$ {puts("`$' is not allowed in source!");exit(45);}
+. {/*discard unknown char*/}
+
+%%
+/* This section is customize definition */
+int yywrap (yyscan_t yyscanner ){
+  return 1;
+}
+
+/*use lex and lemon to parse*/
+rh_vm* rhi_src2vm(rh_vm* vm, const char* expr){
+  void* scanner; /* yyscan_t */
+  YY_BUFFER_STATE lexBuf;
+  void* parser;
+  struct LexExtra lexCont;
+
+  /*Init lex&parse&script */
+  yylex_init( &scanner );
+  lexBuf = yy_scan_string(expr, scanner);
+  yy_switch_to_buffer(lexBuf, scanner);
+
+  parser = p2aAlloc(malloc);
+  lexCont.parser = parser;
+  lexCont.yv.vm = vm;
+  lexCont.yv.l2y = NULL;
+  lexCont.yv.line = 1; // set to 1 before start
+
+  /*lex drive loop, parse end*/
+  yyset_extra(&lexCont, scanner);
+  yylex(scanner);
+  CALL_YYPWL(scanner, 0, 0);
+
+  /*Clean script&parse&lex */
+  p2aFree(parser, free);
+  yy_delete_buffer(lexBuf, scanner);
+  yylex_destroy(scanner);
+
+  return vm;
+}
+
+char* rhi_srcrun(rh_vm* vm, const char* expr,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3) {
+  rh_vm* cvm = rhi_src2vm(vm, expr);
+  /*after parse, vm is ready to run. call main*/
+  return rhi_vmcall(cvm, "main", p0, p1, p2, p3);
+}
+
+@
+
+
+1.15
+log
+@UPATE: change token Y_ prefix
+@
+text
+@d115 1
+@
+
+
+1.14
+log
+@INSERT: implement if branch
+@
+text
+@d15 1
+a15 1
+#define PLIST 20
+d54 7
+a60 5
+if {CALL_YYP(IF, NULL);}
+fi {CALL_YYP(FI, NULL);}
+fn {PRE_YV; yv->step=FN; CALL_YYP(FN, NULL);}
+>{LETTER}+ {CALL_YYP(FRET, YYTEXT);}
+go {PRE_YV; yv->step=GO; yv->pidx=0; CALL_YYP(GO, NULL);}
+d65 1
+a65 1
+      case FN: {     /*val after FN is funcname*/
+d68 1
+a68 1
+        yv->step=VAR;
+d71 2
+a72 2
+      case GO: {
+        yv->step=PLIST;
+d75 1
+a75 1
+      case PLIST: {
+d82 1
+a82 1
+    CALL_YYP(VAR, YYTEXT);
+d88 1
+a88 1
+    case PLIST: {
+d93 1
+a93 1
+  CALL_YYP(INTEGER, YYTEXT); DEBUG_TOKEN();
+d99 1
+a99 1
+    case PLIST: {
+d104 1
+a104 1
+  CALL_YYP(STRING, YYTEXT);
+d107 8
+a114 3
+== {CALL_YYP(EQUAL, NULL);}
+!= {CALL_YYP(NOTEQ, NULL);}
+=  { CALL_YYP(ASSIGN, NULL); DEBUG_TOKEN(); }
+@
+
+
+1.13
+log
+@INSERT: implement IR code dump and run
+@
+text
+@d104 4
+a107 2
+\?{LETTER}+ {CALL_YYP(CMP, YYTEXT);}
+\= { CALL_YYP(ASSIGN, NULL); DEBUG_TOKEN(); }
+@
+
+
+1.12
+log
+@UPDATE: seperate parse and dump, add rh_dump
+@
+text
+@d107 1
+d117 1
+a117 1
+static rh_vm* sf_compile2vm(rh_vm* vm, const char* expr){
+d150 1
+a150 1
+  rh_vm* cvm = sf_compile2vm(vm, expr);
+d152 1
+a152 1
+  return rhi_callfn(cvm, "main", p0, p1, p2, p3);
+@
+
+
+1.11
+log
+@INSERT: implement assign and function return
+@
+text
+@d115 2
+a116 3
+char* rhi_parserun(rh_vm* vm, const char* expr,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3) {
+d143 7
+d151 1
+a151 1
+  return rhi_callfn(vm, "main", p0, p1, p2, p3);
+@
+
+
+1.10
+log
+@UPDATE: make token alloc in lex and destructor in parse, but referenced token must revert manual
+@
+text
+@d63 1
+a63 1
+      case FN: {     // val after FN is funcname
+a69 1
+        rh_rpstbl(&yv->l2y, "goname", YYTEXT);
+a121 1
+  char* ret=NULL;
+d145 1
+a145 2
+  ret = rhi_callfn(vm, "main", p0, p1, p2, p3);
+  return ret;
+@
+
+
+1.9
+log
+@INSERT: implement return gramma
+@
+text
+@d30 1
+a30 1
+        p2a(le->parser, major, minor, &le->yv)
+d54 3
+a56 3
+if {CALL_YYP(IF, "if");}
+fi {CALL_YYP(FI, "fi");}
+fn {PRE_YV; yv->step=FN; CALL_YYP(FN, "fn");}
+d58 1
+a58 1
+go {PRE_YV; yv->step=GO; yv->pidx=0; CALL_YYP(GO, "go");}
+d105 2
+a106 2
+\?{LETTER}+ {CALL_YYP(CMP, "cmp");}
+\= { CALL_YYP(ASSIGN, "="); DEBUG_TOKEN(); }
+@
+
+
+1.8
+log
+@UPDATE: gofunc will only invoke in runtime not parse time, add simple instruction interpreter
+@
+text
+@d3 1
+d11 2
+d16 2
+d57 1
+@
+
+
+1.7
+log
+@UPDATE: support go func and pass parameter
+@
+text
+@d59 1
+d117 1
+d141 2
+a142 1
+  return rhi_callfn(vm, "main", p0, p1, p2, p3);
+@
+
+
+1.6
+log
+@UPDATE: add l2y into Y_Ex, make mind clear
+@
+text
+@a6 1
+#include "parse.h"
+d10 4
+d30 7
+d46 1
+a46 2
+#.* {/*discard comment*/}
+{SPACE}+ {}
+d52 1
+d54 1
+a54 1
+[_A-Za-z]{LETTER}* {
+d56 16
+a71 2
+    if (FN==yv->step){ // val after FN is funcname
+      rh_rpstbl(&yv->l2y, "funcname", YYTEXT);
+d73 22
+a94 1
+    yv->step=VAR; CALL_YYP(VAR, YYTEXT);
+d96 2
+a97 3
+{DIGIT}+ { CALL_YYP(INTEGER, YYTEXT); DEBUG_TOKEN(); }
+\'[^']*\' {CALL_YYP(STRING, YYTEXT);}
+\"[^"]*\" {CALL_YYP(STRING, YYTEXT);}
+@
+
+
+1.5
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d26 1
+d38 1
+a38 1
+\n {struct LexExtra *le=(struct LexExtra*)yyget_extra(yyscanner);le->yv.line++;}
+d42 1
+a42 1
+fn {CALL_YYP(FN, "fn");}
+d44 7
+a50 1
+[_A-Za-z]{LETTER}* { CALL_YYP(VAR, YYTEXT);}
+d81 1
+@
+
+
+1.4
+log
+@UPDATE: improve lex and make parse run
+@
+text
+@d9 1
+d58 1
+a58 1
+char* rh_parserun(rh_vm* vm, const char* expr,
+a64 1
+  struct Y_Ex finp;
+d87 1
+a87 1
+  return rh_callfn(vm, "main", p0, p1, p2, p3);
+@
+
+
+1.3
+log
+@UPDATE: make mainstream available
+@
+text
+@d10 1
+d14 1
+a14 1
+  void *vm;
+d17 8
+a24 5
+#define CALL_YYP(major, minor) \
+        struct LexExtra *v=(struct LexExtra*)yyget_extra(yyscanner);\
+        void*yyp=v->parser;\
+        void*dynVm=v->vm;\
+        p2a(yyp, major, minor, dynVm)
+d26 1
+a26 1
+/*printf("LexStr: %s,%d\n", yyget_text(yyscanner), strlen(yyget_text(yyscanner)))*/
+d36 14
+a49 7
+[_A-Za-z]{LETTER}* { CALL_YYP(VAR, yyget_text(yyscanner));}
+{DIGIT}+ { CALL_YYP(INTEGER, yyget_text(yyscanner));DEBUG_TOKEN(); }
+if {CALL_YYP(IF, "");}
+fi {CALL_YYP(FI, "");}
+fn {CALL_YYP(FN, "");}
+\?{LETTER}+ {CALL_YYP(CMP, "");}
+\= { CALL_YYP(ASSIGN, "+");DEBUG_TOKEN(); }
+d64 1
+d73 2
+a74 2
+
+  lexCont.vm = vm;
+d79 1
+a79 1
+  p2a(parser, 0, 0, vm);
+@
+
+
+1.2
+log
+@UPDATE: modify parse and code generate presentation
+@
+text
+@a19 1
+        scriptPush(dynVm, major, minor);\
+d31 1
+d37 1
+a37 2
+end {CALL_YYP(END, "");}
+\?{LETTER}+
+d46 3
+a48 1
+void rh_eval(const char* src) {
+a51 1
+  void* vm = NULL; /* script lang vm */
+d56 1
+a56 1
+  lexBuf = yy_scan_string(src, scanner);
+d73 3
+@
+
+
+1.1
+log
+@INSERT: add lex and lemon
+@
+text
+@d27 1
+a27 1
+LETTER  [A-Za-z0-9]
+d31 2
+a32 1
+[_A-Za-z][_A-Za-z0-3]* { CALL_YYP(VAR, yyget_text(yyscanner));}
+d34 5
+d51 1
+a51 1
+  void* vm; /* script lang vm */
+a52 1
+  int err;
+a61 4
+  if (0 != err) {
+    puts("Script language is error");
+    goto ERR_VM;
+  }
+a68 1
+ERR_VM:
+@
+

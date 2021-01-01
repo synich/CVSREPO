@@ -1,0 +1,433 @@
+head	1.12;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.12
+date	2018.09.25.14.53.02;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.24.07.21.34;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.23.05.47.04;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.23.03.05.03;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.16.06.34;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.22.10.26.46;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.21.15.23.47;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.18.15.03.27;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.17.13.41.29;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.16.15.52.43;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.16.15.25.28;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@INSERT: simple release for Env and change global flag to function
+@
+text
+@#include <stdio.h>
+#include "elem.h"
+#include "pool.h"
+
+void test_smallmem(){
+  puts("BEGIN SMALL MEM");
+#define ALLOCSZ 15
+  char *p1, *p2, *p3, *p4;
+  p1 = rh_alloc(ALLOCSZ);
+  p2 = rh_alloc(ALLOCSZ);
+  p3 = rh_alloc(ALLOCSZ);
+  p4 = rh_alloc(ALLOCSZ);
+  printf("p1:%p, p2:%p, p3:%p, p4:%p\n", p1, p2, p3, p4);
+  rh_memreport();
+
+  rh_revert(p2);
+  rh_revert(p4);
+  rh_revert(p1);
+  rh_revert(p3);
+  rh_memreport();
+
+  p1 = rh_alloc(ALLOCSZ);
+  p2 = rh_alloc(ALLOCSZ);
+  p3 = rh_alloc(ALLOCSZ);
+  p4 = rh_alloc(ALLOCSZ);
+  printf("p1:%p, p2:%p, p3:%p, p4:%p\n", p1, p2, p3, p4);
+  rh_memreport();
+#undef ALLOCSZ
+}
+
+void test_bigmem(){
+  puts("BEGIN BIG MEM");
+#define ALLOCSZ 80
+  char *p1, *p2, *p3, *p4;
+  p1 = rh_alloc(ALLOCSZ);
+  p2 = rh_alloc(ALLOCSZ);
+  p3 = rh_alloc(ALLOCSZ);
+  p4 = rh_alloc(ALLOCSZ);
+  printf("p1:%p, p2:%p, p3:%p, p4:%p\n", p1, p2, p3, p4);
+  rh_memreport();
+
+  rh_revert(p2);
+  rh_revert(p4);
+  rh_revert(p1);
+  rh_revert(p3);
+  rh_memreport();
+
+  p1 = rh_alloc(ALLOCSZ);
+  p2 = rh_alloc(ALLOCSZ);
+  p3 = rh_alloc(ALLOCSZ);
+  p4 = rh_alloc(ALLOCSZ);
+  printf("p1:%p, p2:%p, p3:%p, p4:%p\n", p1, p2, p3, p4);
+  rh_memreport();
+#undef ALLOCSZ
+}
+
+void test_dupstr(){
+  puts("BEGIN DUPSTR");
+  char* p=rh_dupstr("helloworld");
+  puts(p);
+}
+
+void test_tokey(){
+  uint64_t k, l;
+  char tmp[16] = {0};
+  char *key = NULL;
+  printf("Too long: 0x%llx\n", tokey("Hellohellow"));
+  printf("Invalid: 0x%llx\n", tokey("Hello$"));
+  printf("key NULL: 0x%llx\n", tokey(key));
+
+  key = "_Hello_heL";
+  k = tokey(key);
+  keyrdc(k, tmp);
+  printf("%s is: 0x%llx, reduce: %s\n", key, k, tmp);
+  printf("case 0x%llx!=0x%llx\n", tokey("_Hellohell_"), tokey("_hellohell_"));
+}
+
+void test_toikey(){
+  uint64_t k, l;
+  char tmp[16] = {0};
+  char *key = NULL;
+  printf("Too long: 0x%llx\n", toikey("Hellohellowor"));
+  printf("Invalid: 0x%llx\n", toikey("Hello5"));
+  printf("key NULL: 0x%llx\n", toikey(key));
+
+  key = "_Hello_hellow";
+  k = toikey(key);
+  keyirdc(k, tmp);
+  printf("%s is: 0x%llx, reduce: %s\n", key, k, tmp);
+  printf("Incase 0x%llx==0x%llx\n", toikey("_Hellohello1_"), toikey("_hellohello1_"));
+}
+
+static struct Env_val* s_tbl = NULL;
+
+void sf_test_hsh(const char* k, char* v){
+  char *p = NULL;
+  printf("Ins '%s' is %d\n", k, rh_rpstbl(&s_tbl, k, v));
+  p = rh_gettbl(s_tbl, k);
+  printf("Get '%s' is %s, 0x%p\n", k, p, p);
+  rh_hshreport(s_tbl);
+}
+
+void sf_test_deh(const char* k){
+  rh_deltbl(&s_tbl, k);
+  printf("After del '%s' get %s\n", k, rh_gettbl(s_tbl, k));
+  rh_hshreport(s_tbl);
+}
+
+void test_hashtbl(){
+  puts("BEGIN HASH TABLE. Insert 1 is OK, 0 is fail.");
+  char *p = NULL;
+
+  sf_test_hsh("hellohellohello", "11");
+  sf_test_hsh("_0", "11");
+  sf_test_hsh("_1", "22");
+  sf_test_hsh("_2", "22");
+  sf_test_hsh("_3", "22");
+
+  /*sf_test_deh("_0");
+  sf_test_deh("_1");
+  sf_test_deh("_2");
+  sf_test_deh("_3");*/
+  rh_clstbl(s_tbl);
+  rh_hshreport(s_tbl);
+}
+
+int main(int argc, char** argv){
+  //test_smallmem();
+  //test_bigmem();
+  rh_dbgflg(1);
+  test_hashtbl();
+  //test_dupstr();
+  //test_tokey();
+  //test_toikey();
+  return 0;
+}
+@
+
+
+1.11
+log
+@UPDATE: make tokey and gettbl robus when meet NULL
+@
+text
+@d119 1
+a119 1
+  sf_test_deh("_0");
+d122 3
+a124 1
+  sf_test_deh("_3");
+d130 2
+a131 1
+  //test_hashtbl();
+d134 1
+a134 1
+  test_toikey();
+@
+
+
+1.10
+log
+@UPDATE: fixed low level error
+@
+text
+@d69 1
+d84 1
+d127 1
+a127 1
+  test_bigmem();
+d131 1
+a131 1
+  //test_toikey();
+@
+
+
+1.9
+log
+@UPDATE: fixed while not deal with NULL bug and other
+@
+text
+@d124 2
+a125 2
+  test_smallmem();
+  //test_bigmem();
+@
+
+
+1.8
+log
+@UPDATE: use Werror, stop compile when warning
+@
+text
+@d124 1
+a124 1
+  //test_smallmem();
+d128 1
+a128 1
+  test_tokey();
+@
+
+
+1.7
+log
+@UPDATE: check memory leak and unit test for del hash
+@
+text
+@d63 14
+d78 3
+d82 6
+a87 1
+  printf("Just fine: 0x%llx\n", toikey("_Hellohellowo"));
+a88 1
+  printf("Invalid: 0x%llx\n", toikey("Hello5"));
+d126 1
+a126 1
+  test_hashtbl();
+d128 1
+@
+
+
+1.6
+log
+@UPDATE: add binary hash operation, and fixed genfunc error
+@
+text
+@d91 4
+a94 2
+  sf_test_hsh("hello", "11");
+  sf_test_hsh("hello", "22");
+d96 4
+a99 4
+  sf_test_deh("world");
+  sf_test_deh("hello");
+
+  sf_test_hsh("unix", "22");
+@
+
+
+1.5
+log
+@UPDATE: let hash reentrant, and this make proto useful
+@
+text
+@a1 1
+
+d72 1
+a72 2
+void test_hashtbl(){
+  puts("BEGIN HASH TABLE");
+d74 3
+a76 7
+  printf("Ins too long illeag %d\n", rh_savetbl(&s_tbl, "hellohello1", "11"));
+  printf("Ins 'hello' OK %d\n", rh_savetbl(&s_tbl, "hello", "11"));
+  p = rh_gettbl(s_tbl, "hello");
+  printf("Get 'hello' %s, 0x%p\n", p, p);
+  printf("Ins 'world' OK %d\n", rh_savetbl(&s_tbl, "world", "22"));
+  p = rh_gettbl(s_tbl, "world");
+  printf("Get 'world' %s, 0x%p\n", p, p);
+d78 1
+d80 3
+a82 5
+  rh_deltbl(&s_tbl, "world");
+  printf("After del 'world' get %s\n", rh_gettbl(s_tbl, "world"));
+  rh_hshreport(s_tbl);
+  rh_deltbl(&s_tbl, "hello");
+  puts("After del hello");
+d84 12
+d97 1
+a97 4
+  printf("Ins new 'unix' OK %d\n", rh_savetbl(&s_tbl, "unix", "33"));
+  p = rh_gettbl(s_tbl, "unix");
+  printf("Get 'unix' %s, 0x%p\n", p, p);
+  rh_hshreport(s_tbl);
+@
+
+
+1.4
+log
+@INSERT: add toikey
+@
+text
+@d1 2
+a5 2
+#include <stdio.h>
+
+d71 2
+d76 3
+a78 3
+  printf("Ins too long illeag %d\n", rh_savetbl("hellohello1", "11"));
+  printf("Ins 'hello' OK %d\n", rh_savetbl("hello", "11"));
+  p = rh_gettbl("hello");
+d80 2
+a81 2
+  printf("Ins 'world' OK %d\n", rh_savetbl("world", "22"));
+  p = rh_gettbl("world");
+d83 13
+a95 4
+  rh_deltbl("world");
+  printf("After del 'world' get %s\n", rh_gettbl("world"));
+  printf("Ins new 'unix' OK %d\n", rh_savetbl("unix", "33"));
+  printf("Get 'unix' %s, 0x%p\n", rh_gettbl("unix"));
+d101 1
+a101 1
+  //test_hashtbl();
+d103 1
+a103 1
+  test_toikey();
+@
+
+
+1.3
+log
+@INSERT: add dupstr, simple but useful for parser
+@
+text
+@d64 7
+d88 5
+a92 4
+  test_smallmem();
+  test_bigmem();
+  test_hashtbl();
+  test_dupstr();
+@
+
+
+1.2
+log
+@INSERT: Hash table function
+@
+text
+@d7 1
+d33 1
+d58 6
+d65 1
+d67 1
+a67 1
+  printf("Ins illeag %d\n", rh_savetbl("hellohello1", "11"));
+d81 2
+a82 2
+  //test_smallmem();
+  //test_bigmem();
+d84 1
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d56 15
+d73 2
+a74 1
+  test_bigmem();
+@
+

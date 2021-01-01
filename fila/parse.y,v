@@ -1,0 +1,626 @@
+head	1.18;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.18
+date	2018.09.24.14.51.05;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.09.24.10.38.16;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.09.24.09.12.58;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.09.24.07.27.57;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.09.23.07.14.48;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.09.23.05.50.43;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.23.03.03.53;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.22.16.05.42;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.22.13.40.04;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.22.10.26.02;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.05.32.20;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.21.15.58.41;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.20.17.17.27;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.20.15.06.18;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.19.16.33.30;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.19.15.06.21;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.18.15.20.12;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.17.15.24.42;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.18
+log
+@INSERT: implement mod
+@
+text
+@%include {
+#include <string.h>
+#include "assert.h"
+#include "forward.h"
+#include "elem.h"
+#include "pool.h"
+
+#define CALL_YYR(act)
+//scriptReduce(yv, act)
+
+/*alloc space and strcat B and E, release depend on caller*/
+static char* sf_catcode(char* B, char* E){
+  int len = B?strlen(B):0 + E?strlen(E):0;
+  if (0==len) {return NULL;}
+  char* A = rh_alloc(len+1); /*A always point to illega address*/
+  A[0] = 0;
+  if (B) {strcat(A, B);}
+  if (E) {strcat(A, E);}
+  return A;
+}
+
+/*2 operator is offen appear*/
+static char* sf_mk2opcode(char op, char* A, char* B){
+  int len = strlen(A) + strlen(B);
+  char* E = rh_alloc(len+4);
+  snprintf(E, len+4, "%c%s,%s;", op, A, B);
+  return E;
+}
+
+}
+
+%name p2a
+%token_type {char*}
+%extra_argument {struct Y_Ex* yv}
+%token_destructor {rh_revert($$);(void)yv;/*Make compiler happy*/}
+
+%left Y_VAR.
+%left Y_ASSIGN.
+
+%syntax_error {
+  printf("Parse error at line:%d\n", yypParser->yv->line);
+  printf("Token Type:%d(Ref to parse.h), Token Value:%s\n", yymajor, yyminor);
+}
+
+%type stateList {char*}
+%type expr {char*}
+%type cond {char*}
+%type rval {char*}
+
+program ::= funcList. {}
+funcList ::= .
+funcList ::= funcList def. {}
+
+/*function define, combine funcname and statelist*/
+def ::= Y_FN Y_VAR(N) stateList(A) Y_FRET(R). {
+    char tmp[16] = {0}; /*varible is less than 13*/
+    sprintf(tmp, ">%s;", R+1);
+    char *comboc = sf_catcode(A, tmp);/*hold and free last*/
+
+    rhi_combofunc(yv->vm, N, comboc);
+    rh_revert(A);
+    rh_revert(N);
+    rh_revert(R);
+    rh_deltbl(&yv->l2y, "funcname");
+}
+stateList(A) ::= . {A=NULL;}
+stateList(A) ::= stateList(B) expr(E). {
+  A = sf_catcode(B, E);
+  rh_revert(B);
+  rh_revert(E);
+}
+
+/*rvalue definition*/
+rval(A) ::= Y_VAR(B).      {A = B;}
+rval(A) ::= Y_INTEGER(B).  {A = B;}
+rval(A) ::= Y_STRING(B).   {A = B;}
+expr(E) ::= Y_VAR(A) Y_ASSIGN rval(B). {
+  E = sf_mk2opcode('=', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+
+/*IF condition*/
+expr(E) ::= Y_IF cond(C) stateList(S) Y_FI. {
+  int len = strlen(C) + strlen(S);
+  E = rh_alloc(len+1+2+2);
+  sprintf(E, "%sT;%sY;", C, S);
+  rh_revert(C);
+  rh_revert(S);
+}
+
+/*WHILE and stateList must have break*/
+expr ::= Y_WHILE stateList Y_FI. {
+}
+expr ::= Y_BREAK cond. {
+}
+
+/*execute function*/
+expr(E) ::= Y_GO Y_VAR(N) plst Y_FI. {
+    char *ctxname=rh_gettbl(yv->l2y, "funcname");
+    char *p0 = rh_gettbl(yv->l2y, "_0");
+    char *p1 = rh_gettbl(yv->l2y, "_1");
+    char *p2 = rh_gettbl(yv->l2y, "_2");
+    char *p3 = rh_gettbl(yv->l2y, "_3");
+    E = rhi_gengoexpr(yv->vm, ctxname, N, p0, p1, p2, p3);
+    rh_deltbl(&yv->l2y, "_0");
+    rh_deltbl(&yv->l2y, "_1");
+    rh_deltbl(&yv->l2y, "_2");
+    rh_deltbl(&yv->l2y, "_3");
+    rh_revert(N);
+}
+
+expr(E) ::= rval(A) Y_PLUS rval(B). {
+  E = sf_mk2opcode('+', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+expr(E) ::= rval(A) Y_MINUS rval(B). {
+  E = sf_mk2opcode('-', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+expr(E) ::= rval(A) Y_MULTIPY rval(B). {
+  E = sf_mk2opcode('*', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+expr(E) ::= rval(A) Y_DIVIDE rval(B). {
+  E = sf_mk2opcode('/', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+expr(E) ::= rval(A) Y_MOD rval(B). {
+  E = sf_mk2opcode('%', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+
+/*param list*/
+plst ::= .
+plst ::= plst rval.
+
+/*condtion*/
+cond(C) ::= rval(A) Y_EQUAL rval(B). {
+  C = sf_mk2opcode('E', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+cond(C) ::= rval(A) Y_NOTEQ rval(B). {
+  C = sf_mk2opcode('D', A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+@
+
+
+1.17
+log
+@INSERT: implement int caculate
+@
+text
+@d133 5
+@
+
+
+1.16
+log
+@UPATE: change token Y_ prefix
+@
+text
+@d113 20
+a132 4
+expr ::= rval Y_PLUS rval. {}
+expr ::= rval Y_MINUS rval. {}
+expr ::= rval Y_MULTIPY rval. {}
+expr ::= rval Y_DIVIDE rval. {}
+@
+
+
+1.15
+log
+@INSERT: implement if branch
+@
+text
+@d37 2
+a38 2
+%left VAR IF FI.
+%left ASSIGN INTEGER.
+a53 1
+def ::= FN VAR(N) stateList(A) FRET(R). {
+d55 1
+d74 4
+a77 4
+rval(A) ::= VAR(B).      {A = B;}
+rval(A) ::= INTEGER(B).  {A = B;}
+rval(A) ::= STRING(B).   {A = B;}
+expr(E) ::= VAR(A) ASSIGN rval(B). {
+d83 2
+a84 1
+expr(E) ::= IF cond(C) stateList(S) FI. {
+d91 7
+a97 1
+expr(E) ::= GO VAR(N) plst FI. {
+d99 1
+d113 5
+d123 1
+a123 1
+cond(C) ::= rval(A) EQUAL rval(B). {
+d128 1
+a128 1
+cond(C) ::= rval(A) NOTEQ rval(B). {
+@
+
+
+1.14
+log
+@UPDATE: seperate parse and dump, add rh_dump
+@
+text
+@d22 8
+d41 1
+a41 1
+  printf("Syntax error at line:%d\n", yypParser->yv->line);
+d47 2
+d53 1
+a65 1
+
+d73 6
+a78 4
+expr(E) ::= VAR(A) ASSIGN VAR(B). {
+  int len = strlen(A) + strlen(B);
+  E = rh_alloc(len+4);
+  snprintf(E, len+4, "=%s,%s;", A, B);
+d82 7
+a88 6
+expr(E) ::= VAR(A) ASSIGN INTEGER(B). {
+  int len = strlen(A) + strlen(B);
+  E = rh_alloc(len+4);
+  snprintf(E, len+4, "=%s,%s;", A, B);
+  rh_revert(A);
+  rh_revert(B);
+a89 8
+expr(E) ::= VAR(A) ASSIGN STRING(B). {
+  int len = strlen(A) + strlen(B);
+  E = rh_alloc(len+4);
+  snprintf(E, len+4, "=%s,%s;", A, B);
+  rh_revert(A);
+  rh_revert(B);
+}
+expr(E) ::= IF CMP stateList FI. {E = "Texpr;";}
+d107 13
+a119 3
+plst ::= plst VAR.
+plst ::= plst INTEGER.
+plst ::= plst STRING.
+@
+
+
+1.13
+log
+@INSERT: implement assign and function return
+@
+text
+@d64 5
+a68 1
+  E = "=var;";printf("VAR %s ASSIGN %s\n", A, B);
+d78 5
+a82 1
+  E = "=str;";printf("STR %s ASSIGN %s\n", A, B);
+@
+
+
+1.12
+log
+@UPDATE: make token alloc in lex and destructor in parse, but referenced token must revert manual
+@
+text
+@d10 12
+d43 7
+a49 4
+def ::= FN VAR stateList(A) FRET. {
+/*function define, get funcname from lex and save it*/
+    char *fname=rh_gettbl(yv->l2y, "funcname");
+    rhi_combofunc(yv->vm, fname, A);
+d51 2
+d58 1
+a58 6
+  int blen = B?strlen(B):0;
+  int len = blen + strlen(E);
+  A = rh_alloc(len+1); /*A always point to illega address*/
+  A[0] = 0;
+  if (B) {strcat(A, B);}
+  strcat(A, E);
+d60 1
+d77 1
+a77 1
+expr(E) ::= GO VAR plst FI. {
+a79 1
+    char *gname=rh_gettbl(yv->l2y, "goname");
+d84 1
+a84 1
+    E = rhi_gengoexpr(yv->vm, ctxname, gname, p0, p1, p2, p3);
+d89 1
+a89 1
+    rh_deltbl(&yv->l2y, "goname");
+@
+
+
+1.11
+log
+@INSERT: implement return gramma
+@
+text
+@d15 1
+a15 1
+%token_destructor {(void)yv;/*Make compiler happy*/}
+d43 1
+a43 1
+  A = rh_alloc(len+1); //A always point to illega address
+d50 13
+a62 3
+expr(E) ::= VAR ASSIGN VAR. {E = "=var;";}
+expr(E) ::= VAR ASSIGN INTEGER. {E = "=int;"; }
+expr(E) ::= VAR ASSIGN STRING. {E = "=str;";}
+@
+
+
+1.10
+log
+@UPDATE: gofunc will only invoke in runtime not parse time, add simple instruction interpreter
+@
+text
+@d15 1
+d31 1
+a31 1
+def ::= FN VAR stateList(A) FI. {
+@
+
+
+1.9
+log
+@UPDATE: make nonterminal available, can make instruction next
+@
+text
+@d33 1
+a33 1
+    rhi_genfunc(yv->vm, fname, A);
+d35 1
+d49 5
+a53 5
+expr(E) ::= VAR ASSIGN VAR. {E = "var assign";}
+expr(E) ::= VAR ASSIGN INTEGER. {E = "int assign"; }
+expr(E) ::= VAR ASSIGN STRING. {E = "str assign";}
+expr(E) ::= IF CMP stateList FI. {E = "ifexpr";}
+expr(E) ::= GO VAR plst FI. { E = "gofunc";
+d55 2
+a56 1
+    char *fname=rh_gettbl(yv->l2y, "goname");
+d61 1
+a61 1
+    rhi_callfn(yv->vm, fname, p0, p1, p2, p3);
+d66 1
+@
+
+
+1.8
+log
+@UPDATE: support go func and pass parameter
+@
+text
+@d6 1
+d25 1
+d30 1
+a30 1
+def ::= FN VAR stateList FI. {
+d33 3
+a35 2
+    rhi_genfunc(yv->vm, fname, "+ab");
+  }
+d37 10
+a46 2
+stateList ::= .
+stateList ::= stateList expr. {}
+d48 5
+a52 5
+expr ::= VAR ASSIGN VAR. {puts("var assign");}
+expr ::= VAR ASSIGN INTEGER. {puts("int assign"); }
+expr ::= VAR ASSIGN STRING. {puts("str assign");}
+expr ::= IF CMP stateList FI. {}
+expr ::= GO VAR plst FI. {
+d60 5
+a64 1
+  }
+@
+
+
+1.7
+log
+@UPDATE: add l2y into Y_Ex, make mind clear
+@
+text
+@d29 1
+d41 9
+a49 1
+expr ::= GO VAR plst FI.
+@
+
+
+1.6
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d8 1
+a8 1
+//scriptReduce(dynVm, act)
+d13 1
+a13 1
+%extra_argument {struct Y_Ex* dynVm}
+d19 1
+a19 1
+  printf("Syntax error at line:%d\n", yypParser->dynVm->line);
+d28 4
+a31 1
+def ::= FN VAR stateList FI. {rhi_genfunc(dynVm->vm, "main", "+ab");}
+@
+
+
+1.5
+log
+@UPDATE: improve lex and make parse run
+@
+text
+@d5 2
+d23 2
+d28 1
+a28 1
+def ::= FN VAR stateList FI. {puts("Parse def!");}
+@
+
+
+1.4
+log
+@UPDATE: make mainstream available
+@
+text
+@d1 8
+d11 1
+a11 1
+%extra_argument {void *dynVm}
+a15 7
+%include {
+#include <string.h>
+#include "assert.h"
+void scriptReduce(void* vm, int action);
+#define CALL_YYR(act) scriptReduce(dynVm, act)
+}
+
+d17 2
+a18 1
+  printf("Syntax error! Token Type:%d(Ref to parse.h), Token Value:%s\n", yymajor, yyminor);
+d21 2
+a22 1
+program ::= funcList.
+d24 1
+a24 1
+def ::= FN VAR stateList FI. {}
+d29 3
+a31 1
+expr ::= VAR ASSIGN INTEGER.   { CALL_YYR(0); }
+d34 2
+d39 1
+@
+
+
+1.3
+log
+@UPDATE: modify parse and code generate presentation
+@
+text
+@d28 4
+@
+
+
+1.2
+log
+@DELETE: rename example.txt to .nim
+@
+text
+@d5 1
+a5 1
+%left VAR .
+d21 3
+a23 1
+def ::= FN VAR stateList FI.
+d25 1
+a25 1
+expr ::= ifexpr. { puts("if"); }
+d27 1
+a27 2
+ifexpr ::= IF. {}
+
+@
+
+
+1.1
+log
+@INSERT: add lex and lemon
+@
+text
+@d19 6
+a24 5
+program ::= statementList.
+statementList ::= statementList statement. {}
+statement ::= assignment. {}
+statement ::= ifexpr. { puts("if"); }
+assignment ::= VAR ASSIGN INTEGER.   { CALL_YYR(0); }
+@
+

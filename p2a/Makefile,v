@@ -1,0 +1,228 @@
+head	1.9;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.9
+date	2017.10.08.14.07.44;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.10.08.12.37.55;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.10.07.07.36.10;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.10.01.16.33.26;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.09.30.15.16.48;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.09.26.16.54.38;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.09.25.16.26.25;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.09.24.16.33.49;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.24.14.50.44;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@UPDATE: imporve dependency
+@
+text
+@CXX = gcc
+CFLAGS = -c -Wall -g -O2 -ID:/nds/op3rd/include
+OBJS = grmm.tab.o lex.yy.o fsm.o main.o libmujs.o
+EXENAME = pcj.exe
+
+OPT_HEADERS := $(wildcard *.lua)
+
+all: $(OBJS)
+	$(CXX)  -o $(EXENAME) $(OBJS)
+
+%.o : %.c
+	$(CXX) $(CFLAGS) -o $@@ $<
+
+grmm.tab.c: grmm.y fsm.h
+	@@bison -d -t -r all grmm.y
+
+fsm.c: fsmmujs.c fsmlua.c fsm.h
+	$(CXX) $(CFLAGS) $@@
+
+lex.yy.c: lex.l fsm.h
+	@@flex lex.l
+
+t:
+	@@$(EXENAME) proto.h head.js
+
+count:
+	@@cat lex.l grmm.y fsmmujs.c fsm.h main.c head.js | wc -l
+
+clean:
+	rm *.o
+
+@
+
+
+1.8
+log
+@UPDATE: use macro and uniform entry fsm.c to include different engine
+@
+text
+@d9 1
+a9 1
+	gcc  -o $(EXENAME) $(OBJS)
+d14 1
+a14 1
+grmm.tab.c: grmm.y
+d17 2
+a18 1
+grmm.y: fsm.h
+d20 1
+a20 4
+fsm.c: fsmmujs.c fsmlua.c
+	gcc $(CFLAGS) $@@
+
+lex.yy.c: lex.l
+@
+
+
+1.7
+log
+@UPDATE: rm useless varible and target
+@
+text
+@d3 2
+a4 2
+OBJS = grmm.tab.o lex.yy.o fsmlua.o main.o libmujs.o
+EXENAME = p2a.exe
+d8 1
+a8 1
+all: $(OBJS) $(EXENAME)
+d19 3
+d26 1
+a26 1
+	@@p2a.exe proto.h head.js
+d29 1
+a29 1
+	@@cat lex.l grmm.y fsmlua.c fsm.h main.c head.js | wc -l
+@
+
+
+1.6
+log
+@UPDATE: add in/out param, can produce rough output
+@
+text
+@d3 2
+a4 3
+OBJS = grmm.tab.o lex.yy.o fsmlua.o main.o
+LIBPATH = -LD:/nds/op3rd/lib32
+LDLIBS = libmujs.o
+d8 2
+a9 2
+all: $(OBJS)
+	gcc  -o p2a $(OBJS) $(LDLIBS)
+d20 1
+a20 1
+	@@flex --nounistd lex.l
+a30 3
+test:
+	$(CXX) main.cpp -L. -lrua
+	a.exe
+@
+
+
+1.5
+log
+@UPDATE: control lua with macro, use function instead of hardcord script name, extend js parse
+@
+text
+@d5 1
+a5 1
+LDLIBS = one.o
+d26 3
+@
+
+
+1.4
+log
+@UPDATE: let js support print, fsm both drive lua and js
+@
+text
+@d5 1
+a5 1
+LDLIBS = lua5.1.dll one.o
+d24 1
+a24 1
+	@@p2a.exe proto.h
+@
+
+
+1.3
+log
+@UPDATE: add lua/js script interactive
+@
+text
+@d5 1
+a5 1
+LDLIBS = lua5.1.dll libmujs.o
+@
+
+
+1.2
+log
+@UPDATE: 1.add deal option 2.add proto result parse
+@
+text
+@d2 4
+a5 2
+CFLAGS = -c -Wall -g -O2
+OBJS = grmm.tab.o lex.yy.o main.o
+d10 1
+a10 1
+	gcc -o p2a $(OBJS)
+d18 2
+@
+
+
+1.1
+log
+@INSERT: Init release, Minimal Valuable Product
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -O2
+@
+

@@ -1,0 +1,41 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@About id_rsa & id_rsa.pub
+==
+due to cvs always convert line end to CRLF, MUST use dos2unix to convert these two file
+
+About vimrc dir
+==
+1. make sure init.vim is above other file
+2. copy init.vim into ~/.shuw/
+3. copy what you need *.vim into ~/.shuw/vimrc/
+
+then append this sentense to .vimrc or .config/nvim/init.vim
+```
+source ~/.shuw/init.vim
+```
+
+if use windows, make g:mvcf_path point to mvcf/ dir
+
+@

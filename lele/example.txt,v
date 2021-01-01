@@ -1,0 +1,23 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2018.06.17.10.26.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: initial upload
+@
+text
+@12+34@

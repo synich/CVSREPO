@@ -1,0 +1,201 @@
+head	1.5;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2021.01.01.11.41.17;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	1005FEF0A5D10FCA452;
+
+1.4
+date	2020.12.14.05.14.38;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1005FD6F4BE23554985;
+
+1.3
+date	2020.10.26.08.10.57;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005F96849115B20A94;
+
+1.2
+date	2020.10.01.07.26.14;	author FOTEN;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.05.22.15.36.32;	author android;	state Exp;
+branches;
+next	;
+commitid	629c5ec7f1800000;
+
+
+desc
+@@
+
+
+1.5
+log
+@combine snip branch
+@
+text
+@#!/bin/bash
+
+_snip_sh() {
+  kwd=(if for var)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]};
+    do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  f*) cat <<"EOF"
+while : ;  # endless loop
+for k in ${arr[@@]};
+for ((i=0;i<10;i++));
+do
+done
+EOF
+  ;;
+  i*) cat <<"EOF"
+if [ -a -o ]; then
+if [[ && || ]]; then
+elif
+fi
+
+case $1 in
+  x*)
+  ;;
+esac
+EOF
+  ;;
+  v*) cat <<"EOF"
+$res=${var/-*./.} # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
+$res=$(ls)        # save ls result into res
+$res=$((1+2))     # calc
+EOF
+  ;;
+esac
+}
+
+_snip_awk() {
+cat <<"EOF"
+{if($1 > 1.0) print $1, $2}
+$1 !~ /abc/ {print $1, $2}
+EOF
+}
+
+showallsnip() {
+  kwd=(sh awk)
+  echo support language:
+  for k in ${kwd[@@]};
+  do
+    echo $k
+  done
+}
+
+main() {
+  if [ $# -eq 0 ]; then
+    showallsnip
+    return
+  fi
+  type _snip_$1 1>/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    _snip_$1 $2
+  else
+    echo language $1 not exists
+  fi
+}
+
+main $@@
+
+@
+
+
+1.4
+log
+@add more snip in sh
+@
+text
+@d4 1
+a4 1
+  kwd=(for case if substitude)
+d14 1
+d16 1
+a16 1
+for ((i=0;i<10;i++))
+a20 7
+  c*) cat <<EOF
+case v in
+  x)
+  ;;
+esac
+EOF
+  ;;
+d26 5
+d33 4
+a36 2
+  s*) cat <<"EOF"
+${var/-*./.}  # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
+@
+
+
+1.3
+log
+@add awk and drop function keyword
+@
+text
+@d4 1
+a4 1
+  kwd=(for case if)
+d15 1
+d28 2
+a29 1
+if []; then
+d34 4
+@
+
+
+1.2
+log
+@INSERT: shell if, git https, ps handy command
+@
+text
+@d3 1
+a3 1
+function _snip_sh() {
+d35 9
+a43 2
+function showallsnip() {
+  kwd=(sh xx)
+d51 1
+a51 1
+function main() {
+@
+
+
+1.1
+log
+@bin file
+@
+text
+@d3 2
+a4 2
+function shsnip() {
+  kwd=(for case)
+d26 6
+d49 1
+a49 1
+  type $1snip 1>/dev/null 2>&1
+d51 1
+a51 1
+    $1snip $2
+@
+

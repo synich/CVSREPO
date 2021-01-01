@@ -1,0 +1,124 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2020.12.27.06.25.23;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	1005FE828D231624A86;
+
+1.1
+date	2020.12.05.14.18.58;	author android;	state Exp;
+branches;
+next	;
+commitid	1005FCB96D23A0102AB;
+
+
+desc
+@@
+
+
+1.2
+log
+@combine leader map into kbd.vim
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+" PlugOption {
+
+    " PIV {
+        if isdirectory(expand(mvcf_path_bundle."PIV"))
+            let g:DisableAutoPHPFolding = 0
+            let g:PIVAutoClose = 0
+        endif
+    " }
+
+    " PyMode {
+        " Disable if python support not present
+        if !has('python') && !has('python3')
+            let g:pymode = 0
+            let g:pymode_lint_checkers = ['pyflakes']
+            let g:pymode_trim_whitespaces = 0
+            let g:pymode_options = 0
+            let g:pymode_rope = 0
+        endif
+    " }
+
+    " GoLang {
+        if count(mvcf_bundle_groups, 'go')
+            let g:go_highlight_functions = 1
+            let g:go_highlight_methods = 1
+            let g:go_highlight_structs = 1
+            let g:go_highlight_operators = 1
+            let g:go_highlight_build_constraints = 1
+            let g:go_fmt_command = "goimports"
+            let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+            au FileType go nmap <Leader>m <Plug>(go-implements)
+            au FileType go nmap <Leader>i <Plug>(go-info)
+            au FileType go nmap <Leader>e <Plug>(go-rename)
+            au FileType go nmap <leader>r <Plug>(go-run)
+            au FileType go nmap <leader>b <Plug>(go-build)
+            au FileType go nmap <leader>t <Plug>(go-test)
+            au FileType go nmap <Leader>gd <Plug>(go-doc)
+            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+            au FileType go nmap <leader>co <Plug>(go-coverage)
+        endif
+        " }
+
+    " UndoTree {
+        if isdirectory(expand(mvcf_path_bundle."undotree/"))
+            nnoremap <Leader>u :UndotreeToggle<CR>
+            " If undotree is opened, it is likely one wants to interact with it.
+            let g:undotree_SetFocusWhenToggle=1
+        endif
+    " }
+
+    " AutoCloseTag {
+        " Make it so AutoCloseTag works for xml and xhtml files as well
+        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+    " }
+
+    " Misc {
+        if isdirectory(expand(mvcf_path_bundle."nerdtree"))
+            let g:NERDShutUp=1
+        endif
+        if isdirectory(expand(mvcf_path_bundle."matchit.zip"))
+            let b:match_ignorecase = 1
+        endif
+    " }
+
+" }
+@
+
+
+1.1
+log
+@seperate plug switch into another file
+@
+text
+@d48 1
+a48 1
+        if isdirectory(expand("~/.vim/bundle/undotree/"))
+a57 6
+        nmap <Leader>ac <Plug>ToggleAutoCloseMappings
+    " }
+
+    " NerdCommenter {
+    map  <Leader>cc <Plug>NERDCommenterInvert
+    nmap <Leader>ce <Plug>NERDCommenterToEOL
+d61 1
+a61 1
+        if isdirectory(expand("~/.vim/bundle/nerdtree"))
+d64 1
+a64 1
+        if isdirectory(expand("~/.vim/bundle/matchit.zip"))
+@
+

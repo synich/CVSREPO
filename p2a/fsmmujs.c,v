@@ -1,0 +1,85 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2017.10.08.12.37.55;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@UPDATE: use macro and uniform entry fsm.c to include different engine
+@
+text
+@#include "mujs.h"
+
+js_State *g_J;
+
+static void jsB_alert(js_State* J){
+  puts(js_tostring(J, 1));//in function 0 is this
+  js_pushundefined(J);
+}
+
+static void block2js(char* fn, int phase, char* str){
+  js_getglobal(g_J, fn);
+  js_getproperty(g_J, -1, "push");//global is on top, it's -1
+  js_copy(g_J, -2);
+  js_pushnumber(g_J, phase);
+  js_pushstring(g_J, str);
+  js_call(g_J, 2);
+  js_pop(g_J, 2);
+}
+
+static void state2js(char* fn, int state){
+  js_getglobal(g_J, fn);
+  js_getproperty(g_J, -1, "reach");//global is on top, it's -1
+  js_copy(g_J, -2);
+  js_pushnumber(g_J, state);
+  js_call(g_J, 1);
+  js_pop(g_J, 2);
+}
+
+int p2a_initScript(char* sfn){
+  int ret=0;
+  g_J = js_newstate(NULL, NULL, JS_STRICT);
+  js_newcfunction(g_J, jsB_alert, "print", 1);
+  js_setglobal(g_J, "print");
+  ret = js_ploadfile(g_J, sfn);
+  if (0==ret) {
+    js_pushnull(g_J);
+    if (1==js_pcall(g_J, 0)) {
+        printf("call %s file illegal!%s\n", sfn, js_tostring(g_J, 0));
+    }
+  } else {
+    printf("load %s file wrong!%s\n", sfn, js_tostring(g_J, 0));
+  }
+  js_pop(g_J, 1);//ok or wrong, pop result leave in stack
+
+  return ret;
+}
+
+void p2a_finiScript(){
+  js_freestate(g_J);
+}
+
+int p2a_push(int phase, char* str){
+  //TODO loop call
+  char* p = p2a_accessRootVar(0, NULL);
+  block2js(p, phase, str);
+  return 0;
+}
+
+void p2a_reach(int state){
+  char* p = p2a_accessRootVar(0, NULL);
+  state2js(p, state);
+}
+@

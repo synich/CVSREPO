@@ -1,0 +1,231 @@
+head	1.5;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2020.12.27.02.24.10;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	1005FE7F04A2C268F5E;
+
+1.4
+date	2020.12.22.14.49.26;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1005FE2077643DB02B8;
+
+1.3
+date	2020.12.22.05.05.22;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005FE17E92388A5302;
+
+1.2
+date	2020.10.09.03.49.30;	author alarm;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.5
+log
+@bugfix plugvim command remove bund.tgz before install
+@
+text
+@#!/bin/sh
+
+FAVORITE_DIRNAME=shuw
+
+if [ $# -eq 0 ]; then
+    echo "$0 setup|update|clean [package]"
+    exit 1
+fi
+
+# make template file can be used in host os
+fixdir() {
+  mv bash.sh.tpl bash.sh
+  mv init.vim.tpl init.vim
+  sed -i -e "s/\.FAVORITE_DIRNAME/.${FAVORITE_DIRNAME}/" ~/.${FAVORITE_DIRNAME}/bash.sh
+  sed -i -e "s/\.FAVORITE_DIRNAME/.${FAVORITE_DIRNAME}/" ~/.${FAVORITE_DIRNAME}/init.vim
+  if [ ${HOME:0:21} = "/data/data/com.termux" ]; then
+      sed -i -e "s%#!/bin/bash%#!/data/data/com.termux/files/usr/bin/bash%" ~/.${FAVORITE_DIRNAME}/bin/goto
+      sed -i -e "s%#!/bin/bash%#!/data/data/com.termux/files/usr/bin/bash%" ~/.${FAVORITE_DIRNAME}/bin/pkg
+  fi
+}
+
+# if no package, download. nevertheless change confile name
+preparefile() {
+    confile=envconf.tar.gz
+    if [ -z "$1" ]; then
+      if [ -x "$(command -v curl)" ]; then
+          curl -fsSL http://waer.f3322.net:55555/Archive/$confile > .${FAVORITE_DIRNAME}/$confile
+      elif [ -x "$(command -v wget)" ]; then
+          wget http://waer.f3322.net:55555/Archive/$confile -O .${FAVORITE_DIRNAME}/$confile
+      else
+          echo "has neither curl or wget, setup abort"
+          exit 1
+      fi
+    else
+      confile=$1
+      mv $confile .${FAVORITE_DIRNAME}/$confile
+    fi
+    cd .${FAVORITE_DIRNAME}
+    tar xzf $confile
+    fixdir
+    rm $confile
+    cd ..
+}
+
+# $1[M]: s-setup 1-update
+# $2[O]: package
+addconf() {
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/bundle
+  preparefile $2
+  if [ -x "$(command -v git)" ]; then
+    if [ ! -f .gitconfig ]; then
+      mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
+    fi
+  fi
+  chmod -R 755 .${FAVORITE_DIRNAME}/bin/
+  # only setup need to append sth to rc file
+  if [ $1 = "s" ]; then
+    echo "source ~/.${FAVORITE_DIRNAME}/bash.sh" >> .bashrc
+    if [ -x "$(command -v vim)" ]; then
+      echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
+    fi
+    if [ -x "$(command -v nvim)" ]; then
+      echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .config/nvim/init.vim
+    fi
+    touch .${FAVORITE_DIRNAME}/bin/.gotohist
+  fi
+}
+
+clsconf() {
+  rm -rf .${FAVORITE_DIRNAME}/
+  sed -i -e "s/^source.*${FAVORITE_DIRNAME}.*//" .bashrc
+  if [ -x "$(command -v vim)" ]; then
+    sed -i -e "s/^source.*${FAVORITE_DIRNAME}.*//" .vimrc
+  fi
+  if [ -x "$(command -v nvim)" ]; then
+    sed -i -e "s/^source.*${FAVORITE_DIRNAME}.*//" .config/nvim/init.vim
+  fi
+}
+
+plugvim() {
+  if [ -n "$1" ]; then
+    rm -rf .${FAVORITE_DIRNAME}/vimrc/bundle/*
+    mv $1 .${FAVORITE_DIRNAME}/vimrc/bundle
+    cd .${FAVORITE_DIRNAME}/vimrc/bundle
+    tar xzf $1
+    rm $1
+  fi
+}
+
+main() {
+  action=$1
+  package=$2
+  # make sure package and run place is HOME
+  if [ `pwd` != $HOME -a x$package != x ]; then
+      mv $package ~
+  fi
+  cd ~
+  case "$action" in
+      s*)
+          addconf s $package
+          ;;
+      u*)
+          addconf u $package
+          ;;
+      c*)
+          clsconf
+          ;;
+      p*)
+          plugvim $package
+          ;;
+      v*)
+          echo ver20201227
+          ;;
+      *)
+          echo dont known what to do
+          ;;
+  esac
+}
+
+main $1 $2
+
+@
+
+
+1.4
+log
+@support subcommand p to install vim plugin
+@
+text
+@d82 1
+a84 1
+    rm -r *
+d112 1
+a112 1
+          echo ver20201222
+@
+
+
+1.3
+log
+@avoid of overwrite .gitconfig
+@
+text
+@d80 9
+d108 3
+d112 1
+a112 1
+          echo ver20201009
+@
+
+
+1.2
+log
+@UPDATE: function define drop keyword, adapt ash
+@
+text
+@d51 3
+a53 1
+    mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
+@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d11 1
+a11 1
+function fixdir() {
+d23 1
+a23 1
+function preparefile() {
+d47 1
+a47 1
+function addconf() {
+d67 1
+a67 1
+function clsconf() {
+d79 1
+a79 1
+function main() {
+d97 3
+@
+

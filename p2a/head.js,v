@@ -1,0 +1,616 @@
+head	1.10;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2017.10.07.10.58.40;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2017.10.07.07.52.48;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.10.06.16.26.16;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.10.06.05.14.17;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.10.02.16.26.35;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.10.01.16.33.26;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.09.30.15.16.48;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.09.27.15.53.17;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.09.26.16.54.38;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.25.16.26.26;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@UPDATE: imporve struct output
+@
+text
+@//global varible should same as file name
+var head = {
+  state : 0, ///10-in(basic) 11-in(struct) 20-out(basic) 21-out(struct)
+  cls : '',
+  method : '',
+  comment : '',
+  invar : [],
+  outvar : [],
+  postvar : '',
+  instu : [],
+  outstu : [],
+  tmpone : [undefined, undefined],
+
+  push : function(phase, str){
+    switch (phase) {
+      case 1: {
+        var str = str.replace(/method *: */, '')
+        var cmArr = str.split('.')
+        this.cls = cmArr[0]
+        str = cmArr[1].replace(',', '')
+        this.method = str
+        break
+      }
+      case 2: {
+        this.comment += str.replace(/\/+/, '')
+        break
+      }
+      case 3: {//varible type
+        this.tmpone[0] = str
+        break
+      }
+      case 4: {//varible name
+        this.tmpone[1] = str
+        break
+      }
+      case 5:{
+        this.postvar += str.substring(1, str.length-1)
+        break
+      }
+      case 6:{//struct
+        var stname = str.replace(/struct[ \t]+/, '')
+        if (whichPhase(this.state)=='in') {
+          appendOneVar.call(this, 'in', 'struct', stname)
+        }else if(whichPhase(this.state)=='out'){
+          appendOneVar.call(this, 'out', 'struct', stname)
+        }
+        break
+      }
+    }
+  },
+
+  reach : function(cond){
+    switch (cond) {
+      case 1://One var
+      case 2:{//One array
+        if (whichPhase(this.state)=='in'){//IN
+          appendOneVar.call(this, 'in', this.tmpone[0], this.tmpone[1])
+          if (cond == 2){
+            appendVarDimen.call(this, 'in', this.postvar)
+            this.postvar = '' /// clear after push, avoid of taint next round
+          }
+        }else if (whichPhase(this.state)=='out'){//OUT
+          appendOneVar.call(this, 'out', this.tmpone[0], this.tmpone[1])
+          if (cond == 2){
+            appendVarDimen.call(this, 'out', this.postvar)
+            this.postvar = '' /// clear after push, avoid of taint next round
+          }
+        }
+        break
+      }
+      case 4:{//meet method, begin IN
+        this.state = 10
+        break
+      }
+      case 5:{//meet result, begin OUT
+        this.state = 20
+        break
+      }
+      case 541:{//state plus 1
+        ++this.state
+        break
+      }
+      case 531:{//state minus 1
+        --this.state
+        break
+      }
+      case 9:{
+        ///function declare
+        print( consDeclare.call(this) )
+        /// input param convert
+        print( consInputVar(this.invar) )
+        /// prepare output varible
+        print( consPrepareOut.call(this) )
+        ///construct param list and call
+        print( consFuncCall.call(this) )
+        /// output param convert
+        print( consRetOutput.call(this) )
+        break
+      }
+    }
+  }
+}
+
+function whichPhase(state){
+  if (Math.floor(state/10)==1){
+    return 'in'
+  }else if (Math.floor(state/10)==2){
+    return 'out'
+  }else {
+    return ''
+  }
+}
+
+/// ty varible type
+/// vn varible name
+function appendOneVar(inout, ty, vn){
+  var last = 0
+  var stlst = 0
+  if (inout=='in'){
+    last = this.invar.length//not real but inchiki
+    if (this.state%10==0){//basic varible
+      this.invar.push([])
+      this.invar[last][0] = ty
+      this.invar[last][1] = vn
+    } else if (this.state%10==1){//struct
+      if (!this.instu[last-1]) {// first add struct elem
+        this.instu[last-1] = []
+      }
+      stlst = this.instu[last-1].length
+      this.instu[last-1].push([])
+      this.instu[last-1][stlst][0] = ty
+      this.instu[last-1][stlst][1] = vn
+    }
+  }else {
+    last = this.outvar.length//not real but inchiki
+    if (this.state%10==0){//basic varible
+      this.outvar.push([])
+      this.outvar[last][0] = ty
+      this.outvar[last][1] = vn
+    } else if (this.state%10==1){//struct
+      if (!this.outstu[last-1]) {// first add struct elem
+        this.outstu[last-1] = []
+      }
+      stlst = this.outstu[last-1].length
+      this.outstu[last-1].push([])
+      this.outstu[last-1][stlst][0] = ty
+      this.outstu[last-1][stlst][1] = vn
+    }
+  }
+}
+
+function appendVarDimen(inout, dimen){
+  var lasti = 0
+  if (inout=='in'){
+    lasti = this.invar.length - 1
+    this.invar[lasti][2] = dimen
+  }else{
+    lasti = this.outvar.length -1
+    this.outvar[lasti][2] = dimen
+  }
+}
+
+/// let proto type to json type
+function convType(oriType, isArr){
+  if (oriType == 'int'){
+    return 'Int'
+  } else if (oriType == 'char' && isArr){
+    return 'String'
+  } else {
+    return oriType
+  }
+}
+
+/// make proper output varible type
+function makeOutType(oriType, isArr){
+  if (oriType == 'char' && isArr) {
+    return 'std::string'
+  } else if (oriType == 'struct') {
+    return 'struct'
+  } else {
+    return oriType
+  }
+}
+
+/// make function declare
+function consDeclare(){
+  return 'bool '+this.cls+'::'+this.method+"(Json::Value &request, Memory::CPacket &requestPacket,\n    Json::Value &response, Memory::CPacket &responsePacket)\n{\n  bool ret = false;\n  response[\"result\"] = ret;"
+}
+
+/// json to struct
+function consInStuAssign(vn, stn, arr){
+  var vlst = ''
+  for (var i=0; i<arr.length; i++) {
+    vlst += '  '+vn+'.'+arr[i][1]+' = request["params"]["'+stn+'"]["'+arr[i][1]+'"].as'+convType(arr[i][0], arr[i][2])+"();\n"
+  }
+  return vlst
+}
+
+/// array of varible
+function consInputVar(arr){
+  var vlst = ''
+  for (var i=0; i<arr.length; i++) {
+    var inType = convType(arr[i][0], arr[i][2])
+    if (inType == 'String') {
+      vlst += '  '+arr[i][0]+' vi'+i+'['+arr[i][2]+"];\n"
+      var cpylen = arr[i][2]-1
+      vlst += '  strncpy(vi'+i+', request["params"]["'+arr[i][1]+"\"].asCString(), "+cpylen+");\n"
+    } else if (inType == 'struct') {
+      vlst += '  struct '+arr[i][1]+' vi'+i+";\n  memset(vi"+i+", sizeof(vi"+i+"), 0);\n"
+      vlst += consInStuAssign('vi'+i, arr[i][1], head.instu[i])
+    }else {
+      vlst += '  '+arr[i][0]+' vi'+i+' = request["params"]["'+arr[i][1]+'"].as'+inType+"();\n"
+    }
+  }
+  return vlst
+}
+
+function consPrepareOut(){
+  var vlst = ''
+  var olen = this.outvar.length
+  for (var i=0; i<olen; i++){
+    var otype = makeOutType(this.outvar[i][0], this.outvar[i][2])
+    if (otype == 'struct' ) {
+      vlst += '  '+otype+' '+this.outvar[i][1]+' vo'+i+";\n"
+      vlst += '  memset(vo'+i+', sizeof(vo'+i+"), 0);\n"
+    }else {
+      vlst += '  '+otype+' vo'+i+";\n"
+    }
+  }
+  return vlst
+}
+
+/// make function call statement
+function consFuncCall(){
+  var vlst = ' '
+  var rlast = this.invar.length
+  for (var i=0; i<rlast; i++){
+    vlst += ' vi'+i+','
+  }
+  rlast = this.outvar.length
+  for (var i=0; i<rlast; i++){
+    vlst += ' vo'+i+','
+  }
+  return "  ret = m_ptr->"+this.method+'('+vlst.substring(0, vlst.length-1)+');'
+}
+
+function consRetOutput(){
+  var olst = ''
+  olst = "  if(!ret){\n    response[\"params\"][\"error\"][\"code\"] = Infra::getLastError();\n  else{\n"
+  for (var i=0; i<this.outvar.length; i++){
+    olst += '    response["params"]["'+this.outvar[i][1]+'"] = vo'+i+";\n"
+  }
+  olst += "  }\n  return ret;\n}"
+  return olst
+}
+@
+
+
+1.9
+log
+@UPDATE: refractur varible assignment, introduce struct deal
+@
+text
+@d91 1
+a91 1
+        print( consInputVar.call(this) )
+d117 2
+d120 14
+a133 4
+    var last = this.invar.length//not real but inchiki
+    this.invar.push([])
+    this.invar[last][0] = ty
+    this.invar[last][1] = vn
+d135 14
+a148 4
+    var last = this.outvar.length//not real but inchiki
+    this.outvar.push([])
+    this.outvar[last][0] = ty
+    this.outvar[last][1] = vn
+d179 1
+a179 1
+    return 'struct XXX'
+d190 2
+a191 1
+function consInputVar(){
+d193 11
+a203 2
+  for (var i=0; i<this.invar.length; i++) {
+    var inType = convType(this.invar[i][0], this.invar[i][2])
+d205 6
+a210 3
+      vlst += '  '+this.invar[i][0]+' vi'+i+'['+this.invar[i][2]+"];\n"
+      var cpylen = this.invar[i][2]-1
+      vlst += '  strncpy(vi'+i+', request["params"]["'+this.invar[i][1]+"\"].asCString(), "+cpylen+");\n"
+d212 1
+a212 1
+      vlst += '  '+this.invar[i][0]+' vi'+i+' = request["params"]["'+this.invar[i][1]+'"].as'+inType+"();\n"
+d223 6
+a228 1
+    vlst += '  '+otype+' vo'+i+";\n"
+@
+
+
+1.8
+log
+@UPDATE: enhance strncpy and output varible declare and type define
+@
+text
+@d1 1
+a1 1
+//state 1-method begin, params is in 2-result begin, params is out
+d3 1
+a3 1
+  state : 0,
+d9 3
+a12 1
+  postvar : '',
+d38 10
+d56 2
+a57 5
+        if (this.state==1){//IN
+          var last = this.invar.length//not real but inchiki
+          this.invar.push({})
+          this.invar[last][0] = this.tmpone[0]
+          this.invar[last][1] = this.tmpone[1]
+d59 1
+a59 1
+            this.invar[last][2] = this.postvar
+d62 2
+a63 5
+        }else if (this.state==2){//OUT
+          var last = this.outvar.length//not real but inchiki
+          this.outvar.push({})
+          this.outvar[last][0] = this.tmpone[0]
+          this.outvar[last][1] = this.tmpone[1]
+d65 1
+a65 1
+            this.outvar[last][2] = this.postvar
+d71 10
+a80 2
+      case 4:{//IN
+        this.state = 1
+d83 2
+a84 2
+      case 5:{//OUT
+        this.state = 2
+d104 37
+d156 2
+d175 1
+a175 1
+      vlst += '  strncpy(vi'+i+', request["params"]["'+this.invar[i][i]+"\"].asCString(), "+cpylen+");\n"
+@
+
+
+1.7
+log
+@UPDATE: separate function from object
+@
+text
+@d15 1
+a15 1
+        var str = str.replace(/method *: */, 'bool ')
+d35 1
+a35 1
+        this.postvar += str
+d40 2
+a41 2
+  reach : function(state){
+    switch (state) {
+d49 1
+a49 1
+          if (state == 2){
+d51 1
+d58 1
+a58 1
+          if (state == 2){
+d60 1
+d77 3
+a79 3
+        for (var i=0; i<this.invar.length; i++) {
+          print('  '+this.invar[i][0]+' vi'+i+' = request["params"]["'+this.invar[i][1]+'"].as'+convType(this.invar[i][0], this.invar[i][2])+'();')
+        }
+d101 9
+d112 26
+a137 1
+  return this.cls+'::'+this.method+"(Json::Value &request, Memory::CPacket &requestPacket,\n    Json::Value &response, Memory::CPacket &responsePacket)\n{\n  bool ret = false;\n  response[\"result\"] = ret;"
+d142 1
+a142 1
+  var vlst = ' ';
+@
+
+
+1.6
+log
+@INSERT: support char[N] as string
+@
+text
+@a11 10
+  convType : function(oriType, isArr){
+	if (oriType == 'int'){
+	  return 'Int'
+	} else if (oriType == 'char' && isArr){
+	  return 'String'
+	} else {
+	  return oriType
+	}
+  },
+
+d73 1
+a73 1
+        print(this.cls+'::'+this.method+"(Json::Value &request, Memory::CPacket &requestPacket,\n    Json::Value &response, Memory::CPacket &responsePacket)\n{\n  bool ret = false;\n  response[\"result\"] = ret;")
+d76 1
+a76 1
+          print('  '+this.invar[i][0]+' vi'+i+' = request["params"]["'+this.invar[i][1]+'"].as'+this.convType(this.invar[i][0], this.invar[i][2])+'();')
+d79 1
+a79 11
+        var vlst = '';
+        var rlast = this.invar.length
+        for (var i=0; i<rlast; i++){
+          vlst += ' vi'+i+','
+        }
+        rlast = this.outvar.length
+        for (var i=0; i<rlast; i++){
+          vlst += ' vo'+i+','
+        }
+        vlst.replace(/,$/, '')
+        print("  ret = m_ptr->"+this.method+'('+vlst+');')
+d81 1
+a81 4
+        for (var i=0; i<this.outvar.length; i++){
+          print('  '+'response["params"]["'+this.outvar[i][1]+'"] = vo'+i+';')
+        }
+        print("  return ret;\n}")
+d88 39
+@
+
+
+1.5
+log
+@UPDATE: add in/out param, can produce rough output
+@
+text
+@d10 11
+d44 3
+d52 2
+a53 1
+      case 1:{//One var define
+d59 3
+d67 3
+d73 1
+a73 1
+      case 2:{//IN
+d77 1
+a77 1
+      case 3:{//OUT
+d86 1
+a86 1
+          print('  '+this.invar[i][0]+' vi'+i+' = request["params"]["'+this.invar[i][1]+'"].as'+this.invar[i][0]+'();')
+d98 1
+@
+
+
+1.4
+log
+@UPDATE: control lua with macro, use function instead of hardcord script name, extend js parse
+@
+text
+@d1 1
+d3 1
+d7 3
+a9 2
+  vartype : '',
+  varname : '',
+d22 1
+a22 1
+        this.comment += str.replace(/\/*/, '')
+d25 2
+a26 2
+      case 3: {
+        this.vartype = str
+d29 2
+a30 2
+      case 4: {
+        this.varname = str
+d38 20
+a57 1
+      case 1:{
+d61 1
+d63 19
+a81 2
+        print('  request["params"]["'+this.varname+'"].as'+this.vartype+'()')
+        print("  ret = m_ptr->"+this.method+'();')
+@
+
+
+1.3
+log
+@UPDATE: pass flex token to script, bison parse to trigger script, drop script fini
+@
+text
+@d1 2
+a2 1
+ var head = {
+a7 3
+  init : function(){
+  },
+
+d11 5
+a15 1
+        this.method = str.replace(/method *: */, '')
+a35 1
+        print('request["'+this.varname+'"].as'+this.vartype)
+d39 5
+a43 2
+    print(this.method+'#'+this.comment
+      +'#'+this.vartype+'#'+this.varname)
+@
+
+
+1.2
+log
+@UPDATE: let js support print, fsm both drive lua and js
+@
+text
+@d2 5
+a6 1
+  method : 'first',
+d9 1
+d11 17
+a27 2
+    if (1==phase) {
+      this.method = str;
+d30 12
+a41 2
+  fini : function(){
+    print( this.method) ;
+@
+
+
+1.1
+log
+@UPDATE: add lua/js script interactive
+@
+text
+@d11 1
+a11 1
+    return this.method;
+@
+

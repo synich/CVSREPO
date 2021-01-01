@@ -1,0 +1,201 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.8
+date	2017.10.07.10.58.40;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.10.07.07.38.10;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.10.02.16.26.35;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.10.01.16.33.26;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.09.27.15.53.18;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.09.25.16.26.26;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.09.24.16.33.49;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.24.14.50.45;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@UPDATE: imporve struct output
+@
+text
+@%option nounistd
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <io.h>
+#include "grmm.tab.h"
+#include "fsm.h"
+
+#define CP_YYTEXT(val) val=(char*)calloc(yyleng+1, 1);strncpy(val, yytext, yyleng)
+%}
+
+DIGIT   [0-9]
+LETTER  [A-Za-z0-9]
+SPACE   [ \t]
+%%
+"#ifdef".*"RPC" {return T_BGRPC;}
+"method".* {p2a_push(1, yytext); p2a_reach(4); return T_METHOD;}
+"result".* {p2a_reach(5); return T_RESULT;}
+"#endif" {return T_EDRPC;}
+"int"|"char" {p2a_push(3, yytext); return T_INT;}
+"struct"{SPACE}+{LETTER}+ {p2a_push(6, yytext); p2a_reach(541); return T_STRUCT;}
+{SPACE}+ {}
+"params"{SPACE}*":" {}
+"//".* {p2a_push(2, yytext);}
+\n {yylineno++;}
+"null" {return T_NULL;}
+"["{DIGIT}+"]" {p2a_push(5, yytext); return T_DIMEN;}
+"{"|"}"|";" {return yytext[0];}
+{LETTER}+ {p2a_push(4, yytext); return T_VARNAME;}
+. {}
+%%
+
+int yywrap (void ){
+  return 1;
+}
+@
+
+
+1.7
+log
+@INSERT: add struct support
+@
+text
+@d23 1
+a23 1
+"struct"{SPACE}+{LETTER}+ {p2a_reach(541); p2a_push(6, yytext); return T_STRUCT;}
+@
+
+
+1.6
+log
+@INSERT: support char[N] as string
+@
+text
+@d1 1
+a13 1
+LETTER  [A-Za-z]
+d15 1
+d23 1
+@
+
+
+1.5
+log
+@UPDATE: add in/out param, can produce rough output
+@
+text
+@d18 2
+a19 2
+"method".* {p2a_push(1, yytext); p2a_reach(2); return T_METHOD;}
+"result".* {p2a_reach(3); return T_RESULT;}
+d27 1
+@
+
+
+1.4
+log
+@UPDATE: pass flex token to script, bison parse to trigger script, drop script fini
+@
+text
+@d15 1
+a15 1
+
+d18 2
+a19 2
+"method".* {p2a_findElem(1, yytext); return T_METHOD;}
+"result".* {return T_RESULT;}
+d21 4
+a24 4
+"int" {p2a_findElem(3, yytext); return T_INT;}
+{LETTER}+ {p2a_findElem(4, yytext); return T_VARNAME;}
+[ \t] {}
+"//".* {p2a_findElem(2, yytext);}
+d26 4
+a29 1
+. {return yytext[0];}
+@
+
+
+1.3
+log
+@UPDATE: add lua/js script interactive
+@
+text
+@d8 1
+d18 1
+a18 1
+"method".* {CP_YYTEXT(yylval.val); return T_METHOD;}
+d21 2
+a22 2
+"int" {CP_YYTEXT(yylval.val); return T_INT;}
+{LETTER}+ {CP_YYTEXT(yylval.val); return T_VARNAME;}
+d24 1
+a24 1
+"//".* {}
+@
+
+
+1.2
+log
+@UPDATE: 1.add deal option 2.add proto result parse
+@
+text
+@d9 1
+d17 1
+a17 1
+"method".* {return T_METHOD;}
+d20 2
+a21 2
+"int" {return T_INT;}
+{LETTER}+ {return T_VARNAME;}
+@
+
+
+1.1
+log
+@INSERT: Init release, Minimal Valuable Product
+@
+text
+@d17 1
+@
+

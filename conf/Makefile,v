@@ -1,0 +1,78 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2020.10.08.07.54.20;	author alarm;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2020.10.01.08.22.47;	author alarm;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2020.10.01.07.49.29;	author alarm;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.4
+log
+@UPDATE: tar share folder
+@
+text
+@all:
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/ share/
+	gzip envconf.tar
+	mv envconf.tar.gz ~/pblog/Archive/
+
+@
+
+
+1.3
+log
+@UPDATE: fix ps grep bug
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/
+@
+
+
+1.2
+log
+@UPDATE: ver up to 2
+@
+text
+@d2 1
+a2 1
+	tar cf --exclude=CVS* --exclude=bin/.goto* envconf.tar bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/
+@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/ --exclude CVS* --exclude bin/.goto*
+@
+

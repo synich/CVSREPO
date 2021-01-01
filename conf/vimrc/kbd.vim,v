@@ -1,0 +1,524 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.8
+date	2020.12.28.13.02.33;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	1005FE9D76912543E22;
+
+1.7
+date	2020.12.27.12.17.01;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	1005FE87B3D0D050956;
+
+1.6
+date	2020.12.27.06.25.22;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	1005FE828D231624A86;
+
+1.5
+date	2020.12.27.06.04.49;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	1005FE8240130C86792;
+
+1.4
+date	2020.12.22.05.06.35;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1005FE17EDB38A0A715;
+
+1.3
+date	2020.12.13.15.51.08;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005FD6386C19AB9F3F;
+
+1.2
+date	2020.06.05.15.12.23;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	1a135eda60d70000;
+
+1.1
+date	2020.05.22.15.36.49;	author android;	state Exp;
+branches;
+next	;
+commitid	62b35ec7f1910000;
+
+
+desc
+@@
+
+
+1.8
+log
+@add <tab> -> easycomplete
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+" Formatting {
+
+    set wrap                        " Do not wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    "set matchpairs+=<:>             " Match, to be used with %
+    set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
+    "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+
+" }
+
+" Functions {
+
+    function! s:ShowMaps()
+      let old_reg = getreg("a")          " save the current content of register a
+      let old_reg_type = getregtype("a") " save the type of the register as well
+    try
+      redir @@a                           " redirect output to register a
+      " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+      silent map | call feedkeys("\<CR>")
+      silent imap | call feedkeys("\<CR>")
+      redir END                          " end output redirection
+      vnew                               " new buffer in vertical window
+      setlocal buftype=nofile
+      setlocal bufhidden=delete
+      setlocal nobuflisted
+      setlocal noswapfile
+      setlocal nowrap
+      put a                              " put content of register
+      " Sort on 4th character column which is the key(s)
+      %!sort -k1.4,1.4
+    finally                              " Execute even if exception is raised
+      call setreg("a", old_reg, old_reg_type) " restore register a
+    endtry
+    endfunction
+
+    " Initialize NERDTree as needed {
+    function! NERDTreeInitAsNeeded()
+        redir => bufoutput
+        buffers!
+        redir END
+        let idx = stridx(bufoutput, "NERD_tree")
+        if idx > -1
+            NERDTreeMirror
+            NERDTreeFind
+            wincmd l
+        endif
+    endfunction
+    " }
+
+    " Strip whitespace {
+    function! StripTrailingWhitespace()
+        " Preparation: save last search, and cursor position.
+        let _s=@@/
+        let l = line(".")
+        let c = col(".")
+        " do the business:
+        %s/\s\+$//e
+        " clean up: restore previous search history, and cursor position
+        let @@/=_s
+        call cursor(l, c)
+    endfunction
+    " }
+
+    " Shell command {
+    function! s:RunShellCommand(cmdline)
+        botright new
+
+        setlocal buftype=nofile
+        setlocal bufhidden=delete
+        setlocal nobuflisted
+        setlocal noswapfile
+        setlocal nowrap
+        setlocal filetype=shell
+        setlocal syntax=shell
+
+        call setline(1, a:cmdline)
+        call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+        execute 'silent $read !' . escape(a:cmdline, '%#')
+        setlocal nomodifiable
+        1
+    endfunction
+
+    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    " }
+
+    " Check QuickFix 1-open/0-close {
+    function! MvcfCheckQuickfix()
+      let l:hasqf = 0
+      for winnr in range(1, winnr('$'))
+        if getwinvar(winnr, '&syntax') == 'qf'
+            let l:hasqf = 1
+            break
+        endif
+      endfor
+      return l:hasqf
+    endfunction
+
+    function s:togglequickfix()
+      if MvcfCheckQuickfix()
+          execute 'cclose'
+      else
+          execute 'copen'
+      endif
+    endfunction
+    " }
+
+    " Show snip code {
+    function! s:showsnipcode()
+        let l:ft = &filetype
+        let l:arg = input('Keyword: ')
+        call s:RunShellCommand('snip '.l:ft.' '.l:arg)
+    endfunction
+    " }
+" }
+
+" Key (re)Mappings {
+
+    " Handy {
+    " Wrapped lines goes down/up to next row, rather than next line in file.
+    inoremap jj <Esc>
+    imap     <Tab>   <Plug>EasyCompTabTrigger
+    imap     <S-Tab> <Plug>EasyCompShiftTabTrigger
+    nnoremap j gj
+    nnoremap k gk
+    nnoremap <CR> :
+    nnoremap H ^
+    nnoremap L $
+    nnoremap Y y$
+    " Easier horizontal scrolling
+    map zl zL
+    map zh zH
+    " Allow using the repeat operator with a visual selection (!)
+    " http://stackoverflow.com/a/8064607/127816
+    vnoremap . :normal .<CR>
+    " }
+
+    " Adjust viewports to the same size
+    map      <leader>= <C-w>=
+    nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
+    nnoremap <leader>b 5b
+    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
+    map      <Leader>cc <Plug>NERDCommenterInvert
+    nmap     <Leader>ce <Plug>NERDCommenterToEOL
+    nnoremap <leader>dm :call <SID>ShowMaps()<CR>
+    nnoremap <leader>e 5e
+    " helpers to edit mode, http://vimcasts.org/e/14
+    cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
+    "map      <leader>ew :e %%
+    " Code folding options
+    nmap     <leader>f0 :set foldlevel=0<CR>
+    nmap     <leader>f1 :set foldlevel=1<CR>
+    nmap     <leader>f2 :set foldlevel=2<CR>
+    nmap     <leader>f3 :set foldlevel=3<CR>
+    nmap     <leader>f4 :set foldlevel=4<CR>
+    nmap     <leader>f5 :set foldlevel=5<CR>
+    nmap     <leader>f6 :set foldlevel=6<CR>
+    nmap     <leader>f7 :set foldlevel=7<CR>
+    nmap     <leader>f8 :set foldlevel=8<CR>
+    nmap     <leader>f9 :set foldlevel=9<CR>
+    " Find merge conflict markers
+    map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+    " Display all lines with keyword under cursor,ask which one to jump to
+    nmap     <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+    nmap     <leader>gf <Plug>(search-current-word)
+    nmap     <leader>gp <Plug>(search-one-word)
+    nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+    " Disable search highlight
+    noremap  <leader>nh :nohl<CR>
+    nmap     <leader>nu  <Plug>ToggleNumber
+    " easier formatting
+    nnoremap <silent> <leader>q gwip
+    nnoremap <leader>qf :call <SID>togglequickfix()<CR>
+    nmap     <buffer> <localleader>rf <Plug>(run-script-noarg)
+    nmap     <buffer> <localleader>rp <Plug>(run-script-onearg)
+    nmap     <leader>s <Plug>(easymotion-overwin-f2)
+    nnoremap <silent> <leader>tt :TagbarToggle<CR>
+    " Jump to anywhere you want with minimal keystrokes
+    nmap     <leader>wb <Plug>(easymotion-b)
+    nmap     <leader>wf <Plug>(wildfire-quick-select)
+    nmap     <leader>ww <Plug>(easymotion-w)
+    " Compatible with Emacs window action
+    nnoremap <leader>xo <C-W>w
+    nnoremap <leader>x1 <C-W>o
+    nnoremap <leader>x0 <C-W>c
+    " change backgroud and number style
+    nmap     <leader>xb  <Plug>ToggleBG
+
+    " Write easy {
+
+    " Insert mode using Emacs keybinding
+    inoremap <C-p> <Up>
+    inoremap <C-n> <Down>
+    inoremap <C-b> <Left>
+    inoremap <C-f> <Right>
+    inoremap <C-a> <Home>
+    inoremap <C-e> <End>
+    inoremap <C-d> <Del>
+    inoremap <C-h> <BS>
+
+    " Stupid shift key fixes
+    if has("user_commands")
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+    endif
+
+    " Auto complete for bracket and quote
+    "inoremap ' ''<Left>
+    " }
+
+    " Dont know {
+    " End/Start of line motion keys act relative to row/wrap width in the
+    " presence of `:set wrap`, and relative to line for `:set nowrap`.
+    " Default vim behaviour is to act relative to text line in both cases
+    " If you prefer the default behaviour, add the following to your
+    " .vimrc.before.local file:
+    "   let g:spf13_no_wrapRelMotion = 1
+    if !exists('g:spf13_no_wrapRelMotion')
+        " Same for 0, home, end, etc
+        function! WrapRelativeMotion(key, ...)
+            let vis_sel=""
+            if a:0
+                let vis_sel="gv"
+            endif
+            if &wrap
+                execute "normal!" vis_sel . "g" . a:key
+            else
+                execute "normal!" vis_sel . a:key
+            endif
+        endfunction
+
+        " Map g* keys in Normal, Operator-pending, and Visual+select
+        noremap $ :call WrapRelativeMotion("$")<CR>
+        noremap <End> :call WrapRelativeMotion("$")<CR>
+        noremap 0 :call WrapRelativeMotion("0")<CR>
+        noremap <Home> :call WrapRelativeMotion("0")<CR>
+        noremap ^ :call WrapRelativeMotion("^")<CR>
+        " Overwrite the operator pending $/<End> mappings from above
+        " to force inclusive motion with :execute normal!
+        onoremap $ v:call WrapRelativeMotion("$")<CR>
+        onoremap <End> v:call WrapRelativeMotion("$")<CR>
+        " Overwrite the Visual+select mode mappings from above
+        " to ensure the correct vis_sel flag is passed to function
+        vnoremap $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
+        vnoremap <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
+        vnoremap 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
+        vnoremap <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
+        vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+    endif
+
+    " Shortcuts
+    " Change Working Directory to that of the current file
+    cmap cwd lcd %:p:h
+    cmap cd. lcd %:p:h
+
+    " Visual shifting (does not exit Visual mode)
+    vnoremap < <gv
+    vnoremap > >gv
+
+    " For when you forget to sudo.. Really Write the file.
+    cmap w!! w !sudo tee % >/dev/null
+
+    " }
+
+" }
+
+@
+
+
+1.7
+log
+@add wildfire
+@
+text
+@d133 2
+@
+
+
+1.6
+log
+@combine leader map into kbd.vim
+@
+text
+@d188 2
+a190 1
+    nmap     <leader>wb <Plug>(easymotion-b)
+a197 1
+
+@
+
+
+1.5
+log
+@make leader key togethor
+@
+text
+@d149 1
+d152 2
+a153 1
+    " Show Key Maps
+d174 3
+a176 2
+    nmap     <Leader>gf <Plug>(search-current-word)
+    nmap     <Leader>gp <Plug>(search-one-word)
+d183 3
+a185 1
+    nmap     <Leader>s <Plug>(easymotion-overwin-f2)
+d188 2
+a189 2
+    nmap     <Leader>ww <Plug>(easymotion-w)
+    nmap     <Leader>wb <Plug>(easymotion-b)
+@
+
+
+1.4
+log
+@change toggleNumber to nu
+@
+text
+@a45 1
+    nnoremap <leader>dm :call <SID>ShowMaps()<CR>            " Map keys to call the function
+a129 10
+"  Window {
+
+    " Compatible with Emacs window action
+    nnoremap <Leader>xo <C-W>w
+    nnoremap <Leader>x1 <C-W>o
+    nnoremap <Leader>x0 <C-W>c
+    nnoremap <Leader>qf :call <SID>togglequickfix()<CR>
+
+"  }
+
+d132 1
+a137 4
+    " Disable search highlight
+    noremap <Leader>nh :nohl<CR>
+
+    " Yank from the cursor to the end of the line, to be consistent with C and D.
+d139 3
+a141 1
+
+d147 10
+a156 1
+    " Pretty {
+d158 31
+a188 12
+    nmap <leader>f0 :set foldlevel=0<CR>
+    nmap <leader>f1 :set foldlevel=1<CR>
+    nmap <leader>f2 :set foldlevel=2<CR>
+    nmap <leader>f3 :set foldlevel=3<CR>
+    nmap <leader>f4 :set foldlevel=4<CR>
+    nmap <leader>f5 :set foldlevel=5<CR>
+    nmap <leader>f6 :set foldlevel=6<CR>
+    nmap <leader>f7 :set foldlevel=7<CR>
+    nmap <leader>f8 :set foldlevel=8<CR>
+    nmap <leader>f9 :set foldlevel=9<CR>
+    " }
+
+d190 1
+a190 2
+    nmap <leader>bg  <Plug>ToggleBG
+    nmap <leader>nu  <Plug>ToggleNumber
+a191 12
+    " Read easy {
+    " Map <Leader>ff to display all lines with keyword under cursor
+    " and ask which one to jump to
+    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+
+    " Easier horizontal scrolling
+    map zl zL
+    map zh zH
+
+    " Easier formatting
+    nnoremap <silent> <leader>q gwip
+    " }
+a193 1
+    inoremap jj <Esc>
+a204 8
+    " Some helpers to edit mode
+    " http://vimcasts.org/e/14
+    cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+    map <leader>ew :e %%
+    map <leader>es :sp %%
+    map <leader>ev :vsp %%
+    map <leader>et :tabe %%
+
+a212 1
+    nnoremap <leader>sp :call <SID>showsnipcode()<CR>
+a268 3
+    " Adjust viewports to the same size
+    map <Leader>= <C-w>=
+
+a270 3
+    " Find merge conflict markers
+    map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+
+@
+
+
+1.3
+log
+@adjust vim config
+@
+text
+@d175 1
+a175 1
+    nmap <leader>nn  <Plug>ToggleNumber
+@
+
+
+1.2
+log
+@DELETE: twig filetype uesless
+@
+text
+@a18 10
+    " Remove trailing whitespaces and ^M chars
+    autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  call StripTrailingWhitespace()
+    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
+    autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+    " preceding line best in a plugin but here for now.
+
+    " Workaround vim-commentary for Haskell
+    autocmd FileType haskell setlocal commentstring=--\ %s
+    " Workaround broken colour highlighting in Haskell
+    autocmd FileType haskell,rust setlocal nospell
+d24 24
+a136 1
+
+d143 5
+a147 2
+    noremap j gj
+    noremap k gk
+d173 4
+@
+
+
+1.1
+log
+@vimrc file
+@
+text
+@a21 1
+    autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
+@
+

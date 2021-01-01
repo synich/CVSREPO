@@ -1,0 +1,66 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2018.09.19.15.06.21;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@UPDATE: modify parse and code generate presentation
+@
+text
+@Introduce
+======
+My first language:
+* Strong Type: varible's type is decided at initial time,
+and can't convert to other type, unless to null(means destroy)
+* Support Type: interger(32bit), string(any character)
+* 5 kind of token: varible(prefix by $), keyword, function(normal letter), string, integer
+
+sub function has $0~$9 as parameter and $a~$z as inner varible
+main function has $A~$Z as global varible
+
+## Constructor
+
+A lang runtime at least have 4 parts
+
+1. lexer
+2. parser
+3. generate
+4. executor
+
+Part 1 and 2 can be delegated to tool, so it is difficult is
+how to make parser tree into RISC-like code when we run into parser,
+then transfer the generate code to VM to eval result of the tree.
+
+## Parts
+
+The core part is FUNCTION definition which contains instruction and environment.
+Make instruction as string and embed constant will make generate easy.
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d24 5
+@
+

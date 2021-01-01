@@ -1,0 +1,65 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.36.32;	author android;	state Exp;
+branches;
+next	;
+commitid	629c5ec7f1800000;
+
+
+desc
+@@
+
+
+1.1
+log
+@bin file
+@
+text
+@#!/bin/bash
+
+set -e -u
+
+#choose what mutli-terminal in system
+whatmt=none
+if [ -x "$(command -v screen)" ]; then
+    whatmt=screen
+elif [ -x "$(command -v tmux)" ]; then
+    whatmt=tmux
+fi
+
+if [ $whatmt = none ]; then
+    echo "can't found any multi-terminal in your system"
+fi
+
+function mtscreen() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	l*) screen -ls;;
+	a*) screen -r "$@@";;
+	n*) screen -S "$@@" -t "$@@";;
+	*) screen "$CMD" $@@;;
+esac
+}
+
+function mttmux() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	l*) tmux ls;;
+	a*) tmux attach -t "$@@";;
+	n*) tmux new -s "$@@";;
+	*) tmux "$CMD" $@@;;
+esac
+}
+
+
+mt$whatmt $@@
+
+@

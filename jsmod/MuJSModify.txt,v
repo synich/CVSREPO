@@ -1,0 +1,47 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2017.10.16.15.32.25;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: mujs and duktape patch
+@
+text
+@Makefile:
+  libdir next line CC = gcc
+
+jsstate.c:
+  js_defaultpanic() add trace
+static void js_defaultpanic(js_State *J)
+{
+	char msg[128];
+	int i = 0;
+	snprintf(msg, sizeof(msg)-1, "%s traceback", J->filename);
+	js_report(J, msg);
+	for (i=JS_ENVLIMIT-1; i>=0; i--){
+		if (J->trace[i].name){
+			snprintf(msg, sizeof(msg)-1, "frame:%d,line:%d,%s",
+				i, J->trace[i].line, J->trace[i].name);
+			js_report(J, msg);
+		}
+	}
+	/* return to javascript to abort */
+}
+
+
+jsrun.c:
+  js_throw() abort() -> exit(45);
+@

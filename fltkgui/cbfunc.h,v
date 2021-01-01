@@ -1,0 +1,52 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2018.12.16.06.54.47;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: add fltk gui scaffold
+@
+text
+@#ifndef _CB_FUNC_H_
+#define _CB_FUNC_H_
+
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Input.H>
+#include "FL/Fl_Check_Button.H"
+#include "FL/Fl_Choice.H"
+#include <FL/Fl_Text_Editor.H>
+
+
+struct stLogin
+{
+  unsigned short duration;
+  char token[254];
+
+  Fl_Input* ip;
+  Fl_Input* port;
+  Fl_Input* user;
+  Fl_Input* passwd;
+  Fl_Text_Buffer *in;
+  Fl_Text_Buffer *out;
+};
+
+void gf_cbkeepalive(void* v);
+void gf_cblogin(Fl_Widget* fw, void* w);
+void gf_cbrun(Fl_Widget* fw, void* w);
+void gf_cbselect(Fl_Widget* w, void* v);
+#endif
+@

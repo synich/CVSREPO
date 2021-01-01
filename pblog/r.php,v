@@ -1,0 +1,54 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.06.07.14.17.15;	author android;	state Exp;
+branches;
+next	;
+commitid	491a5edcf6eb0000;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: web entry
+@
+text
+@<?php
+define('LOG_LEVEL', 3); //0-disable range 1-3, lager has more log
+LOG_LEVEL > 0? error_reporting(E_ALL): error_reporting(0);
+
+define('ClsFileLoc', 'C');//Dir has class file
+define('DefaultModuleAction',"blog");//Default Module
+define('DefaultMethodAction',"index");//Default Method
+
+include_once('Cemvc/Cemvc.php');
+include_once('Cemvc/Logger.php');
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: XIP");
+session_start();
+//record guest ip
+$ahd=getallheaders();
+if (isset($ahd['XIP'])) {
+  $xip = urldecode($ahd['XIP']);
+  //ini_set('error_log', 'log.txt');
+  if (strpos($xip, 'gh_')===0){print_info(' '.$xip);}
+}
+//Run, default style 1 means /index.php/cls/method
+$mth = $_SERVER['REQUEST_METHOD'];
+new MthUrlRoute($mth, $_SERVER['REQUEST_URI'], 1);
+
+//Log execute time
+//$st = microtime(true);
+//$ed = microtime(true);
+//print_info($mth.($ed-$st));
+?>
+@

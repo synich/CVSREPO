@@ -1,0 +1,34 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.29.51;	author android;	state Exp;
+branches;
+next	;
+commitid	61495ec7efef0000;
+
+
+desc
+@@
+
+
+1.1
+log
+@npplua file
+@
+text
+@-- Get rid of Notepad++'s ugly bookmark icon
+
+-- Notepad++ uses 24 internally
+editor1:MarkerDefine(24, SC_MARK_BOOKMARK)
+editor1.MarkerFore[24] = 0x0000EE
+editor1.MarkerBack[24] = 0x6060F2
+
+editor2:MarkerDefine(24, SC_MARK_BOOKMARK)
+editor2.MarkerFore[24] = 0x0000EE
+editor2.MarkerBack[24] = 0x6060F2
+@

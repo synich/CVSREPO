@@ -1,0 +1,738 @@
+head	1.7;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.7
+date	2019.01.09.15.39.24;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2019.01.05.14.45.25;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2019.01.05.13.16.46;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2019.01.02.22.56.27;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.12.30.12.53.53;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.12.23.12.46.13;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.12.23.09.26.31;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@UPDATE: use macro rewrite, add new bulk just declare 5 macro
+@
+text
+@#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "walib.h"
+
+/* All Constant Here */
+#define LARGE_MAGIC 0x1
+#define EPHEMEM_SIZE 32
+#define MEMALIGN 8
+
+/** Memory Pool Macro, add new bulk size declare 5 macro */
+
+/* B: bulk size, P: page size, M: max pages
+  e.g. DECLARE_FIX_MEM_FUNC(24, 32, 16)
+ */
+#define DECLARE_FIX_MEM_FUNC(B, P, M)  \
+struct stM##B##Bulk {\
+  uint8_t m;\
+  uint8_t i;\
+  uint8_t s;\
+  uint8_t dummy[MEMALIGN-3];\
+  char c[B];\
+};\
+\
+/* index of rightmost position*/\
+static struct stM##B##Bulk* sv_m##B##mem[M] = {NULL};\
+/*canuse==0 has two means, 1.has not alloc 2.has alloc but all used*/\
+static uint8_t sv_m##B##canuse[M][P] = {0};\
+static uint8_t sv_m##B##used[M] = {0};\
+\
+static char* sf_borrow_m##B(){\
+  char* p = NULL;\
+  int sidx = 0; /*segement index*/\
+  /*iter all bulk, each bulk has 3 condition*/\
+  for (; sidx<M; ++sidx){\
+	/*1. this bulk has memory and has empty slot, got and return*/\
+	if ( (sv_m##B##mem[sidx]!=NULL) && (sv_m##B##used[sidx]<P) ){\
+	  /* lookup: mem -> canuse -> used*/\
+	  p = sv_m##B##mem[sidx][sv_m##B##canuse[sidx][sv_m##B##used[sidx]]].c;\
+	  sv_m##B##used[sidx]++;\
+	  break;\
+	}/*2. this bulk has memory but is full, go next*/\
+	else if ( (sv_m##B##mem[sidx]!=NULL) && (sv_m##B##used[sidx]==P) ){\
+	  continue;\
+	}/*3. this bulk is NULL, make a new memory*/\
+	else {\
+	  int i=0;\
+	  sv_m##B##mem[sidx] = (struct stM##B##Bulk*)malloc(sizeof(struct stM##B##Bulk)*P);\
+	  for (; i<P; i++){\
+		sv_m##B##mem[sidx][i].m = B/4;\
+        sv_m##B##mem[sidx][i].i = i; /* remember idx, this will be used in revert*/\
+        sv_m##B##mem[sidx][i].s = sidx;/* remember sidx, used in revert*/\
+		sv_m##B##canuse[sidx][i] = i;\
+      }\
+	  p = sv_m##B##mem[sidx][sv_m##B##used[sidx]].c;\
+	  sv_m##B##used[sidx]++;\
+	  break;\
+	}\
+  }\
+  return p;\
+}
+
+/*24byte, page 32, max page 16*/
+#define M24_MAXPAGE 16
+DECLARE_FIX_MEM_FUNC(24, 32, M24_MAXPAGE)
+
+#define M184_MAXPAGE 16
+DECLARE_FIX_MEM_FUNC(184, 16, M184_MAXPAGE)
+
+static int large_used = 0;
+static char* sf_borrow_large(int n){
+  char *p = NULL;
+  char *m = (char*)malloc(n+MEMALIGN);
+  if (m) {
+	*m = LARGE_MAGIC;
+	p = m + MEMALIGN;
+    large_used++;
+  }
+  return p;
+}
+
+/*debug flag*/
+static int sv_pooldbgflg =0;
+int wa_memdbgflg(int i){
+  int tmp = sv_pooldbgflg;
+  sv_pooldbgflg = i;
+  return tmp;
+}
+
+#define DECLARE_ALLOC_BULK(B) \
+  if (n<=B){\
+    p = sf_borrow_m##B();\
+    if (p) { p[0]=0; } /*Make benifit for str manipulation*/\
+    if (sv_pooldbgflg&0x1){\
+      printf("alloc mem in %s:%d, p:%p,len:%d\n", f, l, p, n);\
+    }\
+    return p;\
+  }
+  
+char* wa_alloc_(int n, const char* f, int l){
+  char* p=NULL;
+  if (0>=n) {
+    return NULL;
+  }
+
+DECLARE_ALLOC_BULK(24)
+DECLARE_ALLOC_BULK(184)
+  {
+	p = sf_borrow_large(n);
+    if (p) { p[0]=0; } /*Make benifit for str manipulation*/
+    if (sv_pooldbgflg&0x1){
+      printf("alloc mem in %s:%d, p:%p,len:%d\n", f, l, p, n);
+    }
+    return p;
+  }
+}
+
+#define DECLARE_REVERT_BULK(B) \
+  if ((B/4)==mask){\
+    struct stM##B##Bulk *m = (struct stM##B##Bulk*)(p-MEMALIGN);\
+    sv_m##B##used[m->s]--;\
+    sv_m##B##canuse[m->s][sv_m##B##used[m->s]] = m->i;\
+    if (sv_pooldbgflg&0x1){\
+      printf("revert mem in %s:%d, p:%p.\n", f, l, p);\
+    }\
+    return;\
+  }
+
+//Not use this directly, use MACRO instead, which always set p NULL
+void wa_revert_(char* p, const char* f, int l){
+  if(NULL==p){return;}
+  uint8_t mask = *(uint8_t*)(p-MEMALIGN);
+
+DECLARE_REVERT_BULK(24)
+DECLARE_REVERT_BULK(184)
+  if (LARGE_MAGIC==mask) {
+	p -= MEMALIGN;
+    free(p);
+    large_used--;
+    return;
+  }
+  { printf("point %p is not alloc from walib!\n", p); }
+}
+
+#define DECLARE_FINALIZE_BULK(B, M) \
+  for (i=0; i<M; i++) {\
+	if (sv_m##B##mem[i]) {\
+      free(sv_m##B##mem[i]);\
+	  sv_m##B##mem[i]=NULL;\
+    }\
+  }
+
+void wa_finalize(){
+  int i;
+
+  DECLARE_FINALIZE_BULK(24, M24_MAXPAGE)
+  DECLARE_FINALIZE_BULK(184, M184_MAXPAGE)
+}
+
+#define DECLARE_MEM_REPORT(B, M) \
+  ause = 0;\
+  for (i=0; i<M; i++) {\
+	if (sv_m##B##mem[i]==NULL) {\
+	  if (i!=0) {puts("");} break;\
+	} else {\
+		printf("M%d[%d]:%d\t", B, i, sv_m##B##used[i] );\
+		if (i%8==7) puts("");\
+		ause += sv_m##B##used[i];\
+	}\
+  }\
+  printf("Have alloc %d M%d pages, %d M%d object.\n", i, B, ause, B);
+
+void wa_memreport(){
+  int i, ause;
+  puts("------ MEMORY POOL REPORT -----");
+  DECLARE_MEM_REPORT(24, M24_MAXPAGE)
+  DECLARE_MEM_REPORT(184, M184_MAXPAGE)
+
+  printf("| Large             used:%-4d |\n", large_used);
+  puts("-------------------------------");
+}
+
+char* wa_dupstr(const char* p){
+  if (NULL==p){
+    return NULL;
+  }
+  int len = strlen(p)+1;
+  char *dst = wa_alloc(len);
+  strcpy(dst, p);
+  return dst;
+}
+
+char* wa_dupbin(const char* b, int len){
+  if ((NULL==b) || (0==len)) {
+    return NULL;
+  }
+  char* dst = wa_alloc(len);
+  memcpy(dst, b, len);
+  return dst;
+}
+
+static struct {
+	unsigned short sze[EPHEMEM_SIZE];
+	char* ptr[EPHEMEM_SIZE];
+} sv_ephememarr;
+
+static int sf_epheidx(){
+	static int idx = 0;
+	if (idx >= EPHEMEM_SIZE) {idx = 0;}
+	return idx++;
+}
+
+char* wa_ephemem(int n){
+	int i = 0;
+	if ((n>65535) || (n<=0)) {return NULL;}
+
+	i = sf_epheidx();
+	if (sv_ephememarr.sze[i] < n) {
+		free(sv_ephememarr.ptr[i] );
+		sv_ephememarr.sze[i] = n;
+		sv_ephememarr.ptr[i] = malloc(n);
+	}
+	sv_ephememarr.ptr[i][0]=0;
+	return sv_ephememarr.ptr[i];
+}
+@
+
+
+1.6
+log
+@UPDATE: make alloc mem align
+@
+text
+@d8 1
+a8 9
+#define SMALL_MAGIC 0x51
+#define SMALL_BULK 24
+#define SMALL_PAGE 32
+#define MAX_SMALL_PAGE 16
+#define BIG_MAGIC 0x81
+#define BIG_BULK 184
+#define BIG_PAGE 16
+#define MAX_BIG_PAGE 16
+#define LARGE_MAGIC 0x11
+d12 1
+a12 1
+/** Memory Pool */
+d14 56
+a69 25
+struct SmallBulk {
+  uint8_t m;
+  uint8_t i;
+  uint8_t s;
+  uint8_t dummy[MEMALIGN-3];
+  char c[SMALL_BULK];
+};
+
+struct BigBulk {
+  uint8_t m;
+  uint8_t i;
+  uint8_t s;
+  uint8_t dummy[MEMALIGN-3];
+  char c[BIG_BULK];
+};
+
+/* index of rightmost position*/
+static struct SmallBulk* small_mem[MAX_SMALL_PAGE] = {NULL};
+/*canuse==0 has two means, 1.has not alloc 2.has alloc but all used*/
+static uint8_t small_canuse[MAX_SMALL_PAGE][SMALL_PAGE] = {0};
+static uint8_t small_used[MAX_SMALL_PAGE] = {0};
+
+static struct BigBulk* big_mem[MAX_BIG_PAGE] = {NULL};
+static uint8_t big_canuse[MAX_BIG_PAGE][BIG_PAGE] = {0};
+static int big_used[MAX_BIG_PAGE] = {0};
+a71 68
+static int sv_mtimes=0, sv_ftimes=0;
+
+static char* sf_borrow_small(){
+  char* p = NULL;
+  int sidx = 0; /*segement index*/
+  /*iter all bulk, each bulk has 3 condition*/
+  for (; sidx<MAX_SMALL_PAGE; ++sidx){
+	/*1. this bulk has memory and has empty slot, got and return*/
+	if ( (small_mem[sidx]!=NULL) && (small_used[sidx]<SMALL_PAGE) ){
+	  /* lookup: mem -> canuse -> used*/
+	  p = small_mem[sidx][small_canuse[sidx][small_used[sidx]]].c;
+	  small_used[sidx]++;
+	  break;
+	}/*2. this bulk has memory but is full, go next*/
+	else if ( (small_mem[sidx]!=NULL) && (small_used[sidx]==SMALL_PAGE) ){
+	  continue;
+	}/*3. this bulk is NULL, make a new memory*/
+	else {
+	  int i=0;
+	  small_mem[sidx] = (struct SmallBulk*)malloc(sizeof(struct SmallBulk)*SMALL_PAGE);
+	  sv_mtimes++;
+	  for (; i<SMALL_PAGE; i++){
+		small_mem[sidx][i].m = SMALL_MAGIC;
+        small_mem[sidx][i].i = i; // remember idx, this will be used in revert
+        small_mem[sidx][i].s = sidx;// remember sidx, used in revert
+		small_canuse[sidx][i] = i;
+      }
+	  p = small_mem[sidx][small_used[sidx]].c;
+	  small_used[sidx]++;
+	  break;
+	}
+  }
+  return p;
+}
+
+static char* sf_borrow_big(){
+  char* p = NULL;
+  int sidx = 0; /*segement index*/
+  /*iter all bulk, each bulk has 3 condition*/
+  for (; sidx<MAX_BIG_PAGE; ++sidx){
+	/*1. this bulk has memory and has empty slot, got and return*/
+	if ( (big_mem[sidx]!=NULL) && (big_used[sidx]<BIG_PAGE) ){
+	  /* lookup: mem -> canuse -> used*/
+	  p = big_mem[sidx][big_canuse[sidx][big_used[sidx]]].c;
+	  big_used[sidx]++;
+	  break;
+	}/*2. this bulk has memory but is full, go next*/
+	else if ( (big_mem[sidx]!=NULL) && (big_used[sidx]==BIG_PAGE) ){
+	  continue;
+	}/*3. this bulk is NULL, make a new memory*/
+	else {
+	  int i=0;
+	  big_mem[sidx] = (struct BigBulk*)malloc(sizeof(struct BigBulk)*BIG_PAGE);
+	  sv_mtimes++;
+	  for (; i<BIG_PAGE; i++){
+		big_mem[sidx][i].m = BIG_MAGIC;
+        big_mem[sidx][i].i = i; // remember idx, this will be used in revert
+        big_mem[sidx][i].s = sidx;// remember sidx, used in revert
+		big_canuse[sidx][i] = i;
+      }
+	  p = big_mem[sidx][big_used[sidx]].c;
+	  big_used[sidx]++;
+	  break;
+	}
+  }
+  return p;
+}
+
+a84 1
+
+d91 10
+a102 1
+  int flag=0;
+d107 3
+a109 8
+  if (n<SMALL_BULK){
+    flag=1;
+    p = sf_borrow_small();
+  } else if (n<BIG_BULK){
+    flag=2;
+    p = sf_borrow_big();
+  } else {
+	flag=3;
+d111 5
+d117 11
+a127 3
+  if (sv_pooldbgflg&0x1){
+  printf("alloc  %-5s. %s:%d, p:%p,len:%d\n", flag==1?"small":(flag==2?"big":"large"),
+    f, l, p, n);
+a128 3
+  if (p) { p[0]=0; } /*Make benifit for str manipulation*/
+  return p;
+}
+a132 1
+  int flag = 0;
+d135 3
+a137 12
+  if (SMALL_MAGIC==mask){
+    flag = 1;
+    struct SmallBulk *m = (struct SmallBulk*)(p-MEMALIGN);
+    small_used[m->s]--;
+    small_canuse[m->s][small_used[m->s]] = m->i;
+  } else if (BIG_MAGIC==mask) {
+    flag = 2;
+    struct BigBulk *m = (struct BigBulk *)(p-MEMALIGN);
+    big_used[m->s]--;
+    big_canuse[m->s][big_used[m->s]] = m->i;
+  } else if (LARGE_MAGIC==mask) {
+    flag = 3;
+d141 1
+a141 4
+  } else { printf("point %p is not alloc from walib!\n", p); }
+  if (sv_pooldbgflg&0x1){
+  printf("revert %-5s. %s:%d, p:%p.\n", flag==1?"small":(flag==2?"big":"large"),
+    f, l, p);
+d143 1
+d146 8
+d156 26
+a181 15
+  for (i=0; i<MAX_SMALL_PAGE; i++) {
+	if (small_mem[i]) {
+      free(small_mem[i]);
+	  sv_ftimes++;
+	  small_mem[i]=NULL;
+    }
+  }
+  for (i=0; i<MAX_BIG_PAGE; i++) {
+	if (big_mem[i]) {
+      free(big_mem[i]);
+	  sv_ftimes++;
+	  big_mem[i]=NULL;
+    }
+  }
+  printf("syscall malloc %d times, free %d times.\n", sv_mtimes, sv_ftimes);
+d195 1
+a195 1
+  if (0==len){
+a202 29
+void wa_memreport(){
+  int i, ause=0;
+  puts("------ MEMORY POOL REPORT -----");
+  for (i=0; i<MAX_SMALL_PAGE; i++) {
+	if (small_mem[i]==NULL) {
+	  if (i!=0) {puts("");} break;
+	} else {
+		printf("S%d:%d\t", i, small_used[i] );
+		if (i%8==7) puts("");
+		ause += small_used[i];
+	}
+  }
+  printf("Have alloc %d small pages, %d small object.\n", i, ause);
+
+  ause = 0;
+  for (i=0; i<MAX_BIG_PAGE; i++) {
+	if (big_mem[i]==NULL) {
+	  if (i!=0) {puts("");} break;
+	} else {
+		printf("B%d:%d\t", i, big_used[i] );
+		if (i%8==7) puts("");
+		ause += big_used[i];
+	}
+  }
+  printf("Have alloc %d big pages, %d big object.\n", i, ause);
+  printf("| Large             used:%-4d |\n", large_used);
+  puts("-------------------------------");
+}
+
+@
+
+
+1.5
+log
+@UPDATE: copy small mem alloc to big, and enhance memreport
+@
+text
+@d8 2
+a9 1
+#define SMALL_BULK 29
+d12 2
+a13 1
+#define BIG_BULK 190
+d16 1
+d18 1
+a18 1
+
+d23 2
+a24 1
+  uint16_t i;
+d26 1
+d31 1
+d34 1
+d71 1
+d104 1
+d117 11
+d151 2
+a152 3
+    flag=3;
+    p = (char*)malloc(n);
+    large_used++;
+d164 1
+a164 1
+  int mask = ((intptr_t)p)&0x3;
+d166 1
+a166 1
+  if(NULL==p){return;}
+d168 1
+a168 1
+  if (3==mask){
+d170 1
+a170 1
+    struct SmallBulk *m = (struct SmallBulk*)(p-3);
+d173 1
+a173 1
+  } else if (2==mask) {
+d175 1
+a175 1
+    struct BigBulk *m = (struct BigBulk *)(p-2);
+d178 1
+a178 1
+  } else {
+d180 1
+d183 1
+a183 1
+  }
+@
+
+
+1.4
+log
+@UPDATE: rewrite small mem alloc, avoid of realloc make old point invalid
+@
+text
+@d9 1
+a9 1
+#define SMALL_PAGE 2
+d12 1
+a12 1
+#define BIG_PAGE 8
+d36 5
+a40 6
+/*which page to use, when equal to MAX_SMALL_PAGE, cant alloc*/
+static uint8_t small_pagei = 0;
+static struct BigBulk* big_mem = NULL;
+static uint8_t big_pagei = 1;
+static uint8_t* big_canuse = NULL;
+static int big_used = 0;
+d42 1
+d62 1
+d78 26
+a103 26
+  if (NULL == big_mem) {
+    int i;
+    big_mem = (struct BigBulk*)malloc(sizeof(struct BigBulk)*BIG_PAGE);
+    big_canuse = (uint8_t*)malloc(BIG_PAGE);
+    for (i=0; i<BIG_PAGE; i++){
+      big_mem[i].i = i; // remember idx, this will be used in revert
+      big_canuse[i] = i;
+    }
+    big_used = 0;
+  }
+
+  if (big_used < big_pagei*BIG_PAGE) {
+    p = big_mem[big_canuse[big_used]].c;
+    big_used++;
+  } else if(big_pagei<MAX_BIG_PAGE) {
+    int i = big_pagei*BIG_PAGE;
+    big_pagei++;
+    int nxtend = big_pagei * BIG_PAGE;
+    big_mem = realloc(big_mem, sizeof(struct BigBulk)*BIG_PAGE*big_pagei );
+    big_canuse = realloc(big_canuse, BIG_PAGE*big_pagei);
+    for (; i<nxtend; i++){
+      big_mem[i].i = i;
+      big_canuse[i] = i;
+    }
+    p = big_mem[big_canuse[big_used]].c;
+    big_used++;
+d139 1
+a139 1
+  p[0]=0; /*Make benifit for str manipulation*/
+d154 1
+a154 1
+  } else if (1==mask) {
+d156 3
+a158 3
+    struct BigBulk *m = (struct BigBulk *)(p-1);
+    big_used--;
+    big_canuse[big_used] = m->i;
+d171 2
+a172 2
+  int i=0;
+  for (; i<MAX_SMALL_PAGE; i++) {
+d175 2
+d179 6
+a184 3
+  if (big_mem) {
+    free(big_mem);
+    free(big_canuse);
+d186 1
+d209 22
+a230 3
+  int i=0, suse=0;
+  for (; i<MAX_SMALL_PAGE; i++) {
+	suse += small_used[i];
+d232 1
+a232 3
+  puts("------ MEMORY POOL REPORT -----");
+  printf("| Small total:%-4d, used:%-4d |\n", small_pagei*SMALL_PAGE, suse);
+  printf("|  Big  total:%-4d, used:%-4d |\n", big_pagei*BIG_PAGE, big_used);
+@
+
+
+1.3
+log
+@UPDATE: change ephemem to native malloc, wa_alloc has bug, dont use until fix it
+@
+text
+@d8 2
+a9 2
+#define SMALL_BULK 30
+#define SMALL_PAGE 32
+d11 1
+a11 1
+#define BIG_BULK 191
+d21 1
+d27 1
+d31 7
+a37 5
+// index of rightmost position
+static struct SmallBulk* small_mem = NULL;
+static uint8_t small_pagei = 1;
+static uint8_t* small_canuse = NULL;
+static int small_used = 0;
+d46 25
+a70 26
+  if (NULL == small_mem) {
+    int i;
+    small_mem = (struct SmallBulk*)malloc(sizeof(struct SmallBulk)*SMALL_PAGE);
+    small_canuse = (uint8_t*)malloc(SMALL_PAGE);
+    for (i=0; i<SMALL_PAGE; i++){
+      small_mem[i].i = i; // remember idx, this will be used in revert
+      small_canuse[i] = i;
+    }
+    small_used = 0;
+  }
+
+  if (small_used < small_pagei*SMALL_PAGE) {
+    p = small_mem[small_canuse[small_used]].c;
+    small_used++;
+  } else if(small_pagei<MAX_SMALL_PAGE) {
+    int i = small_pagei*SMALL_PAGE;
+    small_pagei++;
+    int nxtend = small_pagei * SMALL_PAGE;
+    small_mem = realloc(small_mem, sizeof(struct SmallBulk)*SMALL_PAGE*small_pagei );
+    small_canuse = realloc(small_canuse, SMALL_PAGE*small_pagei);
+    for (; i<nxtend; i++){
+      small_mem[i].i = i;
+      small_canuse[i] = i;
+    }
+    p = small_mem[small_canuse[small_used]].c;
+    small_used++;
+d148 1
+a148 1
+  if (2==mask){
+d150 3
+a152 3
+    struct SmallBulk *m = (struct SmallBulk*)(p-2);
+    small_used--;
+    small_canuse[small_used] = m->i;
+d170 5
+a174 3
+  if (small_mem) {
+    free(small_mem);
+    free(small_canuse);
+d202 4
+d207 1
+a207 1
+  printf("| Small total:%-4d, used:%-4d |\n", small_pagei*SMALL_PAGE, small_used);
+@
+
+
+1.2
+log
+@UPDATE: protect size of ephemral alloc
+@
+text
+@d217 1
+a217 1
+	if (n>65535) {return NULL;}
+d221 1
+a221 1
+		wa_revert(sv_ephememarr.ptr[i] );
+d223 1
+a223 3
+		sv_ephememarr.ptr[i] = wa_alloc(n);
+	} else {
+		sv_ephememarr.ptr[i][0]=0;/*wa_alloc has do this*/
+d225 1
+@
+
+
+1.1
+log
+@INSERT: copy mem alloc from fila add ephemral mem
+@
+text
+@d216 4
+a219 1
+	int i = sf_epheidx();
+@
+
