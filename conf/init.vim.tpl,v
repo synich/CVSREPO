@@ -1,9 +1,21 @@
-head	1.6;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2021.01.02.09.26.01;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	1005FF03C29143F8E53;
+
+1.7
+date	2021.01.02.07.39.59;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	1005FF0234F1197A5B7;
 
 1.6
 date	2020.12.28.09.33.01;	author android;	state Exp;
@@ -46,9 +58,9 @@ desc
 @@
 
 
-1.6
+1.8
 log
-@move bundle_groups to init, add scheme interpretor
+@move path_bundle from plgrc into init
 @
 text
 @" Modeline and Notes {
@@ -84,6 +96,7 @@ text
         endif
         " Very important to add rtp to load plugin manager
         execute 'set rtp+='.g:mvcf_path
+        let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
         let g:mvcf_bundle_groups=['go', ]
         let g:mvcf_plug_rmt=1   "0 use local plugin
     " }
@@ -104,11 +117,38 @@ text
     let maplocalleader = ','
 " }
 
-" General {
-
+" Load all rc config {
     set nocompatible            " Must be first line
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
+
+for file in split(glob(g:mvcf_path.'*.vim'), '\n')
+  execute 'source '.file
+endfor
+" }
+
+@
+
+
+1.7
+log
+@move some setting from init into style
+@
+text
+@d34 1
+@
+
+
+1.6
+log
+@move bundle_groups to init, add scheme interpretor
+@
+text
+@d54 1
+a54 2
+" General {
+
+a57 20
     set mouse=                  " Disable mouse usage
     set encoding=utf-8
     scriptencoding utf-8
@@ -129,7 +169,7 @@ text
         autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
         " Always switch to the current file directory
     endif
-
+a58 25
     set autoread                    " Automatically read a file when detect modified
     set autowrite                   " Automatically write a file when leaving a modified buffer
     set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
@@ -155,11 +195,6 @@ text
 " }
 
 " Load all rc config {
-for file in split(glob(g:mvcf_path.'*.vim'), '\n')
-  execute 'source '.file
-endfor
-" }
-
 @
 
 

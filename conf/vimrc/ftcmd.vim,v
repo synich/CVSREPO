@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2021.01.03.09.18.02;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	1005FF18BCA2C2F80B1;
 
 1.1
 date	2020.12.13.15.51.08;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@adjust vim config
+@remove spf13 config
 @
 text
 @" Modeline and Notes {
@@ -31,21 +37,17 @@ text
 
     " http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
     " Restore cursor to file position in previous editing session
-    " To disable this, add the following to your .vimrc.before.local file:
-    "   let g:spf13_no_restore_cursor = 1
-    if !exists('g:spf13_no_restore_cursor')
-        function! ResCur()
-            if line("'\"") <= line("$")
-                silent! normal! g`"
-                return 1
-            endif
-        endfunction
+    function! s:ResCur()
+        if line("'\"") <= line("$")
+            silent! normal! g`"
+            return 1
+        endif
+    endfunction
 
-        augroup resCur
-            autocmd!
-            autocmd BufWinEnter * call ResCur()
-        augroup END
-    endif
+    augroup resCur
+        autocmd!
+        autocmd BufWinEnter * call <SID>ResCur()
+    augroup END
 
     " Remove trailing whitespaces and ^M chars
     autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  call StripTrailingWhitespace()
@@ -58,3 +60,30 @@ text
     " Workaround broken colour highlighting in Haskell
     autocmd FileType haskell,rust setlocal nospell
 @
+
+
+1.1
+log
+@adjust vim config
+@
+text
+@d11 6
+a16 9
+    " To disable this, add the following to your .vimrc.before.local file:
+    "   let g:spf13_no_restore_cursor = 1
+    if !exists('g:spf13_no_restore_cursor')
+        function! ResCur()
+            if line("'\"") <= line("$")
+                silent! normal! g`"
+                return 1
+            endif
+        endfunction
+d18 4
+a21 5
+        augroup resCur
+            autocmd!
+            autocmd BufWinEnter * call ResCur()
+        augroup END
+    endif
+@
+

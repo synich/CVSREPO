@@ -1,9 +1,27 @@
-head	1.15;
+head	1.18;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.18
+date	2021.01.17.16.23.37;	author android;	state Exp;
+branches;
+next	1.17;
+commitid	10060046489176BC89B;
+
+1.17
+date	2021.01.02.09.26.01;	author android;	state Exp;
+branches;
+next	1.16;
+commitid	1005FF03C29143F8E53;
+
+1.16
+date	2021.01.02.06.48.36;	author android;	state Exp;
+branches;
+next	1.15;
+commitid	1005FF01744106B6505;
 
 1.15
 date	2020.12.29.04.57.49;	author android;	state Exp;
@@ -100,16 +118,15 @@ desc
 @@
 
 
-1.15
+1.18
 log
-@bugfix use visual-multi only vim8
+@make <C-n/p> restore complete
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
 " }
 
-let mvcf_path_bundle=g:mvcf_path.'bundle/'
 let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',}
 
 " ScriptRunTool {
@@ -270,7 +287,6 @@ Plug (mvcf_plug_rmt?'https://github.com/majutsushi/':mvcf_path_bundle).'tagbar'
         if gitroot != ''
             let &tags = &tags . ',' . gitroot . '/.git/tags'
         endif
-
     "}
 
 " }
@@ -318,10 +334,10 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
 
     " Automatically open and close the popup menu / preview window
     autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-    set completeopt=menu,preview,longest
     " }
 
     if v:version >= 800
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
     endif
 " }
@@ -339,10 +355,7 @@ Plug (mvcf_plug_rmt?'https://github.com/easymotion/':mvcf_path_bundle).'vim-easy
     hi link EasyMotionShade  Comment
     " }
 
-Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
-
     " Search-File-Keyword {
-
     function! s:enhancegrep(useinput)
       let l:word = expand("<cword>")
       if a:useinput
@@ -393,6 +406,7 @@ Plug (mvcf_plug_rmt?'https://github.com/ctrlpvim/':mvcf_path_bundle).'ctrlp.vim'
 " }
 
 " Pretty {
+Plug (mvcf_plug_rmt?'https://github.com/guns/':mvcf_path_bundle).'vim-sexp'
 Plug (mvcf_plug_rmt?'https://github.com/bling/':mvcf_path_bundle).'vim-bufferline'
     " bufferline {
     set showtabline=0
@@ -433,6 +447,43 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.17
+log
+@move path_bundle from plgrc into init
+@
+text
+@a211 1
+    set completeopt=menu,preview,longest
+@
+
+
+1.16
+log
+@add vim-sexp
+@
+text
+@a4 1
+let mvcf_path_bundle=g:mvcf_path.'bundle/'
+@
+
+
+1.15
+log
+@bugfix use visual-multi only vim8
+@
+text
+@a165 1
+
+d217 1
+a234 2
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
+
+a235 1
+
+d286 1
 @
 
 
