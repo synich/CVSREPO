@@ -1,9 +1,14 @@
-head	1.36;
+head	1.37;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.37
+date	2021.02.12.10.43.44;	author FOTEN;	state Exp;
+branches;
+next	1.36;
 
 1.36
 date	2019.10.27.14.18.27;	author WIN7;	state Exp;
@@ -190,12 +195,16 @@ desc
 @@
 
 
-1.36
+1.37
 log
-@UPDATE: merge rest.php into one and rename to r.php
+@add recent any month diary
 @
 text
-@/// d0/t0->12 d1/t1->18 d2/t2->24
+@/// Global variable declare
+var g_date = 0
+var g_off=0;
+
+/// d0/t0->12 d1/t1->18 d2/t2->24
 /// success return 12/18/24 fail return false
 function tag2hour(str){
   var idx = parseInt(str.substring(1));
@@ -241,7 +250,6 @@ function HandleEditTm( error, response ) {
   txt.value = trimFirstLF(response)
 }
 
-var g_date = 0
 function HandleEditBlog(error, response) {
   var txt = document.getElementById("eNow");
   response = trimFirstLF(response)
@@ -352,10 +360,10 @@ function uploadDB(){
       if (g_date) {
         day = g_date;  // use last date
       }
-	  if ( confirm("upload blog "+er[0]+day) ){
+      if ( confirm("upload blog "+er[0]+day) ){
         saveBlog(er[0], day);
         previewMd('eNow', 'eDone');
-	  }
+      }
     } else{
       showHint('Choose day is exceed 10!');
     }
@@ -377,6 +385,7 @@ function setDB() {
   showHint("SETLOCAL OK!");
 }
 
+// get recent blog date-title or some month tmrec
 function recentDigest() {
   var fdb = sepraDB();
   if(fdb[1]=='blog'){
@@ -392,17 +401,23 @@ function recentDigest() {
       httpGet("/digest/tagBlog/"+fdb[0]+"/"+tag, HandleBlst);
     }
   }else if(fdb[1]=='tmrec') {
-    var mon = curDay();
-    var year = mon.substring(0, 2);// trieve year
-    var curmon = mon.substring(2, 4);//trieve month
-    mon = getElemValue("eDay");
-    if (mon<10){
-      mon = '0'+mon;
+    var yearmon = parseInt(getElemValue("eNow"));
+    if (yearmon && yearmon >1000 && yearmon < 9999) {
+      yearmon += '';
+    } else {
+      var mon = curDay();
+      var year = mon.substring(0, 2);// trieve year
+      var curmon = mon.substring(2, 4);//trieve month
+      mon = getElemValue("eDay");
+      if (mon<10){
+        mon = '0'+mon;
+      }
+      if (mon>curmon) {//over current month, get last year
+        year--; year += '';
+      }
+      yearmon = year + mon;
     }
-    if (mon>curmon) {//over current month, get last year
-      year--; year += '';
-    }
-    httpGet("/digest/recentTmrec/"+fdb[0]+"/"+year+mon, HandleDone);
+    httpGet("/digest/recentTmrec/"+fdb[0]+"/"+yearmon, HandleDone);
   }
 }
 
@@ -430,9 +445,9 @@ function queryBlogTmKwd(page) {
 function clearContent() {
   var txt = document.getElementById("eNow");
   txt.value = '';
+  g_date = 0;
 }
 
-var g_off=0;
 function viewBlog(to) {
   var fdb = sepraDB();
   var off = parseInt(getElemValue("eDay"));
@@ -458,15 +473,14 @@ function uploadFile( elemFile, upName ) {
   reader.readAsDataURL(f);
   reader.onload = function(e){
     var pic = this.result;
-    //var param = "pic="+pic+ "|ext="+extName + "|fn="+fn;
     var param = {pic:pic, ext:extName, fn:fn}
     httpPost("/pic/upload", param, HandleUpPic)
   }
 }
 
 function onMenu( ) {
-	var m = document.getElementById("eMenu");
-	var item = m.value;
+    var m = document.getElementById("eMenu");
+    var item = m.value;
   /// enter menu, item is undefined, use if to ban it
   if (item=="PASTE") {
     var cp = app.GetClipboardText();
@@ -490,6 +504,47 @@ function onMenu( ) {
   }
   m.value = "MENU";
 }
+@
+
+
+1.36
+log
+@UPDATE: merge rest.php into one and rename to r.php
+@
+text
+@d1 4
+a50 1
+var g_date = 0
+d161 1
+a161 1
+	  if ( confirm("upload blog "+er[0]+day) ){
+d164 1
+a164 1
+	  }
+d186 1
+d202 15
+a216 6
+    var mon = curDay();
+    var year = mon.substring(0, 2);// trieve year
+    var curmon = mon.substring(2, 4);//trieve month
+    mon = getElemValue("eDay");
+    if (mon<10){
+      mon = '0'+mon;
+d218 1
+a218 4
+    if (mon>curmon) {//over current month, get last year
+      year--; year += '';
+    }
+    httpGet("/digest/recentTmrec/"+fdb[0]+"/"+year+mon, HandleDone);
+d246 1
+a248 1
+var g_off=0;
+a273 1
+    //var param = "pic="+pic+ "|ext="+extName + "|fn="+fn;
+d280 2
+a281 2
+	var m = document.getElementById("eMenu");
+	var item = m.value;
 @
 
 

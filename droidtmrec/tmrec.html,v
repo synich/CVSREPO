@@ -1,9 +1,14 @@
-head	1.27;
+head	1.28;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.28
+date	2021.02.12.10.43.43;	author FOTEN;	state Exp;
+branches;
+next	1.27;
 
 1.27
 date	2019.09.08.15.47.33;	author WIN7;	state Exp;
@@ -145,9 +150,9 @@ desc
 @@
 
 
-1.27
+1.28
 log
-@INSERT: data tag for blog
+@add recent any month diary
 @
 text
 @<html>
@@ -155,10 +160,7 @@ text
 <meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
     <meta name="viewport" content="width=device-width">
     <script src='file:///android_asset/app.js'></script>
-	<script src="common.js"></script>
-    <script src='tmrec.js'></script>
-	<script src='marked.min.js'></script>
-	<script src='jquery.js'></script>
+	<script src="aio.js"></script>
 <script>
     //Called after application is started.
     function OnStart(){
@@ -177,8 +179,7 @@ text
 </script>
 
 <style type="text/css" media="all">
-@@import "ayout.css";
-@@import "pure.css"
+@@import "aio.css";
 </style>
 </head>
 
@@ -266,6 +267,24 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.27
+log
+@INSERT: data tag for blog
+@
+text
+@d6 1
+a6 4
+	<script src="common.js"></script>
+    <script src='tmrec.js'></script>
+	<script src='marked.min.js'></script>
+	<script src='jquery.js'></script>
+d25 1
+a25 2
+@@import "ayout.css";
+@@import "pure.css"
 @
 
 

@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.02.12.10.45.05;	author FOTEN;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@add helper file
+@
+text
+@all:
+	make js
+	make css
+
+js:
+	cat common.js util.js marked.min.js jquery.js > aio.js
+
+css:
+	cat ayout.css pure.css > aio.css@
