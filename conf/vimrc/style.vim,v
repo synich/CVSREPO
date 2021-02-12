@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.02.09.14.42.51;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	10060229F6B269B2A51;
 
 1.5
 date	2021.01.17.16.23.37;	author android;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@make <C-n/p> restore complete
+@use AcpEnable cmd instead of vim-easycomplete and restore <C-n>
 @
 text
 @" Modeline and Notes {
@@ -54,7 +60,7 @@ text
     set mouse=                  " Disable mouse usage
     set autoread                    " Automatically read a file when detect modified
     set autowrite                   " Automatically write a file when leaving a modified buffer
-    set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
+    set shortmess+=filmnrxoOtTc     " Abbrev. of messages (avoids 'hit enter')
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
     set virtualedit=onemore         " Allow for cursor beyond last character
     set history=1000                " Store a ton of history (default is 20)
@@ -64,8 +70,8 @@ text
     set iskeyword-=#                " '#' is an end of word designator
     set iskeyword-=-                " '-' is an end of word designator
     set timeoutlen=800              " make timeout wait faster
-    set complete=.,w,b,t,i          " no need unloaded buffer complete
-    set completeopt=menu,preview,longest
+    set complete=.,w,b,t,k          " no need unloaded buffer complete
+    set completeopt=menu,menuone,noselect " preview,longest
     set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
     set nobackup                    " Backups are nice ...
     set noswapfile                  " Not save .swp in disk
@@ -193,6 +199,21 @@ text
 
 " }
 
+@
+
+
+1.5
+log
+@make <C-n/p> restore complete
+@
+text
+@d10 1
+a10 1
+    set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
+d20 2
+a21 2
+    set complete=.,w,b,t,i          " no need unloaded buffer complete
+    set completeopt=menu,preview,longest
 @
 
 

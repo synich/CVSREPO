@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2021.02.09.14.42.51;	author android;	state Exp;
+branches;
+next	1.18;
+commitid	10060229F6B269B2A51;
 
 1.18
 date	2021.01.17.16.23.37;	author android;	state Exp;
@@ -118,9 +124,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@make <C-n/p> restore complete
+@use AcpEnable cmd instead of vim-easycomplete and restore <C-n>
 @
 text
 @" Modeline and Notes {
@@ -295,7 +301,8 @@ Plug (mvcf_plug_rmt?'https://github.com/majutsushi/':mvcf_path_bundle).'tagbar'
 Plug (mvcf_plug_rmt?'https://github.com/tpope/':mvcf_path_bundle).'vim-surround'
 
     " complete {
-Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-easycomplete'
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-auto-popmenu'
 "Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
     "let g:SuperTabDefaultCompletionType = "context"
     "let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
@@ -447,6 +454,17 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.18
+log
+@make <C-n/p> restore complete
+@
+text
+@d173 2
+a174 1
+Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-easycomplete'
 @
 
 
