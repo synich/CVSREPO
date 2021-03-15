@@ -1,0 +1,44 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.03.15.15.27.08;	author android;	state Exp;
+branches;
+next	;
+commitid	9E9TXtmZPVwQ0qLC;
+
+
+desc
+@@
+
+
+1.1
+log
+@init release logger and parsedown
+@
+text
+@<?php
+function print_error($str){
+  if (LOG_LEVEL && LOG_LEVEL>=1) {
+    error_log($_SERVER['PATH_INFO'].$str);
+  }
+}
+
+function print_warn($str){
+  if (LOG_LEVEL && LOG_LEVEL>=2) {
+    error_log($_SERVER['PATH_INFO'].$str);
+  }
+}
+
+function print_info($str){
+  if (LOG_LEVEL && LOG_LEVEL>=3) {
+    error_log($_SERVER['PATH_INFO'].$str);
+  }
+}
+
+?>
+@
