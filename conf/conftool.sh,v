@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.03.15.15.10.06;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	XWfzMKaawyh0VpLC;
 
 1.5
 date	2020.12.27.02.24.10;	author android;	state Exp;
@@ -39,9 +45,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@bugfix plugvim command remove bund.tgz before install
+@improve vim setting
 @
 text
 @#!/bin/sh
@@ -49,7 +55,7 @@ text
 FAVORITE_DIRNAME=shuw
 
 if [ $# -eq 0 ]; then
-    echo "$0 setup|update|clean [package]"
+    echo "$0 setup|update|clean|plugvim [package]"
     exit 1
 fi
 
@@ -155,7 +161,7 @@ main() {
           plugvim $package
           ;;
       v*)
-          echo ver20201227
+          echo ver20210224
           ;;
       *)
           echo dont known what to do
@@ -165,6 +171,20 @@ main() {
 
 main $1 $2
 
+@
+
+
+1.5
+log
+@bugfix plugvim command remove bund.tgz before install
+@
+text
+@d6 1
+a6 1
+    echo "$0 setup|update|clean [package]"
+d112 1
+a112 1
+          echo ver20201227
 @
 
 

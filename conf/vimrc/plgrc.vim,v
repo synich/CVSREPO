@@ -1,9 +1,15 @@
-head	1.19;
+head	1.20;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.20
+date	2021.03.15.15.10.06;	author android;	state Exp;
+branches;
+next	1.19;
+commitid	XWfzMKaawyh0VpLC;
 
 1.19
 date	2021.02.09.14.42.51;	author android;	state Exp;
@@ -124,9 +130,9 @@ desc
 @@
 
 
-1.19
+1.20
 log
-@use AcpEnable cmd instead of vim-easycomplete and restore <C-n>
+@improve vim setting
 @
 text
 @" Modeline and Notes {
@@ -299,16 +305,12 @@ Plug (mvcf_plug_rmt?'https://github.com/majutsushi/':mvcf_path_bundle).'tagbar'
 
 " Write {
 Plug (mvcf_plug_rmt?'https://github.com/tpope/':mvcf_path_bundle).'vim-surround'
-
-    " complete {
-let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
-Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-auto-popmenu'
-"Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
-    "let g:SuperTabDefaultCompletionType = "context"
-    "let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
-    " }
-
 Plug (mvcf_plug_rmt?'https://github.com/jiangmiao/':mvcf_path_bundle).'auto-pairs'
+" Only use input keymap
+let g:ZFVimIM_keymap = 0
+inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
+Plug (mvcf_plug_rmt?'https://github.com/ZSaberLv0/':mvcf_path_bundle).'ZFVimIM'
+Plug (mvcf_plug_rmt?'https://github.com/synich/':mvcf_path_bundle).'ZFVimIM_wubi_base'
 let g:NERDCreateDefaultMappings = 0
 Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcommenter'
 
@@ -344,8 +346,15 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
     " }
 
     if v:version >= 800
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+set completeopt+=noselect
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
+    else
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
     endif
 " }
 
@@ -454,6 +463,27 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.19
+log
+@use AcpEnable cmd instead of vim-easycomplete and restore <C-n>
+@
+text
+@a170 9
+
+    " complete {
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-auto-popmenu'
+"Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
+    "let g:SuperTabDefaultCompletionType = "context"
+    "let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+    " }
+
+d172 5
+d212 3
+d217 4
 @
 
 

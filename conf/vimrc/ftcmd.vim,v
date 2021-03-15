@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2021.03.15.15.10.06;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	XWfzMKaawyh0VpLC;
 
 1.2
 date	2021.01.03.09.18.02;	author android;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@remove spf13 config
+@improve vim setting
 @
 text
 @" Modeline and Notes {
@@ -50,7 +56,7 @@ text
     augroup END
 
     " Remove trailing whitespaces and ^M chars
-    autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  call StripTrailingWhitespace()
+    autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  :%s/\s\+$//e
     "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
     " preceding line best in a plugin but here for now.
@@ -59,6 +65,17 @@ text
     autocmd FileType haskell setlocal commentstring=--\ %s
     " Workaround broken colour highlighting in Haskell
     autocmd FileType haskell,rust setlocal nospell
+@
+
+
+1.2
+log
+@remove spf13 config
+@
+text
+@d24 1
+a24 1
+    autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  call StripTrailingWhitespace()
 @
 
 

@@ -270,3 +270,10 @@ M600d830a|android|~/sh*0|conf|1.21|bash.sh.tpl
 M60229f6b|android|~/shconf|conf/vimrc|1.11|kbd.vim
 M60229f6b|android|~/shconf|conf/vimrc|1.19|plgrc.vim
 M60229f6b|android|~/shconf|conf/vimrc|1.6|style.vim
+O604f77fe|android|~/*0|conf||conf
+M604f78ce|android|~/*0|conf|1.6|conftool.sh
+M604f78ce|android|~/conf|conf/bin|1.3|goto
+M604f78ce|android|~/conf|conf/vimrc|1.3|ftcmd.vim
+M604f78ce|android|~/conf|conf/vimrc|1.12|kbd.vim
+M604f78ce|android|~/conf|conf/vimrc|1.20|plgrc.vim
+M604f78ce|android|~/conf|conf/vimrc|1.7|style.vim
