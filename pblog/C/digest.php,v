@@ -1,9 +1,15 @@
-head	1.24;
+head	1.25;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.25
+date	2021.03.15.15.28.31;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	T9QCef5Qcm8k1qLC;
 
 1.24
 date	2020.08.09.12.06.40;	author android;	state Exp;
@@ -131,9 +137,9 @@ desc
 @@
 
 
-1.24
+1.25
 log
-@UPDATE: make query result show right in markdown
+@C/digest.php
 @
 text
 @<?php
@@ -245,6 +251,13 @@ class C_digest
     echo $ret;
   }
 
+  private function weekOfDay($date){
+    // $hour,$minute,$second,$month,$day,$year
+    $strap = mktime(12,0,0,intval(substr($date, 2, 2)),intval(substr($date, 4, 2)),2000+intval(substr($date, 0, 2)));
+    // 获取数字型星期几
+    return date("w",$strap);
+  }
+
   public function getRecentTmrec($param, $qry){
     $tdb = new C_tdb($param[0]);
     $whichMonth = $param[1];
@@ -253,7 +266,8 @@ class C_digest
     $output = ' ';
     $br = "<br />";
     foreach($rec as & $one){
-      $output .= $one['date'].$br.$one['record'].$br;
+      $wk = $this->weekOfDay($one['date']);
+      $output .= $one['date'].'-'.$wk.$br.$one['record'].$br;
     }
     echo $output;
   }
@@ -354,6 +368,18 @@ class C_digest
   }
 } // End of C_digest
 ?>
+@
+
+
+1.24
+log
+@UPDATE: make query result show right in markdown
+@
+text
+@d110 7
+d125 2
+a126 1
+      $output .= $one['date'].$br.$one['record'].$br;
 @
 
 

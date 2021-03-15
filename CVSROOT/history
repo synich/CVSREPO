@@ -277,3 +277,16 @@ M604f78ce|android|~/conf|conf/vimrc|1.3|ftcmd.vim
 M604f78ce|android|~/conf|conf/vimrc|1.12|kbd.vim
 M604f78ce|android|~/conf|conf/vimrc|1.20|plgrc.vim
 M604f78ce|android|~/conf|conf/vimrc|1.7|style.vim
+O604f7a67|android|~/*0|pblog||pblog
+A604f7ac3|android|~/*0|pblog|1.1|README
+A604f7ac3|android|~/*0|pblog|1.1|svc.sh
+A604f7ccc|android|~/*0|pblog/Cemvc|1.1|Logger.php
+A604f7ccc|android|~/*0|pblog/Cemvc|1.1|Parsedown.php
+A604f7cf0|android|~/*0|pblog/Page|1.1|Makefile
+M604f7d1f|android|~/pblog|pblog/C|1.25|digest.php
+A604f7e5c|android|~/*0|pblog/theme/js|1.1|jquery-3.4.1.min.js
+A604f7e8f|android|~/*0|pblog/theme/css|1.1|article.css
+A604f7e8f|android|~/*0|pblog/theme/css|1.1|layout.css
+A604f7e8f|android|~/*0|pblog/theme/css|1.1|legacy.css
+A604f7e8f|android|~/*0|pblog/theme/css|1.1|pure.css
+A604f7e8f|android|~/*0|pblog/theme/css|1.1|tmrec.css
