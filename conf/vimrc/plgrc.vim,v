@@ -1,9 +1,15 @@
-head	1.20;
+head	1.21;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.21
+date	2021.03.30.14.49.53;	author android;	state Exp;
+branches;
+next	1.20;
+commitid	k9W3jy1pHBOaklNC;
 
 1.20
 date	2021.03.15.15.10.06;	author android;	state Exp;
@@ -130,9 +136,9 @@ desc
 @@
 
 
-1.20
+1.21
 log
-@improve vim setting
+@UPDATE: fix grep not support blank in keyword
 @
 text
 @" Modeline and Notes {
@@ -155,7 +161,7 @@ let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',
       endif
     endfunction
 
-    " find top dir
+    " refreshtags at top dir
     function! s:refreshtags()
        wall
        let l:Curr_dir=getcwd()
@@ -166,7 +172,7 @@ let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',
             "--fields=+lS  cscope -Rbkq
             return
           else
-            cd ..
+            lcd ..
             let i += 1
           endif
        endwhile
@@ -378,13 +384,13 @@ Plug (mvcf_plug_rmt?'https://github.com/easymotion/':mvcf_path_bundle).'vim-easy
           let l:word = input("Keyword:")
       endif
       if executable('rg')
-          call <SID>runcmd('rg '.l:word)
+          call <SID>runcmd('rg "'.l:word.'"')
       elseif executable('ag')
-          call <SID>runcmd('ag '.l:word)
+          call <SID>runcmd('ag "'.l:word.'"')
       elseif executable('ack')
-          call <SID>runcmd('ack '.l:word)
+          call <SID>runcmd('ack "'.l:word.'"')
       else
-          call <SID>runcmd('grep -i -R '.l:word.' *')
+          call <SID>runcmd('grep -i -R "'.l:word.'" *')
       endif
     endfunction
     nnoremap <Plug>(search-current-word) :call <SID>enhancegrep(0)<CR>
@@ -463,6 +469,32 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.20
+log
+@improve vim setting
+@
+text
+@d21 1
+a21 1
+    " find top dir
+d32 1
+a32 1
+            cd ..
+d244 1
+a244 1
+          call <SID>runcmd('rg '.l:word)
+d246 1
+a246 1
+          call <SID>runcmd('ag '.l:word)
+d248 1
+a248 1
+          call <SID>runcmd('ack '.l:word)
+d250 1
+a250 1
+          call <SID>runcmd('grep -i -R '.l:word.' *')
 @
 
 

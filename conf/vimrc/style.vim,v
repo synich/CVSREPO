@@ -1,9 +1,21 @@
-head	1.7;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2021.03.30.14.50.17;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	Eg59H53xnjjjklNC;
+
+1.8
+date	2021.03.30.13.57.52;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	jr4uleeT0zmk2lNC;
 
 1.7
 date	2021.03.15.15.10.06;	author android;	state Exp;
@@ -52,9 +64,9 @@ desc
 @@
 
 
-1.7
+1.9
 log
-@improve vim setting
+@INSERT: use ct goto top dir
 @
 text
 @" Modeline and Notes {
@@ -97,10 +109,25 @@ text
         endif
     endif
 
-    " Always switch to the current file directory, or disable let g:spf13_no_autochdir = 1
-    if !exists('g:spf13_no_autochdir')
+    " Always switch to the current file directory
+    if 0
         autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
     endif
+
+    " find top dir
+    function! s:gototopdir()
+       let i = 1
+       while i < 10
+          if filereadable("tags") || isdirectory(".git")
+            echo "Found top dir"
+            return
+          else
+            lcd ..
+            let i += 1
+          endif
+       endwhile
+    endfunction
+    nnoremap <Plug>GotoTopDir :call <SID>gototopdir()<CR>
 
 " }
 
@@ -205,6 +232,27 @@ text
 
 " }
 
+@
+
+
+1.8
+log
+@UPDATE: disable auto change to file directory, use kbd instead
+@
+text
+@d46 15
+@
+
+
+1.7
+log
+@improve vim setting
+@
+text
+@d41 2
+a42 2
+    " Always switch to the current file directory, or disable let g:spf13_no_autochdir = 1
+    if !exists('g:spf13_no_autochdir')
 @
 
 

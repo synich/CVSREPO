@@ -1,9 +1,21 @@
-head	1.12;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2021.03.30.14.50.17;	author android;	state Exp;
+branches;
+next	1.13;
+commitid	Eg59H53xnjjjklNC;
+
+1.13
+date	2021.03.30.13.57.52;	author android;	state Exp;
+branches;
+next	1.12;
+commitid	jr4uleeT0zmk2lNC;
 
 1.12
 date	2021.03.15.15.10.06;	author android;	state Exp;
@@ -82,9 +94,9 @@ desc
 @@
 
 
-1.12
+1.14
 log
-@improve vim setting
+@INSERT: use ct goto top dir
 @
 text
 @" Modeline and Notes {
@@ -225,9 +237,11 @@ text
     map      <leader>= <C-w>=
     nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
     nnoremap <leader>b 5b
-    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
     map      <Leader>cc <Plug>NERDCommenterInvert
     nmap     <Leader>ce <Plug>NERDCommenterToEOL
+    nnoremap <leader>cp :lcd  %:p:h<cr>
+    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
+    nmap     <leader>ct <Plug>GotoTopDir
     nnoremap <leader>dm :call <SID>ShowMaps()<CR>
     nnoremap <leader>e 5e
     " helpers to edit mode, http://vimcasts.org/e/14
@@ -352,6 +366,26 @@ text
 
 " }
 
+@
+
+
+1.13
+log
+@UPDATE: disable auto change to file directory, use kbd instead
+@
+text
+@d143 1
+@
+
+
+1.12
+log
+@improve vim setting
+@
+text
+@a138 1
+    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
+d141 2
 @
 
 
