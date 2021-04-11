@@ -1,9 +1,15 @@
-head	1.22;
+head	1.23;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.23
+date	2021.04.11.15.20.38;	author android;	state Exp;
+branches;
+next	1.22;
+commitid	sDhTnMA5CX2O6TOC;
 
 1.22
 date	2021.04.11.07.15.36;	author android;	state Exp;
@@ -133,9 +139,9 @@ desc
 @@
 
 
-1.22
+1.23
 log
-@PS1 use u5s instead of \h
+@use double quote instead single quote in PS1, reduce subshell call
 @
 text
 @# avoid init interative
@@ -144,7 +150,7 @@ case "$-" in
     *) return
 esac
 
-PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
+PS1="\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ "
 
 alias ls="ls --color"
 alias ll="ls -lAh"
@@ -292,6 +298,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.22
+log
+@PS1 use u5s instead of \h
+@
+text
+@d7 1
+a7 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
 @
 
 
