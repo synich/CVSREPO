@@ -1,9 +1,15 @@
-head	1.21;
+head	1.22;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.22
+date	2021.04.11.07.15.36;	author android;	state Exp;
+branches;
+next	1.21;
+commitid	Id1BSo9PscBpqQOC;
 
 1.21
 date	2021.01.24.14.24.10;	author android;	state Exp;
@@ -127,9 +133,9 @@ desc
 @@
 
 
-1.21
+1.22
 log
-@fix psp show PID bug
+@PS1 use u5s instead of \h
 @
 text
 @# avoid init interative
@@ -138,7 +144,7 @@ case "$-" in
     *) return
 esac
 
-PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 alias ls="ls --color"
 alias ll="ls -lAh"
@@ -286,6 +292,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.21
+log
+@fix psp show PID bug
+@
+text
+@d7 1
+a7 1
+PS1='\[\033[01;32m\]\u@@\[\033[01;31m\]\h\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ '
 @
 
 
