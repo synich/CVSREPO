@@ -1,9 +1,15 @@
-head	1.23;
+head	1.24;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.24
+date	2021.04.25.05.26.08;	author android;	state Exp;
+branches;
+next	1.23;
+commitid	ZTt7wcasUDnXmDQC;
 
 1.23
 date	2021.04.11.15.20.38;	author android;	state Exp;
@@ -139,9 +145,9 @@ desc
 @@
 
 
-1.23
+1.24
 log
-@use double quote instead single quote in PS1, reduce subshell call
+@add sub command rpc in p, do simple remote batch work
 @
 text
 @# avoid init interative
@@ -230,6 +236,12 @@ p() {
             todir=`echo $dirlst| tr ' ' '\n'|sed -n "${idx}p"`
             cd $todir
         fi
+    elif [ $1 = 'rpc' ]; then
+        for h in `cat h.txt`
+        do
+            echo HOST: $h
+            ssh $h $*
+        done
     elif [ $1 -gt 0 ]; then
         for ((i=0; i<$1; i++))
         do
@@ -298,6 +310,15 @@ psp() {
   fi
 }
 
+@
+
+
+1.23
+log
+@use double quote instead single quote in PS1, reduce subshell call
+@
+text
+@d87 6
 @
 
 
