@@ -1,9 +1,15 @@
-head	1.21;
+head	1.22;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.22
+date	2021.04.29.12.08.31;	author android;	state Exp;
+branches;
+next	1.21;
+commitid	n26fk46vlSO1tbRC;
 
 1.21
 date	2021.03.30.14.49.53;	author android;	state Exp;
@@ -136,9 +142,9 @@ desc
 @@
 
 
-1.21
+1.22
 log
-@UPDATE: fix grep not support blank in keyword
+@add command Rg
 @
 text
 @" Modeline and Notes {
@@ -380,7 +386,9 @@ Plug (mvcf_plug_rmt?'https://github.com/easymotion/':mvcf_path_bundle).'vim-easy
     " Search-File-Keyword {
     function! s:enhancegrep(useinput)
       let l:word = expand("<cword>")
-      if a:useinput
+      if type(a:useinput) == 1
+          let l:word = a:useinput
+      elseif a:useinput == 1
           let l:word = input("Keyword:")
       endif
       if executable('rg')
@@ -395,6 +403,7 @@ Plug (mvcf_plug_rmt?'https://github.com/easymotion/':mvcf_path_bundle).'vim-easy
     endfunction
     nnoremap <Plug>(search-current-word) :call <SID>enhancegrep(0)<CR>
     nnoremap <Plug>(search-one-word)     :call <SID>enhancegrep(1)<CR>
+    command! -nargs=1 Rg call <SID>enhancegrep(<q-args>)
 
     if executable('fzf')
         nnoremap <Leader>f  :FZF<CR>
@@ -469,6 +478,18 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.21
+log
+@UPDATE: fix grep not support blank in keyword
+@
+text
+@d240 3
+a242 1
+      if a:useinput
+d257 1
 @
 
 
