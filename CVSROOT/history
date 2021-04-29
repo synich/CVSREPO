@@ -218,3 +218,5 @@ M60633aa9|android|~/shconf|conf/vimrc|1.9|style.vim
 M6072a219|android|~/sh*0|conf|1.22|bash.sh.tpl
 M607313c6|android|~/sh*0|conf|1.23|bash.sh.tpl
 M6084fd70|android|~/sh*0|conf|1.24|bash.sh.tpl
+M6089fdef|android|~/sh*0|conf|1.25|bash.sh.tpl
+M6089fdef|android|~/shconf|conf/vimrc|1.15|kbd.vim

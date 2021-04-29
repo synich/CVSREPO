@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2021.04.29.00.29.35;	author android;	state Exp;
+branches;
+next	1.14;
+commitid	0DjWve1CQUPfB7RC;
 
 1.14
 date	2021.03.30.14.50.17;	author android;	state Exp;
@@ -94,9 +100,9 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@INSERT: use ct goto top dir
+@change vim search to rg
 @
 text
 @" Modeline and Notes {
@@ -262,7 +268,6 @@ text
     map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
     " Display all lines with keyword under cursor,ask which one to jump to
     nmap     <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
-    nmap     <leader>gf <Plug>(search-current-word)
     nmap     <leader>gp <Plug>(search-one-word)
     nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     " Disable search highlight
@@ -272,6 +277,7 @@ text
     nnoremap <silent> <leader>q gwip
     nnoremap <leader>qf :call <SID>togglequickfix()<CR>
     nmap     <buffer> <localleader>rf <Plug>(run-script-noarg)
+    nmap     <leader>rg <Plug>(search-current-word)
     nmap     <buffer> <localleader>rp <Plug>(run-script-onearg)
     nmap     <leader>s <Plug>(easymotion-overwin-f2)
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
@@ -366,6 +372,17 @@ text
 
 " }
 
+@
+
+
+1.14
+log
+@INSERT: use ct goto top dir
+@
+text
+@a163 1
+    nmap     <leader>gf <Plug>(search-current-word)
+d173 1
 @
 
 

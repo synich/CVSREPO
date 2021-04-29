@@ -1,9 +1,15 @@
-head	1.24;
+head	1.25;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.25
+date	2021.04.29.00.29.35;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	0DjWve1CQUPfB7RC;
 
 1.24
 date	2021.04.25.05.26.08;	author android;	state Exp;
@@ -145,9 +151,9 @@ desc
 @@
 
 
-1.24
+1.25
 log
-@add sub command rpc in p, do simple remote batch work
+@change vim search to rg
 @
 text
 @# avoid init interative
@@ -156,7 +162,7 @@ case "$-" in
     *) return
 esac
 
-PS1="\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ "
+PS1="\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]4$?\[\033[01;34m\]\W\[\033[00m\]\$ "
 
 alias ls="ls --color"
 alias ll="ls -lAh"
@@ -310,6 +316,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.24
+log
+@add sub command rpc in p, do simple remote batch work
+@
+text
+@d7 1
+a7 1
+PS1="\[\033[01;32m\]\u@@\[\033[01;31m\]$(hostname)\[\033[01;33m\]3$?\[\033[01;34m\]\W\[\033[00m\]\$ "
 @
 
 
