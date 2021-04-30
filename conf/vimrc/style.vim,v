@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2021.04.30.00.39.57;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	mKby3DzLpUtOCfRC;
 
 1.9
 date	2021.03.30.14.50.17;	author android;	state Exp;
@@ -64,9 +70,9 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@INSERT: use ct goto top dir
+@fixed complete bug in not load plgrc.vim
 @
 text
 @" Modeline and Notes {
@@ -90,6 +96,9 @@ text
     set timeoutlen=800              " make timeout wait faster
     set complete=.,w,b,t,k          " no need unloaded buffer complete
     set completeopt=menu,menuone    " preview,longest
+    if v:version >= 800
+      set completeopt+=noselect
+    endif
     set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
     set nobackup                    " Backups are nice ...
     set noswapfile                  " Not save .swp in disk
@@ -232,6 +241,15 @@ text
 
 " }
 
+@
+
+
+1.9
+log
+@INSERT: use ct goto top dir
+@
+text
+@d22 3
 @
 
 

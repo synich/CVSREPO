@@ -1,9 +1,15 @@
-head	1.25;
+head	1.26;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.26
+date	2021.04.30.00.39.18;	author android;	state Exp;
+branches;
+next	1.25;
+commitid	L6LmhbPQTrMACfRC;
 
 1.25
 date	2021.04.29.00.29.35;	author android;	state Exp;
@@ -151,9 +157,9 @@ desc
 @@
 
 
-1.25
+1.26
 log
-@change vim search to rg
+@add self make rg
 @
 text
 @# avoid init interative
@@ -173,6 +179,11 @@ if [ -x "$(command -v strace)" ]; then
 fi
 if [ -x "$(command -v pstree)" ]; then
   alias pstree="pstree -p"
+fi
+if ! [ -x "$(command -v rg)" ]; then
+  rg(){
+    grep -nR "$*" *
+  }
 fi
 
 bind '"\C-t": backward-word'
@@ -316,6 +327,15 @@ psp() {
   fi
 }
 
+@
+
+
+1.25
+log
+@change vim search to rg
+@
+text
+@d19 5
 @
 
 

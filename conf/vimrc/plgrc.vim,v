@@ -1,9 +1,15 @@
-head	1.22;
+head	1.23;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.23
+date	2021.04.30.00.39.57;	author android;	state Exp;
+branches;
+next	1.22;
+commitid	mKby3DzLpUtOCfRC;
 
 1.22
 date	2021.04.29.12.08.31;	author android;	state Exp;
@@ -142,9 +148,9 @@ desc
 @@
 
 
-1.22
+1.23
 log
-@add command Rg
+@fixed complete bug in not load plgrc.vim
 @
 text
 @" Modeline and Notes {
@@ -359,7 +365,6 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
 
     if v:version >= 800
 let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
-set completeopt+=noselect
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
@@ -478,6 +483,16 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.22
+log
+@add command Rg
+@
+text
+@a212 1
+set completeopt+=noselect
 @
 
 
