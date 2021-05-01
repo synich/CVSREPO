@@ -1,9 +1,21 @@
-head	1.10;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2021.05.01.03.13.03;	author android;	state Exp;
+branches;
+next	1.11;
+commitid	V5pbSB6aaEDlroRC;
+
+1.11
+date	2021.05.01.03.10.57;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	H3KWfBthRULCqoRC;
 
 1.10
 date	2021.01.10.15.41.37;	author android;	state Exp;
@@ -69,9 +81,9 @@ desc
 @@
 
 
-1.10
+1.12
 log
-@add more function explain of awk
+@make comment alien right
 @
 text
 @#!/bin/bash
@@ -95,7 +107,10 @@ EOF
   ;;
   i*) cat <<"EOF"
 if [ -a -o ]; then
-if [[ && || ]]; then
+if [[ && || ]]; then         # bash feature
+if [[ "$i" =~ a.* ]]; then   # bash regex, no quote right
+if [[ "$i" == a* ]]; then    # bash glob, no quote right
+if [[ "$i" == *" "* ]]; then # compare to space
 elif
 fi
 
@@ -195,6 +210,31 @@ main() {
 
 main $@@
 
+@
+
+
+1.11
+log
+@add bash compare glob and regex hint
+@
+text
+@d22 4
+a25 4
+if [[ && || ]]; then     # bash feature
+if [[ "$i" =~ a.* ]]; then # bash regex, no quote right
+if [[ "$i" == a* ]]; then  # bash glob, no quote right
+if [[ "$i" == *" "* ]]; then  # compare to space
+@
+
+
+1.10
+log
+@add more function explain of awk
+@
+text
+@d22 4
+a25 1
+if [[ && || ]]; then
 @
 
 
