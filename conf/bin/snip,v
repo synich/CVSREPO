@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2021.05.13.13.06.39;	author android;	state Exp;
+branches;
+next	1.12;
+commitid	F1ZojhOy7YE4lZSC;
 
 1.12
 date	2021.05.01.03.13.03;	author android;	state Exp;
@@ -81,9 +87,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@make comment alien right
+@add var not assign default value
 @
 text
 @#!/bin/bash
@@ -121,6 +127,7 @@ esac
 EOF
   ;;
   v*) cat <<"EOF"
+res=${var:-abc}  # if $var not assign, $res is 'abc'. beside ${var-abc} means $var not declare
 res=${var/-*./.} # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
 res=($spcstr)    # $spcstr spilt by space and asign array to $res
 res=$(ls)        # save ls result into res
@@ -210,6 +217,15 @@ main() {
 
 main $@@
 
+@
+
+
+1.12
+log
+@make comment alien right
+@
+text
+@d36 1
 @
 
 
