@@ -1,9 +1,15 @@
-head	1.27;
+head	1.28;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.28
+date	2021.05.30.15.12.19;	author android;	state Exp;
+branches;
+next	1.27;
+commitid	ZCUGZjZ3FH0jubVC;
 
 1.27
 date	2021.05.01.03.10.36;	author android;	state Exp;
@@ -163,9 +169,9 @@ desc
 @@
 
 
-1.27
+1.28
 log
-@support -i and -w in self make rg
+@add cat file into z
 @
 text
 @# avoid init interative
@@ -218,7 +224,23 @@ esac
 stty -ixon -ixoff
 
 if [ -x "$(command -v lua)" ]; then
-    eval "$(lua ~/.FAVORITE_DIRNAME/bin/z.lua  --init bash)"
+  eval "$(lua ~/.FAVORITE_DIRNAME/bin/z.lua  --init bash)"
+  unalias z
+  z(){
+    if [ -f "$1" ]; then
+      cat $@@
+    else
+      _zlua $@@
+    fi
+  }
+else
+  z(){
+    if [ -f "$1" ]; then
+      cat $@@
+    else
+      cd $1
+    fi
+  }
 fi
 
 # "ff diff % %" will change to "ff diff $(fzf) $(fzf)"
@@ -341,6 +363,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.27
+log
+@support -i and -w in self make rg
+@
+text
+@d51 17
+a67 1
+    eval "$(lua ~/.FAVORITE_DIRNAME/bin/z.lua  --init bash)"
 @
 
 
