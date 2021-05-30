@@ -1,9 +1,15 @@
-head	1.15;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2021.05.30.14.40.30;	author android;	state Exp;
+branches;
+next	1.15;
+commitid	gWf8fz4wTkMnjbVC;
 
 1.15
 date	2021.04.29.00.29.35;	author android;	state Exp;
@@ -100,9 +106,9 @@ desc
 @@
 
 
-1.15
+1.16
 log
-@change vim search to rg
+@open current content as file
 @
 text
 @" Modeline and Notes {
@@ -268,6 +274,7 @@ text
     map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
     " Display all lines with keyword under cursor,ask which one to jump to
     nmap     <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+    nmap     <leader>gf <Plug>(open-cur-file-win1)
     nmap     <leader>gp <Plug>(search-one-word)
     nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     " Disable search highlight
@@ -372,6 +379,15 @@ text
 
 " }
 
+@
+
+
+1.15
+log
+@change vim search to rg
+@
+text
+@d164 1
 @
 
 

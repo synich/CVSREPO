@@ -1,9 +1,15 @@
-head	1.23;
+head	1.24;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.24
+date	2021.05.30.14.40.29;	author android;	state Exp;
+branches;
+next	1.23;
+commitid	gWf8fz4wTkMnjbVC;
 
 1.23
 date	2021.04.30.00.39.57;	author android;	state Exp;
@@ -148,9 +154,9 @@ desc
 @@
 
 
-1.23
+1.24
 log
-@fixed complete bug in not load plgrc.vim
+@open current content as file
 @
 text
 @" Modeline and Notes {
@@ -222,6 +228,13 @@ let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',
     endfunction
     nnoremap <Plug>(run-script-noarg)  :call <SID>runcurrentscript(0)<CR>
     nnoremap <Plug>(run-script-onearg) :call <SID>runcurrentscript(1)<CR>
+
+    function! s:openfileinwin1()
+      let pth = expand('<cfile>')
+      call win_gotoid(win_getid(1))
+      execute 'e./'.pth
+    endfunction
+    nnoremap <Plug>(open-cur-file-win1)  :call <SID>openfileinwin1()<CR>
 
     function! s:replConnect()
       let l:scheme_executable = s:chooseExecutor()
@@ -483,6 +496,15 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.23
+log
+@fixed complete bug in not load plgrc.vim
+@
+text
+@d71 7
 @
 
 
