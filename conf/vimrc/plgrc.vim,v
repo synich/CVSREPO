@@ -1,9 +1,15 @@
-head	1.24;
+head	1.25;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.25
+date	2021.05.31.23.56.47;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	4yTZ8acvP7KemmVC;
 
 1.24
 date	2021.05.30.14.40.29;	author android;	state Exp;
@@ -154,9 +160,9 @@ desc
 @@
 
 
-1.24
+1.25
 log
-@open current content as file
+@use wincmd instead of win_gotoid for vim74
 @
 text
 @" Modeline and Notes {
@@ -231,7 +237,7 @@ let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',
 
     function! s:openfileinwin1()
       let pth = expand('<cfile>')
-      call win_gotoid(win_getid(1))
+      1wincmd w
       execute 'e./'.pth
     endfunction
     nnoremap <Plug>(open-cur-file-win1)  :call <SID>openfileinwin1()<CR>
@@ -496,6 +502,17 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.24
+log
+@open current content as file
+@
+text
+@d73 1
+a73 1
+      call win_gotoid(win_getid(1))
 @
 
 
