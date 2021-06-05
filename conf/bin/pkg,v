@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.06.05.15.55.35;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	yIXUWwUQ8xHbxXVC;
 
 1.5
 date	2021.06.05.15.46.30;	author android;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@modify comment for pkg
+@make list-i short as lis
 @
 text
 @#!/bin/bash
@@ -102,7 +108,7 @@ case "$CMD" in
 	f*) dpkg -L "$@@";;
 	he*) show_help;;
 	add|ins*)  apt install "$@@";;
-	list-i*|ha*) apt list --installed ;;
+	lis*|ha*) apt list --installed ;;
 	rei*) apt install --reinstall "$@@";;
 	se*)  apt search "$@@";;
 	sh*|inf*) apt show "$@@";;
@@ -121,7 +127,7 @@ case "$CMD" in
 	f*) pacman -Ql "$@@";;
 	he*) show_help;;
 	add|ins*) pacman -S "$@@";;
-	list-i*|ha*) pacman -Qv ;;
+	lis*|ha*) pacman -Qv ;;
 	rei*) echo "Unsupport this command in this package system";;
 	se*) pacman -Ss "$@@";;
 	sh*|inf*) pacman -Qii "$@@";;
@@ -139,7 +145,7 @@ case "$CMD" in
 	f*) apk info -L "$@@";;
 	he*) show_help;;
 	add|ins*) apk add "$@@";;
-	list-i*|ha*) apk list -I;;
+	lis*|ha*) apk list -I;;
 	rei*) echo "Unsupport this command in this package system";;
 	se*) apk search "$@@";;
 	sh*|inf*) apk info "$@@";;
@@ -157,7 +163,7 @@ case "$CMD" in
 	f*) rpm -ql "$@@";;
 	he*) show_help;;
 	add|ins*) yum install "$@@";;
-	list-i*|ha*) rpm -qa;;
+	lis*|ha*) rpm -qa;;
 	rei*) yum reinstall "$@@";;
 	se*) yum search "$@@";;
 	sh*|inf*) rpm -qi "$@@";;
@@ -175,7 +181,7 @@ case "$CMD" in
 	f*) xbps-query -f "$@@";;
 	he*) show_help;;
 	add|ins*) xbps-install "$@@";;
-	list-i*|ha*) xbps-query -l;;
+	lis*|ha*) xbps-query -l;;
 	rei*) echo "Unsupport this command in this package system";;
 	se*) xbps-query -R "$@@";;
 	sh*|inf*) xbps-query -S "$@@";;
@@ -188,6 +194,29 @@ esac
 
 pkg$whatpkg $@@
 
+@
+
+
+1.5
+log
+@modify comment for pkg
+@
+text
+@d58 1
+a58 1
+	list-i*|ha*) apt list --installed ;;
+d77 1
+a77 1
+	list-i*|ha*) pacman -Qv ;;
+d95 1
+a95 1
+	list-i*|ha*) apk list -I;;
+d113 1
+a113 1
+	list-i*|ha*) rpm -qa;;
+d131 1
+a131 1
+	list-i*|ha*) xbps-query -l;;
 @
 
 
