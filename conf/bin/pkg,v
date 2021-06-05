@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2021.06.05.15.46.30;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	Mo5qcJsCLDG4uXVC;
 
 1.4
 date	2021.06.05.15.38.48;	author android;	state Exp;
@@ -34,13 +40,13 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@add voidlinux xbps- package manager
+@modify comment for pkg
 @
 text
 @#!/bin/bash
-# A tool for managing packages, Warp for Debian/Arch/CentOS/Alpine package manager in same way
+# A wrap tool for Debian/Arch/CentOS/Alpine/Void package manager in same way
 # Usage: pkg command [arguments]
 # Commands:
 #   files <packages>
@@ -182,6 +188,17 @@ esac
 
 pkg$whatpkg $@@
 
+@
+
+
+1.4
+log
+@add voidlinux xbps- package manager
+@
+text
+@d2 1
+a2 1
+# A tool for managing packages, Warp for Debian/Arch/CentOS/Alpine package manager in same way
 @
 
 
