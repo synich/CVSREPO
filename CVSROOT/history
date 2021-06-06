@@ -236,3 +236,7 @@ M60b577bf|android|~/shconf|conf/vimrc|1.25|plgrc.vim
 M60bb9a88|android|~/shconf|conf/bin|1.4|pkg
 M60bb9c56|android|~/shconf|conf/bin|1.5|pkg
 M60bb9e77|android|~/shconf|conf/bin|1.6|pkg
+M60bcf240|android|~/sh*0|conf|1.29|bash.sh.tpl
+M60bcf8eb|android|~/sh*0|conf|1.30|bash.sh.tpl
+M60bcf8ec|android|~/shconf|conf/bin|1.4|z.lua
+M60bcfdef|android|~/sh*0|conf|1.31|bash.sh.tpl

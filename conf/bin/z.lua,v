@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2021.06.06.16.33.47;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	sEWfqwsp9jBiI5WC;
 
 1.3
 date	2021.05.30.14.39.36;	author android;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@update z.lua with upstream
+@modify z.lua incoprate with PS1
 @
 text
 @#! /usr/bin/env lua
@@ -2187,7 +2193,7 @@ alias ${_ZL_CMD:-z}='_zlua'
 local script_init_bash = [[
 case "$PROMPT_COMMAND" in
 	*_zlua?--add*) ;;
-	*) PROMPT_COMMAND="(_zlua --add \"\$(command pwd 2>/dev/null)\" &)${PROMPT_COMMAND:+;$PROMPT_COMMAND}" ;;
+	*) PROMPT_COMMAND="${PROMPT_COMMAND};(_zlua --add \"\$(command pwd 2>/dev/null)\" &)" ;;
 esac
 ]]
 
@@ -2784,6 +2790,17 @@ end
 
 -- vim: set ts=4 sw=4 tw=0 noet :
 
+@
+
+
+1.3
+log
+@update z.lua with upstream
+@
+text
+@d2155 1
+a2155 1
+	*) PROMPT_COMMAND="(_zlua --add \"\$(command pwd 2>/dev/null)\" &)${PROMPT_COMMAND:+;$PROMPT_COMMAND}" ;;
 @
 
 
