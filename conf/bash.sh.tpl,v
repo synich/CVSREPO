@@ -1,9 +1,15 @@
-head	1.31;
+head	1.32;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.32
+date	2021.06.10.16.15.11;	author android;	state Exp;
+branches;
+next	1.31;
+commitid	3jzt4dlJNUZWtBWC;
 
 1.31
 date	2021.06.06.16.55.11;	author android;	state Exp;
@@ -187,9 +193,9 @@ desc
 @@
 
 
-1.31
+1.32
 log
-@show git status in PS1
+@rpc miss shift
 @
 text
 @# avoid init interative
@@ -334,6 +340,7 @@ p() {
             cd $todir
         fi
     elif [ $1 = 'rpc' ]; then
+        shift
         for h in `cat h.txt`
         do
             echo HOST: $h
@@ -407,6 +414,15 @@ psp() {
   fi
 }
 
+@
+
+
+1.31
+log
+@show git status in PS1
+@
+text
+@d143 1
 @
 
 
