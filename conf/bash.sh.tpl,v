@@ -1,9 +1,15 @@
-head	1.32;
+head	1.33;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.33
+date	2021.06.10.16.31.11;	author android;	state Exp;
+branches;
+next	1.32;
+commitid	78Lv7equ3FirzBWC;
 
 1.32
 date	2021.06.10.16.15.11;	author android;	state Exp;
@@ -193,9 +199,9 @@ desc
 @@
 
 
-1.32
+1.33
 log
-@rpc miss shift
+@loose PS1 git status check
 @
 text
 @# avoid init interative
@@ -222,7 +228,7 @@ set_ps1(){
   if [ $? -eq 0 ] ; then
     GITST="(`git br | grep '^\*' | cut -d' ' -f2`"
     # git status not clean, append `!' after branch name
-    if [ -z "`git status|head -2|tail -1|grep '^nothing'`" ]; then
+    if [ -z "`git status|grep 'nothing to commit'`" ]; then
       GITST=${GITST}"!)"
     else
       GITST=${GITST}")"
@@ -414,6 +420,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.32
+log
+@rpc miss shift
+@
+text
+@d25 1
+a25 1
+    if [ -z "`git status|head -2|tail -1|grep '^nothing'`" ]; then
 @
 
 
