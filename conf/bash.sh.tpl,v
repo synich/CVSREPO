@@ -1,9 +1,15 @@
-head	1.34;
+head	1.35;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.35
+date	2021.06.13.09.55.26;	author android;	state Exp;
+branches;
+next	1.34;
+commitid	CZTnUGRCL38HhXWC;
 
 1.34
 date	2021.06.12.04.29.50;	author android;	state Exp;
@@ -205,9 +211,9 @@ desc
 @@
 
 
-1.34
+1.35
 log
-@show ~ when branch is ahead or behind
+@p h show help
 @
 text
 @# avoid init interative
@@ -341,10 +347,15 @@ fzf() {
 }
 fi
 
-# use `p [num]' instead of "cd .." easy, use `p d` choose dir quickly
+# use `p [num]' instead of "cd .." easy
 p() {
     if [ $# -eq 0 ]; then
         eval cd ..
+    elif [ $1 = 'h' ]; then
+        cat <<EOF
+p d   # choose dir quickly
+p rpc # ssh cmd over host in h.txt
+EOF
     elif [ $1 = 'd' ]; then
         dirlst=`find -maxdepth 1 -type d ! -path '.'`
         arrdir=($dirlst)
@@ -432,6 +443,18 @@ psp() {
   fi
 }
 
+@
+
+
+1.34
+log
+@show ~ when branch is ahead or behind
+@
+text
+@d132 1
+a132 1
+# use `p [num]' instead of "cd .." easy, use `p d` choose dir quickly
+d136 5
 @
 
 
