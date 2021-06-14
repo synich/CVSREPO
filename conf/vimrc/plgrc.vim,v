@@ -1,9 +1,15 @@
-head	1.25;
+head	1.26;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.26
+date	2021.06.14.08.07.30;	author android;	state Exp;
+branches;
+next	1.25;
+commitid	GlZJMyq5UGyFE4XC;
 
 1.25
 date	2021.05.31.23.56.47;	author android;	state Exp;
@@ -160,16 +166,17 @@ desc
 @@
 
 
-1.25
+1.26
 log
-@use wincmd instead of win_gotoid for vim74
+@add lisp in cp<motion> key stroke
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
 " }
 
-let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',}
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos', 'lisp':'ecl'}
+autocmd FileType scheme,lisp,lua,python nnoremap <buffer> cp :set opfunc=<SID>replEval<cr>g@@
 
 " ScriptRunTool {
 
@@ -292,7 +299,6 @@ let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',
       let &selection = sel_save
       let @@@@ = reg_save
     endfunction
-    autocmd FileType scheme,lua,python nnoremap <buffer> cp :set opfunc=<SID>replEval<cr>g@@
 
 " }
 
@@ -502,6 +508,19 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.25
+log
+@use wincmd instead of win_gotoid for vim74
+@
+text
+@d5 2
+a6 1
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos',}
+a128 1
+    autocmd FileType scheme,lua,python nnoremap <buffer> cp :set opfunc=<SID>replEval<cr>g@@
 @
 
 
