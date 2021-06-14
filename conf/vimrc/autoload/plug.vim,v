@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2021.06.14.14.13.46;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	f5HEO1kveXXjG6XC;
 
 1.1
 date	2020.11.14.16.02.55;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@INSERT plug.vim
+@merge upstream plug.vim
 @
 text
 @" vim-plug: Vim plugin manager
@@ -138,6 +144,10 @@ let s:TYPE = {
 \ }
 let s:loaded = get(s:, 'loaded', {})
 let s:triggers = get(s:, 'triggers', {})
+
+function! s:is_powershell(shell)
+  return a:shell =~# 'powershell\(\.exe\)\?$' || a:shell =~# 'pwsh\(\.exe\)\?$'
+endfunction
 
 function! s:isabsolute(dir) abort
   return a:dir =~# '^/' || (has('win32') && a:dir =~? '^\%(\\\|[A-Z]:\)')
@@ -286,7 +296,7 @@ function! s:define_commands()
   endif
   if has('win32')
   \ && &shellslash
-  \ && (&shell =~# 'cmd\(\.exe\)\?$' || &shell =~# 'powershell\(\.exe\)\?$')
+  \ && (&shell =~# 'cmd\(\.exe\)\?$' || s:is_powershell(&shell))
     return s:err('vim-plug does not support shell, ' . &shell . ', when shellslash is set.')
   endif
   if !has('nvim')
@@ -526,7 +536,7 @@ if s:is_win
     let batchfile = s:plug_tempname().'.bat'
     call writefile(s:wrap_cmds(a:cmd), batchfile)
     let cmd = plug#shellescape(batchfile, {'shell': &shell, 'script': 0})
-    if &shell =~# 'powershell\(\.exe\)\?$'
+    if s:is_powershell(&shell)
       let cmd = '& ' . cmd
     endif
     return [batchfile, cmd]
@@ -958,7 +968,7 @@ function! s:prepare(...)
     call s:new_window()
   endif
 
-  nnoremap <silent> <buffer> q  :if b:plug_preview==1<bar>pc<bar>endif<bar>bd<cr>
+  nnoremap <silent> <buffer> q :call <SID>close_pane()<cr>
   if a:0 == 0
     call s:finish_bindings()
   endif
@@ -980,6 +990,15 @@ function! s:prepare(...)
   endif
 endfunction
 
+function! s:close_pane()
+  if b:plug_preview == 1
+    pc
+    let b:plug_preview = -1
+  else
+    bd
+  endif
+endfunction
+
 function! s:assign_name()
   " Assign buffer name
   let prefix = '[Plugins]'
@@ -998,7 +1017,7 @@ function! s:chsh(swap)
     set shell=sh
   endif
   if a:swap
-    if &shell =~# 'powershell\(\.exe\)\?$' || &shell =~# 'pwsh$'
+    if s:is_powershell(&shell)
       let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s'
     elseif &shell =~# 'sh' || &shell =~# 'cmd\(\.exe\)\?$'
       set shellredir=>%s\ 2>&1
@@ -1555,7 +1574,7 @@ while 1 " Without TCO, Vim stack is bound to explode
     let [error, _] = s:git_validate(spec, 0)
     if empty(error)
       if pull
-        let cmd = ['git', 'fetch']
+        let cmd = s:git_version_requirement(2) ? ['git', '-c', 'credential.helper=', 'fetch'] : ['git', 'fetch']
         if has_tag && !empty(globpath(spec.dir, '.git/shallow'))
           call extend(cmd, ['--depth', '99999999'])
         endif
@@ -2239,7 +2258,7 @@ function! plug#shellescape(arg, ...)
   let script = get(opts, 'script', 1)
   if shell =~# 'cmd\(\.exe\)\?$'
     return s:shellesc_cmd(a:arg, script)
-  elseif shell =~# 'powershell\(\.exe\)\?$' || shell =~# 'pwsh$'
+  elseif s:is_powershell(shell)
     return s:shellesc_ps1(a:arg)
   endif
   return s:shellesc_sh(a:arg)
@@ -2291,7 +2310,7 @@ function! s:system(cmd, ...)
         return system(a:cmd)
       endif
       let cmd = join(map(copy(a:cmd), 'plug#shellescape(v:val, {"shell": &shell, "script": 0})'))
-      if &shell =~# 'powershell\(\.exe\)\?$'
+      if s:is_powershell(&shell)
         let cmd = '& ' . cmd
       endif
     else
@@ -2810,3 +2829,35 @@ endif
 let &cpo = s:cpo_save
 unlet s:cpo_save
 @
+
+
+1.1
+log
+@INSERT plug.vim
+@
+text
+@d119 4
+d270 1
+a270 1
+  \ && (&shell =~# 'cmd\(\.exe\)\?$' || &shell =~# 'powershell\(\.exe\)\?$')
+d510 1
+a510 1
+    if &shell =~# 'powershell\(\.exe\)\?$'
+d942 1
+a942 1
+  nnoremap <silent> <buffer> q  :if b:plug_preview==1<bar>pc<bar>endif<bar>bd<cr>
+d964 9
+d991 1
+a991 1
+    if &shell =~# 'powershell\(\.exe\)\?$' || &shell =~# 'pwsh$'
+d1548 1
+a1548 1
+        let cmd = ['git', 'fetch']
+d2232 1
+a2232 1
+  elseif shell =~# 'powershell\(\.exe\)\?$' || shell =~# 'pwsh$'
+d2284 1
+a2284 1
+      if &shell =~# 'powershell\(\.exe\)\?$'
+@
+
