@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2021.06.20.04.00.01;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	M2lhxyZ4mOlO5PXC;
 
 1.10
 date	2021.04.30.00.39.57;	author android;	state Exp;
@@ -70,9 +76,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fixed complete bug in not load plgrc.vim
+@fix some up-low wrong
 @
 text
 @" Modeline and Notes {
@@ -189,7 +195,7 @@ text
 
     " Allow to trigger background
     set background=dark             " Assume a dark background
-    function! s:ToggleBG()
+    function! s:toggleBG()
         let l:tbg = &background
         " Inversion
         if l:tbg == "dark"
@@ -198,10 +204,10 @@ text
             set background=dark
         endif
     endfunction
-    nnoremap <Plug>ToggleBG  :call <SID>ToggleBG()<CR>
+    nnoremap <Plug>ToggleBG  :call <SID>toggleBG()<CR>
 
     " Change between relativenumber and nonumber
-    function! s:ToggleNumber()
+    function! s:toggleNumber()
         let l:tbg = &relativenumber
         " Inversion
         if l:tbg == 1
@@ -212,7 +218,7 @@ text
             set relativenumber
         endif
     endfunction
-    nnoremap <Plug>ToggleNumber :call <SID>ToggleNumber()<CR>
+    nnoremap <Plug>ToggleNumber :call <SID>toggleNumber()<CR>
 
     " if !has('gui')
         "set term=$TERM          " Make arrow and other keys work
@@ -241,6 +247,26 @@ text
 
 " }
 
+@
+
+
+1.10
+log
+@fixed complete bug in not load plgrc.vim
+@
+text
+@d115 1
+a115 1
+    function! s:ToggleBG()
+d124 1
+a124 1
+    nnoremap <Plug>ToggleBG  :call <SID>ToggleBG()<CR>
+d127 1
+a127 1
+    function! s:ToggleNumber()
+d138 1
+a138 1
+    nnoremap <Plug>ToggleNumber :call <SID>ToggleNumber()<CR>
 @
 
 

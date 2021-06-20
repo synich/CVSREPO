@@ -1,9 +1,15 @@
-head	1.16;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2021.06.20.04.00.01;	author android;	state Exp;
+branches;
+next	1.16;
+commitid	M2lhxyZ4mOlO5PXC;
 
 1.16
 date	2021.05.30.14.40.30;	author android;	state Exp;
@@ -106,9 +112,9 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@open current content as file
+@fix some up-low wrong
 @
 text
 @" Modeline and Notes {
@@ -134,7 +140,7 @@ text
 
 " Functions {
 
-    function! s:ShowMaps()
+    function! s:showMaps()
       let old_reg = getreg("a")          " save the current content of register a
       let old_reg_type = getregtype("a") " save the type of the register as well
     try
@@ -252,9 +258,9 @@ text
     map      <Leader>cc <Plug>NERDCommenterInvert
     nmap     <Leader>ce <Plug>NERDCommenterToEOL
     nnoremap <leader>cp :lcd  %:p:h<cr>
-    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
+    nnoremap <leader>cs :call <SID>showsnipcode()<cr>
     nmap     <leader>ct <Plug>GotoTopDir
-    nnoremap <leader>dm :call <SID>ShowMaps()<CR>
+    nnoremap <leader>dm :call <SID>showMaps()<CR>
     nnoremap <leader>e 5e
     " helpers to edit mode, http://vimcasts.org/e/14
     cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
@@ -379,6 +385,23 @@ text
 
 " }
 
+@
+
+
+1.16
+log
+@open current content as file
+@
+text
+@d24 1
+a24 1
+    function! s:ShowMaps()
+d142 1
+a142 1
+    nnoremap <leader>cs :call <sid>showsnipcode()<cr>
+d144 1
+a144 1
+    nnoremap <leader>dm :call <SID>ShowMaps()<CR>
 @
 
 
