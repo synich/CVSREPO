@@ -260,3 +260,13 @@ A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|plgrc.vim
 A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|style.vim
 A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|switch.vim
 M60ced7bc|android|~/sh*0|conf|1.9|init.vim.tpl
+M60ceee4a|android|~/sh*0|conf|1.5|Makefile
+A60ceee4a|android|~/shconf|conf/vimrc/autoload|1.1|rv.vim
+M60ceee4a|android|~/shconf|conf/vimrc/plugin|1.2|kbd.vim
+M60ceee4a|android|~/shconf|conf/vimrc/plugin|1.2|plgrc.vim
+M60ceee4a|android|~/shconf|conf/vimrc/plugin|1.2|style.vim
+M60cef655|android|~/shconf/vimrc|conf/vimrc/autoload|1.2|rv.vim
+M60cef655|android|~/shconf/vimrc|conf/vimrc/plugin|1.3|kbd.vim
+M60cf085b|android|~/sh*0|conf|1.10|init.vim.tpl
+A60cf085b|android|~/shconf|conf/vimrc|1.1|plgrc.vim
+R60cf085b|android|~/shconf|conf/vimrc/plugin|1.3|plgrc.vim

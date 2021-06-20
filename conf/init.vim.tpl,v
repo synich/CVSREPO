@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2021.06.20.09.20.27;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	mxyiEjQZSxWJRQXC;
 
 1.9
 date	2021.06.20.05.52.59;	author android;	state Exp;
@@ -64,9 +70,9 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@use plugin instead of manual source vim
+@manual source plugin until find solution
 @
 text
 @" Modeline and Notes {
@@ -74,6 +80,7 @@ text
 " }
 
 " Init once {
+    set nocompatible            " Must be first line
     if exists('g:shuw_vim_has_init')
         finish
     endif
@@ -123,11 +130,24 @@ text
 " }
 
 " Load all rc config {
-    set nocompatible            " Must be first line
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
+    "Not good, but dont know how to fix
+    execute 'source '.g:mvcf_path.'plgrc.vim'
 " }
 
+@
+
+
+1.9
+log
+@use plugin instead of manual source vim
+@
+text
+@d6 1
+a55 1
+    set nocompatible            " Must be first line
+d58 2
 @
 
 

@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	Ib9ovegQE2iAfQXC;
 
 1.1
 date	2021.06.20.05.52.12;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@move into plugin
+@use autoload instead of plugin
 @
 text
 @" Modeline and Notes {
@@ -69,21 +75,6 @@ text
         autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
     endif
 
-    " find top dir
-    function! s:gototopdir()
-       let i = 1
-       while i < 10
-          if filereadable("tags") || isdirectory(".git")
-            echo "Found top dir"
-            return
-          else
-            lcd ..
-            let i += 1
-          endif
-       endwhile
-    endfunction
-    nnoremap <Plug>GotoTopDir :call <SID>gototopdir()<CR>
-
 " }
 
 " Vim UI {
@@ -132,33 +123,8 @@ text
     set foldenable                  " Auto fold code
     set list
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
-
     " Allow to trigger background
     set background=dark             " Assume a dark background
-    function! s:toggleBG()
-        let l:tbg = &background
-        " Inversion
-        if l:tbg == "dark"
-            set background=light
-        else
-            set background=dark
-        endif
-    endfunction
-    nnoremap <Plug>ToggleBG  :call <SID>toggleBG()<CR>
-
-    " Change between relativenumber and nonumber
-    function! s:toggleNumber()
-        let l:tbg = &relativenumber
-        " Inversion
-        if l:tbg == 1
-            set norelativenumber
-            set nonumber
-        else
-            set number
-            set relativenumber
-        endif
-    endfunction
-    nnoremap <Plug>ToggleNumber :call <SID>toggleNumber()<CR>
 
     " if !has('gui')
         "set term=$TERM          " Make arrow and other keys work
@@ -188,3 +154,55 @@ text
 " }
 
 @
+
+
+1.1
+log
+@move into plugin
+@
+text
+@a48 15
+    " find top dir
+    function! s:gototopdir()
+       let i = 1
+       while i < 10
+          if filereadable("tags") || isdirectory(".git")
+            echo "Found top dir"
+            return
+          else
+            lcd ..
+            let i += 1
+          endif
+       endwhile
+    endfunction
+    nnoremap <Plug>GotoTopDir :call <SID>gototopdir()<CR>
+
+a96 1
+
+a98 24
+    function! s:toggleBG()
+        let l:tbg = &background
+        " Inversion
+        if l:tbg == "dark"
+            set background=light
+        else
+            set background=dark
+        endif
+    endfunction
+    nnoremap <Plug>ToggleBG  :call <SID>toggleBG()<CR>
+
+    " Change between relativenumber and nonumber
+    function! s:toggleNumber()
+        let l:tbg = &relativenumber
+        " Inversion
+        if l:tbg == 1
+            set norelativenumber
+            set nonumber
+        else
+            set number
+            set relativenumber
+        endif
+    endfunction
+    nnoremap <Plug>ToggleNumber :call <SID>toggleNumber()<CR>
+@
+

@@ -1,9 +1,21 @@
-head	1.1;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2021.06.20.08.03.33;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	OCQK5lIh49bmrQXC;
+
+1.2
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	Ib9ovegQE2iAfQXC;
 
 1.1
 date	2021.06.20.05.52.12;	author android;	state Exp;
@@ -16,9 +28,9 @@ desc
 @@
 
 
-1.1
+1.3
 log
-@move into plugin
+@add showEx cmd for capture output of ex-mode
 @
 text
 @" Modeline and Notes {
@@ -44,29 +56,6 @@ text
 
 " Functions {
 
-    function! s:showMaps()
-      let old_reg = getreg("a")          " save the current content of register a
-      let old_reg_type = getregtype("a") " save the type of the register as well
-    try
-      redir @@a                           " redirect output to register a
-      " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
-      silent map | call feedkeys("\<CR>")
-      silent imap | call feedkeys("\<CR>")
-      redir END                          " end output redirection
-      vnew                               " new buffer in vertical window
-      setlocal buftype=nofile
-      setlocal bufhidden=delete
-      setlocal nobuflisted
-      setlocal noswapfile
-      setlocal nowrap
-      put a                              " put content of register
-      " Sort on 4th character column which is the key(s)
-      %!sort -k1.4,1.4
-    finally                              " Execute even if exception is raised
-      call setreg("a", old_reg, old_reg_type) " restore register a
-    endtry
-    endfunction
-
     " Initialize NERDTree as needed {
     function! NERDTreeInitAsNeeded()
         redir => bufoutput
@@ -81,29 +70,6 @@ text
     endfunction
     " }
 
-    " Shell command {
-    function! s:RunShellCommand(cmdline)
-        botright new
-
-        setlocal buftype=nofile
-        setlocal bufhidden=delete
-        setlocal nobuflisted
-        setlocal noswapfile
-        setlocal nowrap
-        setlocal filetype=shell
-        setlocal syntax=shell
-
-        call setline(1, a:cmdline)
-        call setline(2, substitute(a:cmdline, '.', '=', 'g'))
-        execute 'silent $read !' . escape(a:cmdline, '%#')
-        setlocal nomodifiable
-        1
-    endfunction
-
-    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
-    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
-    " }
-
     " Check QuickFix 1-open/0-close {
     function! MvcfCheckQuickfix()
       let l:hasqf = 0
@@ -115,22 +81,6 @@ text
       endfor
       return l:hasqf
     endfunction
-
-    function s:togglequickfix()
-      if MvcfCheckQuickfix()
-          execute 'cclose'
-      else
-          execute 'copen'
-      endif
-    endfunction
-    " }
-
-    " Show snip code {
-    function! s:showsnipcode()
-        let l:ft = &filetype
-        let l:arg = input('Keyword: ')
-        call s:RunShellCommand('snip '.l:ft.' '.l:arg)
-    endfunction
     " }
 " }
 
@@ -139,8 +89,8 @@ text
     " Handy {
     " Wrapped lines goes down/up to next row, rather than next line in file.
     inoremap jj <Esc>
-    imap     <Tab>   <Plug>EasyCompTabTrigger
-    imap     <S-Tab> <Plug>EasyCompShiftTabTrigger
+    imap     <Tab>   <C-x><C-n>
+    imap     <S-Tab> <C-x><C-p>
     nnoremap j gj
     nnoremap k gk
     nnoremap <CR> :
@@ -162,9 +112,9 @@ text
     map      <Leader>cc <Plug>NERDCommenterInvert
     nmap     <Leader>ce <Plug>NERDCommenterToEOL
     nnoremap <leader>cp :lcd  %:p:h<cr>
-    nnoremap <leader>cs :call <SID>showsnipcode()<cr>
-    nmap     <leader>ct <Plug>GotoTopDir
-    nnoremap <leader>dm :call <SID>showMaps()<CR>
+    nnoremap <leader>cs :call rv#showsnipcode()<cr>
+    nnoremap <leader>ct :call rv#gototopdir()<CR>
+    nnoremap <leader>dm :call rv#showMaps()<CR>
     nnoremap <leader>e 5e
     " helpers to edit mode, http://vimcasts.org/e/14
     cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
@@ -184,18 +134,18 @@ text
     map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
     " Display all lines with keyword under cursor,ask which one to jump to
     nmap     <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
-    nmap     <leader>gf <Plug>(open-cur-file-win1)
-    nmap     <leader>gp <Plug>(search-one-word)
+    nnoremap <leader>gf :call rv#openfileinwin1()<CR>
+    nnoremap <leader>gp :call rv#enhancegrep(1)<CR>
     nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     " Disable search highlight
     noremap  <leader>nh :nohl<CR>
-    nmap     <leader>nu  <Plug>ToggleNumber
+    nnoremap <leader>nu :call rv#toggleNumber()<CR>
     " easier formatting
     nnoremap <silent> <leader>q gwip
-    nnoremap <leader>qf :call <SID>togglequickfix()<CR>
-    nmap     <buffer> <localleader>rf <Plug>(run-script-noarg)
-    nmap     <leader>rg <Plug>(search-current-word)
-    nmap     <buffer> <localleader>rp <Plug>(run-script-onearg)
+    nnoremap <leader>qf :call rv#togglequickfix()<CR>
+    nnoremap <buffer> <localleader>rf :call rv#runcurrentscript(0)<CR>
+    nnoremap <leader>rg :call rv#enhancegrep(0)<CR>
+    nnoremap <buffer> <localleader>rp :call rv#runcurrentscript(1)<CR>
     nmap     <leader>s <Plug>(easymotion-overwin-f2)
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
     " Jump to anywhere you want with minimal keystrokes
@@ -207,7 +157,10 @@ text
     nnoremap <leader>x1 <C-W>o
     nnoremap <leader>xc <C-W>c
     " change backgroud and number style
-    nmap     <leader>xb  <Plug>ToggleBG
+    nnoremap <leader>xb  :call rv#toggleBG()<CR>
+
+    nnoremap <F12> <esc>:call rv#refreshtags()<cr>
+    inoremap <F12> <esc>:call rv#refreshtags()<cr>
 
     " Write easy {
 
@@ -220,6 +173,11 @@ text
     inoremap <C-e> <End>
     inoremap <C-d> <Del>
     inoremap <C-h> <BS>
+
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    command! -complete=file -nargs=+ Shell call rv#runShellCommand(<q-args>)
+    command! -nargs=1 Rg call rv#enhancegrep(<q-args>)
+    command! -nargs=+ -complete=command ShowEx call rv#showEx(<q-args>)
 
     " Stupid shift key fixes
     if has("user_commands")
@@ -290,3 +248,112 @@ text
 " }
 
 @
+
+
+1.2
+log
+@use autoload instead of plugin
+@
+text
+@d145 1
+@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@a23 23
+    function! s:showMaps()
+      let old_reg = getreg("a")          " save the current content of register a
+      let old_reg_type = getregtype("a") " save the type of the register as well
+    try
+      redir @@a                           " redirect output to register a
+      " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+      silent map | call feedkeys("\<CR>")
+      silent imap | call feedkeys("\<CR>")
+      redir END                          " end output redirection
+      vnew                               " new buffer in vertical window
+      setlocal buftype=nofile
+      setlocal bufhidden=delete
+      setlocal nobuflisted
+      setlocal noswapfile
+      setlocal nowrap
+      put a                              " put content of register
+      " Sort on 4th character column which is the key(s)
+      %!sort -k1.4,1.4
+    finally                              " Execute even if exception is raised
+      call setreg("a", old_reg, old_reg_type) " restore register a
+    endtry
+    endfunction
+
+a37 23
+    " Shell command {
+    function! s:RunShellCommand(cmdline)
+        botright new
+
+        setlocal buftype=nofile
+        setlocal bufhidden=delete
+        setlocal nobuflisted
+        setlocal noswapfile
+        setlocal nowrap
+        setlocal filetype=shell
+        setlocal syntax=shell
+
+        call setline(1, a:cmdline)
+        call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+        execute 'silent $read !' . escape(a:cmdline, '%#')
+        setlocal nomodifiable
+        1
+    endfunction
+
+    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    " }
+
+a48 16
+
+    function s:togglequickfix()
+      if MvcfCheckQuickfix()
+          execute 'cclose'
+      else
+          execute 'copen'
+      endif
+    endfunction
+    " }
+
+    " Show snip code {
+    function! s:showsnipcode()
+        let l:ft = &filetype
+        let l:arg = input('Keyword: ')
+        call s:RunShellCommand('snip '.l:ft.' '.l:arg)
+    endfunction
+d57 2
+a58 2
+    imap     <Tab>   <Plug>EasyCompTabTrigger
+    imap     <S-Tab> <Plug>EasyCompShiftTabTrigger
+d80 3
+a82 3
+    nnoremap <leader>cs :call <SID>showsnipcode()<cr>
+    nmap     <leader>ct <Plug>GotoTopDir
+    nnoremap <leader>dm :call <SID>showMaps()<CR>
+d102 2
+a103 2
+    nmap     <leader>gf <Plug>(open-cur-file-win1)
+    nmap     <leader>gp <Plug>(search-one-word)
+d107 1
+a107 1
+    nmap     <leader>nu  <Plug>ToggleNumber
+d110 4
+a113 4
+    nnoremap <leader>qf :call <SID>togglequickfix()<CR>
+    nmap     <buffer> <localleader>rf <Plug>(run-script-noarg)
+    nmap     <leader>rg <Plug>(search-current-word)
+    nmap     <buffer> <localleader>rp <Plug>(run-script-onearg)
+d125 4
+a128 1
+    nmap     <leader>xb  <Plug>ToggleBG
+d142 4
+@
+
