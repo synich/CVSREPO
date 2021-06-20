@@ -1,0 +1,288 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2021.06.20.08.03.33;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	OCQK5lIh49bmrQXC;
+
+1.1
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	;
+commitid	Ib9ovegQE2iAfQXC;
+
+
+desc
+@@
+
+
+1.2
+log
+@add showEx cmd for capture output of ex-mode
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos', 'lisp':'ecl'}
+autocmd FileType scheme,lisp,lua,python nnoremap <buffer> cp :set opfunc=<SID>replEval<cr>g@@
+
+" ScriptRunTool {
+
+" default show quickfix window. silent run if has more argument
+function! s:runcmd(cmd, ...)
+  if v:version >= 800
+      execute 'AsyncRun '.a:cmd
+      if a:0==0 && !MvcfCheckQuickfix()
+          execute 'copen'
+      endif
+  else
+      execute 'Shell '.a:cmd
+  endif
+endfunction
+
+function! s:chooseExecutor()
+  let l:ft = &filetype
+  let l:cmd = ''
+  for [k, v] in items(s:syndic)
+      if k ==? l:ft
+          let l:cmd = v | break
+      endif
+  endfor
+  return l:cmd
+endfunction
+
+function! s:replConnect()
+  let l:scheme_executable = s:chooseExecutor()
+  if '' == l:scheme_executable
+      return
+  endif
+
+  if has('nvim')
+    new
+    let s:repl_term_id = termopen(l:scheme_executable)
+  else
+    let s:repl_term_id = term_start(l:scheme_executable)
+  endif
+
+  let g:scheme_split_size = get(g:, "scheme_split_size", "default")
+  if g:scheme_split_size != "default"
+    silent execute "resize " . g:scheme_split_size
+  endif
+
+  normal! G
+endfunction
+
+" run part code in another window by cp<textobj>
+function! s:replEval(type)
+  let sel_save = &selection
+  let &selection = "inclusive"
+  let reg_save = @@@@
+
+  if a:0
+    silent exe "normal! `<" . a:type . "`>y"
+  elseif a:type == 'line'
+    silent exe "normal! '[V']y"
+  elseif a:type == 'block'
+    silent exe "normal! `[\<C-V>`]y"
+  else
+    silent exe "normal! `[v`]y"
+  endif
+
+  if !exists('s:repl_term_id')
+    call s:replConnect()
+  end
+
+  if has("nvim")
+    call jobsend(s:repl_term_id, @@@@ . "\n")
+  else
+    call term_sendkeys(s:repl_term_id, @@@@ . "\n")
+  end
+
+  let &selection = sel_save
+  let @@@@ = reg_save
+endfunction
+
+function! rv#showMaps()
+  let old_reg = getreg("a")          " save the current content of register a
+  let old_reg_type = getregtype("a") " save the type of the register as well
+try
+  redir @@a                           " redirect output to register a
+  " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+  silent map | call feedkeys("\<CR>")
+  silent imap | call feedkeys("\<CR>")
+  redir END                          " end output redirection
+  vnew                               " new buffer in vertical window
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal nobuflisted
+  setlocal noswapfile
+  setlocal nowrap
+  put a                              " put content of register
+  " Sort on 4th character column which is the key(s)
+  %!sort -k1.4,1.4
+finally                              " Execute even if exception is raised
+  call setreg("a", old_reg, old_reg_type) " restore register a
+endtry
+endfunction
+
+function! rv#togglequickfix()
+  if MvcfCheckQuickfix()
+      execute 'cclose'
+  else
+      execute 'copen'
+  endif
+endfunction
+
+function! rv#runShellCommand(cmdline)
+    botright new
+
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
+    setlocal nobuflisted
+    setlocal noswapfile
+    setlocal nowrap
+    setlocal filetype=shell
+    setlocal syntax=shell
+
+    call setline(1, a:cmdline)
+    call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+    execute 'silent $read !' . escape(a:cmdline, '%#')
+    setlocal nomodifiable
+    1
+endfunction
+
+function! rv#showsnipcode()
+    let l:ft = &filetype
+    let l:arg = input('Keyword: ')
+    call rv#runShellCommand('snip '.l:ft.' '.l:arg)
+endfunction
+
+function! rv#toggleBG()
+    let l:tbg = &background
+    " Inversion
+    if l:tbg == "dark"
+        set background=light
+    else
+        set background=dark
+    endif
+endfunction
+
+" Change between relativenumber and nonumber
+function! rv#toggleNumber()
+    let l:tbg = &relativenumber
+    " Inversion
+    if l:tbg == 1
+        set norelativenumber
+        set nonumber
+    else
+        set number
+        set relativenumber
+    endif
+endfunction
+
+" refreshtags at top dir
+function! rv#refreshtags()
+   wall
+   let l:Curr_dir=getcwd()
+   let i = 1
+   while i < 10
+      if filereadable("tags")
+        call <SID>runcmd('ctags -R', 'silent')
+        "--fields=+lS  cscope -Rbkq
+        return
+      else
+        lcd ..
+        let i += 1
+      endif
+   endwhile
+   exec 'cd '.l:Curr_dir
+   "force buffer reload tags
+   edit %
+endfunction
+
+function! rv#runcurrentscript(hasarg)
+  let l:cmd = s:chooseExecutor()
+  if '' == l:cmd
+      echo 'runscript cannot recognize this filetype!'
+      return
+  endif
+  let l:arg = ''
+  if a:hasarg
+    let l:arg = input('Arguments: ')
+  endif
+  execute 'write'
+  call <SID>runcmd(l:cmd.' % '.l:arg)
+endfunction
+
+function! rv#openfileinwin1()
+  let pth = expand('<cfile>')
+  1wincmd w
+  execute 'e./'.pth
+endfunction
+
+" Search-File-Keyword {
+function! rv#enhancegrep(useinput)
+  let l:word = expand("<cword>")
+  if type(a:useinput) == 1
+      let l:word = a:useinput
+  elseif a:useinput == 1
+      let l:word = input("Keyword:")
+  endif
+  if executable('rg')
+      call <SID>runcmd('rg "'.l:word.'"')
+  elseif executable('ag')
+      call <SID>runcmd('ag "'.l:word.'"')
+  elseif executable('ack')
+      call <SID>runcmd('ack "'.l:word.'"')
+  else
+      call <SID>runcmd('grep -i -R "'.l:word.'" *')
+  endif
+endfunction
+
+" find top dir
+function! rv#gototopdir()
+   let i = 1
+   while i < 10
+      if filereadable("tags") || isdirectory(".git")
+        echo "Found top dir"
+        return
+      else
+        lcd ..
+        let i += 1
+      endif
+   endwhile
+endfunction
+
+function! rv#showEx(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "no output"
+  else
+    " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
+    new
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+    silent put=message
+  endif
+endfunction
+" }
+
+@
+
+
+1.1
+log
+@use autoload instead of plugin
+@
+text
+@d233 14
+@
+
