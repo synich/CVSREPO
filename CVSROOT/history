@@ -270,3 +270,6 @@ M60cef655|android|~/shconf/vimrc|conf/vimrc/plugin|1.3|kbd.vim
 M60cf085b|android|~/sh*0|conf|1.10|init.vim.tpl
 A60cf085b|android|~/shconf|conf/vimrc|1.1|plgrc.vim
 R60cf085b|android|~/shconf|conf/vimrc/plugin|1.3|plgrc.vim
+M60cfd4e3|android|~/sh*0|conf|1.6|Makefile
+M60cfd4e3|android|~/shconf|conf/vimrc|1.2|plgrc.vim
+M60cfd4e3|android|~/shconf|conf/vimrc/plugin|1.4|kbd.vim

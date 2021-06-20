@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2021.06.20.23.53.07;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	f74Z5BFBAwf7HVXC;
 
 1.3
 date	2021.06.20.08.03.33;	author android;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@add showEx cmd for capture output of ex-mode
+@fix tab in complete
 @
 text
 @" Modeline and Notes {
@@ -87,13 +93,13 @@ text
 " Key (re)Mappings {
 
     " Handy {
-    " Wrapped lines goes down/up to next row, rather than next line in file.
     inoremap jj <Esc>
-    imap     <Tab>   <C-x><C-n>
-    imap     <S-Tab> <C-x><C-p>
+    inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-p>"
+    " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
     nnoremap k gk
-    nnoremap <CR> :
+    " nnoremap <CR> :
     nnoremap H ^
     nnoremap L $
     nnoremap Y y$
@@ -247,6 +253,22 @@ text
 
 " }
 
+@
+
+
+1.3
+log
+@add showEx cmd for capture output of ex-mode
+@
+text
+@d55 3
+a58 3
+    inoremap jj <Esc>
+    imap     <Tab>   <C-x><C-n>
+    imap     <S-Tab> <C-x><C-p>
+d61 1
+a61 1
+    nnoremap <CR> :
 @
 
 

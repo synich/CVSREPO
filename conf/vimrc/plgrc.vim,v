@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2021.06.20.23.53.07;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	f74Z5BFBAwf7HVXC;
 
 1.1
 date	2021.06.20.09.20.27;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@manual source plugin until find solution
+@fix tab in complete
 @
 text
 @" Modeline and Notes {
@@ -111,7 +117,7 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
     " }
 
     if v:version >= 800
-let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
@@ -209,3 +215,15 @@ call plug#end()
     " }
 
 @
+
+
+1.1
+log
+@manual source plugin until find solution
+@
+text
+@d91 1
+a91 1
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+@
+

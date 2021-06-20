@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.06.20.23.53.07;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	f74Z5BFBAwf7HVXC;
 
 1.5
 date	2021.06.20.07.29.14;	author android;	state Exp;
@@ -37,16 +43,27 @@ desc
 @@
 
 
+1.6
+log
+@fix tab in complete
+@
+text
+@all:
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plgrc.vim vimrc/plugin/ vimrc/autoload/ bin/ share/
+	gzip envconf.tar
+	mv envconf.tar.gz ~/pblog/Archive/
+
+@
+
+
 1.5
 log
 @use autoload instead of plugin
 @
 text
-@all:
+@d2 1
+a2 1
 	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ bin/ share/
-	gzip envconf.tar
-	mv envconf.tar.gz ~/pblog/Archive/
-
 @
 
 
