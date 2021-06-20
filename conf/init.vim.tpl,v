@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2021.06.20.05.52.59;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	kIG1s45upKdzIPXC;
 
 1.8
 date	2021.01.02.09.26.01;	author android;	state Exp;
@@ -58,9 +64,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@move path_bundle from plgrc into init
+@use plugin instead of manual source vim
 @
 text
 @" Modeline and Notes {
@@ -112,7 +118,6 @@ text
 " Leader Define {
     " The default leader is '\', but many people prefer ',' or ' ' as it's in a
     " standard location. To override this behavior and set it back to '\' :
-    "let mapleader = ','
     map <Space> <Leader>
     let maplocalleader = ','
 " }
@@ -121,12 +126,23 @@ text
     set nocompatible            " Must be first line
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
+" }
+
+@
+
+
+1.8
+log
+@move path_bundle from plgrc into init
+@
+text
+@a49 1
+    "let mapleader = ','
+a57 4
 
 for file in split(glob(g:mvcf_path.'*.vim'), '\n')
   execute 'source '.file
 endfor
-" }
-
 @
 
 

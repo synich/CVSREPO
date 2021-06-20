@@ -1,84 +1,24 @@
-head	1.11;
+head	1.1;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
 
-1.11
-date	2021.06.20.04.00.01;	author android;	state Exp;
-branches;
-next	1.10;
-commitid	M2lhxyZ4mOlO5PXC;
-
-1.10
-date	2021.04.30.00.39.57;	author android;	state Exp;
-branches;
-next	1.9;
-commitid	mKby3DzLpUtOCfRC;
-
-1.9
-date	2021.03.30.14.50.17;	author android;	state Exp;
-branches;
-next	1.8;
-commitid	Eg59H53xnjjjklNC;
-
-1.8
-date	2021.03.30.13.57.52;	author android;	state Exp;
-branches;
-next	1.7;
-commitid	jr4uleeT0zmk2lNC;
-
-1.7
-date	2021.03.15.15.10.06;	author android;	state Exp;
-branches;
-next	1.6;
-commitid	XWfzMKaawyh0VpLC;
-
-1.6
-date	2021.02.09.14.42.51;	author android;	state Exp;
-branches;
-next	1.5;
-commitid	10060229F6B269B2A51;
-
-1.5
-date	2021.01.17.16.23.37;	author android;	state Exp;
-branches;
-next	1.4;
-commitid	10060046489176BC89B;
-
-1.4
-date	2021.01.02.07.39.59;	author android;	state Exp;
-branches;
-next	1.3;
-commitid	1005FF0234F1197A5B7;
-
-1.3
-date	2020.12.14.14.46.11;	author android;	state Exp;
-branches;
-next	1.2;
-commitid	1005FD77AB30CAEC2B8;
-
-1.2
-date	2020.12.13.15.51.08;	author android;	state Exp;
-branches;
-next	1.1;
-commitid	1005FD6386C19AB9F3F;
-
 1.1
-date	2020.05.22.15.36.49;	author android;	state Exp;
+date	2021.06.20.05.52.12;	author android;	state Exp;
 branches;
 next	;
-commitid	62b35ec7f1910000;
+commitid	CX8ej6OirlxiIPXC;
 
 
 desc
 @@
 
 
-1.11
+1.1
 log
-@fix some up-low wrong
+@move into plugin
 @
 text
 @" Modeline and Notes {
@@ -248,135 +188,3 @@ text
 " }
 
 @
-
-
-1.10
-log
-@fixed complete bug in not load plgrc.vim
-@
-text
-@d115 1
-a115 1
-    function! s:ToggleBG()
-d124 1
-a124 1
-    nnoremap <Plug>ToggleBG  :call <SID>ToggleBG()<CR>
-d127 1
-a127 1
-    function! s:ToggleNumber()
-d138 1
-a138 1
-    nnoremap <Plug>ToggleNumber :call <SID>ToggleNumber()<CR>
-@
-
-
-1.9
-log
-@INSERT: use ct goto top dir
-@
-text
-@d22 3
-@
-
-
-1.8
-log
-@UPDATE: disable auto change to file directory, use kbd instead
-@
-text
-@d46 15
-@
-
-
-1.7
-log
-@improve vim setting
-@
-text
-@d41 2
-a42 2
-    " Always switch to the current file directory, or disable let g:spf13_no_autochdir = 1
-    if !exists('g:spf13_no_autochdir')
-@
-
-
-1.6
-log
-@use AcpEnable cmd instead of vim-easycomplete and restore <C-n>
-@
-text
-@d21 1
-a21 1
-    set completeopt=menu,menuone,noselect " preview,longest
-@
-
-
-1.5
-log
-@make <C-n/p> restore complete
-@
-text
-@d10 1
-a10 1
-    set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
-d20 2
-a21 2
-    set complete=.,w,b,t,i          " no need unloaded buffer complete
-    set completeopt=menu,preview,longest
-@
-
-
-1.4
-log
-@move some setting from init into style
-@
-text
-@d21 1
-@
-
-
-1.3
-log
-@change ToggleNumber behavior with turn on/off number
-@
-text
-@d5 42
-@
-
-
-1.2
-log
-@adjust vim config
-@
-text
-@d55 1
-a55 1
-        let s:tbg = &background
-d57 1
-a57 1
-        if s:tbg == "dark"
-d65 1
-a65 1
-    " Change between relativenumber and number
-d67 1
-a67 1
-        let s:tbg = &relativenumber
-d69 1
-a69 1
-        if s:tbg == 1
-d71 1
-d73 1
-@
-
-
-1.1
-log
-@vimrc file
-@
-text
-@d35 2
-a36 1
-    set number                      " Line numbers on
-d52 29
-@
-

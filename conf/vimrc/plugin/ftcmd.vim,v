@@ -1,0 +1,56 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
+" Restore cursor to file position in previous editing session
+function! s:ResCur()
+    if line("'\"") <= line("$")
+        silent! normal! g`"
+        return 1
+    endif
+endfunction
+
+augroup resCur
+    autocmd!
+    autocmd BufWinEnter * call <SID>ResCur()
+augroup END
+
+" Remove trailing whitespaces and ^M chars
+autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  :%s/\s\+$//e
+"autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+" preceding line best in a plugin but here for now.
+
+" Workaround vim-commentary for Haskell
+autocmd FileType haskell setlocal commentstring=--\ %s
+" Workaround broken colour highlighting in Haskell
+autocmd FileType haskell,rust setlocal nospell
+@

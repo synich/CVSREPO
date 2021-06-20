@@ -249,3 +249,14 @@ M60c70e42|android|~/shconf|conf/vimrc|1.26|plgrc.vim
 M60c7641a|android|~/shconf/vimrc|conf/vimrc/autoload|1.2|plug.vim
 M60cebd41|android|~/sh*0|conf/vimrc|1.17|kbd.vim
 M60cebd41|android|~/sh*0|conf/vimrc|1.11|style.vim
+R60ced6d4|android|~/sh*0|conf/vimrc|1.5|ftcmd.vim
+R60ced6d5|android|~/sh*0|conf/vimrc|1.18|kbd.vim
+R60ced6d5|android|~/sh*0|conf/vimrc|1.27|plgrc.vim
+R60ced6d5|android|~/sh*0|conf/vimrc|1.12|style.vim
+R60ced6d5|android|~/sh*0|conf/vimrc|1.3|switch.vim
+A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|ftcmd.vim
+A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|kbd.vim
+A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|plgrc.vim
+A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|style.vim
+A60ced78c|android|~/sh*0|conf/vimrc/plugin|1.1|switch.vim
+M60ced7bc|android|~/sh*0|conf|1.9|init.vim.tpl

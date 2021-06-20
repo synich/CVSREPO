@@ -1,0 +1,361 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'stklos', 'lisp':'ecl'}
+autocmd FileType scheme,lisp,lua,python nnoremap <buffer> cp :set opfunc=<SID>replEval<cr>g@@
+
+" ScriptRunTool {
+
+    " default show quickfix window. silent run if has more argument
+    function! s:runcmd(cmd, ...)
+      if v:version >= 800
+          execute 'AsyncRun '.a:cmd
+          if a:0==0 && !MvcfCheckQuickfix()
+              execute 'copen'
+          endif
+      else
+          execute 'Shell '.a:cmd
+      endif
+    endfunction
+
+    " refreshtags at top dir
+    function! s:refreshtags()
+       wall
+       let l:Curr_dir=getcwd()
+       let i = 1
+       while i < 10
+          if filereadable("tags")
+            call <SID>runcmd('ctags -R', 'silent')
+            "--fields=+lS  cscope -Rbkq
+            return
+          else
+            lcd ..
+            let i += 1
+          endif
+       endwhile
+       exec 'cd '.l:Curr_dir
+       "force buffer reload tags
+       edit %
+    endfunction
+
+    nnoremap <F12> <esc>:call <SID>refreshtags()<cr>
+    inoremap <F12> <esc>:call <SID>refreshtags()<cr>
+
+    function! s:chooseExecutor()
+      let l:ft = &filetype
+      let l:cmd = ''
+      for [k, v] in items(s:syndic)
+          if k ==? l:ft
+              let l:cmd = v | break
+          endif
+      endfor
+      return l:cmd
+    endfunction
+
+    function! s:runcurrentscript(hasarg)
+      let l:cmd = s:chooseExecutor()
+      if '' == l:cmd
+          echo 'runscript cannot recognize this filetype!'
+          return
+      endif
+      let l:arg = ''
+      if a:hasarg
+        let l:arg = input('Arguments: ')
+      endif
+      execute 'write'
+      call <SID>runcmd(l:cmd.' % '.l:arg)
+    endfunction
+    nnoremap <Plug>(run-script-noarg)  :call <SID>runcurrentscript(0)<CR>
+    nnoremap <Plug>(run-script-onearg) :call <SID>runcurrentscript(1)<CR>
+
+    function! s:openfileinwin1()
+      let pth = expand('<cfile>')
+      1wincmd w
+      execute 'e./'.pth
+    endfunction
+    nnoremap <Plug>(open-cur-file-win1)  :call <SID>openfileinwin1()<CR>
+
+    function! s:replConnect()
+      let l:scheme_executable = s:chooseExecutor()
+      if '' == l:scheme_executable
+          return
+      endif
+
+      if has('nvim')
+        new
+        let s:repl_term_id = termopen(l:scheme_executable)
+      else
+        let s:repl_term_id = term_start(l:scheme_executable)
+      endif
+
+      let g:scheme_split_size = get(g:, "scheme_split_size", "default")
+      if g:scheme_split_size != "default"
+        silent execute "resize " . g:scheme_split_size
+      endif
+
+      normal! G
+    endfunction
+
+    " run part code in another window by cp<textobj>
+    function! s:replEval(type)
+      let sel_save = &selection
+      let &selection = "inclusive"
+      let reg_save = @@@@
+
+      if a:0
+        silent exe "normal! `<" . a:type . "`>y"
+      elseif a:type == 'line'
+        silent exe "normal! '[V']y"
+      elseif a:type == 'block'
+        silent exe "normal! `[\<C-V>`]y"
+      else
+        silent exe "normal! `[v`]y"
+      endif
+
+      if !exists('s:repl_term_id')
+        call s:replConnect()
+      end
+
+      if has("nvim")
+        call jobsend(s:repl_term_id, @@@@ . "\n")
+      else
+        call term_sendkeys(s:repl_term_id, @@@@ . "\n")
+      end
+
+      let &selection = sel_save
+      let @@@@ = reg_save
+    endfunction
+
+" }
+
+silent! call plug#begin(mvcf_path_bundle)
+
+" Read {
+
+    " Rainbow {
+Plug (mvcf_plug_rmt?'https://github.com/luochen1990/':mvcf_path_bundle).'rainbow'
+let g:rainbow_conf = {
+	\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+	\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+	\	'operators': '_,_',
+	\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+	\	'separately': {
+	\		'*': {},
+	\		'tex': {
+	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+	\		},
+	\		'lisp': {
+	\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+	\		},
+	\		'vim': {
+	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+	\		},
+	\		'html': {
+	\			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+	\		},
+	\		'css': 0,
+	\	}
+\}
+
+    " }
+
+    " TagBar {
+Plug (mvcf_plug_rmt?'https://github.com/majutsushi/':mvcf_path_bundle).'tagbar'
+        set tags=./tags;/,~/.vimtags
+
+        " Make tags placed in .git/tags file available in all levels of a repository
+        let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+        if gitroot != ''
+            let &tags = &tags . ',' . gitroot . '/.git/tags'
+        endif
+    "}
+
+" }
+
+" Write {
+Plug (mvcf_plug_rmt?'https://github.com/tpope/':mvcf_path_bundle).'vim-surround'
+Plug (mvcf_plug_rmt?'https://github.com/jiangmiao/':mvcf_path_bundle).'auto-pairs'
+" Only use input keymap
+let g:ZFVimIM_keymap = 0
+inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
+Plug (mvcf_plug_rmt?'https://github.com/ZSaberLv0/':mvcf_path_bundle).'ZFVimIM'
+Plug (mvcf_plug_rmt?'https://github.com/synich/':mvcf_path_bundle).'ZFVimIM_wubi_base'
+let g:NERDCreateDefaultMappings = 0
+Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcommenter'
+
+    " OmniComplete {
+    if has("autocmd") && exists("+omnifunc")
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType python setlocal omnifunc=python3complete#Complete
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+        autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+        autocmd Filetype * if &omnifunc == "" |
+            \setlocal omnifunc=syntaxcomplete#Complete |
+            \endif
+    endif
+
+    hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+    hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+    hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
+    "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+    if exists('g:spf13_map_cr_omni_complete')
+        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+    endif
+    inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+    inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+    inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+    " Automatically open and close the popup menu / preview window
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+    " }
+
+    if v:version >= 800
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1}
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
+Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
+    else
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
+    endif
+" }
+
+" Tool {
+
+    " EasyMotion {
+Plug (mvcf_plug_rmt?'https://github.com/easymotion/':mvcf_path_bundle).'vim-easymotion'
+    " Disable default mappings
+    let g:EasyMotion_do_mapping = 0
+    " Turn on case-insensitive feature
+    let g:EasyMotion_smartcase = 1
+
+    hi link EasyMotionTarget ErrorMsg
+    hi link EasyMotionShade  Comment
+    " }
+
+    " Search-File-Keyword {
+    function! s:enhancegrep(useinput)
+      let l:word = expand("<cword>")
+      if type(a:useinput) == 1
+          let l:word = a:useinput
+      elseif a:useinput == 1
+          let l:word = input("Keyword:")
+      endif
+      if executable('rg')
+          call <SID>runcmd('rg "'.l:word.'"')
+      elseif executable('ag')
+          call <SID>runcmd('ag "'.l:word.'"')
+      elseif executable('ack')
+          call <SID>runcmd('ack "'.l:word.'"')
+      else
+          call <SID>runcmd('grep -i -R "'.l:word.'" *')
+      endif
+    endfunction
+    nnoremap <Plug>(search-current-word) :call <SID>enhancegrep(0)<CR>
+    nnoremap <Plug>(search-one-word)     :call <SID>enhancegrep(1)<CR>
+    command! -nargs=1 Rg call <SID>enhancegrep(<q-args>)
+
+    if executable('fzf')
+        nnoremap <Leader>f  :FZF<CR>
+    else
+Plug (mvcf_plug_rmt?'https://github.com/ctrlpvim/':mvcf_path_bundle).'ctrlp.vim'
+        let g:ctrlp_map = '<Leader>f'
+    endif
+    " }
+
+    " Fugitive {
+        if isdirectory(expand(mvcf_path_bundle."vim-fugitive/"))
+            nnoremap <silent> <leader>gs :Gstatus<CR>
+            nnoremap <silent> <leader>gd :Gdiff<CR>
+            nnoremap <silent> <leader>gc :Gcommit<CR>
+            nnoremap <silent> <leader>gb :Gblame<CR>
+            nnoremap <silent> <leader>gl :Glog<CR>
+            nnoremap <silent> <leader>gp :Git push<CR>
+            nnoremap <silent> <leader>gr :Gread<CR>
+            nnoremap <silent> <leader>gw :Gwrite<CR>
+            nnoremap <silent> <leader>ge :Gedit<CR>
+            " Mnemonic _i_nteractive
+            nnoremap <silent> <leader>gi :Git add -p %<CR>
+            nnoremap <silent> <leader>gg :SignifyToggle<CR>
+        endif
+    "}
+
+    " JSON {
+        let g:vim_json_syntax_conceal = 0
+    " }
+
+" }
+
+" Pretty {
+Plug (mvcf_plug_rmt?'https://github.com/guns/':mvcf_path_bundle).'vim-sexp'
+Plug (mvcf_plug_rmt?'https://github.com/bling/':mvcf_path_bundle).'vim-bufferline'
+    " bufferline {
+    set showtabline=0
+    let g:bufferline_rotate=1
+    let g:bufferline_separator=''
+    " }
+Plug (mvcf_plug_rmt?'https://github.com/gcmt/':mvcf_path_bundle).'wildfire.vim'
+    " Wildfire {
+    let g:wildfire_objects = {
+                \ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip"],
+                \ "html,xml" : ["at"],
+                \ }
+    " }
+
+" }
+
+if filereadable(expand(mvcf_path.'ext.vim.local'))
+  execute 'source '.mvcf_path.'ext.vim.local'
+endif
+call plug#end()
+
+" Plugins {
+
+    " TextObj Sentence & Quote {
+        if count(mvcf_bundle_groups, 'textobj')
+            augroup textobj_sentence
+              autocmd!
+              autocmd FileType markdown call textobj#sentence#init()
+              autocmd FileType textile call textobj#sentence#init()
+              autocmd FileType text call textobj#sentence#init()
+            augroup END
+            augroup textobj_quote
+                autocmd!
+                autocmd FileType markdown call textobj#quote#init()
+                autocmd FileType textile call textobj#quote#init()
+                autocmd FileType text call textobj#quote#init({'educate': 0})
+            augroup END
+        endif
+    " }
+
+@
