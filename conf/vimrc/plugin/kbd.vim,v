@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2021.06.21.16.43.45;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	94HtdypC4ZNOh1YC;
 
 1.4
 date	2021.06.20.23.53.07;	author android;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix tab in complete
+@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
 @
 text
 @" Modeline and Notes {
@@ -94,8 +100,10 @@ text
 
     " Handy {
     inoremap jj <Esc>
+  if v:version < 802
     inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
-    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-p>"
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
+  endif
     " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
     nnoremap k gk
@@ -165,6 +173,7 @@ text
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
 
+    inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
 
@@ -253,6 +262,19 @@ text
 
 " }
 
+@
+
+
+1.4
+log
+@fix tab in complete
+@
+text
+@d56 1
+d58 2
+a59 1
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-p>"
+d129 1
 @
 
 

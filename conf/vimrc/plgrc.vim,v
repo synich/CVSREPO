@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2021.06.21.16.43.45;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	94HtdypC4ZNOh1YC;
 
 1.2
 date	2021.06.20.23.53.07;	author android;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@fix tab in complete
+@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
 @
 text
 @" Modeline and Notes {
@@ -79,7 +85,6 @@ Plug (mvcf_plug_rmt?'https://github.com/tpope/':mvcf_path_bundle).'vim-surround'
 Plug (mvcf_plug_rmt?'https://github.com/jiangmiao/':mvcf_path_bundle).'auto-pairs'
 " Only use input keymap
 let g:ZFVimIM_keymap = 0
-inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
 Plug (mvcf_plug_rmt?'https://github.com/ZSaberLv0/':mvcf_path_bundle).'ZFVimIM'
 Plug (mvcf_plug_rmt?'https://github.com/synich/':mvcf_path_bundle).'ZFVimIM_wubi_base'
 let g:NERDCreateDefaultMappings = 0
@@ -117,14 +122,13 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
     " }
 
     if v:version >= 800
-let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
+let g:apc_enable_ft = {'go':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
-    else
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
-Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
+    endif
+    if v:version >= 802
+Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-easycomplete'
     endif
 " }
 
@@ -214,6 +218,25 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.2
+log
+@fix tab in complete
+@
+text
+@a52 1
+inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
+d90 1
+a90 1
+let g:apc_enable_ft = {'text':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
+d94 3
+a96 4
+    else
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+Plug (mvcf_plug_rmt?'https://github.com/ervandew/':mvcf_path_bundle).'supertab'
 @
 
 
