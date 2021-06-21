@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2021.06.21.17.23.54;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	6DThjAmUcs7Bv1YC;
 
 1.3
 date	2021.06.21.16.43.45;	author android;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
+@make auto popmenu every filetype
 @
 text
 @" Modeline and Notes {
@@ -122,13 +128,14 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
     " }
 
     if v:version >= 800
-let g:apc_enable_ft = {'go':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
-Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
-    endif
-    if v:version >= 802
+      if v:version >= 802
 Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-easycomplete'
+      else
+    let g:apc_enable_ft = {'*':1}
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
+      endif
     endif
 " }
 
@@ -218,6 +225,22 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.3
+log
+@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
+@
+text
+@a89 2
+let g:apc_enable_ft = {'go':1, 'vim':1, 'php':1, 'shell':1, 'python':1}
+Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'vim-auto-popmenu'
+d92 1
+a92 2
+    endif
+    if v:version >= 802
+d94 4
 @
 
 

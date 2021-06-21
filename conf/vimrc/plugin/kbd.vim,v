@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.06.21.17.23.54;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	6DThjAmUcs7Bv1YC;
 
 1.5
 date	2021.06.21.16.43.45;	author android;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
+@make auto popmenu every filetype
 @
 text
 @" Modeline and Notes {
@@ -100,7 +106,7 @@ text
 
     " Handy {
     inoremap jj <Esc>
-  if v:version < 802
+  if v:version < 800
     inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
     inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
   endif
@@ -262,6 +268,17 @@ text
 
 " }
 
+@
+
+
+1.5
+log
+@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
+@
+text
+@d56 1
+a56 1
+  if v:version < 802
 @
 
 
