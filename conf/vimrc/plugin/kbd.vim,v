@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2021.06.22.05.01.04;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	xZPaugj8k2OLm5YC;
 
 1.6
 date	2021.06.21.17.23.54;	author android;	state Exp;
@@ -46,9 +52,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@make auto popmenu every filetype
+@Tab should add <expr> first
 @
 text
 @" Modeline and Notes {
@@ -107,8 +113,8 @@ text
     " Handy {
     inoremap jj <Esc>
   if v:version < 800
-    inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
-    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
+    inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
+    inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
   endif
     " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
@@ -268,6 +274,18 @@ text
 
 " }
 
+@
+
+
+1.6
+log
+@make auto popmenu every filetype
+@
+text
+@d57 2
+a58 2
+    inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
 @
 
 
