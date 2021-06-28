@@ -1,9 +1,15 @@
-head	1.35;
+head	1.36;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.36
+date	2021.06.28.15.05.40;	author android;	state Exp;
+branches;
+next	1.35;
+commitid	Qcyhdtb7K6mewUYC;
 
 1.35
 date	2021.06.13.09.55.26;	author android;	state Exp;
@@ -211,9 +217,9 @@ desc
 @@
 
 
-1.35
+1.36
 log
-@p h show help
+@supperss warning when execute git status in .git
 @
 text
 @# avoid init interative
@@ -240,7 +246,7 @@ set_ps1(){
   if [ $? -eq 0 ] ; then
     GITST="(`git br | grep '^\*' | cut -d' ' -f2`"
     # git status not clean, append `!' after branch name
-    local iscln="$(git status)"
+    local iscln="$(git status 2>/dev/null)"
     if [[ "$iscln" =~ 'nothing to commit' ]]; then
       local remote_pattern="branch is (ahead|behind)"
       if [[ "$iscln" =~ $remote_pattern ]]; then
@@ -443,6 +449,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.35
+log
+@p h show help
+@
+text
+@d25 1
+a25 1
+    local iscln="$(git status)"
 @
 
 
