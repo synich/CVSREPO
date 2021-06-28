@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2021.06.28.14.15.35;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	NCWuBSGefJP2fUYC;
 
 1.1
 date	2021.06.20.05.52.12;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@move into plugin
+@move some non-plugin to other file
 @
 text
 @" Modeline and Notes {
@@ -26,6 +32,28 @@ text
 " }
 
 " PlugOption {
+
+    " OmniComplete {
+    if has("autocmd") && exists("+omnifunc")
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType python setlocal omnifunc=python3complete#Complete
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+        autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+        autocmd Filetype * if &omnifunc == "" |
+            \setlocal omnifunc=syntaxcomplete#Complete |
+            \endif
+    endif
+
+    hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+    hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+    hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
+    " Automatically open and close the popup menu / preview window
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+    " }
 
     " PIV {
         if isdirectory(expand(mvcf_path_bundle."PIV"))
@@ -91,3 +119,13 @@ text
 
 " }
 @
+
+
+1.1
+log
+@move into plugin
+@
+text
+@d7 22
+@
+
