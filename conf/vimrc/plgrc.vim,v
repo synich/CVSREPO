@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2021.06.29.15.07.42;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	l0cKTWtJRBLVu2ZC;
 
 1.5
 date	2021.06.28.14.15.35;	author android;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@move some non-plugin to other file
+@vim-easycomplete only support unix
 @
 text
 @" Modeline and Notes {
@@ -105,7 +111,7 @@ Plug (mvcf_plug_rmt?'https://github.com/preservim/':mvcf_path_bundle).'nerdcomme
     if v:version >= 800
 Plug (mvcf_plug_rmt?'https://github.com/skywind3000/':mvcf_path_bundle).'asyncrun.vim'
 Plug (mvcf_plug_rmt?'https://github.com/mg979/':mvcf_path_bundle).'vim-visual-multi'
-      if v:version >= 802
+      if v:version >= 802 && !WINDOWS()
 Plug (mvcf_plug_rmt?'https://github.com/jayli/':mvcf_path_bundle).'vim-easycomplete'
       else
     let g:apc_enable_ft = {'*':1}
@@ -200,6 +206,17 @@ call plug#end()
         endif
     " }
 
+@
+
+
+1.5
+log
+@move some non-plugin to other file
+@
+text
+@d61 1
+a61 1
+      if v:version >= 802
 @
 
 
