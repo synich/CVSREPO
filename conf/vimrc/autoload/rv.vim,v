@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2021.07.06.14.36.32;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	fs1KbbCnPrTh6WZC;
 
 1.2
 date	2021.06.20.08.03.33;	author android;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@add showEx cmd for capture output of ex-mode
+@add vim debug function
 @
 text
 @" Modeline and Notes {
@@ -273,8 +279,31 @@ function! rv#showEx(cmd)
     silent put=message
   endif
 endfunction
+
+" When not know what happen under vim, use this
+function! rv#debug(...)
+    if winnr('$') == 1
+        top new
+        setlocal buftype=nofile
+        setlocal bufhidden=delete
+        setlocal nobuflisted
+        setlocal noswapfile
+    endif
+    1wincmd w
+    put=a:000
+endfunction
+
 " }
 
+@
+
+
+1.2
+log
+@add showEx cmd for capture output of ex-mode
+@
+text
+@d247 14
 @
 
 

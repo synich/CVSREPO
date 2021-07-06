@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2021.07.04.13.49.44;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	wvg5YypOg5RdUFZC;
 
 1.2
 date	2021.06.28.14.15.35;	author android;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@move some non-plugin to other file
+@use <Leader>t? replace original go-filetype-cmd
 @
 text
 @" Modeline and Notes {
@@ -83,15 +89,15 @@ text
             let g:go_fmt_command = "goimports"
             let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
             let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-            au FileType go nmap <Leader>m <Plug>(go-implements)
-            au FileType go nmap <Leader>i <Plug>(go-info)
-            au FileType go nmap <Leader>e <Plug>(go-rename)
-            au FileType go nmap <leader>r <Plug>(go-run)
-            au FileType go nmap <leader>b <Plug>(go-build)
-            au FileType go nmap <leader>t <Plug>(go-test)
-            au FileType go nmap <Leader>gd <Plug>(go-doc)
-            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-            au FileType go nmap <leader>co <Plug>(go-coverage)
+            au FileType go nmap <Leader>tm <Plug>(go-implements)
+            au FileType go nmap <Leader>ti <Plug>(go-info)
+            au FileType go nmap <Leader>te <Plug>(go-rename)
+            au FileType go nmap <leader>tr <Plug>(go-run)
+            au FileType go nmap <leader>tb <Plug>(go-build)
+            au FileType go nmap <leader>tt <Plug>(go-test)
+            au FileType go nmap <leader>tc <Plug>(go-coverage)
+            au FileType go nmap <Leader>td <Plug>(go-doc)
+            "au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
         endif
         " }
 
@@ -118,6 +124,25 @@ text
     " }
 
 " }
+@
+
+
+1.2
+log
+@move some non-plugin to other file
+@
+text
+@d57 9
+a65 9
+            au FileType go nmap <Leader>m <Plug>(go-implements)
+            au FileType go nmap <Leader>i <Plug>(go-info)
+            au FileType go nmap <Leader>e <Plug>(go-rename)
+            au FileType go nmap <leader>r <Plug>(go-run)
+            au FileType go nmap <leader>b <Plug>(go-build)
+            au FileType go nmap <leader>t <Plug>(go-test)
+            au FileType go nmap <Leader>gd <Plug>(go-doc)
+            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+            au FileType go nmap <leader>co <Plug>(go-coverage)
 @
 
 
