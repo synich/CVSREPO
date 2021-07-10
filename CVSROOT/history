@@ -285,3 +285,4 @@ M60d9e544|android|~/sh*0|conf|1.36|bash.sh.tpl
 M60db373e|android|~/shconf|conf/vimrc|1.6|plgrc.vim
 M60e1bc78|android|~/shconf|conf/vimrc/plugin|1.3|switch.vim
 M60e46a70|android|~/shconf|conf/vimrc/autoload|1.3|rv.vim
+M60e9c81e|android|~/shconf|conf/vimrc/plugin|1.9|kbd.vim

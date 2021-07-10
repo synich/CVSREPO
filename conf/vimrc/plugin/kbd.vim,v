@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2021.07.10.16.17.34;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	3ClPdybnr3DYws0D;
 
 1.8
 date	2021.06.28.14.15.35;	author android;	state Exp;
@@ -58,9 +64,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@move some non-plugin to other file
+@use double <Esc> to escape from vim terminal
 @
 text
 @" Modeline and Notes {
@@ -203,6 +209,9 @@ text
     inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
+  if v:version >= 801
+    tnoremap <Esc><Esc>  <C-W>N
+  endif
 
     " Write easy {
 
@@ -289,6 +298,15 @@ text
 
 " }
 
+@
+
+
+1.8
+log
+@move some non-plugin to other file
+@
+text
+@d141 3
 @
 
 
