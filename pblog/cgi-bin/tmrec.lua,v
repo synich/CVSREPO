@@ -1,0 +1,56 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
+branches;
+next	;
+commitid	1006335C3D00A0DEA03;
+
+
+desc
+@@
+
+
+1.1
+log
+@lua cgi-bin
+@
+text
+@-- tmrec.cgi/read?dt=2208
+function read(q)
+  local dt = q["dt"]
+  local belong = dt:sub(1,1)
+  local mon = dt:sub(1,4)
+  local day = dt:sub(5,6)
+  local cmd = "sed -n -e '"..day.."p' ../Archive/t"..belong.."/"..mon..".txt"
+  if day == '' then
+    local cmd = "cat ../Archive/t"..belong.."/"..mon..".txt"
+  end
+  os.execute(cmd)
+end
+
+function edit(q, c)
+  local dt = q["dt"]
+  local belong = dt:sub(1,1)
+  local mon = dt:sub(1,4)
+  local day = dt:sub(5,6)
+  local txt = b64dec(res_urlenc(c["txt"]))
+  local tm_name = " ../Archive/t"..belong.."/"..mon..".txt "
+  local cmd = "sed -e '"..day.."c \\\n"..dt..txt.."'"..tm_name.." >tmp_tmrec"
+  print(cmd)
+  os.execute(cmd)
+  os.execute("mv tmp_tmrec "..tm_name)
+end
+
+fn["read"]=read
+fn["edit"]=edit
+--read({dt="2209"})
+
+main()
+
+@

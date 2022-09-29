@@ -1,0 +1,43 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
+branches;
+next	;
+commitid	1006335C3D00A0DEA03;
+
+
+desc
+@@
+
+
+1.1
+log
+@lua cgi-bin
+@
+text
+@-- blog.cgi/read?dt=220204
+function read(q)
+  local dt = q["dt"]
+  local fd = io.open("../Archive/"..dt..".md", "r")
+  if fd then
+    local txt = fd:read("*a")
+    print(txt)
+  end
+end
+
+function keyword(q)
+  local kwd = b64dec(q["kwd"])
+  os.execute("grep '"..kwd.."' ../Archive/*.md")
+end
+
+fn["read"]=read
+fn["keyword"]=keyword
+--read({dt="220115"})
+
+@
