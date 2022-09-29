@@ -1,0 +1,286 @@
+head	1.13;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.13
+date	2018.09.24.09.12.39;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.24.07.21.34;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.23.17.00.18;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.23.03.05.03;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.22.16.06.34;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.13.40.03;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.22.10.26.46;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.20.17.17.27;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.20.15.06.18;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.19.16.33.30;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.17.15.24.42;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.16.15.25.28;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.13
+log
+@INSERT: add head file dependcy
+@
+text
+@CXX = gcc
+CFLAGS = -c --std=c99 -Wall -Werror -pedantic -g
+OBJS = obj/rua.o obj/pool.o obj/parse.o obj/lex.yy.o
+
+lib: $(OBJS)
+	@@ar rcu librua.a $^
+
+obj/%.o : %.c
+	$(CXX) $(CFLAGS) -o $@@ $<
+
+parse.c: parse.y
+	@@lemon parse.y
+
+lex.yy.c: lex.l
+	@@flex lex.l
+
+clean:
+	rm obj/*.o
+
+exe:
+	@@$(CXX) main.c -L. -lrua
+
+ut: lib
+	$(CXX) utest.c -o ut -L. -lrua
+	@@ut.exe
+
+t: lib exe
+	@@a.exe example.nim niu
+
+wc:
+	@@echo C Func
+	@@cat lex.l parse.y rua.c pool.c main.c | wc -l
+	@@echo Unit Test
+	@@cat utest.c | wc -l
+	@@echo Head Declare
+	@@cat elem.h rua.h pool.h forward.h | wc -l
+
+#c file depend on head
+lex.yy.c: parse.h forward.h elem.h pool.h
+parse.c: forward.h elem.h pool.h
+rua.c: forward.h elem.h rua.h pool.h
+main.c: rua.h
+utest.c: elem.h pool.h
+@
+
+
+1.12
+log
+@UPDATE: make tokey and gettbl robus when meet NULL
+@
+text
+@d37 7
+@
+
+
+1.11
+log
+@INSERT: line caculate
+@
+text
+@a21 1
+	@@a.exe example.nim
+d28 1
+@
+
+
+1.10
+log
+@UPDATE: fixed while not deal with NULL bug and other
+@
+text
+@d30 7
+@
+
+
+1.9
+log
+@UPDATE: use Werror, stop compile when warning
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c --std=c99 -Wall -Werror -pedantic
+d6 1
+a6 1
+	ar rcu librua.a $^
+d21 2
+a22 2
+	$(CXX) main.c -L. -lrua
+	a.exe example.nim
+d26 1
+a26 1
+	ut.exe
+@
+
+
+1.8
+log
+@UPDATE: gofunc will only invoke in runtime not parse time, add simple instruction interpreter
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -g
+@
+
+
+1.7
+log
+@UPDATE: check memory leak and unit test for del hash
+@
+text
+@d12 1
+a12 1
+	lemon parse.y
+d15 1
+a15 1
+	flex lex.l
+@
+
+
+1.6
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -O2 -g
+d24 1
+a24 1
+ut:
+d26 1
+@
+
+
+1.5
+log
+@UPDATE: improve lex and make parse run
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -O2
+@
+
+
+1.4
+log
+@UPDATE: make mainstream available
+@
+text
+@d5 1
+a5 1
+all: $(OBJS)
+d22 1
+a22 1
+#	a.exe
+d26 3
+@
+
+
+1.3
+log
+@INSERT: add lex and lemon
+@
+text
+@d20 1
+a20 1
+test:
+d22 1
+a22 1
+	a.exe
+@
+
+
+1.2
+log
+@INSERT: Hash table function
+@
+text
+@d3 1
+a3 1
+OBJS = obj/rua.o obj/pool.o
+d11 6
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d3 1
+a3 1
+OBJS = rua.o pool.o
+d8 1
+a8 1
+%.o : %.c
+d12 1
+a12 1
+	rm *.o
+@
+

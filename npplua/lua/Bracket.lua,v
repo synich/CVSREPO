@@ -1,0 +1,77 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.29.51;	author android;	state Exp;
+branches;
+next	;
+commitid	61495ec7efef0000;
+
+
+desc
+@@
+
+
+1.1
+log
+@npplua file
+@
+text
+@
+local function wrapBracket()
+  local txt, tlen = editor:GetSelText()
+  if tlen == 0 then return end
+
+  txt = string.format('(%s)', txt)
+  editor:ReplaceSel(txt)
+end
+
+local function backChar(fulltxt, from, what, frontbr)
+  local barrir = 0
+  if type(frontbr) == 'number' then barrir = math.max(frontbr, barrir) end
+  while from > barrir do
+   local ch = fulltxt:sub(from, from)
+   if ch == what then break end
+   from = from -1
+  end
+  return from > barrir and from or nil
+end
+local function forwardChar(fulltxt, from, what, endbr)
+  local barrir = fulltxt:len()
+  if type(endbr) == 'number' then barrir = math.min(endbr, barrir) end
+  while from <= barrir do
+   local ch = fulltxt:sub(from, from)
+   if ch == what then break end
+   from = from +1
+  end
+  return from <= barrir and from or nil
+end
+-- return true-strip bracket false-no bracket found
+local function stripBothSide(Lbracket, Rbracket, cpos)
+  local full = editor:GetText()
+  local frontbr, endbr = math.max(cpos-30, 0), math.min(cpos+30, full:len())
+  local st, ed = backChar(full, cpos, Lbracket, frontbr), forwardChar(full, cpos, Rbracket, endbr)
+  if st and ed then
+    st = st-1  -- lua begin from 1, so minus 1
+    editor:SetSel(st, ed)
+    local txt = editor:textrange(st, ed)
+    editor:ReplaceSel(txt:sub(2, -2))
+    return true
+  end
+  return false
+end
+-- try to unwrap () or [] or {}
+local function unwrapBracket()
+  local cpos = editor.CurrentPos
+  if stripBothSide("(", ")", cpos) then return end
+  if stripBothSide("[", "]", cpos) then return end
+  if stripBothSide("{", "}", cpos) then return end
+end
+
+npp.AddShortcut('WrapBracket', 'Ctrl+Alt+W', wrapBracket)
+npp.AddShortcut('UnwrapBracket', 'Ctrl+Shift+W', unwrapBracket)
+@

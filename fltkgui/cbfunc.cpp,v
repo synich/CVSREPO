@@ -1,0 +1,62 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@// @;
+
+
+1.1
+date	2018.12.16.06.54.47;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: add fltk gui scaffold
+@
+text
+@#include "cbfunc.h"
+
+//Keepalive element
+void gf_cbkeepalive(void* v){
+  stLogin *k = (stLogin *)v;
+  puts("callback in fltk");
+  Fl::repeat_timeout(k->duration, gf_cbkeepalive, k);
+}
+
+//Login element
+void gf_cblogin(Fl_Widget* fw, void* w){
+  Fl_Button *btn = (Fl_Button *)fw;
+  stLogin* v = (stLogin*)w;
+  if (1==btn->value()) {
+    const char *ip = v->ip->value();
+    const char* port = v->port->value();
+    const char *user = v->user->value();
+    const char *passwd = v->passwd->value();
+    puts(ip);
+
+    v->duration = 1;
+    strcpy(v->token, "I'm a token!");
+    Fl::add_timeout(v->duration, gf_cbkeepalive, v);
+  } else {
+    Fl::remove_timeout(gf_cbkeepalive, v);
+  }
+}
+
+// Run command element
+void gf_cbrun(Fl_Widget* fw, void* w){
+  stLogin *cmd = (stLogin*)w;
+  puts(cmd->token);
+  cmd->out->text( cmd->in->text() );
+}
+
+void gf_cbselect(Fl_Widget* w, void* v){
+  Fl_Choice* sel = (Fl_Choice*)w;
+  printf("select %d\n", sel->value());
+}
+@

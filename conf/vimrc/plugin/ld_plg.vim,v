@@ -1,0 +1,237 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2022.05.04.13.25.15;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	10062727EBB527701F5;
+
+1.1
+date	2022.03.22.14.05.44;	author android;	state Exp;
+branches;
+next	;
+commitid	1006239D7B864A53436;
+
+
+desc
+@@
+
+
+1.2
+log
+@s-exp doc and combine load opt function
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
+" }
+
+" bufferline {
+set showtabline=0
+let g:bufferline_rotate=1
+let g:bufferline_separator=''
+" }
+
+" EasyMotion {
+" Disable default mappings
+let g:EasyMotion_do_mapping = 0
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
+" }
+
+" after setting, start pack
+if v:version >= 800
+    execute 'set packpath+='.g:mvcf_path
+endif
+
+" Load opt {
+function! MvcfHardlyuse()
+  packadd wildfire.vim
+  let g:wildfire_objects = {
+        \ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip"],
+        \ "html,xml" : ["at"],
+        \ }
+
+  " Only use input on Windows
+  if WINDOWS()
+    let g:ZFVimIM_keymap = 0
+    packadd ZFVimIM
+    packadd ZFVimIM_wubi_base
+  endif
+
+  packadd tagbar
+  set tags=./tags;/,~/.vimtags
+
+  " Make tags placed in .git/tags file available in all levels of a repository
+  let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+  if gitroot != ''
+      let &tags = &tags . ',' . gitroot . '/.git/tags'
+  endif
+
+  packadd vim-visual-multi
+endfunction
+
+" simple complete and lisp pack
+function! MvcfComplete()
+  if exists('s:mvcf_complete')
+    echo "alreay loaded"
+    return ""
+  else
+    packadd vim-sexp
+    let g:rainbow_active = 1
+    packadd rainbow
+    let g:rainbow_conf = {
+      \	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+      \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+      \	'operators': '_,_',
+      \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+      \	'separately': {
+      \		'*': {},
+      \		'tex': {
+      \			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+      \		},
+      \		'lisp': {
+      \			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+      \		},
+      \		'vim': {
+      \			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+      \		},
+      \		'html': {
+      \			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+      \		},
+      \		'css': 0,
+      \	}
+\  }
+    RainbowToggleOn
+
+    packadd nerdcommenter
+    let g:NERDCreateDefaultMappings = 0
+    let g:apc_enable_ft = {'*':1}
+    packadd vim-auto-popmenu
+    ApcEnable
+    let s:mvcf_complete = 1
+    return ""
+  endif
+endfunction
+" }
+
+if filereadable(expand(mvcf_path.'ext.vim.local'))
+  execute 'source '.mvcf_path.'ext.vim.local'
+endif
+
+
+    " TextObj Sentence & Quote {
+        if count(mvcf_bundle_groups, 'textobj')
+            augroup textobj_sentence
+              autocmd!
+              autocmd FileType markdown call textobj#sentence#init()
+              autocmd FileType textile call textobj#sentence#init()
+              autocmd FileType text call textobj#sentence#init()
+            augroup END
+            augroup textobj_quote
+                autocmd!
+                autocmd FileType markdown call textobj#quote#init()
+                autocmd FileType textile call textobj#quote#init()
+                autocmd FileType text call textobj#quote#init({'educate': 0})
+            augroup END
+        endif
+    " }
+
+    " Fugitive {
+        if isdirectory(expand(mvcf_path_bundle."vim-fugitive/"))
+            nnoremap <silent> <leader>gs :Gstatus<CR>
+            nnoremap <silent> <leader>gd :Gdiff<CR>
+            nnoremap <silent> <leader>gc :Gcommit<CR>
+            nnoremap <silent> <leader>gb :Gblame<CR>
+            nnoremap <silent> <leader>gl :Glog<CR>
+            nnoremap <silent> <leader>gp :Git push<CR>
+            nnoremap <silent> <leader>gr :Gread<CR>
+            nnoremap <silent> <leader>gw :Gwrite<CR>
+            nnoremap <silent> <leader>ge :Gedit<CR>
+            " Mnemonic _i_nteractive
+            nnoremap <silent> <leader>gi :Git add -p %<CR>
+            nnoremap <silent> <leader>gg :SignifyToggle<CR>
+        endif
+    "}
+
+@
+
+
+1.1
+log
+@move plgrc.vim into plugin, not manual load it
+@
+text
+@d26 2
+a27 28
+" Lisp {
+function! MvcfLisp()
+  packadd vim-sexp
+  packadd rainbow
+  let g:rainbow_conf = {
+	\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+	\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+	\	'operators': '_,_',
+	\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+	\	'separately': {
+	\		'*': {},
+	\		'tex': {
+	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+	\		},
+	\		'lisp': {
+	\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+	\		},
+	\		'vim': {
+	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+	\		},
+	\		'html': {
+	\			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+	\		},
+	\		'css': 0,
+	\	}
+\}
+  RainbowToggleOn
+
+a33 3
+  packadd nerdcommenter
+  let g:NERDCreateDefaultMappings = 0
+
+a51 1
+" }
+d53 1
+a53 1
+" self improve <tab> complete
+d56 2
+a57 1
+    return "\<C-x>\<C-n>"
+d59 32
+a91 18
+    let l:ft = &filetype
+    if (l:ft=='go' ||l:ft=='python') && !WINDOWS()
+      "packadd vim-easycomplete
+      "let &rtp = &rtp . ',' . plug_home . 'vim-easycomplete/'
+      "execute 'source '. plug_home . 'vim-easycomplete/plugin/easycomplete.vim'
+      ""manual trigger this buff, other buff trigger by autocmd
+      "call easycomplete#Enable()
+      "augroup EasyCompleteStart
+      "  autocmd!
+      "  autocmd BufReadPost,BufNewFile * call easycomplete#Enable()
+      "augroup END
+      echo "alreay loaded"
+"packadd vim-easycomplete
+    else
+      let g:apc_enable_ft = {'*':1}
+      packadd vim-auto-popmenu
+      ApcEnable
+    endif
+d95 1
+@
+

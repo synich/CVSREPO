@@ -1,0 +1,26 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2022.04.04.12.03.17;	author android;	state Exp;
+branches;
+next	;
+commitid	100624ADE8517E3B39C;
+
+
+desc
+@@
+
+
+1.1
+log
+@add rv.txt into vimrc/doc
+@
+text
+@rv	rv.txt	/*rv*
+rv.txt	rv.txt	/*rv.txt*
+@

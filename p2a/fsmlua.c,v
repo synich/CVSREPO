@@ -1,0 +1,221 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.6
+date	2017.10.08.12.37.55;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.10.01.16.33.26;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.09.30.15.16.48;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.09.27.15.53.17;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.09.26.16.54.38;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.25.16.26.26;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@UPDATE: use macro and uniform entry fsm.c to include different engine
+@
+text
+@#include "fsm.h"
+#include "lua51/lauxlib.h"
+#include "lua51/lualib.h"
+
+lua_State *g_L;
+/// \param[in] fn lua-script file name&global object name
+/// \param[in] phase what's step now is
+/// \param[in] str parsed token
+static void block2lua(char* fn, int phase, char* str){
+  lua_getglobal(g_L, fn);
+  lua_getfield(g_L, 1, "push");
+  lua_pushvalue(g_L, 1);
+  lua_pushinteger(g_L, phase);
+  lua_pushstring(g_L, str);
+  lua_call(g_L, 3, 1);
+  lua_pop(g_L, 2);
+}
+
+int p2a_initScript(char* sfn){
+  int ret=0;
+
+  g_L = luaL_newstate();
+  luaL_openlibs(g_L);
+  //TODO loop more script
+  ret = luaL_dofile(g_L, sfn);
+
+  return ret;
+}
+
+void p2a_finiScript(){
+  lua_close(g_L);
+}
+
+int p2a_push(int phase, char* str){
+  //TODO loop call
+  char* p = p2a_accessRootVar(0, NULL);
+  block2lua(p, phase, str);
+  return 0;
+}
+
+void p2a_reach(int state){
+  char* p = p2a_accessRootVar(0, NULL);
+}
+@
+
+
+1.5
+log
+@UPDATE: add in/out param, can produce rough output
+@
+text
+@d2 2
+d5 1
+a5 2
+#ifdef WITH_LUA
+extern lua_State *g_L;
+a17 1
+#endif
+d19 2
+a20 1
+extern js_State *g_J;
+d22 4
+a25 9
+static void block2js(char* fn, int phase, char* str){
+  js_getglobal(g_J, fn);
+  js_getproperty(g_J, -1, "push");//global is on top, it's -1
+  js_copy(g_J, -2);
+  js_pushnumber(g_J, phase);
+  js_pushstring(g_J, str);
+  js_call(g_J, 2);
+  js_pop(g_J, 2);
+}
+d27 1
+a27 7
+static void state2js(char* fn, int state){
+  js_getglobal(g_J, fn);
+  js_getproperty(g_J, -1, "reach");//global is on top, it's -1
+  js_copy(g_J, -2);
+  js_pushnumber(g_J, state);
+  js_call(g_J, 1);
+  js_pop(g_J, 2);
+d30 2
+a31 11
+char* p2a_accessRootVar(int act, char* name){
+  static char varName[32];
+  char *p;
+  if (1==act) {
+    strncpy(varName, name, sizeof(varName)-1);
+    p = strchr(varName, '.');
+    if (p != NULL){
+      *p = 0;//just save file name, drop ext name
+    }
+  }
+  return varName;
+d37 1
+a37 2
+  //block2lua(p, phase, str);
+  block2js(p, phase, str);
+a42 1
+  state2js(p, state);
+@
+
+
+1.4
+log
+@UPDATE: control lua with macro, use function instead of hardcord script name, extend js parse
+@
+text
+@d53 1
+a53 1
+int p2a_findElem(int phase, char* str){
+d61 1
+a61 1
+void p2a_reachState(int state){
+@
+
+
+1.3
+log
+@UPDATE: pass flex token to script, bison parse to trigger script, drop script fini
+@
+text
+@d3 1
+a4 2
+extern js_State *g_J;
+
+d17 3
+d40 13
+d55 1
+a55 1
+  char* p = "head";
+d62 1
+a62 1
+  char* p = "head";
+@
+
+
+1.2
+log
+@UPDATE: let js support print, fsm both drive lua and js
+@
+text
+@d29 10
+a38 1
+int p2a_findBlock(char* method){
+d41 2
+a42 2
+  block2lua(p, 1, method);
+  block2js(p, 1, method);
+d45 5
+@
+
+
+1.1
+log
+@UPDATE: add lua/js script interactive
+@
+text
+@d4 1
+d6 5
+a10 5
+int p2a_findBlock(char* method){
+  //TODO loop call
+  char* p = "head";
+
+  lua_getglobal(g_L, p);
+d13 2
+a14 2
+  lua_pushinteger(g_L, 1);
+  lua_pushstring(g_L, method);
+d17 1
+d19 15
+@
+

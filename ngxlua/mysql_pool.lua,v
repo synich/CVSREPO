@@ -1,0 +1,160 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2019.06.22.09.57.28;	author WIN7;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2019.06.15.12.46.44;	author WIN7;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.06.09.08.08.40;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@UPDATE: make insert handy
+@
+text
+@local mysqlConfig = {
+    host= "127.0.0.1",
+    port= 3306,
+    user= "root",
+    password= "root",
+    database= "test"}
+
+local mysql = require("resty.mysql")
+local mysql_pool = {}
+
+--[[
+    先从连接池取连接,如果没有再建立连接.
+    返回:
+        false,出错信息.
+        true,数据库连接
+--]]
+function mysql_pool:get_connect()
+    if ngx.ctx[mysql_pool] then
+        return true, ngx.ctx[mysql_pool]
+    end
+
+    local client, errmsg = mysql:new()
+    if not client then
+        return false, "mysql.socket_failed: " .. (errmsg or "nil")
+    end
+
+    client:set_timeout(10000)  --10秒
+
+    local result, errmsg, errno, sqlstate = client:connect(mysqlConfig)
+    if not result then
+        return false, "mysql.cant_connect: " .. (errmsg or "nil") .. ", errno:" .. (errno or "nil") ..
+                ", sql_state:" .. (sqlstate or "nil")
+    end
+
+    local query = "SET NAMES UTF8"
+    local result, errmsg, errno, sqlstate = client:query(query)
+    if not result then
+        return false, "mysql.query_failed: " .. (errmsg or "nil") .. ", errno:" .. (errno or "nil") ..
+                ", sql_state:" .. (sqlstate or "nil")
+    end
+
+    ngx.ctx[mysql_pool] = client
+    return true, ngx.ctx[mysql_pool]
+end
+
+--[[
+    把连接返回到连接池
+    用set_keepalive代替close() 将开启连接池特性,可以为每个nginx工作进程，指定连接最大空闲时间，和连接池最大连接数
+ --]]
+function mysql_pool:close()
+    if ngx.ctx[mysql_pool] then
+        ngx.ctx[mysql_pool]:set_keepalive(60000, 1000)
+        ngx.ctx[mysql_pool] = nil
+    end
+end
+
+--[[
+    查询
+    有结果数据集时返回结果数据集
+    无数据数据集时返回查询影响
+    返回:
+        false,出错信息(string),sqlstate.
+        true,结果集(table),sqlstate.
+--]]
+function mysql_pool:query(sql)
+    local ret, client = self:get_connect()
+    if not ret then
+        return false, client, nil
+    end
+
+    local result, errmsg, errno, sqlstate = client:query(sql)
+    self:close()
+
+    if not result then
+        errmsg = string.format("mysql.query_failed: %d, %s, %s.", errno, errmsg, sqlstate)
+        return false, errmsg, sqlstate
+    end
+
+    return true, result, sqlstate
+end
+
+function mysql_pool:insert(tblname, val)
+  local function wrapv(v)
+    if type(v) == 'string' then return string.format("'%s'", v)
+    elseif type(v) == 'number' then return v
+    else error(string.format('expect type %s in SQL insert value', type(v))) end
+  end
+  local tbldesc, values = '(', '('
+  for k,v in pairs(val) do
+    if tbldesc ~= '(' then
+      tbldesc = tbldesc..','..k
+      values = values.. ','..wrapv(v)
+    else
+      tbldesc = tbldesc..k
+      values = values..wrapv(v)
+    end
+  end
+  tbldesc = tbldesc .. ')'
+  values = values .. ')'
+  local stmt = string.format("INSERT INTO %s%s VALUES%s;", tblname, tbldesc, values)
+  return self:query(stmt)
+end
+
+return mysql_pool
+@
+
+
+1.2
+log
+@DELETE: remove module definition
+@
+text
+@d70 1
+a70 1
+    
+d82 22
+@
+
+
+1.1
+log
+@INSERT: add openresty app with lua
+@
+text
+@a0 1
+module("mysql_pool", package.seeall)
+@
+

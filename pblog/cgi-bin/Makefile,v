@@ -1,0 +1,91 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2022.08.27.05.45.47;	author games;	state Exp;
+branches;
+next	1.3;
+commitid	1006309AF8B5BE0651F;
+
+1.3
+date	2022.08.15.16.18.54;	author games;	state Exp;
+branches;
+next	1.2;
+commitid	10062FA71ED25C91C6F;
+
+1.2
+date	2022.07.10.04.56.40;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	10062CA5C082FECD469;
+
+1.1
+date	2022.07.03.15.44.11;	author android;	state Exp;
+branches;
+next	;
+commitid	10062C1B94B6986CA54;
+
+
+desc
+@@
+
+
+1.4
+log
+@move cgi template into r.lua
+@
+text
+@all: blog
+
+blog: blog.lua
+	@@cat r.lua $^ > $^.cgi
+	@@echo "main()" >> $^.cgi
+	@@chmod 755 $^.cgi
+	@@mv $^.cgi blog.cgi
+
+
+@
+
+
+1.3
+log
+@cgi-bin r.template -> r.lua
+@
+text
+@d4 1
+a4 2
+	@@cat r.lua > $^.cgi
+	@@cat $^ >> $^.cgi
+d9 1
+@
+
+
+1.2
+log
+@change Makefile because sdf.org
+@
+text
+@d4 1
+a4 1
+	@@cat r.template > $^.cgi
+@
+
+
+1.1
+log
+@cgi-bin style blog start
+@
+text
+@d1 8
+a8 5
+all:
+	@@cat r.template >r.cgi
+	@@cat *.lua >>r.cgi
+	@@echo "main()" >>r.cgi
+	@@chmod 755 r.cgi
+@
+

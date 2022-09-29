@@ -1,0 +1,484 @@
+head	1.12;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.12
+date	2022.01.09.08.14.51;	author android;	state Exp;
+branches;
+next	1.11;
+commitid	10061DA997A4AA8C78C;
+
+1.11
+date	2022.01.09.07.40.56;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	10061DA9188496A2C30;
+
+1.10
+date	2021.10.16.12.23.59;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	xQKFaUwa7WOx52dD;
+
+1.9
+date	2021.10.06.04.33.13;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	KFMyiitH3dgYNHbD;
+
+1.8
+date	2021.08.29.14.51.25;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	LIMunqVRD1wMrS6D;
+
+1.7
+date	2021.08.14.12.09.03;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	7WS2r0RoXDbY1W4D;
+
+1.6
+date	2021.06.05.15.55.35;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	yIXUWwUQ8xHbxXVC;
+
+1.5
+date	2021.06.05.15.46.30;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	Mo5qcJsCLDG4uXVC;
+
+1.4
+date	2021.06.05.15.38.48;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	eeHNtYk2aYQqrXVC;
+
+1.3
+date	2020.12.14.14.19.06;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005FD7745A2D8FD054;
+
+1.2
+date	2020.05.24.08.28.19;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	a195eca30230000;
+
+1.1
+date	2020.05.22.15.36.32;	author android;	state Exp;
+branches;
+next	;
+commitid	629c5ec7f1800000;
+
+
+desc
+@@
+
+
+1.12
+log
+@improve pkg -py and let ps1 to 7
+@
+text
+@#!/bin/bash
+# A wrap tool for Debian/Arch/CentOS/Alpine/Void or Python package manager in same way
+# Usage: pkg [-lang] command [arguments]
+# Commands:
+#   files <packages>
+#   add/install <packages>
+#   list-installed/has-installed
+#   reinstall <packages>
+#   search <query>
+#   show/info <packages>
+#   uninstall/rm/del <packages>
+#   update /*just renew metadata*/
+#   upgrade /*make soft newer*/
+#   belong <file>
+#   dep <package>
+#   rdp <package>
+
+set -e -u
+
+show_help() {
+    sed -ne '/^#/!q;s/.\{1,2\}//;1d;p' < "$0"
+	exit 0
+}
+
+check_pkgcache() {
+	if [ -z "$(find /data/data/com.termux/files/usr/var/cache/apt/pkgcache.bin -mmin -5)" ]; then
+		apt update
+	fi
+}
+
+function pkgapt() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) dpkg -L "$@@";;
+	he*) show_help;;
+	add|ins*)  apt install "$@@";;
+	li*|ha*) apt list --installed ;;
+	rei*) apt install --reinstall "$@@";;
+	se*)  apt search "$@@";;
+	sh*|inf*) apt show "$@@";;
+	un*|rm|del*) apt remove "$@@";;
+	upd*) apt update ;;
+	upg*) apt full-upgrade "$@@";;
+    b*) dpkg-query -S "$@@";;
+    dep*) apt-cache depends "$@@";;
+    rdp*) apt-cache rdepends "$@@";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+function pkgpacman() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) pacman -Ql "$@@";;
+	he*) show_help;;
+	add|ins*) pacman -S "$@@";;
+	li*|ha*) pacman -Qv ;;
+	rei*) echo "Unsupport this command in this package system";;
+	se*) pacman -Ss "$@@";;
+	sh*|inf*|dep*|rdp*) pacman -Qii "$@@";;
+	un*|rm|del*) pacman -Rs "$@@";;
+	up*) pacman -Syu "$@@";;
+    b*) pacman -Qo "$@@";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+function pkgapk() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) apk info -L "$@@";;
+	he*) show_help;;
+	add|ins*) apk add "$@@";;
+	li*|ha*) apk list -I;;
+	rei*) echo "Unsupport this command in this package system";;
+	se*) apk search "$@@";;
+	sh*|inf*) apk info "$@@";;
+	un*|rm|del*) apk del "$@@";;
+	up*) apk update; apk upgrade "$@@";;
+    b*) apk info -W "$@@";;
+    dep*) apk info -R "$@@";;
+    rdp*) apk info -r "$@@";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+function pkgrpm() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) rpm -ql "$@@";;
+	he*) show_help;;
+	add|ins*) yum install "$@@";;
+	li*|ha*) rpm -qa;;
+	rei*) yum reinstall "$@@";;
+	se*) yum search "$@@";;
+	sh*|inf*) rpm -qi "$@@";;
+	un*|rm|del*) rpm -e "$@@";;
+	upd*) yum makecache fast;;
+	upg*) yum update "$@@";;
+    b*) rpm -qf "$@@";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+function pkgxbps() {
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) xbps-query -f "$@@";;
+	he*) show_help;;
+	add|ins*) xbps-install "$@@";;
+	li*|ha*) xbps-query -l;;
+	rei*) echo "Unsupport this command in this package system";;
+	se*) xbps-query -R "$@@";;
+	sh*|inf*) xbps-query -S "$@@";;
+	un*|rm|del*) xbps-remove "$@@";;
+	up*) xbps-install -Su "$@@";;
+    b*) xbps-query -o "$@@";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+distropkg(){
+  #choose what pkg in system
+  whatpkg=none
+  if [ -x "$(command -v apk)" ]; then
+    whatpkg=apk
+  elif [ -x "$(command -v apt)" ]; then
+    whatpkg=apt
+  elif [ -x "$(command -v pacman)" ]; then
+    whatpkg=pacman
+  elif [ -x "$(command -v rpm)" ]; then
+    whatpkg=rpm
+  elif [ -x "$(command -v xbps-query)" ]; then
+    whatpkg=xbps
+  fi
+
+  if [ $whatpkg = none ]; then
+    echo "can't found any package in your system"
+  fi
+
+  pkg$whatpkg $@@
+}
+
+pkgpy(){
+  if [ $# = 0 ]; then
+    echo "~/.pip/pip.conf"
+    show_help
+  fi
+
+  CMD=$1
+  shift 1
+case "$CMD" in
+	f*) pip show -f "$@@";;
+	he*) show_help;;
+	add|ins*) pip install $@@;;
+	li*|ha*) pip list;;
+	se*) pip search "$@@";;
+	sh*|inf*) pip show "$@@";;
+	un*|rm|del*) pip uninstall "$@@";;
+	upd*) pip list --outdate; echo "Upgrade above one by one, use 'pkg add -U xx'";;
+    upg*) pip list -o --format freeze | cut -d = -f 1 | xargs -n1 pip install -U;;
+    dep*) pip show -f "$@@" | grep "Requires:";;
+    rdp*) pip show -f "$@@" | grep "Required-by:";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
+main(){
+  if [ $# = 0 ]; then
+    show_help
+  fi
+
+  if [ ${1:0:1} = '-' ]; then
+    whatlang=${1:1}
+    shift
+    pkg$whatlang $@@
+  else
+    distropkg $@@
+  fi
+}
+
+main $@@
+
+@
+
+
+1.11
+log
+@let pkg support pip
+@
+text
+@d158 1
+a158 1
+	f*) pip info -L "$@@";;
+d160 1
+a160 1
+	add|ins*) pip install "$@@";;
+d165 4
+a168 2
+	upd*) pip list --outdate; echo "Upgrade above one by one";;
+    upg*) pip install -U "$@@";;
+@
+
+
+1.10
+log
+@add bash variable drop syntax
+@
+text
+@d2 2
+a3 2
+# A wrap tool for Debian/Arch/CentOS/Alpine/Void package manager in same way
+# Usage: pkg command [arguments]
+d22 1
+a22 1
+	exit 1
+d38 1
+a38 1
+	lis*|ha*) apt list --installed ;;
+d59 1
+a59 1
+	lis*|ha*) pacman -Qv ;;
+d77 1
+a77 1
+	lis*|ha*) apk list -I;;
+d97 1
+a97 1
+	lis*|ha*) rpm -qa;;
+d116 1
+a116 1
+	lis*|ha*) xbps-query -l;;
+d127 1
+a127 5
+main(){
+  if [ $# = 0 ]; then
+    show_help
+  fi
+
+d149 36
+@
+
+
+1.9
+log
+@add dep/rdp subcommand for pkg
+@
+text
+@d15 2
+@
+
+
+1.8
+log
+@add rpm update subcommand
+@
+text
+@d44 2
+d60 1
+a60 1
+	sh*|inf*) pacman -Qii "$@@";;
+d82 2
+@
+
+
+1.7
+log
+@rewrite pkg use main as entry
+@
+text
+@d96 2
+a97 1
+	up*) yum update "$@@";;
+@
+
+
+1.6
+log
+@make list-i short as lis
+@
+text
+@a28 22
+if [ $# = 0 ]; then
+	show_help
+fi
+
+#choose what pkg in system
+whatpkg=none
+if [ -x "$(command -v apk)" ]; then
+    whatpkg=apk
+elif [ -x "$(command -v apt)" ]; then
+    whatpkg=apt
+elif [ -x "$(command -v pacman)" ]; then
+    whatpkg=pacman
+elif [ -x "$(command -v rpm)" ]; then
+    whatpkg=rpm
+elif [ -x "$(command -v xbps-query)" ]; then
+    whatpkg=xbps
+fi
+
+if [ $whatpkg = none ]; then
+    echo "can't found any package in your system"
+fi
+
+d120 27
+a146 1
+pkg$whatpkg $@@
+@
+
+
+1.5
+log
+@modify comment for pkg
+@
+text
+@d58 1
+a58 1
+	list-i*|ha*) apt list --installed ;;
+d77 1
+a77 1
+	list-i*|ha*) pacman -Qv ;;
+d95 1
+a95 1
+	list-i*|ha*) apk list -I;;
+d113 1
+a113 1
+	list-i*|ha*) rpm -qa;;
+d131 1
+a131 1
+	list-i*|ha*) xbps-query -l;;
+@
+
+
+1.4
+log
+@add voidlinux xbps- package manager
+@
+text
+@d2 1
+a2 1
+# A tool for managing packages, Warp for Debian/Arch/CentOS/Alpine package manager in same way
+@
+
+
+1.3
+log
+@use a tricky way rewrite usage
+@
+text
+@d43 2
+d124 18
+@
+
+
+1.2
+log
+@UPDATE: add pkg belong command
+@
+text
+@d2 13
+d19 1
+a19 14
+	echo 'Usage: pkg command [arguments]'
+	echo ''
+	echo 'A tool for managing packages. Commands:'
+	echo ''
+	echo '  files <packages>'
+	echo '  add/install <packages>'
+	echo '  list-installed/has-installed'
+	echo '  reinstall <packages>'
+	echo '  search <query>'
+	echo '  show/info <packages>'
+	echo '  uninstall/rm/del <packages>'
+	echo '  update /*just renew metadata*/'
+	echo '  upgrade /*make soft newer*/'
+	echo '  belong <file>'
+@
+
+
+1.1
+log
+@bin file
+@
+text
+@d19 1
+d63 1
+d81 1
+d99 1
+d117 1
+@
+

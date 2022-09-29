@@ -1,0 +1,684 @@
+head	1.23;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.23
+date	2021.09.05.11.35.07;	author android;	state Exp;
+branches;
+next	1.22;
+commitid	uf9nyah8Slfu8L7D;
+
+1.22
+date	2021.09.05.10.44.19;	author android;	state Exp;
+branches;
+next	1.21;
+commitid	O3sKZdjlIEP3RK7D;
+
+1.21
+date	2019.05.11.13.42.44;	author WIN7;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2019.01.19.13.07.44;	author Administrator;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2019.01.16.22.44.02;	author Administrator;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2018.08.19.00.04.02;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.03.03.15.46.46;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.03.03.15.36.40;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.02.25.13.32.55;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.02.22.03.50.01;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.02.21.05.20.10;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.02.20.12.49.33;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.02.03.09.21.45;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.01.01.09.00.50;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2017.09.11.14.39.32;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.09.09.16.45.16;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.08.13.11.13.26;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.08.13.10.17.12;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.07.29.12.32.21;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.06.25.16.40.33;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.06.04.16.00.23;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.05.31.15.32.17;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.05.30.06.35.58;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.23
+log
+@drop last empty element from array
+@
+text
+@<?php
+include_once('basedb.php');
+
+/// blog DB access
+class C_bdb extends C_basedb {
+
+  public function getIndexList($whichPage, $pageNum, & $rec, & $dcount) {
+    $stmt = $this->db->query("SELECT * FROM blog ORDER BY date DESC LIMIT ${pageNum} OFFSET ${whichPage}", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+
+    $stmt = $this->db->query("SELECT count(date) FROM blog");
+    $dcountRec = $stmt->fetch();
+    $dcount = $dcountRec[0];
+  }
+
+  public function getTagCount(& $tglst, &$totalNum){
+    $stmt = $this->db->query('SELECT DISTINCT attr FROM blog', PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+    foreach ($rec as &$tag){
+      if ($tag['attr'] != ''){
+        $tagName = $tag['attr'];
+        $tagShow = $tagName; // use plain name as default
+        if (array_key_exists($tagName, C_auth::$s_tagName) ){
+            $tagShow = C_auth::$s_tagName[$tagName];
+        }
+
+        $rnum = $this->db->query("SELECT count(attr) FROM blog WHERE attr='".$tagName."';");
+        $recnum = $rnum->fetch();
+        $num = $recnum[0];
+        $tagElem = '<a href="/index.php/blog/tag/'.$tagName.'">'.$tagShow.'('.$num.')</a> ';
+        $tglst[] = $tagElem;
+        $totalNum += $num;
+      }
+    }
+  }
+
+  public function getTagList($tag, & $rec) {
+    $stmt = $this->db->query("SELECT date, content FROM blog WHERE attr LIKE '%".$tag."%' ORDER BY date DESC", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+  }
+
+  public function getByKeyword($word, & $essay) {
+    $cmd = "SELECT date, content FROM blog WHERE ";
+    $this->consByKeyword($cmd, 'content', $word, $essay);
+  }
+
+  public function getTextByDate($whichDay, & $rec) {
+    $stmt = $this->db->query("SELECT content, attr FROM blog WHERE date=${whichDay}", PDO :: FETCH_ASSOC);
+    $rec = $stmt->fetch(); //only need one record
+  }
+
+  /// \param[in] $row one DB record
+  /// \param[out] $ttile blog title
+  /// \param[out] $link HTML link
+  private function getTitleAndLink(&$row, &$ttile, &$link){
+    $tdate = $row['date'];
+    $pos = strpos($row['content'], '==');
+    $ttile = substr($row['content'], 0, $pos-1);
+    //$link = '<a href="/index.php/blog/timeline/'.$tdate.'">'.$tdate.'</a> '.$ttile;
+    $link = $tdate.','.$ttile;
+  }
+
+  /// After update blog ctx or date, refresh cache file of homepage
+  /// \param[in] $date which day update
+  private function refreshHomeCache($date){
+    $recUp = array(); // recent update blog
+
+    eval($this->loadCache());//TODO
+    $stmt = $this->db->query("SELECT content FROM blog WHERE date=${date}", PDO :: FETCH_ASSOC);
+    $rec = $stmt->fetch(); //only need one record
+    $pos = strpos($rec['content'], '==');
+    $ttile = substr($rec['content'], 0, $pos-1);
+    $recentUpdate = "${date},${ttile}；";
+    $upRecentNum = 0;
+    $uparr = explode('；', $forIdx['recentUpdate']);
+    array_pop($uparr); // last is empty string
+    foreach($uparr as $one){
+        if (strncmp($one, $date, 6)!=0){
+            $recentUpdate = $recentUpdate.$one."；";
+            $upRecentNum++;
+        }
+        if ($upRecentNum>=10) break; // TODO record update hardcode limit
+    }
+
+    $tglst = array();
+    $totalNum = 0;
+    $this->getTagCount($tglst, $totalNum);/// get each tag count
+
+    $fileCtx = "\$forTotalNum = $totalNum;\$forIdx = array('recentUpdate'=>'"
+      .$recentUpdate."');\$forTag = array(";
+    $tgnum = count($tglst);
+    for($i=0; $i<$tgnum; $i++){
+      $fileCtx .= "'$tglst[$i]',";
+    }
+    $fileCtx .= ");";
+    $this->saveCache($fileCtx);
+  }
+  public function putBlogCtx($date, $content, $tag) {
+    $quco = str_replace("'", "''", $content);// SQLite use '' intead of \'
+    try {
+      $this->db->exec("INSERT OR REPLACE INTO blog VALUES(${date}, '${quco}', '${tag}')");
+      $this->refreshHomeCache($date);
+      return true;
+    }
+    catch (PDOException $e){
+      return false;
+    }
+  }
+
+  public function updateBlogDate($odate, $ndate) {
+    try {
+      $this->db->exec("UPDATE blog SET date=${ndate} WHERE date=${odate}");
+      $this->refreshHomeCache($ndate);
+      return true;
+    }
+    catch (PDOException $e){
+      return false;
+    }
+  }
+
+  /// get recent update blog, hard code num
+  /// param[out] $num
+  public function getRecentUpdate($num, &$rec, $page=0){
+    if ($page>0){
+      $page *= $num;
+    }
+    $stmt = $this->db->query("SELECT date, content FROM blog ORDER BY date DESC LIMIT ${num} OFFSET ${page};", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+  }
+
+  public function getDayByOff($off, & $rec) {
+    $stmt = $this->db->query("SELECT date FROM blog ORDER BY date DESC LIMIT 1 OFFSET ${off}", PDO :: FETCH_ASSOC);
+    $rec = $stmt->fetch(); //only need one record
+  }
+
+  public function saveCache($str) {
+    $quco = base64_encode($str);
+    try {
+      $this->db->exec("INSERT OR REPLACE INTO cache VALUES('blog', '${quco}')");
+    } catch (PDOException $e) {
+    }
+  }
+
+  public function loadCache() {
+    $stmt = $this->db->query("SELECT content FROM cache WHERE usage='blog'", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetch();
+    return base64_decode($rec['content']);
+  }
+
+} // End of C_bdb
+
+?>
+@
+
+
+1.22
+log
+@record latest update blog
+@
+text
+@a68 1
+    $uparr = explode('；', $forIdx['recentUpdate']);
+d75 2
+d78 1
+a78 1
+        if ((strncmp($one, $date, 6)!=0)&&(strlen($one)>=6)){
+@
+
+
+1.21
+log
+@UPDATE: change to SPA, a href is useless
+@
+text
+@d64 2
+a65 1
+  private function refreshHomeCache(){
+a66 1
+    $recentUpdate = '';
+d68 14
+a81 5
+    $this->getRecentUpdate(10, $recUp);// get new 10 blog
+    foreach($recUp as &$one) {
+      $ttile = $link = '';
+      $this->getTitleAndLink($one, $ttile, $link);
+      $recentUpdate = $recentUpdate.$link.'；';
+d101 1
+a101 1
+      $this->refreshHomeCache();
+d112 1
+a112 1
+      $this->refreshHomeCache();
+@
+
+
+1.20
+log
+@INSERT: support view blog by idx
+@
+text
+@d59 2
+a60 1
+    $link = '<a href="/index.php/blog/timeline/'.$tdate.'">'.$tdate.'</a> '.$ttile;
+@
+
+
+1.19
+log
+@UPDATE: show recent 10 blog
+@
+text
+@d120 5
+@
+
+
+1.18
+log
+@UPDATE: support recent blog query by page
+@
+text
+@d67 1
+a67 1
+    $this->getRecentUpdate(5, $recUp);// get new 5 blog
+@
+
+
+1.17
+log
+@UPDATE: fixed spell miss
+@
+text
+@d22 5
+a26 1
+        $tagShow = C_auth::$s_tagName[$tagName] ? C_auth::$s_tagName[$tagName] : $tagName;
+d112 5
+a116 2
+  public function getRecentUpdate($num, &$rec){
+    $stmt = $this->db->query("SELECT date, content FROM blog ORDER BY date DESC LIMIT ${num};", PDO::FETCH_ASSOC);
+@
+
+
+1.16
+log
+@UPDATE: change auth to static, no need explicit load
+@
+text
+@d22 1
+a22 1
+        $tagShow = C_auth::$s_tagName[$tagName] ? $g_tagName[$tagName] : $tagName;
+@
+
+
+1.15
+log
+@INSERT: find blog and tmrec from mobile
+@
+text
+@a16 1
+    global $g_tagName;
+d22 1
+a22 1
+        $tagShow = $g_tagName[$tagName] ? $g_tagName[$tagName] : $tagName;
+@
+
+
+1.14
+log
+@UPDATE: save blog cache in DB and switch account
+@
+text
+@d39 1
+a39 1
+  public function getByKeyword($wordCol, & $essay) {
+d41 1
+a41 1
+    $this->consByKeyword($cmd, 'content', $wordCol, $essay);
+@
+
+
+1.13
+log
+@UPDATE: combine insert sql convert
+@
+text
+@d75 2
+a76 2
+    $fileCtx = "<?php\n\$forTotalNum = $totalNum;\n\$forIdx = array('recentUpdate'=>'"
+      .$recentUpdate."');\n\$forTag = array(";
+d81 2
+a82 2
+    $fileCtx .= ");\n?>";
+    file_put_contents(HomePageCache, $fileCtx);
+d113 16
+a128 1
+}
+@
+
+
+1.12
+log
+@UPDATE: tmrec support multi word search
+@
+text
+@d84 2
+a85 1
+  public function putBlogCtx($date, $quco, $tag) {
+@
+
+
+1.11
+log
+@UPDATE: collect config into auth.php
+@
+text
+@a38 15
+  /// \param[in] $word keyword in string
+  private function consFindWord($word){
+    $retStr = '';
+    if ( 0 != strlen($word) ){
+      if ( '-' == $word[0]){
+        $word = substr($word, 1);
+        $retStr = "content NOT LIKE '%${word}%' ";
+      }
+      else{
+        $retStr = "content LIKE '%${word}%' ";
+      }
+    }
+    return $retStr;
+  }
+
+d41 1
+a41 14
+    $wordLen = count($wordCol);
+    $findKey = $wordCol[0];
+    $toSql = $this->consFindWord($findKey);
+    $cmd .= $toSql;
+    for($i=1; $i<$wordLen; $i++){
+      $toSql = $this->consFindWord($wordCol[$i]);
+      if (0 != strlen($toSql)){
+        $cmd = $cmd . "AND " . $toSql;
+      }
+    }
+    $cmd .= ' ORDER BY date DESC';
+
+    $rec = $this->db->query($cmd, PDO::FETCH_ASSOC);
+    $essay = $rec->fetchAll();
+@
+
+
+1.10
+log
+@UPDATE: support droidscript access fix urldecode bug, add book category
+@
+text
+@a15 7
+  private $m_tagName = array('lang'=>'程序语言',
+    'protocol'=>'协议相关', 'lua'=>'Lua语言',
+    'design'=>'软件设计', 'security'=>'加密与安全',
+    'os'=>'操作系统', 'think'=>'所思所想',
+    'web'=>'网页开发', 'net'=>'网络原理',
+    'tool'=>'软件使用技巧', 'book'=>'读书笔记' );
+
+d17 1
+d23 1
+a23 1
+        $tagShow = $this->m_tagName[$tagName] ? $this->m_tagName[$tagName] : $tagName;
+@
+
+
+1.9
+log
+@DELETE: remove time db into tdb.php
+@
+text
+@d21 1
+a21 1
+    'tool'=>'软件使用技巧' );
+@
+
+
+1.8
+log
+@UPDATE: homepage read cache file instead of read DB
+@
+text
+@d2 1
+d4 2
+a5 19
+class C_bdb {
+  private $db = null;
+
+  /// Maybe need not use try/catch
+  /// return PDO object / null
+  function __construct(){
+    try {
+      $who = isset($_SESSION['isLogin'])?$_SESSION['isLogin']:'shuw';//Guest see shuw
+      if ($who == '1') $who = 'shuw';//some legacy client remain '1'
+
+      $this->db = new PDO("sqlite:./Archive/$who.db");
+    } catch (PDOException $e) {
+    }
+    return $this->db;
+  }
+
+  public function isValid(){
+    return $this->db != null;
+  }
+a139 40
+  public function getTmRecByMonth($month, & $rec) {
+    $stmt = $this->db->query("SELECT date, record FROM tmrec WHERE date LIKE '${month}%'", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+  }
+
+  public function getTmRecByDay($day){
+    $stmt = $this->db->query("SELECT record FROM tmrec WHERE date=${day}", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetch();
+    return $rec['record'];
+  }
+
+  public function appendTmRec($date, $hour, $dosth) {
+    $stmt = $this->db->query("SELECT record FROM tmrec WHERE date=${date}", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetch();
+    $doall = $rec['record'];
+    //$doCol = explode('|', $doall);
+
+    $stHour = '|'.$hour.',';
+    $newRec = $stHour.$dosth;
+    /// no exist record, just overwrite
+    if (strpos($doall, $stHour) === false){
+      $doall .= $newRec;/// TODO level is hardcode 3
+    }
+    else {
+      $doall = preg_replace("/\\".$stHour.'[^|]*/', $newRec, $doall);// '|' is OR in regex, must put \ before it
+    }
+
+    $this->db->exec("INSERT OR REPLACE INTO tmrec VALUES(${date}, '${doall}')");
+    return $doall;
+  }
+
+  /// search diary by keyword
+  /// param[out] $rec found record match $kwd
+  /// return number of items has been found
+  public function getTmRecByKwd($kwd, &$rec){
+    $stmt = $this->db->query("SELECT date, record FROM tmrec WHERE record LIKE '%${kwd}%' ORDER BY date DESC", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+    return count($rec);
+  }
+
+@
+
+
+1.7
+log
+@UPDATE: allow modify blog date use 140103170812 format
+@
+text
+@d32 1
+a32 1
+  private $m_tagName = array('lang'=>'程序语言设计',
+d39 1
+a39 1
+  public function getTagCount(& $tglst){
+d51 1
+d99 36
+a134 1
+  public function putAllBlog($date, $quco, $tag) {
+d137 1
+d145 1
+a145 1
+  public function updateDate($odate, $ndate) {
+d148 1
+@
+
+
+1.6
+log
+@INSERT: add recent update blog list entry
+@
+text
+@d108 10
+@
+
+
+1.5
+log
+@UPDATE:1.make tag show pretty 2.add search diary func
+@
+text
+@d34 1
+a34 1
+    'design'=>'软件设计', 'security'=>'网络安全',
+d36 2
+a37 2
+    'web'=>'网页开发', 'vcs'=>'版本管理软件',
+    'edit'=>'编辑和排版', 'db'=>'数据库');
+d147 7
+@
+
+
+1.4
+log
+@let guest see shuw blog
+@
+text
+@d32 7
+d45 1
+d49 1
+a49 1
+        $tagElem = '<a href="/index.php/blog/tag/'.$tagName.'">'.$tagName.'('.$num.')</a> ';
+d138 9
+@
+
+
+1.3
+log
+@UPDATE: each time load window, get latest log
+@
+text
+@d10 3
+a12 3
+      $who = isset($_SESSION['isLogin'])?$_SESSION['isLogin']:'1';
+      if($who != 'shuw' && $who != 'liyan')
+        return null;
+@
+
+
+1.2
+log
+@INSERT: add getTmRecByMonth for time schdule
+@
+text
+@d105 6
+d118 1
+a118 1
+    $newRec = $stHour.'3,'.$dosth;
+@
+
+
+1.1
+log
+@INSERT: let database as indepent component
+@
+text
+@d11 2
+a12 1
+      if($who != 'shuw' && $who != 'liyan') return null;
+d19 4
+d99 25
+@
+

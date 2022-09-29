@@ -1,0 +1,168 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2018.03.03.08.42.12;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.02.23.09.07.38;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.02.21.05.20.10;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.02.20.12.49.32;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.01.23.14.07.14;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.11.14.38.09;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@INSERT: seperate bdb into blog/time 2 parts, both are inherit from basedb
+@
+
+
+1.6
+log
+@INSERT: support remove with day
+@
+text
+@<?php
+class C_basedb {
+  protected $db = null;
+
+  /// Maybe need not use try/catch
+  /// return PDO object / null
+  function __construct($dbname='shuw'){
+    try {
+      $who = isset($_SESSION['isLogin'])?$_SESSION['isLogin']:$dbname;//Guest see shuw
+
+      $this->db = new PDO("sqlite:./Archive/$who.db");
+    } catch (PDOException $e) {
+    }
+    return $this->db;
+  }
+
+  public function isValid(){
+    return $this->db != null;
+  }
+
+  /// \param[in] $word keyword in string
+  /// \param[in] $recname DB field name
+  private function consFindWord($word, $recname){
+    $retStr = '';
+    if ( 0 != strlen($word) ){
+      if ( '-' == $word[0]){
+        $word = substr($word, 1);
+        $retStr = "${recname} NOT LIKE '%${word}%' ";
+      }
+      else{
+        $retStr = "${recname} LIKE '%${word}%' ";
+      }
+    }
+    return $retStr;
+  }
+
+  /// common find, support multi word and '-' as exclusive word
+  /// \param[in] $cmd base SQL
+  /// \param[in] $recname which field to search
+  /// \param[in] $word search keyword seperate by space
+  /// \param[out] $essay find result
+  protected function consByKeyword($cmd, $recname, $word, & $essay) {
+    $wordCol = explode(' ', $word); // into array
+    $wordLen = count($wordCol);
+    $findKey = $wordCol[0];
+    $toSql = $this->consFindWord($findKey, $recname);
+    $cmd .= $toSql;
+    for($i=1; $i<$wordLen; $i++){
+      $toSql = $this->consFindWord($wordCol[$i], $recname);
+      if (0 != strlen($toSql)){
+        $cmd = $cmd . "AND " . $toSql;
+      }
+    }
+    $cmd .= ' ORDER BY date DESC';
+
+    $rec = $this->db->query($cmd, PDO::FETCH_ASSOC);
+    $essay = $rec->fetchAll();
+  }
+
+  public function removeDay($tbl, $day){
+    return $this->db->exec("DELETE FROM ${tbl} WHERE date='${day}'");
+  }
+
+}
+?>
+@
+
+
+1.5
+log
+@ADD: support mobile save digest
+@
+text
+@d60 4
+@
+
+
+1.4
+log
+@UPDATE: combine insert sql convert
+@
+text
+@d7 1
+a7 1
+  function __construct(){
+d9 1
+a9 1
+      $who = isset($_SESSION['isLogin'])?$_SESSION['isLogin']:'shuw';//Guest see shuw
+@
+
+
+1.3
+log
+@UPDATE: tmrec support multi word search
+@
+text
+@d40 1
+a40 1
+  /// \param[in] $wordCol array of search keyword
+@
+
+
+1.2
+log
+@UPDATE: optimize password map db
+@
+text
+@d20 40
+@
+
+
+1.1
+log
+@INSERT: init ci seperate db
+@
+text
+@a9 1
+      if ($who == '1') $who = 'shuw';//some legacy client remain '1'
+@
+

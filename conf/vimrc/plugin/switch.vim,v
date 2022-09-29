@@ -1,0 +1,156 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2021.07.04.13.49.44;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	wvg5YypOg5RdUFZC;
+
+1.2
+date	2021.06.28.14.15.35;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	NCWuBSGefJP2fUYC;
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.3
+log
+@use <Leader>t? replace original go-filetype-cmd
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+" PlugOption {
+
+    " OmniComplete {
+    if has("autocmd") && exists("+omnifunc")
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType python setlocal omnifunc=python3complete#Complete
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+        autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+        autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+        autocmd Filetype * if &omnifunc == "" |
+            \setlocal omnifunc=syntaxcomplete#Complete |
+            \endif
+    endif
+
+    hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+    hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+    hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
+    " Automatically open and close the popup menu / preview window
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+    " }
+
+    " PIV {
+        if isdirectory(expand(mvcf_path_bundle."PIV"))
+            let g:DisableAutoPHPFolding = 0
+            let g:PIVAutoClose = 0
+        endif
+    " }
+
+    " PyMode {
+        " Disable if python support not present
+        if !has('python') && !has('python3')
+            let g:pymode = 0
+            let g:pymode_lint_checkers = ['pyflakes']
+            let g:pymode_trim_whitespaces = 0
+            let g:pymode_options = 0
+            let g:pymode_rope = 0
+        endif
+    " }
+
+    " GoLang {
+        if count(mvcf_bundle_groups, 'go')
+            let g:go_highlight_functions = 1
+            let g:go_highlight_methods = 1
+            let g:go_highlight_structs = 1
+            let g:go_highlight_operators = 1
+            let g:go_highlight_build_constraints = 1
+            let g:go_fmt_command = "goimports"
+            let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+            au FileType go nmap <Leader>tm <Plug>(go-implements)
+            au FileType go nmap <Leader>ti <Plug>(go-info)
+            au FileType go nmap <Leader>te <Plug>(go-rename)
+            au FileType go nmap <leader>tr <Plug>(go-run)
+            au FileType go nmap <leader>tb <Plug>(go-build)
+            au FileType go nmap <leader>tt <Plug>(go-test)
+            au FileType go nmap <leader>tc <Plug>(go-coverage)
+            au FileType go nmap <Leader>td <Plug>(go-doc)
+            "au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+        endif
+        " }
+
+    " UndoTree {
+        if isdirectory(expand(mvcf_path_bundle."undotree/"))
+            nnoremap <Leader>u :UndotreeToggle<CR>
+            " If undotree is opened, it is likely one wants to interact with it.
+            let g:undotree_SetFocusWhenToggle=1
+        endif
+    " }
+
+    " AutoCloseTag {
+        " Make it so AutoCloseTag works for xml and xhtml files as well
+        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+    " }
+
+    " Misc {
+        if isdirectory(expand(mvcf_path_bundle."nerdtree"))
+            let g:NERDShutUp=1
+        endif
+        if isdirectory(expand(mvcf_path_bundle."matchit.zip"))
+            let b:match_ignorecase = 1
+        endif
+    " }
+
+" }
+@
+
+
+1.2
+log
+@move some non-plugin to other file
+@
+text
+@d57 9
+a65 9
+            au FileType go nmap <Leader>m <Plug>(go-implements)
+            au FileType go nmap <Leader>i <Plug>(go-info)
+            au FileType go nmap <Leader>e <Plug>(go-rename)
+            au FileType go nmap <leader>r <Plug>(go-run)
+            au FileType go nmap <leader>b <Plug>(go-build)
+            au FileType go nmap <leader>t <Plug>(go-test)
+            au FileType go nmap <Leader>gd <Plug>(go-doc)
+            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+            au FileType go nmap <leader>co <Plug>(go-coverage)
+@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@d7 22
+@
+

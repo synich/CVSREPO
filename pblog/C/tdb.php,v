@@ -1,0 +1,141 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2018.02.27.14.59.04;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.02.26.14.41.42;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.02.20.12.49.33;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.09.11.14.38.09;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@INSERT: seperate bdb into blog/time 2 parts, both are inherit from basedb
+@
+
+
+1.4
+log
+@UPDATE: mobile use tdb, reserve tmrec for brower simple construct
+@
+text
+@<?php
+include_once('basedb.php');
+
+/// time record DB access
+class C_tdb extends C_basedb {
+
+  public function getTmRecByMonth($month, & $rec) {
+    $stmt = $this->db->query("SELECT date, record FROM tmrec WHERE date LIKE '${month}%'", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+  }
+
+  public function getTmRecByDay($day){
+    $stmt = $this->db->query("SELECT record FROM tmrec WHERE date=${day}", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetch();
+    return $rec['record'];
+  }
+
+  public function getTmRecByHour($day, $hour){
+    $ret = $this->getTmRecByDay($day);
+    $recCol = explode('|', $ret);
+    $idx = intval($hour);
+    $idx = $idx/6 -1;
+    $cnt = count($recCol);
+    if ($idx<$cnt){
+      $ret = substr($recCol[$idx], 3);// TODO fixed 3 is bad
+    }else {
+      $ret = '';
+    }
+    return $ret;
+  }
+
+  public function appendTmRec($date, $hour, $dosth) {
+    $stmt = $this->db->query("SELECT record FROM tmrec WHERE date=${date}", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetch();
+    $doall = $rec['record'];
+    if ($doall == ''){ // Init with hour but level-1 and empty txt
+      $doall = '|12,1,|18,1,|24,1,';
+    }
+
+    $stHour = '|'.$hour.',';
+    $newRec = $stHour.$dosth;
+    $doall = preg_replace("/\\".$stHour.'[^|]*/', $newRec, $doall);// '|' is OR in regex, must put \ before it
+
+    $this->db->exec("INSERT OR REPLACE INTO tmrec VALUES(${date}, '${doall}')");
+    return $doall;
+  }
+
+  /// search diary by keyword
+  /// param[out] $rec found record match $kwd
+  /// return number of items has been found
+  public function getTmRecByKwd($word, &$rec){
+    $cmd = "SELECT date, record FROM tmrec WHERE ";
+    $this->consByKeyword($cmd, 'record', $word, $rec);
+
+    return count($rec);
+  }
+
+}
+?>
+@
+
+
+1.3
+log
+@UPDATE: fix tmrec write any order, move mobile api to digest
+@
+text
+@d18 14
+@
+
+
+1.2
+log
+@UPDATE: tmrec support multi word search
+@
+text
+@d22 3
+a24 1
+    //$doCol = explode('|', $doall);
+d28 1
+a28 7
+    /// no exist record, just overwrite
+    if (strpos($doall, $stHour) === false){
+      $doall .= $newRec;/// TODO level is hardcode 3
+    }
+    else {
+      $doall = preg_replace("/\\".$stHour.'[^|]*/', $newRec, $doall);// '|' is OR in regex, must put \ before it
+    }
+@
+
+
+1.1
+log
+@INSERT: init ci seperate db
+@
+text
+@d41 4
+a44 3
+  public function getTmRecByKwd($kwd, &$rec){
+    $stmt = $this->db->query("SELECT date, record FROM tmrec WHERE record LIKE '%${kwd}%' ORDER BY date DESC", PDO::FETCH_ASSOC);
+    $rec = $stmt->fetchAll();
+@
+

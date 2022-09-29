@@ -1,0 +1,514 @@
+head	1.20;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.20
+date	2019.11.14.13.20.05;	author WIN7;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2019.05.26.14.29.36;	author WIN7;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2019.05.12.03.02.56;	author WIN7;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2019.05.11.13.36.12;	author WIN7;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2019.02.13.06.01.19;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.03.03.15.36.40;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.02.27.14.59.04;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.02.26.15.08.38;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.02.26.14.41.42;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.02.03.09.21.46;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.01.23.14.07.14;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.01.01.09.00.50;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.12.30.04.03.41;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.09.11.14.39.57;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.08.13.11.06.35;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.07.29.12.33.19;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.06.25.16.39.48;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.06.25.16.24.38;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.06.04.16.01.40;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.05.31.15.29.55;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.20
+log
+@DELETE: tmrec getIndex is useless
+@
+text
+@<?php
+//API declare
+// /tmrec/getJustDo/171215/12
+// /tmrec/getRecClnt/171215
+// /tmrec/saveRec/171215 {hour: rec:}
+
+class C_tmrec
+{
+  private $db;
+  function __construct(){
+    $this->db = new C_tdb();
+  }
+
+  //Zeller: y+[y/4]+[c/4]-2c+[26(m+1)/10]+d-1
+  //c always 20
+  private function calcWeek($str) {
+    $year = intval(substr($str, 0, 2));
+    $month = intval(substr($str, 2, 2));
+    $day = intval(substr($str, 4, 2));
+    if ($month<3) { // month 1/2 treat as last year 13/14 month
+      $month += 12;
+      $year -= 1;
+    }
+    $w = intval($year*1.25)-36+intval(2.6*($month+1))+$day;
+    return ($w+70)%7;
+  }
+
+  /// used for web, server generate HTML tag
+  public function getRec($param){
+    $whichMonth = $param[0];
+    $rec;
+    $tbl = '<table border="1"><tr><td>date</td><td>8~12点</td><td>12~18点</td><td>18~24点</td></tr>';
+    if ($this->db->isValid()) {
+      $this->db->getTmRecByMonth($whichMonth, $rec);
+      foreach($rec as & $one){
+        $recCol = explode('|', $one['record']);
+        $cntCol = count($recCol);
+        $wkdef = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+
+        $row = '<td>'.$one['date'].'<br>'.$wkdef[$this->calcWeek($one['date'])].'</td>';
+
+        $imp2color = array('1'=>'imp1', '2'=>'imp2', '3'=>'imp3', '4'=>'imp4', '5'=>'imp5');
+        for($i=1; $i<$cntCol; $i ++){ // first elem is empty, skip it
+          $doth = $recCol[$i];
+          $impor = substr($doth, 3, 1);
+          $row .= '<td class="'.$imp2color[$impor].'">'.substr($doth, 5).'</td>';//TODO 12,3, length fixed 5
+        }
+        $tbl .= '<tr>'.$row.'</tr>';
+      }
+    }
+    echo $tbl.'</table>';
+  }
+
+  public function postRec($param, $qry){
+    $date = $param[0];
+    $hour = $_POST['hour'];
+    $rec = urldecode($_POST['rec']);
+
+    $ret = $this->db->appendTmRec($date, $hour, $rec);
+    echo 'record len:'.mb_strlen($ret);
+  }
+
+  public function postJustDo($param, $qry){
+    $date = $param[0];
+    $hour = $param[1];
+    $ret = $this->db->getTmRecByHour($date, $hour);
+    echo $ret;
+  }
+
+  /// search in diary by keyword
+  public function postSearchRec($param){
+    $kwd = urldecode($param[0]);
+    $rec = array();
+    $cnt = $this->db->getTmRecByKwd($kwd, $rec);
+
+    $ctx = 'Nothing has been found!';
+    if ($cnt != 0){
+      $ctx = '';
+      foreach($rec as &$row){
+        $ctx .= $row['date'].':'.$row['record'].'<br />';
+      }
+    }
+    echo $ctx;
+  }
+}
+
+?>
+@
+
+
+1.19
+log
+@UPDATE: remove viewtpl
+@
+text
+@d40 1
+a40 1
+        $row = '<td>'.$one['date'].'</br>'.$wkdef[$this->calcWeek($one['date'])].'</td>';
+a53 9
+  public function getIndex(){
+    if (!C_auth::s_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+      //header('Location: /');
+      $this->show('auth');// not login then enter password
+    } else {
+      $this->show();
+    }
+  }
+
+@
+
+
+1.18
+log
+@UPDATE: change to rest, add get or post before function name
+@
+text
+@d7 1
+a7 1
+class C_tmrec extends Cemvc_ViewTpl
+a10 1
+    parent :: __construct();
+@
+
+
+1.17
+log
+@UPDATE: change route to rest, so add get before function name
+@
+text
+@d64 1
+a64 1
+  public function saveRec($param, $qry){
+d73 1
+a73 1
+  public function getJustDo($param, $qry){
+d81 1
+a81 1
+  public function searchRec($param){
+@
+
+
+1.16
+log
+@UPDATE: iconv_strlen return error 22 in PHP5.5.9, manual say mb_strlen work right, so we change
+@
+text
+@d3 3
+a5 3
+// index.php/tmrec/getJustDo/171215/12
+// index.php/tmrec/getRecClnt/171215
+// index.php/tmrec/saveRec/171215 {hour: rec:}
+d55 1
+a55 1
+  public function index(){
+@
+
+
+1.15
+log
+@UPDATE: change auth to static, no need explicit load
+@
+text
+@d70 1
+a70 1
+    echo 'record len:'.iconv_strlen($ret);
+@
+
+
+1.14
+log
+@UPDATE: mobile use tdb, reserve tmrec for brower simple construct
+@
+text
+@d56 1
+a56 1
+    if (!g_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+@
+
+
+1.13
+log
+@UPDATE: fix tmrec default construct bug, add search in digest
+@
+text
+@d10 1
+a10 1
+  function __construct($dbname=null){
+d12 1
+a12 5
+    if ($dbname != null) {//if speci, use it
+      $this->db = new C_tdb($dbname);
+    } else {//brower access is empty, use default
+      $this->db = new C_tdb();
+    }
+d76 2
+a77 10
+    $ret = $this->db->getTmRecByDay($date);
+    $recCol = explode('|', $ret);
+    $idx = intval($hour);
+    $idx = $idx/6 -1;
+    $cnt = count($recCol);
+    if ($idx<$cnt){
+      echo substr($recCol[$idx], 3);// TODO fixed 3 is bad
+    }else {
+      echo '';
+    }
+@
+
+
+1.12
+log
+@UPDATE: fix tmrec write any order, move mobile api to digest
+@
+text
+@d10 1
+a10 1
+  function __construct($dbname){
+d12 5
+a16 1
+    $this->db = new C_tdb($dbname);
+@
+
+
+1.11
+log
+@UPDATE: collect config into auth.php
+@
+text
+@d10 1
+a10 1
+  function __construct(){
+d12 1
+a12 1
+    $this->db = new C_tdb();
+a54 20
+  /// used as pure interface
+  public function getRecClnt($param){
+    $whichMonth = $param[0];
+    $rec;
+    $tbl = '';
+    if ($this->db->isValid()) {
+      $one = $this->db->getTmRecByDay($whichMonth);
+      $recCol = explode('|', $one);
+      $cntCol = count($recCol);
+
+      $row = '';
+      for($i=1; $i<$cntCol; $i ++){ // first elem is empty, skip it
+        $doth = $recCol[$i];
+        $row .= substr($doth, 0)."<hr/>";//TODO 12,3, length fixed 5
+      }
+      $tbl .= $row;
+    }
+    echo $tbl;
+  }
+
+@
+
+
+1.10
+log
+@UPDATE: optimize password map db
+@
+text
+@a6 2
+include_once('auth.php');
+
+@
+
+
+1.9
+log
+@UPDATE: support droidscript access fix urldecode bug, add book category
+@
+text
+@d2 5
+d41 1
+a41 1
+        $wkdef = array('Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat');
+@
+
+
+1.8
+log
+@UPDATE: add blog total num and diary weekday
+@
+text
+@d6 1
+a6 1
+  private $bdb;
+d9 1
+a9 1
+    $this->bdb = new C_tdb();
+d26 1
+d31 2
+a32 2
+    if ($this->bdb->isValid()) {
+      $this->bdb->getTmRecByMonth($whichMonth, $rec);
+d52 20
+d84 1
+a84 1
+    $rec = $_POST['rec'];
+d86 1
+a86 1
+    $ret = $this->bdb->appendTmRec($date, $hour, $rec);
+d93 1
+a93 1
+    $ret = $this->bdb->getTmRecByDay($date);
+d109 1
+a109 1
+    $cnt = $this->bdb->getTmRecByKwd($kwd, $rec);
+@
+
+
+1.7
+log
+@UPDATE: change DB to tdb
+@
+text
+@d12 14
+d35 3
+a37 1
+        $row = '<td>'.$one['date'].'</td>';
+d66 1
+a66 1
+    echo 'record len:'.strlen($ret);
+@
+
+
+1.6
+log
+@UPDATE: short diary feedback, save mobile 4G data
+@
+text
+@d9 1
+a9 1
+    $this->bdb = new C_bdb();
+@
+
+
+1.5
+log
+@INSERT: add search diary entry
+@
+text
+@d50 1
+a50 1
+    echo 'record is:'.$ret;
+@
+
+
+1.4
+log
+@UPDATE: move authenticate into auth.php, so admin and tmrec page can share common code, rename auth page name
+@
+text
+@d67 16
+@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@d38 1
+a38 1
+      $this->show('admin_login');// not login then enter password
+@
+
+
+1.2
+log
+@INSERT: get last doth when load window, so I can easily modify log
+@
+text
+@d2 1
+d36 6
+a41 1
+    $this->show();
+@
+
+
+1.1
+log
+@INSERT: add time schedule
+@
+text
+@d14 1
+a14 1
+    $tbl = '<table><tr><td>date</td><td>8~12点</td><td>12~18点</td><td>18~24点</td></tr>';
+d22 1
+d25 2
+a26 1
+          $row .= '<td>'.substr($doth, 5).'</td>';//TODO 12,3, length fixed 5
+d46 15
+@
+

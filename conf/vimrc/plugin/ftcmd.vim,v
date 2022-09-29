@@ -1,0 +1,124 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2022.05.04.12.29.45;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	100627271B94955B34E;
+
+1.3
+date	2022.05.03.06.39.07;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1006270CE0B148036D3;
+
+1.2
+date	2021.08.01.02.58.25;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	Oo5O4NJW82UYod3D;
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.4
+log
+@dict support 7 langs
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+" }
+
+" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
+" Restore cursor to file position in previous editing session
+function! s:ResCur()
+    if line("'\"") <= line("$")
+        silent! normal! g`"
+        return 1
+    endif
+endfunction
+
+augroup resCur
+    autocmd!
+    autocmd BufWinEnter * call <SID>ResCur()
+augroup END
+
+" Remove trailing whitespaces and ^M chars
+autocmd FileType c,cpp,java,go,php,javascript,python,rust,vim,xml,yml,perl,sql autocmd BufWritePre <buffer>  :%s/\s\+$//e
+"autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+" preceding line best in a plugin but here for now.
+
+" Workaround vim-commentary for Haskell
+autocmd FileType haskell setlocal commentstring=--\ %s
+" Workaround broken colour highlighting in Haskell
+autocmd FileType haskell,rust setlocal nospell
+
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+" Run part in REPL and FileType specify diction
+autocmd FileType scheme,lisp,lua,python nnoremap <buffer> cp :set opfunc=rv#replEval<cr>g@@
+function! s:add_dict()
+  let l:ft = &filetype
+  let dic_f = g:mvcf_path."dict/".l:ft.".dict"
+  " same file will only add once
+  execute "setlocal dict+=".dic_f
+endfunction
+autocmd FileType lua,python,go,c,vim,sh,javascript call s:add_dict()
+
+@
+
+
+1.3
+log
+@make some filetype load dictionary
+@
+text
+@d38 2
+a39 1
+  let dic_f = g:mvcf_path."dict/".l:ft.".txt"
+d42 1
+a42 1
+autocmd FileType lua,python call s:add_dict()
+@
+
+
+1.2
+log
+@fix scheme cant use cp to compile
+@
+text
+@d34 1
+d36 7
+@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@a4 4
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+d29 6
+@
+

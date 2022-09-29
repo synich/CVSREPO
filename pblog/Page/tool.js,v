@@ -1,0 +1,96 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2022.09.29.15.09.07;	author games;	state Exp;
+branches;
+next	1.2;
+commitid	1006335B513132203B4;
+
+1.2
+date	2020.05.30.05.27.24;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	bf75ed1eebc0000;
+
+1.1
+date	2019.11.14.13.22.37;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@trans tmrec to sdf
+@
+text
+@g_xip = returnCitySN['cip']+'_'+encodeURI(returnCitySN['cname']);
+//g_url = "http://waer.f3322.net:55555/r.php"
+g_url = "http://192.168.1.100:8080/r.php"
+function getHttp (pth, arg, cb) {
+    $.ajax({
+        type : 'GET',
+        url : g_url+pth,
+        data : arg,
+        //beforeSend: function(xhr) {xhr.setRequestHeader("XIP", g_xip)},
+        headers : {'XIP':g_xip}
+    }).done(cb)
+}
+function postHttp(pth, arg, cb) {
+    $.post(g_url+pth, arg, cb)
+}
+function getElemValue(e) {
+  var elem =  document.getElementById(e);
+  return elem.value
+}
+function getElemInner(e) {
+  var elem =  document.getElementById(e);
+  return elem.innerHTML
+}
+function bindInner2Elem(d, e) {
+  var elem = document.getElementById(e);
+  elem.innerHTML = d;
+}
+function bindValue2Elem(d, e) {
+  var elem = document.getElementById(e);
+  elem.value = d;
+}
+
+@
+
+
+1.2
+log
+@UPDATE: repo rebuild
+@
+text
+@d2 2
+d7 1
+a7 1
+        url : 'http://waer.f3322.net:55555/r.php'+pth,
+d14 1
+a14 1
+    $.post('http://waer.f3322.net:55555/r.php'+pth, arg, cb)
+@
+
+
+1.1
+log
+@INSERT: init release html and js
+@
+text
+@d1 1
+d3 7
+a9 1
+	$.get('http://waer.f3322.net:55555/r.php'+pth, arg, cb)
+d30 1
+@
+

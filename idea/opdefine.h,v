@@ -1,0 +1,137 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2019.01.13.14.31.24;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@INSERT: collect into opdefine
+@
+text
+@_OP_DEF(OP_LOAD, opexe_0)
+_OP_DEF(OP_T0LVL, opexe_0)
+_OP_DEF(OP_T1LVL, opexe_0)
+_OP_DEF(OP_READ, opexe_0)
+_OP_DEF(OP_VALUEPRINT, opexe_0)
+_OP_DEF(OP_EVAL, opexe_0)
+_OP_DEF(OP_E0ARGS, opexe_0)
+_OP_DEF(OP_E1ARGS, opexe_0)
+_OP_DEF(OP_APPLY, opexe_0)
+_OP_DEF(OP_DOMACRO, opexe_0)
+_OP_DEF(OP_LAMBDA, opexe_0)
+_OP_DEF(OP_QUOTE, opexe_0)
+_OP_DEF(OP_DEF0, opexe_0)
+_OP_DEF(OP_DEF1, opexe_0)
+_OP_DEF(OP_BEGIN, opexe_0)
+_OP_DEF(OP_IF0, opexe_0)
+_OP_DEF(OP_IF1, opexe_0)
+_OP_DEF(OP_SET0, opexe_0)
+_OP_DEF(OP_SET1, opexe_0)
+_OP_DEF(OP_LET0, opexe_0)
+_OP_DEF(OP_LET1, opexe_0)
+_OP_DEF(OP_LET2, opexe_0)
+_OP_DEF(OP_LET0AST, opexe_0)
+_OP_DEF(OP_LET1AST, opexe_0)
+_OP_DEF(OP_LET2AST, opexe_0)
+
+_OP_DEF(OP_LET0REC, opexe_1)
+_OP_DEF(OP_LET1REC, opexe_1)
+_OP_DEF(OP_LET2REC, opexe_1)
+_OP_DEF(OP_COND0, opexe_1)
+_OP_DEF(OP_COND1, opexe_1)
+_OP_DEF(OP_DELAY, opexe_1)
+_OP_DEF(OP_AND0, opexe_1)
+_OP_DEF(OP_AND1, opexe_1)
+_OP_DEF(OP_OR0, opexe_1)
+_OP_DEF(OP_OR1, opexe_1)
+_OP_DEF(OP_C0STREAM, opexe_1)
+_OP_DEF(OP_C1STREAM, opexe_1)
+_OP_DEF(OP_0MACRO, opexe_1)
+_OP_DEF(OP_1MACRO, opexe_1)
+_OP_DEF(OP_CASE0, opexe_1)
+_OP_DEF(OP_CASE1, opexe_1)
+_OP_DEF(OP_CASE2, opexe_1)
+_OP_DEF(OP_PEVAL, opexe_1)
+_OP_DEF(OP_PAPPLY, opexe_1)
+_OP_DEF(OP_CONTINUATION, opexe_1)
+
+_OP_DEF(OP_ADD, opexe_2)
+_OP_DEF(OP_SUB, opexe_2)
+_OP_DEF(OP_MUL, opexe_2)
+_OP_DEF(OP_DIV, opexe_2)
+_OP_DEF(OP_REM, opexe_2)
+_OP_DEF(OP_CAR, opexe_2)
+_OP_DEF(OP_CDR, opexe_2)
+_OP_DEF(OP_CONS, opexe_2)
+_OP_DEF(OP_SETCAR, opexe_2)
+_OP_DEF(OP_SETCDR, opexe_2)
+
+_OP_DEF(OP_NOT, opexe_3)
+_OP_DEF(OP_BOOL, opexe_3)
+_OP_DEF(OP_NULL, opexe_3)
+_OP_DEF(OP_ZEROP, opexe_3)
+_OP_DEF(OP_POSP, opexe_3)
+_OP_DEF(OP_NEGP, opexe_3)
+_OP_DEF(OP_NEQ, opexe_3)
+_OP_DEF(OP_LESS, opexe_3)
+_OP_DEF(OP_GRE, opexe_3)
+_OP_DEF(OP_LEQ, opexe_3)
+_OP_DEF(OP_GEQ, opexe_3)
+_OP_DEF(OP_SYMBOL, opexe_3)
+_OP_DEF(OP_NUMBER, opexe_3)
+_OP_DEF(OP_STRING, opexe_3)
+_OP_DEF(OP_PROC, opexe_3)
+_OP_DEF(OP_PAIR, opexe_3)
+_OP_DEF(OP_EQ, opexe_3)
+_OP_DEF(OP_EQV, opexe_3)
+
+_OP_DEF(OP_FORCE, opexe_4)
+_OP_DEF(OP_WRITE, opexe_4)
+_OP_DEF(OP_DISPLAY, opexe_4)
+_OP_DEF(OP_NEWLINE, opexe_4)
+_OP_DEF(OP_ERR0, opexe_4)
+_OP_DEF(OP_ERR1, opexe_4)
+_OP_DEF(OP_REVERSE, opexe_4)
+_OP_DEF(OP_APPEND, opexe_4)
+_OP_DEF(OP_PUT, opexe_4)
+_OP_DEF(OP_GET, opexe_4)
+_OP_DEF(OP_QUIT, opexe_4)
+_OP_DEF(OP_GC, opexe_4)
+_OP_DEF(OP_GCVERB, opexe_4)
+_OP_DEF(OP_NEWSEGMENT, opexe_4)
+
+_OP_DEF(OP_RDSEXPR, opexe_5)
+_OP_DEF(OP_RDLIST, opexe_5)
+_OP_DEF(OP_RDDOT, opexe_5)
+_OP_DEF(OP_RDQUOTE, opexe_5)
+_OP_DEF(OP_RDQQUOTE, opexe_5)
+_OP_DEF(OP_RDUNQUOTE, opexe_5)
+_OP_DEF(OP_RDUQTSP, opexe_5)
+_OP_DEF(OP_P0LIST, opexe_5)
+_OP_DEF(OP_P1LIST, opexe_5)
+
+_OP_DEF(OP_LIST_LENGTH, opexe_6)
+_OP_DEF(OP_ASSQ, opexe_6)
+_OP_DEF(OP_PRINT_WIDTH, opexe_6)
+_OP_DEF(OP_P0_WIDTH, opexe_6)
+_OP_DEF(OP_P1_WIDTH, opexe_6)
+_OP_DEF(OP_GET_CLOSURE, opexe_6)
+_OP_DEF(OP_CLOSUREP, opexe_6)
+#ifdef USE_MACRO
+_OP_DEF(OP_MACROP, opexe_6)
+#endif
+
+_OP_DEF(OP_PRINTDOT, opexe_7)
+@

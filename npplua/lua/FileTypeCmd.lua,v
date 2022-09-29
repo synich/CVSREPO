@@ -1,0 +1,57 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2020.05.22.15.29.51;	author android;	state Exp;
+branches;
+next	;
+commitid	61495ec7efef0000;
+
+
+desc
+@@
+
+
+1.1
+log
+@npplua file
+@
+text
+@local ENUM = {LUA="D:\\soft\\phpstudy\\PHPTutorial\\nginx\\luajit.exe",
+GO="D:\\soft\\msys\\wabin\\go.bat"}
+local nlsys = require("nlsys")
+
+local luaFuncArray = {
+  function()  -- 1
+    local txt, tlen = editor:GetSelText()
+    if tlen == 0 then return end
+
+    local tmpsrc = npp:GetNppDirectory().."\\rsfile.tmp"
+    local fd = io.open(tmpsrc, "w")
+    fd:write(txt)
+    fd:close()
+    nlsys.fork(string.format('%s "%s"&PAUSE', ENUM.LUA, tmpsrc))
+  end
+}
+
+local goFuncArray = {
+  function()
+    local fname = npp:GetCurrentDirectory().."\\"..npp:GetFileName()
+    nlsys.fork(string.format('%s fmt "%s"&PAUSE', ENUM.GO, fname))
+  end
+}
+
+-- File type depend func array
+local extFnTbl = {lua=luaFuncArray, go=goFuncArray}
+
+local function runFileTypeCmd1()
+  local fn = extFnTbl[npp:GetExtPart():sub(2)]
+  if fn then fn[1]() end
+end
+
+npp.AddShortcut('FileTypeCmd1', 'Ctrl+1', runFileTypeCmd1)
+@

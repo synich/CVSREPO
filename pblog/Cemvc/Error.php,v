@@ -1,0 +1,90 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2016.12.19.13.53.57;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2016.10.23.13.56.14;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@remove smarty from index.php, allow custom Class and View directory
+@
+text
+@<?php
+/******************************************************************
+*
+##  Project:CEPHP,A concise and easy framework for PHP
+##  Copyright: 2010 All rights reserved
+##  version: 1.0.8
+##  Author: eastdoor <cephp@@sina.com>
+*
+##  File: Error.php (Cemvc_App_Error)
+*
+******************************************************************/
+Class Cemvc_Error{
+	public function __construct($ErrorMessage){
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>System occur error!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style>
+body{
+	font-family: Microsoft Yahei, Verdana, arial, sans-serif;
+	font-size:14px;
+}
+
+h2{
+	border-bottom:1px solid #EEEEEE;
+	padding:10px 0;
+    font-size:25px;
+}
+.box{
+	background:#FFFFCA;
+	color:#2E2E2E;
+	border:1px solid #E0E0E0;
+	padding:20px;
+}
+</style>
+</head>
+<body>
+
+<h2 align="center"><font color="#00FFFF">蛙二</font><font color="#00CC33">的</font><font color="#CACACA">记忆</font></h2>
+<p class="box"><font color=red>Error Message:</font>'.$ErrorMessage.'</p>
+<div align="center" style="color:#FF3300;margin:5pt;font-family:Verdana"><span style="color:silver"> < 来自蛙二的记忆 ></span></div>
+</body>
+</html>';
+	}
+}
+?>
+@
+
+
+1.1
+log
+@import cemvc's file
+@
+text
+@d17 1
+a17 1
+<title>系统发生错误</title>
+d41 1
+a41 1
+<p class="box"><font color=red>错误信息:</font>'.$ErrorMessage.'</p>
+@
+

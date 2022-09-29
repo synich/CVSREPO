@@ -1,0 +1,534 @@
+head	1.22;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.22
+date	2019.11.03.03.08.31;	author WIN7;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2019.05.26.14.29.36;	author WIN7;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2019.05.12.03.02.56;	author WIN7;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2019.05.11.13.35.57;	author WIN7;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2018.03.03.15.36.40;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.02.23.09.07.38;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.02.21.05.20.09;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.02.03.09.21.45;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2017.09.09.14.55.28;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2017.08.13.11.31.15;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2017.08.13.11.13.26;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2017.06.25.16.39.48;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2017.06.25.16.24.38;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2017.05.30.06.33.59;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.05.20.14.31.37;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.05.19.12.25.51;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.05.18.16.33.10;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.04.24.09.55.41;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.02.07.14.56.01;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.02.04.06.36.08;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.02.04.06.15.12;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.02.04.05.52.05;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.22
+log
+@DELETE: SPA not need view template from php
+@
+text
+@<?php
+
+class C_admin
+{
+  private $bdb;
+  private $saveToDay;
+
+  function __construct() {
+    $this->bdb = new C_bdb();
+  }
+
+  /// Sync blog to DB
+  /// \param[in] $date both 170402 and 160514170813 is supported
+  private function saveToDb($date, $content, $tag){
+    if ( (preg_match("/\d+/", $date) == 1) && (strlen($date) == 12) ) {//update date && content
+      // date like 160514170813 mean after update previous
+      $olddate = substr($date, 0, 6);
+      $newdate = substr($date, 6, 6);
+
+      if ($this->bdb) {
+        $this->saveToDay = $newdate;
+        return $this->bdb->updateBlogDate($olddate, $newdate) && $this->bdb->putBlogCtx($newdate, $content, $tag);
+      }
+    } elseif ( (preg_match("/\d+/", $date) == 1) && (strlen($date) == 6)) { //just update content
+      $this->saveToDay = $date;
+      if ($this->bdb) {
+        return $this->bdb->putBlogCtx($date, $content, $tag);
+      }
+    } else { /// illegal date format
+      return false;
+    }
+  }
+
+  /// \param[in] param array, 0 is day
+  public function postArticle($param, $qry){
+    if ( !C_auth::s_isLogin(null) ){
+      exit('没有权限');
+    }
+    $date = $param[0];
+    $content = $_POST['ctx'];
+    $tag = $_POST['tag'];
+
+    $ret = $this->saveToDb($date, $content, $tag);
+    if ($ret){
+      echo 'OK:'.$this->saveToDay;
+    }
+    else {
+      echo 'NO!';
+    }
+  }
+
+} // End of C_admin
+
+?>
+@
+
+
+1.21
+log
+@UPDATE: remove viewtpl
+@
+text
+@a11 10
+  /// admin managerment space definition
+  public function getSpace($pth, $qry){
+    if (!C_auth::s_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+      //header('Location: /');
+      $this->show('auth');// not login then enter password
+    } else {
+      $this->show();
+    }
+  }
+
+@
+
+
+1.20
+log
+@UPDATE: change to rest, add get or post before function name
+@
+text
+@d3 1
+a3 1
+class C_admin extends Cemvc_ViewTpl
+a8 1
+    parent :: __construct();
+@
+
+
+1.19
+log
+@UPDATE: change route to rest, so add get before function name
+@
+text
+@d46 1
+a46 1
+  public function saveArticle($param, $qry){
+@
+
+
+1.18
+log
+@UPDATE: change auth to static, no need explicit load
+@
+text
+@d14 1
+a14 1
+  public function space($pth, $qry){
+@
+
+
+1.17
+log
+@ADD: support mobile save digest
+@
+text
+@d15 1
+a15 1
+    if (!g_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+d47 1
+a47 1
+    if ( !g_isLogin(null) ){
+@
+
+
+1.16
+log
+@UPDATE: combine insert sql convert
+@
+text
+@d63 1
+a63 1
+}
+@
+
+
+1.15
+log
+@UPDATE: collect config into auth.php
+@
+text
+@a30 1
+      $quco = str_replace("'", "''", $content);// SQLite use '' intead of \'
+d33 1
+a33 1
+        return $this->bdb->updateBlogDate($olddate, $newdate) && $this->bdb->putBlogCtx($newdate, $quco, $tag);
+a36 1
+      $quco = str_replace("'", "''", $content);// SQLite use '' intead of \'
+d38 1
+a38 1
+        return $this->bdb->putBlogCtx($date, $quco, $tag);
+@
+
+
+1.14
+log
+@UPDATE: make DB blog function name understand easily
+@
+text
+@a1 1
+include_once('auth.php');
+@
+
+
+1.13
+log
+@UPDATE: bugfix date is illegal or not
+@
+text
+@d35 1
+a35 1
+        return $this->bdb->updateDate($olddate, $newdate) && $this->bdb->putAllBlog($newdate, $quco, $tag);
+d41 1
+a41 1
+        return $this->bdb->putAllBlog($date, $quco, $tag);
+d59 1
+a59 1
+      echo '保存到'.$this->saveToDay;
+d62 1
+a62 1
+      echo '保存失败';
+@
+
+
+1.12
+log
+@UPDATE: allow modify blog date use 140103170812 format
+@
+text
+@d27 2
+a28 2
+    if (preg_match("/\d{12}/", $date) == 1) {//update date && content
+      // date like 160514170813 mean later update previous
+d37 1
+a37 1
+    } elseif (preg_match("/\d{6}/", $date) == 1) { //just update content
+@
+
+
+1.11
+log
+@UPDATE: move authenticate into auth.php, so admin and tmrec page can share common code, rename auth page name
+@
+text
+@d7 1
+d25 1
+d27 17
+a43 1
+    if(preg_match("/\d{6}/", $date) != 1) { //make sure date like 170402
+a45 5
+
+    $quco = str_replace("'", "''", $content);// SQLite use '' intead of \'
+    if ($this->bdb) {
+      return $this->bdb->putAllBlog($date, $quco, $tag);
+    }
+d59 1
+a59 1
+      echo '保存成功';
+@
+
+
+1.10
+log
+@*** empty log message ***
+@
+text
+@d17 1
+a17 1
+      $this->show('admin_login');// not login then enter password
+@
+
+
+1.9
+log
+@DELETE: remove database to bdb.php
+@
+text
+@d2 1
+a12 13
+  ///\param[in] $pwd user input, check it
+  ///\return true/false
+  private function isLogin($pwd){
+    $isIn = false;
+    if ($pwd == 'shuw' || $pwd == 'liyan'){ //TODO
+      $isIn = true;
+      $_SESSION['isLogin'] = $pwd;
+    } elseif ( isset($_SESSION['isLogin']) ){ // just keep last time
+      $isIn = true;
+    }
+    return $isIn;
+  }
+
+d15 5
+a19 2
+    if (!$this->isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+      header('Location: /');/// Not login redirect to index
+a20 1
+    $this->show();
+d37 1
+a37 1
+    if ( !$this->isLogin(null) ){
+@
+
+
+1.8
+log
+@UPDATE: let blog has TAG attribute
+@
+text
+@d5 7
+a32 8
+  private function getDbInstance(){
+    try {
+      $who = $_SESSION['isLogin'];
+      $db = new PDO("sqlite:./Archive/$who.db");
+      return $db;
+    } catch (PDOException $e) {return null;}
+  }
+
+a37 2
+    $db = $this->getDbInstance();
+    if (!$db) { return false; }
+d40 2
+a41 6
+    try {
+      $db->exec("insert or replace into blog values(${date}, '${quco}', '${tag}')");
+      return true;
+    }
+    catch (PDOException $e){
+      return false;
+@
+
+
+1.7
+log
+@UPDATE: from now two owner who enter this will see different page, use _SESSION instead of file in disk
+@
+text
+@d35 1
+a35 1
+  private function saveToDb($date, $content){
+d44 1
+a44 1
+      $db->exec("insert or replace into blog values(${date}, '${quco}')");
+d59 1
+d61 1
+a61 1
+    $ret = $this->saveToDb($date, $content);
+@
+
+
+1.6
+log
+@UPDATE: support 2 individual blog file, use file to persistent
+@
+text
+@d9 1
+a9 1
+    if ( isset($_SESSION['isLogin']) ){ // just set is enough
+d11 2
+a12 1
+    } elseif ($pwd == 'shuw'){ //TODO
+a13 1
+      $_SESSION['isLogin'] = 1;
+a19 1
+    session_start();
+a25 1
+  private  $filewho = './Archive/who';
+d28 1
+a28 1
+      $who = file_get_contents($this->filewho);
+d39 1
+a39 1
+    $db = getDbInstance();
+a53 1
+    session_start();
+@
+
+
+1.5
+log
+@UPDATE: make sure date must has 6 digit, avoid wrong date format
+@
+text
+@d27 9
+d41 1
+a41 1
+    $db = new PDO('sqlite:./Archive/blog.db');
+@
+
+
+1.4
+log
+@DELETE: only save to DB, no md file
+@
+text
+@d29 3
+@
+
+
+1.3
+log
+@INSERT: sync blog to DB
+@
+text
+@d35 4
+a39 1
+    catch (PDOException $e){}
+d51 1
+a51 5
+    $year = substr($date, 0, 2);
+    $day = substr($date, 2);
+    $mdFilePath =
+      './Archive'.DIRECTORY_SEPARATOR.$year.DIRECTORY_SEPARATOR.$day.'.md';
+    $ret = file_put_contents($mdFilePath, $content);
+a52 1
+      $this->saveToDb($date, $content);
+@
+
+
+1.2
+log
+@UPDATE: direct use _SESSION has NOTICE, use isset is enough
+@
+text
+@d27 12
+d45 5
+a49 2
+    $year = substr($param[0], 0, 2);
+    $day = substr($param[0], 2);
+d52 1
+a52 1
+    $ret = file_put_contents($mdFilePath, $_POST['ctx']);
+d54 1
+@
+
+
+1.1
+log
+@INSERT: login and edit blog
+@
+text
+@d9 1
+a9 1
+    if ( $_SESSION['isLogin'] == 1 ){ // if SESSION ok, it's ok.
+@
+

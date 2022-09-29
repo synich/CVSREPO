@@ -1,0 +1,194 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.8
+date	2018.09.22.16.06.34;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.22.13.40.03;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.22.05.32.20;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.21.15.58.41;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.20.17.17.26;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.20.15.06.18;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.19.16.33.30;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.17.15.24.42;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@UPDATE: use Werror, stop compile when warning
+@
+text
+@#ifndef _PARSER_DECL_H_
+#define _PARSER_DECL_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "rua.h"
+#include "pool.h"
+
+/* parser need to generate code and lex current line and column */
+struct Y_Ex{
+  rh_vm* vm;
+  struct Env_val* l2y; /*save val which transfer from lex to parse*/
+  uint16_t line;
+  char step;  /*remember what step now*/
+  char pidx;  /*current index of params*/
+};
+
+/* parse declare, you can change p2a but be same as parse.y %name */
+void *p2aAlloc(void *(*mallocProc)(size_t));
+void p2a(
+  void *yyp,       /* The parser */
+  int yymajor,     /* The major token code number */
+  char* yyminor,   /* The value for the token, type is same as %token_type */
+  struct Y_Ex* yv
+);
+void p2aFree(
+  void *p,                    /* The parser to be deleted */
+  void (*freeProc)(void*)     /* Function used to reclaim memory */
+);
+
+#endif
+@
+
+
+1.7
+log
+@UPDATE: gofunc will only invoke in runtime not parse time, add simple instruction interpreter
+@
+text
+@d12 1
+a12 1
+  struct Env_val* l2y; // save val which transfer from lex to parse
+d14 2
+a15 2
+  char step;  // remember what step now
+  char pidx;  // current index of params
+@
+
+
+1.6
+log
+@UPDATE: support go func and pass parameter
+@
+text
+@d11 1
+a11 1
+  void* vm;
+@
+
+
+1.5
+log
+@UPDATE: add l2y into Y_Ex, make mind clear
+@
+text
+@d15 1
+a15 1
+  char reserved;
+@
+
+
+1.4
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d7 1
+d12 4
+a15 1
+  int line;
+d24 1
+a24 1
+  struct Y_Ex* dynVm
+@
+
+
+1.3
+log
+@UPDATE: improve lex and make parse run
+@
+text
+@d1 2
+a2 2
+#ifndef _FORWARD_H_
+#define _FORWARD_H_
+a26 9
+/* parse expr into vm and run */
+char* rh_parserun(rh_vm*, const char* expr,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3);
+/* when parse finish, call main from vm */
+char* rh_callfn(rh_vm*, const char* funcname,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3);
+
+@
+
+
+1.2
+log
+@UPDATE: make mainstream available
+@
+text
+@d8 6
+d20 1
+a20 1
+  void* dynVm
+@
+
+
+1.1
+log
+@INSERT: add lex and lemon
+@
+text
+@d6 1
+d21 8
+a28 7
+/* parse to lua or js script */
+void* scriptInit(int *err);
+void scriptPush(void* vm, int major, const char* val);
+void scriptClean(void* vm);
+
+/* export function from lex which drive eval */
+void leleEvalString(const char* src);
+@
+

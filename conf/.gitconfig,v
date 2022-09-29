@@ -1,0 +1,92 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2022.05.29.09.10.20;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1006293387C2B852ED2;
+
+1.3
+date	2020.10.06.07.21.41;	author alarm;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2020.10.01.07.26.14;	author FOTEN;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.03.31.14.12.14;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@adjust conftool.sh,drop git useless alias
+@
+text
+@# This is Git's per-user configuration file.
+[user]
+	name = synich
+	email = shu_wang@@163.com
+[credential]
+	helper = store
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[http]
+	sslVerify = false
+@
+
+
+1.3
+log
+@INSERT: more alias
+@
+text
+@a2 1
+# Please adapt and uncomment the following lines:
+a11 1
+    rs = reset HEAD --
+a12 1
+    las = log -1 HEAD
+d14 1
+a14 1
+    sslVerify = false
+@
+
+
+1.2
+log
+@INSERT: shell if, git https, ps handy command
+@
+text
+@d13 1
+d15 1
+@
+
+
+1.1
+log
+@INSERT git config and remote credential
+@
+text
+@a5 1
+
+d14 2
+@
+

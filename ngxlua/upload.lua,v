@@ -1,0 +1,73 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2019.06.11.14.21.57;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@UPDATE: seperate function code and route code
+@
+text
+@local upload = require 'resty.upload'
+
+local function call_upload()
+  local chunk_size = 4096
+  local form, err = upload:new(chunk_size)
+  if not form then
+    ngx.say('upload fail'..err)
+    return
+  end
+
+  form:set_timeout(1000)
+  local fname, fdout
+  while true do
+    local typ, res, err = form:read()
+    if not typ then
+      ngx.say('form read fail'..err)
+      return
+    end
+    if typ == "header" then
+      local k, v = res[1], res[2];
+      ngx.say(k..':'..v)
+      if k == "Content-Disposition" then
+        fname = v:match('filename="(.*)"')
+        if fname then
+          fdout = io.open(fname, 'wb+')
+          if not fdout then ngx.say('open fail '..fname) end
+        end
+      end
+    elseif typ == "body" then
+      if fdout then fdout:write(res); end
+      ngx.say(res:len())
+    elseif typ == "part_end" then
+      if fdout then fdout:close(); fname=nil; fdout=nil; end
+    else
+      break
+    end
+  end
+end
+
+local function upgrade_later()
+  local function upgrade(premature)
+    if not premature then
+      local t = os.date()
+      os.execute('touch '..t..'.txt')
+    end
+  end
+  local ok, err = ngx.timer.at(1, upgrade)
+  if not ok then ngx.say('timer fail'); end
+end
+
+@

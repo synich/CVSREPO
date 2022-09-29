@@ -1,0 +1,1001 @@
+head	1.17;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.17
+date	2018.09.28.15.16.33;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.09.24.14.51.05;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.09.24.10.38.16;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.09.24.07.27.57;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.09.23.16.54.39;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.23.15.05.52;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.23.13.55.08;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.23.07.14.48;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.23.05.50.43;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.23.03.05.03;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.22.16.06.34;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.22.13.40.04;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.22.05.32.21;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.21.15.23.47;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.20.17.17.27;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.19.16.33.30;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.17
+log
+@UPDATE: use function instead of global varible
+@
+text
+@#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "rua.h"
+#include "elem.h"
+#include "forward.h"
+
+/* There are 4 state and 3 way.
+  1. Source -> VM -> Run     | eval
+  2. Source -> VM -> Serial  | dump
+  3. Serial -> VM -> Run     | eval
+##############################
+   Source------|
+              VM-----Run
+   Serial------|
+*/
+
+/* Set IR Delimer as `$'. MUST SYNCHROUS TO LEX */
+#define IRDELIMER 0x24
+#define PANIC(...)\
+printf("PANIC %s:%d. ", __FILE__, __LINE__);printf(__VA_ARGS__);puts("");exit(45)
+
+/*******************************
+Inner used execute
+*******************************/
+/* from IR code(seq of $fname$code) to construct vm */
+static rh_vm* sf_ir2vm(rh_vm* vm, const char* expr){
+  const char *p = expr;
+  while (p && *p) {
+    rh_func* fn = NULL;
+    char *endname = NULL, *endcode = NULL;
+    /*Skip begin $, then find end $*/
+    ++p;
+    endname = strchr(p, IRDELIMER);
+    *endname++ = 0;
+    endcode = strchr(endname, IRDELIMER);
+    *endcode++ = 0;
+
+    fn = (rh_func*)rh_alloc(sizeof(rh_func));
+    fn->code = endname;
+    fn->env = NULL;
+    rh_rpbtbl(&vm->fmap, p, (char*)fn, sizeof(rh_func));
+
+    /*next func or EOF*/
+    p = endcode;
+  }
+
+  return vm;
+}
+
+/*run inner IR code*/
+static char* sf_irrun(rh_vm* vm, const char* expr,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3){
+  /*construct vm from IR code*/
+  vm = sf_ir2vm(vm, expr);
+  /*after construct, vm is ready. call main*/
+  return rhi_vmcall(vm, "main", p0, p1, p2, p3);
+}
+
+/*VAR-0 NUM-1 STR-2*/
+enum {
+  TP_VAR = 0,
+  TP_NUM = 1,
+  TP_STR = 2
+};
+#define IS_NUM(c) ((('0'<=(c))&&((c)<='9'))?TP_NUM:0)
+#define IS_STR(c) ((((c)=='\'')||((c)=='"'))?TP_STR:0)
+#define IS_LITERAL(c) (IS_NUM(c)||IS_STR(c))
+
+static void sf_insassign(rh_func* fn, char* k, char* v){
+  if (IS_LITERAL(*v)) {
+    rh_rpstbl(&fn->env, k, v);
+  }
+  else {
+    char* mb = rh_gettbl(fn->env, v);
+    if (mb) {
+      rh_rpstbl(&fn->env, k, mb);
+    } else {
+      PANIC("%s = %s, but can't find RVAR `%s'", k, v, v);
+    }
+  }
+}
+
+/*1-equal 0-different*/
+int sf_is2eq(struct Env_val* e, char* p1, char* p2){
+  int iseq = 0;
+  char *v1=p1, *v2=p2;
+
+  if (p1==NULL || p2==NULL) {
+    return iseq; /*nan is not equal to nan*/
+  }
+  if (!(IS_LITERAL(*p1))) {
+    v1 = rh_gettbl(e, p1);
+  }
+  if (!(IS_LITERAL(*p2))) {
+    v2 = rh_gettbl(e, p2);
+  }
+  if (v1==NULL || v2==NULL) {
+    return iseq; /*nan is not equal to nan*/
+  }
+  if (0==strcmp(v1, v2)) {
+    iseq=1;
+  }
+
+  return iseq;
+}
+
+/*integer caculate 0-fail 1-res is result*/
+int sf_calcalg(struct Env_val* e, char op, char* p1, char* p2, int* res){
+  int isok = 0;
+  char *v1=p1, *v2=p2;
+
+  if (p1==NULL || p2==NULL) {
+    return isok; /*nan is not equal to nan*/
+  }
+  if (!(IS_LITERAL(*p1))) {
+    v1 = rh_gettbl(e, p1);
+  }
+  if (!(IS_LITERAL(*p2))) {
+    v2 = rh_gettbl(e, p2);
+  }
+  if (v1==NULL || v2==NULL) {
+    return isok; /*nan is not equal to nan*/
+  }
+  if ((IS_STR(*v1)) || (IS_STR(*v2))) {
+    return isok;
+  }
+  isok = 1;
+  switch (op) {
+    case '+': {
+      *res = atoi(v1) + atoi(v2);
+      break;
+    }
+    case '-': {
+      *res = atoi(v1) - atoi(v2);
+      break;
+    }
+    case '*': {
+      *res = atoi(v1) * atoi(v2);
+      break;
+    }
+    case '/': {
+      *res = atoi(v1) / atoi(v2);
+      break;
+    }
+    case '%': {
+      *res = atoi(v1) % atoi(v2);
+      break;
+    }
+    default : {}
+  }
+  return isok;
+}
+
+static int sv_instructionexec = 0;
+
+#define OUTPUT_INS(...) if (sv_instructionexec){\
+  printf(__VA_ARGS__);}
+
+/* execute fn code. First char is instruction, follow by the params
+  which split by `,' and end with `;'.
+  OP: `=' assign; `T' if;    `C' gofunc;
+      `>' return; `E' equal; `D' different
+      `Y' endif;  `+' plus;  `-' minus
+      `*' multpy; `/' divie; `%' mod
+  Example : =xx,yy;Cxx,yy,zz; */
+static char* sf_fnexec(rh_vm* vm, const char* fname, rh_func *fn){
+  char* oric = rh_dupstr(fn->code);
+  char* c = oric;
+  char* ret = NULL;
+  OUTPUT_INS("func %s begin: code is [ %s ] p0:%s, p1:%s, p2:%s, p3:%s\n",
+    fname, c, rh_gettbl(fn->env, "_0"), rh_gettbl(fn->env, "_1"),
+    rh_gettbl(fn->env, "_2"), rh_gettbl(fn->env, "_3"));
+  while(c && *c){
+    char ins = *c++;
+    char* inspc = strchr(c, ';');
+    if (NULL == inspc) {
+      PANIC("func `%s' code [%s] miss `;'", fname, --c);
+    }
+    *inspc++ = 0; /*EIP is next of current instruction*/
+    switch (ins) {
+/*In this scope c is param after instructor without `;'
+  No param instruction is "" */
+/*split code into 2 params, only used for op2 code*/
+#define OP2ARG(c) char* p=strchr(c,',');*p++=0
+      case '=':{ /*ASSIGN like =*/
+        OP2ARG(c);
+        sf_insassign(fn, c, p);
+        break;
+      }
+      case 'T':{ /*TEST like if*/
+        OUTPUT_INS("TEST [%s]\n", fn->cflg?"ok":"fail");
+        if (!fn->cflg) {/*fail, jmp next instruction*/
+          c++;
+          c = strstr(c, "Y;");
+          inspc = c+2; /*skip Y; is next instruction*/
+        }
+        break;
+      }
+      case 'C': { /*CALL func like go*/
+        char *ecn = strchr(c, ',');
+        char *parg = NULL;
+        char *tr = NULL;
+        int pidx = 0;
+        if (ecn) { *ecn = 0; } /*after this c is func name*/
+        rh_func *sub = (rh_func*)rh_gettbl(vm->fmap, c);
+        if (NULL == sub) {
+          PANIC("Subroutine `%s' not exist!", c);
+        }
+        while (ecn) {
+          char tmp[4] = {0};
+          *ecn = 0;
+          parg = ++ecn;
+          ecn = strchr(parg, ',');
+          if (ecn) {*ecn = 0;}
+          sprintf(tmp, "_%d", pidx++);
+          if (IS_LITERAL(*parg)) {
+            rh_rpstbl(&sub->env, tmp, parg);
+          } else {
+            char* pv = rh_gettbl(fn->env, parg);
+            rh_rpstbl(&sub->env, tmp, pv);
+          }
+        }
+        tr = sf_fnexec(vm, c, sub);
+        // save subroutine result in parent _A
+        rh_rpstbl(&fn->env, "_A", tr); //TODO rh_revert
+        break;
+      }
+      case '>': {/*RETURN VAR*/
+        ret = rh_gettbl(fn->env, c);
+        if (NULL == ret) {
+          PANIC("func `%s' return `%s' no definition", fname, c);
+        }
+        break;
+      }
+      case 'D': {/*Different*/
+        OP2ARG(c);
+        fn->cflg = !sf_is2eq(fn->env, c, p);
+        break;
+      }
+      case 'E': {/*Equal*/
+        OP2ARG(c);
+        fn->cflg = sf_is2eq(fn->env, c, p);
+        OUTPUT_INS("Equal compare is:%d", fn->cflg);
+        break;
+      }
+      case 'Y': {/*Endif no param, just jmp `;'*/
+        inspc = c+1;
+        break;
+      }
+      case '+': {
+        OP2ARG(c);
+        int res = 0;
+        if ( sf_calcalg(fn->env, '+', c, p, &res) ) {
+          char tmp[24] = {0};
+          sprintf(tmp, "%d", res);
+          rh_rpstbl(&fn->env, "_A", tmp);
+        }
+        break;
+      }
+      case '-': {
+        OP2ARG(c);
+        int res = 0;
+        if ( sf_calcalg(fn->env, '-', c, p, &res) ) {
+          char tmp[24] = {0};
+          sprintf(tmp, "%d", res);
+          rh_rpstbl(&fn->env, "_A", tmp);
+        }
+        break;
+      }
+      case '*': {
+        OP2ARG(c);
+        int res = 0;
+        if ( sf_calcalg(fn->env, '*', c, p, &res) ) {
+          char tmp[24] = {0};
+          sprintf(tmp, "%d", res);
+          rh_rpstbl(&fn->env, "_A", tmp);
+        }
+        break;
+      }
+      case '/': {
+        OP2ARG(c);
+        int res = 0;
+        if ( sf_calcalg(fn->env, '/', c, p, &res) ) {
+          char tmp[24] = {0};
+          sprintf(tmp, "%d", res);
+          rh_rpstbl(&fn->env, "_A", tmp);
+        }
+        break;
+      }
+      case '%': {
+        OP2ARG(c);
+        int res = 0;
+        if ( sf_calcalg(fn->env, '%', c, p, &res) ) {
+          char tmp[24] = {0};
+          sprintf(tmp, "%d", res);
+          rh_rpstbl(&fn->env, "_A", tmp);
+        }
+        break;
+      }
+      default : {
+        OUTPUT_INS("Unknown instruction `%c'", ins);
+      }
+    }
+    c = inspc; // move to next instruction
+  }
+  OUTPUT_INS("func %s end.\n", fname);
+  rh_revert(oric);
+  rh_deltbl(&fn->env, "_0");
+  rh_deltbl(&fn->env, "_1");
+  rh_deltbl(&fn->env, "_2");
+  rh_deltbl(&fn->env, "_3");
+  return ret;
+}
+
+#undef OP2ARG
+#undef OUTPUT_INS
+#undef IS_NUM
+#undef IS_STR
+#undef IS_LITERAL
+
+/************************************
+use by lex parse: generate and call
+*************************************/
+char* rhi_gengoexpr(rh_vm* vm, const char* ctxname, const char* goname,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3){
+  char *c = NULL;
+  char tmp[128] = {0};
+  //rh_func *ctx = (rh_func*)rh_gettbl(vm->fmap, "funcname");
+  snprintf(tmp, sizeof(tmp), "C%s", goname);
+  if (p0) {
+    strcat(tmp, ",");strcat(tmp, p0);
+    if (p1) {
+      strcat(tmp, ",");strcat(tmp, p1);
+      if (p2) {
+        strcat(tmp, ",");strcat(tmp, p2);
+        if (p3) {
+          strcat(tmp, ",");strcat(tmp, p3);
+        }
+      }
+    }
+  }
+  strcat(tmp, ";");
+  c = rh_dupstr(tmp);
+  return c;
+}
+
+/*lex meet func name, alloc rh_func*/
+void rhi_meetfn(rh_vm* vm, char* funcname){
+  rh_func* fn = (rh_func*)rh_alloc(sizeof(rh_func));
+  fn->code = NULL;
+  fn->env = NULL;
+  rh_rpbtbl(&vm->fmap, funcname, (char*)fn, sizeof(rh_func));
+}
+
+void rhi_combofunc(rh_vm* vm, char* name, char* code){
+  rh_func* fn = (rh_func*)rh_gettbl(vm->fmap, name);
+  fn->code = rh_dupstr(code);
+}
+
+char* rhi_vmcall(rh_vm* vm, const char* funcname,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3){
+  rh_func *fn = (rh_func *)rh_gettbl(vm->fmap, funcname);
+  if (fn){
+    if (p0) {
+      rh_rpstbl(&fn->env, "_0", (char*)p0);
+      if (p1) {
+        rh_rpstbl(&fn->env, "_1", (char*)p1);
+        if (p2) {
+          rh_rpstbl(&fn->env, "_2", (char*)p2);
+          if (p3) {
+            rh_rpstbl(&fn->env, "_3", (char*)p3);
+          }
+        }
+      }
+    }
+    /*input arguments is ready, exec*/
+    return sf_fnexec(vm, funcname, fn);
+  }
+  return NULL;
+}
+
+
+/************************
+  Outside use function
+*************************/
+rh_vm* rh_new(){
+    rh_vm* vm = (rh_vm*)rh_alloc(sizeof(rh_vm));
+    vm->fmap = NULL;
+    return vm;
+}
+
+char* rh_eval(rh_vm* vm, const char* expr,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3){
+  if (IRDELIMER == *expr) {
+    return sf_irrun(vm, expr, p0, p1, p2, p3);
+  } else {
+    return rhi_srcrun(vm, expr, p0, p1, p2, p3);
+  }
+}
+
+char* rh_dump(rh_vm* vm, const char* expr){
+  char* ret = NULL;
+  rh_vm* cm = rhi_src2vm(vm, expr);
+  struct Env_val* fc = cm->fmap;
+  while (fc) {
+    int i = 0;
+    for (; i < fc->used; i++) {
+      char tmp[16] = {0};
+      rh_func* fn = (rh_func*)fc->val[i];
+      KEYRDC(fc->key[i], tmp);
+      printf("%c%s%c%s%c", IRDELIMER, tmp,
+        IRDELIMER, fn->code, IRDELIMER);
+    }
+    fc = fc->next;
+  }
+  return ret;
+}
+
+static void sf_destructFn(void *v){
+  rh_func *fn = (rh_func *)v;
+  rh_revert(fn->code);
+  rh_revert(fn);
+}
+
+int rh_free(rh_vm* vm){
+    if (vm) {
+      rh_tblclear(vm->fmap, sf_destructFn);
+      vm->fmap = NULL;
+      rh_revert(vm);
+    }
+    return 0;
+}
+
+int rh_vmtune(int flg){
+  int tmp = sv_instructionexec;
+  sv_instructionexec = flg;
+  return tmp;
+}
+@
+
+
+1.16
+log
+@INSERT: implement mod
+@
+text
+@d156 1
+a156 1
+int g_instructionexec = 0;
+d158 1
+a158 1
+#define OUTPUT_INS(...) if (g_instructionexec){\
+d438 6
+@
+
+
+1.15
+log
+@INSERT: implement int caculate
+@
+text
+@d147 4
+d166 1
+a166 1
+      `*' multpy; `/' divie;
+d292 10
+@
+
+
+1.14
+log
+@INSERT: implement if branch
+@
+text
+@d109 43
+d159 1
+a159 1
+  OP: `=' assign; `T' if; `C' gofunc;
+d161 2
+a162 1
+      `Y' endif
+d248 40
+@
+
+
+1.13
+log
+@UPDATE: implement subroutine call with arguments
+@
+text
+@d61 10
+a71 1
+#define IS_LITERAL(c) (((c)=='\'')||((c)=='"')||(('0'<=(c))&&((c)<='9')))?1:0
+d85 24
+d116 4
+a119 1
+  Example : Axx,yy;Bxx,yy,zz; */
+d129 2
+a130 2
+    char* pend = strchr(c, ';');
+    if (NULL == pend) {
+d133 1
+a133 1
+    *pend = 0;
+d135 4
+a138 1
+/*In this scope c is param after instructor without `;' */
+d140 2
+a141 4
+        char* comma = strchr(c, ',');
+        *comma = 0;
+        char* bev = ++comma;
+        sf_insassign(fn, c, bev);
+d145 6
+a150 1
+        OUTPUT_INS("TEST %s\n", c);
+d178 1
+a178 1
+        // save subroutine result in _A
+d189 15
+d205 1
+a205 1
+        OUTPUT_INS("unknown instruction");
+d208 1
+a208 1
+    c = ++pend; // fetch next instruction
+d219 1
+d221 2
+@
+
+
+1.12
+log
+@UPDATE: fixed bug which vmcall -> sf_fnexec should insert params into env
+@
+text
+@d21 1
+a21 1
+printf("PANIC %s:%d. ", __FILE__, __LINE__);printf(__VA_ARGS__);exit(45)
+a73 1
+#undef IS_VARIBLE
+d85 2
+a86 1
+  char* c = fn->code;
+d94 3
+d113 10
+a122 1
+        if (ecn) {
+d124 10
+d135 1
+a135 3
+        rh_func *sub = (rh_func*)rh_gettbl(vm->fmap, c); //TODO
+        char *ret = NULL;
+        ret = sf_fnexec(vm, c, sub);
+d137 1
+a137 1
+        rh_rpstbl(&fn->env, "_A", ret); //TODO rh_revert
+d154 5
+d161 1
+d163 1
+@
+
+
+1.11
+log
+@INSERT: implement IR code dump and run
+@
+text
+@d18 5
+a25 2
+/* Set IR Delimer as `$' */
+#define IRDELIMER 0x24
+a60 3
+#define PANIC(...)\
+printf("PANIC %s:%d. ", __FILE__, __LINE__);printf(__VA_ARGS__);exit(45)
+
+d85 1
+a85 3
+static char* sf_fnexec(rh_vm* vm, const char* fname, rh_func *fn,
+              const char* p0, const char* p1,
+              const char* p2, const char* p3){
+d89 2
+a90 1
+    fname, c, p0, p1, p2, p3);
+d95 2
+a96 1
+    switch (ins) {/* c is param after instructor without ; */
+d109 4
+d115 1
+a115 1
+        ret = sf_fnexec(vm, c, sub, NULL, NULL, NULL, NULL);
+d147 14
+a160 1
+  snprintf(tmp, sizeof(tmp), "C%s;", goname);
+d183 14
+a196 1
+    return sf_fnexec(vm, funcname, fn, p0, p1, p2, p3);
+@
+
+
+1.10
+log
+@UPDATE: seperate parse and dump, add rh_dump
+@
+text
+@d8 10
+d21 24
+a44 2
+/* from IR code($lead instructor) to construct vm */
+static rh_vm* sf_ircons(rh_vm* vm, const char* expr){
+d53 1
+a53 1
+  vm = sf_ircons(vm, expr);
+d55 1
+a55 1
+  return rhi_callfn(vm, "main", p0, p1, p2, p3);
+d77 5
+d90 1
+a90 1
+  printf("func %s begin: code is [ %s ] p0:%s, p1:%s, p2:%s, p3:%s\n",
+d105 1
+a105 1
+        printf("TEST %s\n", c);
+d124 1
+a124 1
+        puts("unknown instruction");
+d129 1
+a129 1
+  printf("func %s end.\n", fname);
+d132 1
+a132 1
+
+a150 1
+  fn->ret = 0;
+d161 1
+a161 1
+char* rhi_callfn(rh_vm* vm, const char* funcname,
+d184 1
+a184 1
+  if ('$' == *expr) {
+d193 12
+a204 2
+  if (vm->fmap) {
+    ret = (char*)expr;
+@
+
+
+1.9
+log
+@INSERT: implement assign and function return
+@
+text
+@d26 2
+a27 1
+#define PANIC(s) printf("PANIC %s:%d. %s\n", __FILE__, __LINE__, s);exit(45)
+d39 1
+a39 1
+      PANIC("LVAR = RVAR, but can't find RVAR");
+d81 3
+d151 1
+a151 1
+    return rhi_parserun(vm, expr, p0, p1, p2, p3);
+d155 8
+@
+
+
+1.8
+log
+@UPDATE: fixed while not deal with NULL bug and other
+@
+text
+@d26 21
+a46 1
+/* execute fn code */
+d51 2
+a52 1
+  printf("func %s begin: code is %s, p0:%s, p1:%s, p2:%s, p3:%s\n",
+d63 1
+a63 1
+        printf("CODE: %s <- %s\n", c, bev);
+d70 1
+a70 1
+      case 'C': { // CALL func like go
+d78 4
+d89 1
+a89 1
+  return NULL;
+a143 1
+  puts(expr);
+@
+
+
+1.7
+log
+@UPDATE: use Werror, stop compile when warning
+@
+text
+@d33 1
+a33 1
+  while(*c){
+d37 1
+a37 1
+    switch (ins) {
+d39 4
+a42 1
+        printf("ASSIGN %s\n", c);
+d54 1
+a54 1
+        rh_rpstbl(&fn->env, "_A", ret);
+d63 1
+d127 1
+a127 1
+static void destructFn(void *v){
+d130 1
+a130 1
+  rh_revert((char*)fn);
+d135 1
+a135 1
+      rh_tblclear(vm->fmap, destructFn);
+d137 1
+a137 1
+      rh_revert((char*)vm);
+@
+
+
+1.6
+log
+@UPDATE: gofunc will only invoke in runtime not parse time, add simple instruction interpreter
+@
+text
+@d16 1
+a16 1
+// run inner IR code
+d27 1
+a27 1
+static char* rhv_fnexec(rh_func *fn,
+d31 2
+a32 2
+  printf("execute code is %s, p0:%s, p1:%s, p2:%s, p3:%s\n",
+    c, p0, p1, p2, p3);
+d38 1
+a38 1
+      case '=':{ // ASSIGN like =
+d42 1
+a42 1
+      case 'T':{ // TEST like if
+d47 5
+a51 1
+        printf("GO %s\n", c);
+d72 2
+a73 2
+  rh_func *ctx = (rh_func*)rh_gettbl(vm->fmap, "funcname");
+  snprintf(tmp, sizeof(tmp), "C%s,%s;", ctxname, goname);
+a95 1
+
+d97 1
+a97 2
+    printf("func %s execute!\n", funcname);
+    return rhv_fnexec(fn, p0, p1, p2, p3);
+@
+
+
+1.5
+log
+@UPDATE: support go func and pass parameter
+@
+text
+@d3 1
+d33 23
+a55 1
+  //while(p){ FETCH EXECUTE }
+d63 13
+a75 1
+void rhi_genfunc(rh_vm* vm, char* name, char* code){
+d78 7
+a85 2
+  fn->env = NULL;
+  rh_rpbtbl(&vm->fmap, name, (char*)fn, sizeof(rh_func));
+d105 1
+a105 1
+    rh_vm* vm = (rh_vm*)malloc(sizeof(rh_vm));
+d121 6
+d129 3
+a131 1
+        free(vm);
+@
+
+
+1.4
+log
+@UPDATE: add binary hash operation, and fixed genfunc error
+@
+text
+@d7 3
+a9 10
+////////////////generate//////////////
+void rhi_genfunc(rh_vm* vm, char* name, char* code){
+  rh_func* fn = (rh_func*)rh_alloc(sizeof(rh_func));
+  fn->ret = 0;
+  fn->code = rh_dupstr(code);
+  fn->env = NULL;
+  rh_rpbtbl(&vm->fmap, name, (char*)fn, sizeof(rh_func));
+}
+
+////////////////execute/////////////////////////
+d26 6
+a31 3
+static void rhv_fnexec(rh_func *fn){
+  char* p = fn->code;
+  printf("execute code is %s\n", p);
+d33 13
+d55 1
+a55 5
+    //rh_savetbl(&fn->env, "_0", (char*)p0);
+    //rh_savetbl(&fn->env, "_1", (char*)p1);
+    //rh_savetbl(&fn->env, "_2", (char*)p2);
+    //rh_savetbl(&fn->env, "_3", (char*)p3);
+    rhv_fnexec(fn);
+d60 4
+a63 1
+/* Outside use function */
+@
+
+
+1.3
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d9 1
+a9 1
+  rh_func* fn = rh_alloc(sizeof(rh_func));
+d13 1
+a13 1
+  rh_savetbl(&vm->fmap, name, fn);
+@
+
+
+1.2
+log
+@UPDATE: make mainstream available
+@
+text
+@d7 10
+d18 1
+a18 1
+rh_vm* rh_ircons(rh_vm* vm, const char* expr){
+d23 1
+a23 1
+static char* rh_irrun(rh_vm* vm, const char* expr,
+d27 1
+a27 1
+  vm = rh_ircons(vm, expr);
+d29 8
+a36 1
+  return rh_callfn(vm, "main", p0, p1, p2, p3);
+d39 1
+a39 1
+char* rh_callfn(rh_vm* vm, const char* funcname,
+d42 10
+d55 1
+d58 1
+d67 1
+a67 1
+    return rh_irrun(vm, expr, p0, p1, p2, p3);
+d69 1
+a69 1
+    return rh_parserun(vm, expr, p0, p1, p2, p3);
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d5 1
+d7 2
+a8 4
+static rh_vm* rh_parse(rh_vm* vm, const char* str){
+  int token;
+  while(token = rh_getlex(str)){
+  }
+d12 13
+a24 1
+static char* rh_execute(rh_vm* vm){
+d33 9
+a41 4
+char* rh_eval(rh_vm *vm, const char* str){
+  puts(str);
+  vm = rh_parse(vm, str);
+  return rh_execute(vm);
+@
+

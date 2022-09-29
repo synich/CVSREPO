@@ -1,0 +1,811 @@
+head	1.27;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.27
+date	2022.07.28.16.46.34;	author android;	state Exp;
+branches;
+next	1.26;
+commitid	10062E2BD6A0286A635;
+
+1.26
+date	2022.07.05.16.37.14;	author android;	state Exp;
+branches;
+next	1.25;
+commitid	10062C468B91EE47B50;
+
+1.25
+date	2022.02.20.07.58.00;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	1006211F488488E69F4;
+
+1.24
+date	2022.02.06.13.57.38;	author android;	state Exp;
+branches;
+next	1.23;
+commitid	10061FFD3D23F91D0A2;
+
+1.23
+date	2022.02.05.10.16.27;	author android;	state Exp;
+branches;
+next	1.22;
+commitid	10061FE4E7B3830ACAE;
+
+1.22
+date	2021.11.21.06.19.54;	author android;	state Exp;
+branches;
+next	1.21;
+commitid	k6UAznFjmxDTUChD;
+
+1.21
+date	2021.10.02.08.58.56;	author android;	state Exp;
+branches;
+next	1.20;
+commitid	proN73uko266pdbD;
+
+1.20
+date	2021.09.25.04.53.56;	author android;	state Exp;
+branches;
+next	1.19;
+commitid	csGUGfCgPIZZgiaD;
+
+1.19
+date	2021.09.17.16.12.20;	author android;	state Exp;
+branches;
+next	1.18;
+commitid	wU54a7aHLMXFhk9D;
+
+1.18
+date	2021.09.12.09.19.38;	author android;	state Exp;
+branches;
+next	1.17;
+commitid	xHhhuva8k0M3aE8D;
+
+1.17
+date	2021.09.08.15.26.20;	author android;	state Exp;
+branches;
+next	1.16;
+commitid	xkpjixQ4bqkPja8D;
+
+1.16
+date	2021.09.08.14.48.10;	author android;	state Exp;
+branches;
+next	1.15;
+commitid	4VCL8ja3L5NJ6a8D;
+
+1.15
+date	2021.09.07.05.37.34;	author android;	state Exp;
+branches;
+next	1.14;
+commitid	ENokA9kDImeQ5Z7D;
+
+1.14
+date	2021.09.07.01.14.50;	author android;	state Exp;
+branches;
+next	1.13;
+commitid	Rg4vebHKHCXHDX7D;
+
+1.13
+date	2021.09.05.04.19.34;	author android;	state Exp;
+branches;
+next	1.12;
+commitid	oREn4fJKBd34JI7D;
+
+1.12
+date	2021.08.28.14.01.37;	author android;	state Exp;
+branches;
+next	1.11;
+commitid	MwAexL6OINKGcK6D;
+
+1.11
+date	2021.08.14.14.49.26;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	j4K12YRtdYFZUW4D;
+
+1.10
+date	2021.08.01.03.50.59;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	5hT2O9NcqlQ0Hd3D;
+
+1.9
+date	2021.07.10.16.17.34;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	3ClPdybnr3DYws0D;
+
+1.8
+date	2021.06.28.14.15.35;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	NCWuBSGefJP2fUYC;
+
+1.7
+date	2021.06.22.05.01.04;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	xZPaugj8k2OLm5YC;
+
+1.6
+date	2021.06.21.17.23.54;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	6DThjAmUcs7Bv1YC;
+
+1.5
+date	2021.06.21.16.43.45;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	94HtdypC4ZNOh1YC;
+
+1.4
+date	2021.06.20.23.53.07;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	f74Z5BFBAwf7HVXC;
+
+1.3
+date	2021.06.20.08.03.33;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	OCQK5lIh49bmrQXC;
+
+1.2
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	Ib9ovegQE2iAfQXC;
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.27
+log
+@show snip lib in faker preview window
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
+" }
+
+" Formatting {
+
+    set wrap                        " Do not wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    "set matchpairs+=<:>             " Match, to be used with %
+    set pastetoggle=<F2>             " pastetoggle (sane indentation on pastes)
+    "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+
+" }
+
+" Functions {
+
+    " Initialize NERDTree as needed {
+    function! NERDTreeInitAsNeeded()
+        redir => bufoutput
+        buffers!
+        redir END
+        let idx = stridx(bufoutput, "NERD_tree")
+        if idx > -1
+            NERDTreeMirror
+            NERDTreeFind
+            wincmd l
+        endif
+    endfunction
+    " }
+
+    " Check QuickFix 1-open/0-close {
+    function! MvcfCheckQuickfix()
+      let l:hasqf = 0
+      for winnr in range(1, winnr('$'))
+        if getwinvar(winnr, '&syntax') == 'qf'
+            let l:hasqf = 1
+            break
+        endif
+      endfor
+      return l:hasqf
+    endfunction
+    " }
+" }
+
+" Key (re)Mappings {
+
+    " Handy {
+    inoremap jj <Esc>
+  if v:version < 800
+    inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
+    inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
+  endif
+    "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+    if exists('g:spf13_map_cr_omni_complete')
+        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+    endif
+    inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+    inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+    inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+    " Wrapped lines goes down/up to next row, rather than next line in file.
+    nnoremap j gj
+    nnoremap k gk
+    " nnoremap <CR> :
+    nnoremap H ^
+    nnoremap L $
+    nnoremap Y y$
+    " Easier horizontal scrolling
+    map zl zL
+    map zh zH
+    " Allow using the repeat operator with a visual selection (!)
+    " http://stackoverflow.com/a/8064607/127816
+    vnoremap . :normal .<CR>
+    " }
+
+    " Adjust viewports to the same size
+    map      <leader>= <C-w>=
+    nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
+    nnoremap <leader>b 5b
+    vnoremap <leader>b 5b
+    map      <Leader>cc <Plug>NERDCommenterInvert
+    nmap     <Leader>ce <Plug>NERDCommenterToEOL
+    nnoremap <leader>cp :lcd  %:p:h<cr>
+    nnoremap <leader>cs :call rv#showsnipcode()<cr>
+    nnoremap <leader>ct :call rv#gototopdir()<CR>
+    nnoremap <leader>dm :call rv#showMaps()<CR>
+    nnoremap <leader>e 5e
+    vnoremap <leader>e 5e
+    " helpers to edit mode, http://vimcasts.org/e/14
+    cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
+    "map      <leader>ew :e %%
+    " Code folding options
+    nmap     <leader>f0 :set foldlevel=0<CR>
+    nmap     <leader>f1 :set foldlevel=1<CR>
+    nmap     <leader>f2 :set foldlevel=2<CR>
+    nmap     <leader>f3 :set foldlevel=3<CR>
+    nmap     <leader>f4 :set foldlevel=4<CR>
+    nmap     <leader>f5 :set foldlevel=5<CR>
+    nmap     <leader>f6 :set foldlevel=6<CR>
+    nmap     <leader>f7 :set foldlevel=7<CR>
+    nmap     <leader>f8 :set foldlevel=8<CR>
+    nmap     <leader>f9 :set foldlevel=9<CR>
+    nnoremap <leader>fb <C-b>
+    nnoremap <leader>ff <C-f>
+    " Display all lines with keyword under cursor,ask which one to jump to
+    nmap     <leader>fh [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+    nnoremap <leader>gf :call rv#openfileinwin1()<CR>
+    nnoremap <leader>gh :call rv#showhint()<CR>
+    nnoremap <leader>gp :call rv#enhancegrep(1)<CR>
+    nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+    " Disable search highlight
+    noremap  <leader>nh :nohl<CR>
+    nnoremap <leader>nu :call rv#toggleNumber()<CR>
+    " easier formatting
+    nnoremap <silent> <leader>q gwip
+    nnoremap <leader>qf :call rv#togglequickfix()<CR>
+    nnoremap <localleader>rf :call rv#runcurrentscript(0)<CR>
+    nnoremap <leader>ra :call rv#txtReplace('g')<CR>
+    nnoremap <leader>rc :call rv#txtReplace('c')<CR>
+    nnoremap <leader>rg :call rv#enhancegrep(0)<CR>
+  if has('nvim') || v:version >= 801
+    nnoremap <leader>rt  :call rv#replConnect("bash")<CR>
+    tnoremap <C-j><C-j>  <C-\><C-n>
+  endif
+    nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
+    nmap     <leader>s <Plug>(easymotion-overwin-f2)
+    nnoremap <silent> <leader>tt :TagbarToggle<CR>
+    " Jump to anywhere you want with minimal keystrokes
+    nmap     <leader>wb <Plug>(easymotion-b)
+    nmap     <leader>wf <Plug>(wildfire-quick-select)
+    nmap     <leader>ww <Plug>(easymotion-w)
+    " Compatible with Emacs window action
+    nnoremap <leader>xo <C-W>w
+    nnoremap <leader>x1 <C-W>o
+    nnoremap <leader>xc <C-W>c
+    " change backgroud and number style
+    nnoremap <leader>xb  :call rv#toggleBG()<CR>
+
+    inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
+    inoremap <expr><silent> <C-k> MvcfComplete()
+    nnoremap <F12> <esc>:call rv#refreshtags()<cr>
+    inoremap <F12> <esc>:call rv#refreshtags()<cr>
+    inoremap <C-g> <esc>:call rv#inssnipcode()<CR>
+    nnoremap <C-u> 6k
+    nnoremap <C-d> 6j
+
+    " Write easy {
+
+    " Insert mode using Emacs keybinding
+    inoremap <C-p> <Up>
+    inoremap <C-n> <Down>
+    inoremap <C-b> <Left>
+    inoremap <C-f> <Right>
+    inoremap <C-a> <Home>
+    inoremap <C-e> <End>
+    inoremap <C-d> <Del>
+    inoremap <C-h> <BS>
+
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    command! -nargs=* Chrun call rv#changerunscript(<q-args>)
+    command! -nargs=+ Repl call rv#replConnect(<q-args>)
+    command! -nargs=1 Rg call rv#enhancegrep(<q-args>)
+    command! -complete=file -nargs=+ Shell call rv#runShellCommand(<q-args>)
+    command! -nargs=+ -complete=command ShowEx call rv#showEx(<q-args>)
+
+    " Stupid shift key fixes
+    if has("user_commands")
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+    endif
+
+    " Auto complete for bracket and quote
+    "inoremap ' ''<Left>
+    " }
+
+    " Dont know {
+    " End/Start of line motion keys act relative to row/wrap width in the
+    " presence of `:set wrap`, and relative to line for `:set nowrap`.
+    " Default vim behaviour is to act relative to text line in both cases
+    " If you prefer the default behaviour, add the following to your
+    " .vimrc.before.local file:
+    "   let g:spf13_no_wrapRelMotion = 1
+    if !exists('g:spf13_no_wrapRelMotion')
+        " Same for 0, home, end, etc
+        function! WrapRelativeMotion(key, ...)
+            let vis_sel=""
+            if a:0
+                let vis_sel="gv"
+            endif
+            if &wrap
+                execute "normal!" vis_sel . "g" . a:key
+            else
+                execute "normal!" vis_sel . a:key
+            endif
+        endfunction
+
+        " Map g* keys in Normal, Operator-pending, and Visual+select
+        noremap $ :call WrapRelativeMotion("$")<CR>
+        noremap <End> :call WrapRelativeMotion("$")<CR>
+        noremap 0 :call WrapRelativeMotion("0")<CR>
+        noremap <Home> :call WrapRelativeMotion("0")<CR>
+        noremap ^ :call WrapRelativeMotion("^")<CR>
+        " Overwrite the operator pending $/<End> mappings from above
+        " to force inclusive motion with :execute normal!
+        onoremap $ v:call WrapRelativeMotion("$")<CR>
+        onoremap <End> v:call WrapRelativeMotion("$")<CR>
+        " Overwrite the Visual+select mode mappings from above
+        " to ensure the correct vis_sel flag is passed to function
+        vnoremap $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
+        vnoremap <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
+        vnoremap 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
+        vnoremap <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
+        vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+    endif
+
+    " Shortcuts
+    " Change Working Directory to that of the current file
+    cmap cwd lcd %:p:h
+    cmap cd. lcd %:p:h
+
+    " Visual shifting (does not exit Visual mode)
+    vnoremap < <gv
+    vnoremap > >gv
+
+    " For when you forget to sudo.. Really Write the file.
+    cmap w!! w !sudo tee % >/dev/null
+
+    " }
+
+" }
+
+    " Find merge conflict markers
+    "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.26
+log
+@simple replace for vim
+@
+text
+@d116 1
+@
+
+
+1.25
+log
+@remove rf&rp <buffer> in map
+@
+text
+@d125 2
+@
+
+
+1.24
+log
+@snip add vim, improve vim complete experince
+@
+text
+@d124 1
+a124 1
+    nnoremap <buffer> <localleader>rf :call rv#runcurrentscript(0)<CR>
+d130 1
+a130 1
+    nnoremap <buffer> <localleader>rp :call rv#runcurrentscript(1)<CR>
+@
+
+
+1.23
+log
+@c-k manual trigger vim complete
+@
+text
+@a59 2
+    "sometimes complete not work, use c-k manual trigger
+    inoremap <expr><C-k>   "\<C-x>\<C-n>"
+d145 1
+@
+
+
+1.22
+log
+@add hint for date and vim c-d and c-u small
+@
+text
+@d60 2
+@
+
+
+1.21
+log
+@change pastetoggle to F2
+@
+text
+@d148 2
+@
+
+
+1.20
+log
+@add insert snipcode
+@
+text
+@d17 1
+a17 1
+    set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
+@
+
+
+1.19
+log
+@add Chrun command show and change runscript
+@
+text
+@d147 1
+@
+
+
+1.18
+log
+@adjust window scroll
+@
+text
+@d161 1
+@
+
+
+1.17
+log
+@use replConnect instead of vim-terminal-help
+@
+text
+@d127 1
+a127 1
+    nnoremap <leader>rt  :call rv#replConnect("sh")<CR>
+@
+
+
+1.16
+log
+@minor improve config for vim
+@
+text
+@d127 1
+a127 1
+    nnoremap <leader>rt  :call TerminalToggle()<CR>
+d161 2
+a163 1
+    command! -nargs=1 Rg call rv#enhancegrep(<q-args>)
+@
+
+
+1.15
+log
+@fix rg -t bug, use <leader>rt to call terminal in vim
+@
+text
+@d2 1
+a2 1
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
+a112 2
+    " Find merge conflict markers
+    map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+d233 2
+@
+
+
+1.14
+log
+@support -t in fake rg and change vim terminal normal mode keymap
+@
+text
+@d128 4
+a148 3
+  if has('nvim') || v:version >= 801
+    tnoremap <C-j><C-j>  <C-\><C-n>
+  endif
+@
+
+
+1.13
+log
+@add <leader>b and e in visual mode
+@
+text
+@d146 1
+a146 1
+    tnoremap <m-q>  <C-\><C-n>
+@
+
+
+1.12
+log
+@drop <buffer> when runscript and use <m-q> make terminal into normal mode(not quit terminal)
+@
+text
+@d88 1
+d96 1
+@
+
+
+1.11
+log
+@drop <buffer>, it avoid load file in e command
+@
+text
+@d124 1
+a124 1
+    nnoremap <localleader>rf :call rv#runcurrentscript(0)<CR>
+d126 1
+a126 1
+    nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
+d143 2
+a144 2
+  if v:version >= 801
+    tnoremap <Esc><Esc>  <C-W>N
+@
+
+
+1.10
+log
+@use <leader>ff/fb roll in vim
+@
+text
+@d124 1
+a124 1
+    nnoremap <buffer> <localleader>rf :call rv#runcurrentscript(0)<CR>
+d126 1
+a126 1
+    nnoremap <buffer> <localleader>rp :call rv#runcurrentscript(1)<CR>
+@
+
+
+1.9
+log
+@use double <Esc> to escape from vim terminal
+@
+text
+@d109 2
+d114 1
+a114 1
+    nmap     <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+@
+
+
+1.8
+log
+@move some non-plugin to other file
+@
+text
+@d141 3
+@
+
+
+1.7
+log
+@Tab should add <expr> first
+@
+text
+@d60 9
+@
+
+
+1.6
+log
+@make auto popmenu every filetype
+@
+text
+@d57 2
+a58 2
+    inoremap <Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
+@
+
+
+1.5
+log
+@use vim-easycomplete when 8.2 and self simple TAB instead of supertab
+@
+text
+@d56 1
+a56 1
+  if v:version < 802
+@
+
+
+1.4
+log
+@fix tab in complete
+@
+text
+@d56 1
+d58 2
+a59 1
+    inoremap <S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-p>"
+d129 1
+@
+
+
+1.3
+log
+@add showEx cmd for capture output of ex-mode
+@
+text
+@d55 3
+a58 3
+    inoremap jj <Esc>
+    imap     <Tab>   <C-x><C-n>
+    imap     <S-Tab> <C-x><C-p>
+d61 1
+a61 1
+    nnoremap <CR> :
+@
+
+
+1.2
+log
+@use autoload instead of plugin
+@
+text
+@d145 1
+@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@a23 23
+    function! s:showMaps()
+      let old_reg = getreg("a")          " save the current content of register a
+      let old_reg_type = getregtype("a") " save the type of the register as well
+    try
+      redir @@a                           " redirect output to register a
+      " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+      silent map | call feedkeys("\<CR>")
+      silent imap | call feedkeys("\<CR>")
+      redir END                          " end output redirection
+      vnew                               " new buffer in vertical window
+      setlocal buftype=nofile
+      setlocal bufhidden=delete
+      setlocal nobuflisted
+      setlocal noswapfile
+      setlocal nowrap
+      put a                              " put content of register
+      " Sort on 4th character column which is the key(s)
+      %!sort -k1.4,1.4
+    finally                              " Execute even if exception is raised
+      call setreg("a", old_reg, old_reg_type) " restore register a
+    endtry
+    endfunction
+
+a37 23
+    " Shell command {
+    function! s:RunShellCommand(cmdline)
+        botright new
+
+        setlocal buftype=nofile
+        setlocal bufhidden=delete
+        setlocal nobuflisted
+        setlocal noswapfile
+        setlocal nowrap
+        setlocal filetype=shell
+        setlocal syntax=shell
+
+        call setline(1, a:cmdline)
+        call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+        execute 'silent $read !' . escape(a:cmdline, '%#')
+        setlocal nomodifiable
+        1
+    endfunction
+
+    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    " }
+
+a48 16
+
+    function s:togglequickfix()
+      if MvcfCheckQuickfix()
+          execute 'cclose'
+      else
+          execute 'copen'
+      endif
+    endfunction
+    " }
+
+    " Show snip code {
+    function! s:showsnipcode()
+        let l:ft = &filetype
+        let l:arg = input('Keyword: ')
+        call s:RunShellCommand('snip '.l:ft.' '.l:arg)
+    endfunction
+d57 2
+a58 2
+    imap     <Tab>   <Plug>EasyCompTabTrigger
+    imap     <S-Tab> <Plug>EasyCompShiftTabTrigger
+d80 3
+a82 3
+    nnoremap <leader>cs :call <SID>showsnipcode()<cr>
+    nmap     <leader>ct <Plug>GotoTopDir
+    nnoremap <leader>dm :call <SID>showMaps()<CR>
+d102 2
+a103 2
+    nmap     <leader>gf <Plug>(open-cur-file-win1)
+    nmap     <leader>gp <Plug>(search-one-word)
+d107 1
+a107 1
+    nmap     <leader>nu  <Plug>ToggleNumber
+d110 4
+a113 4
+    nnoremap <leader>qf :call <SID>togglequickfix()<CR>
+    nmap     <buffer> <localleader>rf <Plug>(run-script-noarg)
+    nmap     <leader>rg <Plug>(search-current-word)
+    nmap     <buffer> <localleader>rp <Plug>(run-script-onearg)
+d125 4
+a128 1
+    nmap     <leader>xb  <Plug>ToggleBG
+d142 4
+@
+

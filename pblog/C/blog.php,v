@@ -1,0 +1,1380 @@
+head	1.35;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.35
+date	2020.06.07.14.14.34;	author android;	state Exp;
+branches;
+next	1.34;
+commitid	48a75edcf64a0000;
+
+1.34
+date	2020.05.30.05.31.27;	author android;	state Exp;
+branches;
+next	1.33;
+commitid	c525ed1efaf0000;
+
+1.33
+date	2019.10.29.16.28.21;	author WIN7;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2019.10.28.14.48.56;	author WIN7;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2019.10.14.14.56.37;	author WIN7;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2019.05.26.14.29.36;	author WIN7;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2019.05.12.03.02.56;	author WIN7;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2019.05.11.13.36.38;	author WIN7;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2019.04.21.11.15.38;	author WIN7;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2019.02.13.06.01.19;	author Administrator;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2018.03.03.15.36.40;	author Administrator;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2018.02.23.01.50.44;	author Administrator;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2018.02.22.03.50.01;	author Administrator;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2018.02.20.12.49.33;	author Administrator;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2018.02.03.09.21.46;	author Administrator;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2017.12.30.04.03.40;	author Administrator;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2017.09.09.16.45.15;	author Administrator;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2017.08.13.10.17.12;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2017.08.13.09.18.17;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2017.05.31.15.31.20;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2017.05.30.06.20.46;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2017.05.21.04.15.27;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2017.05.20.16.22.21;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2017.05.20.14.31.37;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2017.05.19.12.25.51;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2017.05.18.16.33.10;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2017.03.12.10.02.11;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.03.02.15.04.26;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.02.05.08.47.49;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.02.05.07.39.26;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.02.05.06.20.50;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.02.04.05.43.57;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.01.16.14.45.00;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.01.14.09.37.26;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.01.09.14.45.47;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.35
+log
+@UPDATE: getPreview(timeline page) add totalPage, let js know
+@
+text
+@<?php
+//$Id: blog.php,v 1.34 2020/05/30 05:31:27 android Exp $
+if (!defined(DIRECTORY_SEPARATOR)){
+  define(DIRECTORY_SEPARATOR, '/');
+}
+
+/// \param[in] fn which day the blog like '160505'
+/// \param[in] ctx blog content
+/// \return the day's blog abstract
+function tmpOutputParagraph($fn, $ctx){
+  $dateArr = array();
+  $englistMonth =
+    array('01'=>'Jan ', '02'=>'Feb ', '03'=>'Mar ', '04'=>'Apr ',
+          '05'=>'May ', '06'=>'Jun ', '07'=>'Jul ', '08'=>'Aug ',
+          '09'=>'Sep ', '10'=>'Oct ', '11'=>'Nov ', '12'=>'Dec ',);
+  preg_match("/(\d{2})(\d{2})(\d{2})/", $fn, $dateArr);
+  $year = $dateArr[1];/// 0 is all match, so begin from 1
+  $month = $dateArr[2];
+  $day = $dateArr[3];
+
+  $abstract = '<div class="anessay">';
+  $abstract = $abstract.$englistMonth[$month].$day.", "."20".$year;
+  $abst = iconv_substr($ctx, 0, 120, 'UTF-8');
+  $absContent = preg_split('/=+/', $abst);
+  foreach ($absContent as $line){
+    $abstract = $abstract.'<p>'.$line.'</p>';
+  }
+  $abstract = $abstract.'<a href="/index.php/blog/timeline/'.$year.$month.$day.'">阅读全文</a>';
+  $abstract = $abstract.'</div><hr />';
+
+  return $abstract;
+}
+
+require_once('./Cemvc/Parsedown.php');
+
+class C_blog
+{
+  private $bdb = null;
+  function __construct(){
+    $this->bdb = new C_bdb();
+  }
+
+  /// \param[in] $row one DB record
+  /// \param[out] $ttile blog title
+  /// \param[out] $link HTML link
+  private function getTitleAndLink(&$row, &$ttile, &$link){
+    $tdate = $row['date'];
+    $pos = strpos($row['content'], '==');
+    $ttile = substr($row['content'], 0, $pos-1);
+    //$link = '<a href="/index.php/blog/timeline/'.$tdate.'">'.$tdate.'</a> '.$ttile;
+    // change to SPA, combine date and title with comma, In JS we will construct it into DOM
+    $link = $tdate.','.$ttile;
+  }
+
+      /*deprecated index code
+      $pageNum = 10;
+      $whichPage *= $pageNum;
+      $rec;
+      $dcount;
+      $this->bdb->getIndexList($whichPage, $pageNum, $rec, $dcount);
+
+      $abs = array();  /// empty abstract
+      foreach ($rec as &$fn){
+        $abs[] = tmpOutputParagraph($fn['date'], $fn['content']);
+      }*/
+
+      /* generate page navi list, from 0 to last page
+      $plst = array(); /// empty pageList
+      for ($i=0; $i<$dcount/$pageNum; ++$i){
+        $plst[] = '<a href="/index.php/blog/index/'.$i.'">'.$i.'</a> ';
+      }
+
+      $this->save('abstractList', $abs);
+      $this->save('pageList', $plst);
+      */
+
+/// get markdown origin text(array0) and tag(array1) from day
+  private function &getTextFromDay($whichDay){
+  $tt = array();
+  $rec;
+  if ($this->bdb) {
+    $this->bdb->getTextByDate($whichDay, $rec);
+    $tt[] = $rec['content'];
+    $tt[] = $rec['attr'];
+  }
+  return $tt;
+}
+
+/// because original text has "\n" make html seems inadequacy, so strip the "\n"
+/// \param[in] $text original text
+  private function transformMarkdown($text){
+  //$text = str_replace("\n", "", $text);
+  $text = Parsedown::instance()->parse($text);
+  return $text;
+}
+
+/// Edit blog
+/// \param[in] param[0] 6digit format like 060522
+  public function getEdit($param){
+    $whichDay = $param[0];
+    $tt = &$this->getTextFromDay($whichDay);
+    echo json_encode($tt);//$tt is array, transfer into json
+  }
+
+/// \param[in] param array, only has `ctx' field
+  public function getPreview($param, $qry){
+    $ret = '';
+    if ($this->bdb) {
+      $recUp = array();
+      eval($this->bdb->loadCache());//TODO
+      $perPage = 15;
+      $articleShow = 150;
+      $this->bdb->getRecentUpdate($perPage, $recUp, $qry['page'] );
+      $arr = array();
+      $arr['totalPage'] = ceil($forTotalNum/$perPage);
+      $arr['lst'] = array();
+      foreach($recUp as &$one) {
+        // each article show hardcode char number
+        array_push($arr['lst'], array('date'=>$one['date'], 'content'=>$this->transformMarkdown(iconv_substr($one['content'], 0, $articleShow) ) ) );
+      }
+      $ret .= json_encode($arr);
+    }
+    echo $ret;
+  }
+
+  private $sesame = '<table><tr><td><span onclick="onLogin(\'inpwd\')" >切换账号</span><input id = "inpwd" type="text" name="pwd"></td><td onclick="onDoorBody()">博客文章</td><td onclick="toTmrecPage()">时间的河</td><td onclick="toAdminPage()">后台管理</td></tr></table><hr />';
+  public function getTitle() {
+    if ($this->bdb) {
+      eval($this->bdb->loadCache());//TODO
+      //global $forIdx; //global only be effective when include in index.php, in blog.php not affect
+      $recentUpdate = "文章 $forTotalNum 篇，最近更新：</br>".$forIdx['recentUpdate'];
+      $oput = array();
+      $oput['lst'] = $forTag;
+      $oput['recUp'] = $recentUpdate;
+      if (C_auth::s_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null)) {
+        $oput['sesame'] = $this->sesame;
+      }
+      echo json_encode($oput, JSON_UNESCAPED_UNICODE);
+    }
+  }
+
+  public function getSesame($pth) {
+    $incantation = $pth[0];
+    $oput = '';
+    if ($incantation == '403') {
+      $oput = $this->sesame;
+    }
+    echo $oput;
+  }
+
+/// search by keyword
+/// \param[in] qry s=xxx
+  public function getSearch($pth, $qry) {
+    $word = $qry['s'];
+    $word = urldecode($word); //query string has been urlencoded
+    if (preg_match("/^[ \t]*$/", $word)){
+      echo 'Search must has a valid word!';
+      exit(1);
+    }
+
+    $essay = array();
+    if ($this->bdb->isValid()) {
+      $this->bdb->getByKeyword($word, $essay);
+      foreach ($essay as &$page){
+        $page['content'] = $this->transformMarkdown($page['content']);
+      }
+    }
+    echo json_encode($essay, JSON_UNESCAPED_UNICODE);
+  }
+
+  public function getTag($pth) {
+    $tag = $pth[0];
+    $tglst = array();
+    if ($this->bdb) {
+      $rec;
+      $this->bdb->getTagList($tag, $rec);
+      foreach($rec as &$one){
+        $ttile = $link = '';
+        $this->getTitleAndLink($one, $ttile, $link);
+        $tglst[] = $link;
+      }
+    }
+    echo json_encode($tglst, JSON_UNESCAPED_UNICODE);
+  }
+
+/// \param[in] pth[0] 6digit format like 060522
+  public function getTimeline($pth) {
+    $whichDay = $pth[0];
+    $content = '';
+    if (!empty($whichDay)) {
+      $tt = &$this->getTextFromDay($whichDay);
+      $text = $tt[0];
+
+      if ($text){
+        $content = $this->transformMarkdown($text);
+      }
+    }
+    echo $content;
+  }
+
+  // Personal Review
+  public function getAbout($pth) {
+    echo "<ul><li>2013年至今 浙江大华，从事安防行业各种业务</li><li>2011~2012年 杭州华为从事安防平台软件开发</li><li>2007~2010年 日本电装（名古屋），从事汽车电子相关研发</li><li>2007年 毕业于浙江大学电机与电器专业，硕士</li></ul><hr /><ul><li>熟悉C/C++、Lua、PHP语言</li><li>熟悉嵌入式和平台软件开发、对多种网络协议、流媒体、安全加密都较了解</li></ul>";
+  }
+
+} /// End of C_blog
+
+?>
+
+@
+
+
+1.34
+log
+@UPDATE: rebuild repo
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.35 2020/03/29 09:58:28 alarm Exp $
+d110 4
+a113 1
+      $this->bdb->getRecentUpdate(20, $recUp, $qry['page'] );
+d115 2
+d118 2
+a119 1
+        array_push($arr, array('date'=>$one['date'], 'content'=>$this->transformMarkdown(iconv_substr($one['content'], 0, 300) ) ) );
+d133 6
+a138 6
+	  $oput['lst'] = $forTag;
+    $oput['recUp'] = $recentUpdate;
+	if (C_auth::s_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null)) {
+		$oput['sesame'] = $this->sesame;
+	}
+	echo json_encode($oput, JSON_UNESCAPED_UNICODE);
+d143 3
+a145 3
+	$incantation = $pth[0];
+	$oput = '';
+	if ($incantation == '403') {
+d147 1
+a147 1
+	}
+d168 1
+a168 1
+	echo json_encode($essay, JSON_UNESCAPED_UNICODE);
+@
+
+
+1.33
+log
+@UPDATE: make preview show recent blog with 300 literal
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.32 2019/10/28 14:48:56 WIN7 Exp $
+d197 1
+a197 1
+    echo "<ul><li>2013年至今 在浙江大华工作，熟悉安防行业各种业务</li><li>2011~2012年 在杭州华为从事安防平台软件开发</li><li>2007~2010年 在日本电装（名古屋），从事汽车电子相关研发</li><li>2007年 毕业于浙江大学电机与电器专业，获硕士学位</li></ul><hr /><ul><li>熟悉C/C++、PHP语言</li><li>擅长网络协议、安全加密</li></ul>";
+d203 1
+@
+
+
+1.32
+log
+@INSERT: add review
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.31 2019/10/14 14:56:37 WIN7 Exp $
+d78 1
+a78 1
+private function &getTextFromDay($whichDay){
+d91 1
+a91 1
+private function transformMarkdown($text){
+d99 1
+a99 1
+  public function getEdit($param, $qry){
+d106 12
+a117 3
+  public function preview($param){
+    $content = $this->transformMarkdown($param['ctx']);
+    echo $content;
+@
+
+
+1.31
+log
+@UPDATE: parse querystring into array
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.30 2019/05/26 14:29:36 WIN7 Exp $
+d186 4
+@
+
+
+1.30
+log
+@UPDATE: remove viewtpl
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.29 2019/05/12 03:02:56 WIN7 Exp $
+d139 1
+a139 1
+    $word = substr($qry, 2); // skip 's=' which length is 2
+d155 1
+a155 1
+  
+@
+
+
+1.29
+log
+@UPDATE: change to rest, add get or post before function name
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.28 2019/05/11 13:36:38 WIN7 Exp $
+d111 1
+a111 1
+  private $sesame = '<table><tr><td><span onclick="onLogin(\'inpwd\')" >切换账号</span><input id = "inpwd" type="text" name="pwd"></td><td><a href="/rest.php/tmrec/index/">时间的河</a></td><td><a href="/rest.php/admin/space/">后台管理</a></td></tr></table><hr />';
+@
+
+
+1.28
+log
+@UPDATE: change web into SPA
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.26 2019/02/13 06:01:19 Administrator Exp $
+d99 1
+a99 1
+  public function edit($param, $qry){
+@
+
+
+1.27
+log
+@drop useless query string
+@
+text
+@d36 1
+a36 1
+class C_blog extends Cemvc_ViewTpl
+a39 1
+    parent :: __construct();
+d50 3
+a52 25
+    $link = '<a href="/index.php/blog/timeline/'.$tdate.'">'.$tdate.'</a> '.$ttile;
+  }
+
+  /// blog first page
+  public function index($pth){
+    $showAdmin = false;// Defalut not show admin bar
+    // has been login user or explicit url will show admin bar
+    if ( C_auth::s_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+      $showAdmin = 403;
+    } elseif (!empty($pth)){
+      $showAdmin = $pth[0];
+    }
+
+    if ($this->bdb) {
+      eval($this->bdb->loadCache());//TODO
+      //global $forIdx; //global only be effective when include in index.php, in blog.php not affect
+      $recentUpdate = "文章 $forTotalNum 篇，最近更新：</br>".$forIdx['recentUpdate'];
+      $tglst = $forTag;
+    }
+
+    $this->save('showAdmin', $showAdmin);
+    $this->save('tagList', $tglst);
+    $this->save('recentUpdate', $recentUpdate);
+
+    $this->show();
+d97 1
+d99 1
+a99 2
+/// return 0:success -1:failure
+  public function timeline($param){
+d101 3
+a103 6
+    if (empty($whichDay)) {
+      return -1;
+    }
+    else {
+      $tt = &$this->getTextFromDay($whichDay);
+      $text = $tt[0];
+d105 5
+a109 6
+      if ($text){
+        $content = $this->transformMarkdown($text);
+      }
+      else {
+        return -1;
+      }
+d111 13
+a123 6
+      /// 打开博客全文的赋值
+      $this->save('content', $content);
+      $this->save('whichDay', $whichDay);
+      $this->save('charNum', mb_strlen($text));
+      $this->show();
+      return 0;
+d127 9
+d137 3
+a139 4
+/// \param[in] param[0] ?s=xxx
+  public function search($param, $qry){
+    $keyword = $qry;
+    $word = substr($keyword, 2); // skip 's=' which length is 2
+d142 1
+a142 1
+      new Cemvc_Error('Search must has a valid word!');
+d153 1
+a153 4
+    /// show search content
+    $this->save('essay', $essay);
+    $this->show();
+    return 0;
+d155 3
+a157 17
+
+/// Edit blog
+/// \param[in] param[0] 6digit format like 060522
+  public function edit($param){
+    $whichDay = $param[0];
+    $tt = &$this->getTextFromDay($whichDay);
+    echo json_encode($tt);//$tt is array, transfer into json
+  }
+
+/// \param[in] param array, only has `ctx' field
+  public function preview($param){
+    $content = $this->transformMarkdown($param['ctx']);
+    echo $content;
+  }
+
+  public function tag($param){
+    $tag = $param[0];
+d168 10
+d179 5
+a183 2
+    $this->save('tagList', $tglst);
+    $this->show();
+d185 2
+@
+
+
+1.26
+log
+@UPDATE: iconv_strlen return error 22 in PHP5.5.9, manual say mb_strlen work right, so we change
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.25 2018/03/03 15:36:40 Administrator Exp $
+d173 1
+a173 1
+  public function edit($param, $qry){
+@
+
+
+1.25
+log
+@UPDATE: change auth to static, no need explicit load
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.24 2018/02/23 01:50:44 Administrator Exp $
+d141 1
+a141 1
+      $this->save('charNum', iconv_strlen($text));
+@
+
+
+1.24
+log
+@UPDATE: add tag
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.23 2018/02/22 03:50:01 Administrator Exp $
+d58 1
+a58 1
+    if ( g_isLogin(isset($_POST['pwd']) ? $_POST['pwd'] : null) ) {
+@
+
+
+1.23
+log
+@UPDATE: save blog cache in DB and switch account
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.22 2018/02/20 12:49:33 Administrator Exp $
+d57 1
+d60 1
+a60 1
+    } elseif (!empty($pth)){ // explicit command to show bar is ok
+@
+
+
+1.22
+log
+@UPDATE: tmrec support multi word search
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.21 2018/02/03 09:21:46 Administrator Exp $
+d63 6
+a68 4
+    include_once(HomePageCache);
+    //global $forIdx; //global only be effective when include in index.php, in blog.php not affect
+    $recentUpdate = "文章 $forTotalNum 篇，最近更新：</br>".$forIdx['recentUpdate'];
+    $tglst = $forTag;
+d201 1
+@
+
+
+1.21
+log
+@UPDATE: collect config into auth.php
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.20 2017/12/30 04:03:40 Administrator Exp $
+a154 1
+    $wordCol = explode(' ', $word); // into multi word
+d157 1
+a157 1
+      $this->bdb->getByKeyword($wordCol, $essay);
+@
+
+
+1.20
+log
+@UPDATE: add blog total num and diary weekday
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.19 2017/09/09 16:45:15 Administrator Exp $
+a34 1
+include_once('auth.php');
+@
+
+
+1.19
+log
+@UPDATE: homepage read cache file instead of read DB
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.18 2017/08/13 10:17:12 Administrator Exp $
+d139 1
+@
+
+
+1.18
+log
+@INSERT: add recent update blog list entry
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.17 2017/08/13 09:18:17 Administrator Exp $
+d64 8
+a71 2
+    $tglst = array();
+    $recentUpdate = '最近更新：';
+d73 2
+a74 11
+    if ($this->bdb->isValid() ){
+      /// get each tag count
+      $this->bdb->getTagCount($tglst);
+
+      $recUp = array(); // recent update blog
+      $this->bdb->getRecentUpdate(5, $recUp);// get new 5 blog
+      foreach($recUp as &$one) {
+        $ttile = $link = '';
+        $this->getTitleAndLink($one, $ttile, $link);
+        $recentUpdate = $recentUpdate.$link.'；';
+      }
+d76 2
+a77 1
+      /*$pageNum = 10;
+d92 1
+a92 2
+      }*/
+    }
+d94 3
+a96 8
+    $this->save('showAdmin', $showAdmin);
+    $this->save('tagList', $tglst);
+    $this->save('recentUpdate', $recentUpdate);
+    /*$this->save('abstractList', $abs);
+    $this->save('pageList', $plst);*/
+
+    $this->show();
+  }
+@
+
+
+1.17
+log
+@UPDATE: hide admin bar, only access by command or session
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.16 2017/05/31 15:31:20 Administrator Exp $
+d45 10
+d65 1
+d71 8
+d99 1
+d198 3
+a200 4
+        $tdate = $one['date'];
+        $pos = strpos($one['content'], '==');
+        $ttile = substr($one['content'], 0, $pos-1);
+        $tglst[] = '<a href="/index.php/blog/timeline/'.$tdate.'">'.$tdate.'</a> '.$ttile;
+@
+
+
+1.16
+log
+@UPDATE: this->bdb is null is different from bdb->db is null, so add isValid function to check
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.15 2017/05/30 06:20:46 Administrator Exp $
+d35 1
+d47 5
+a51 4
+    if (empty($pth)){
+      $whichPage = 0;
+    } else {
+      $whichPage = $pth[0];
+a53 2
+    $pageNum = 10;
+    $whichPage *= $pageNum;
+a54 2
+    $abs = array();  /// empty abstract
+    $plst = array(); /// empty pageList
+d59 3
+d66 1
+d69 1
+a69 1
+      }
+d71 2
+a72 1
+      /// generate page navi list, from 0 to last page
+d75 1
+a75 1
+      }
+d78 1
+d80 3
+a82 2
+    $this->save('abstractList', $abs);
+    $this->save('pageList', $plst);
+@
+
+
+1.15
+log
+@DELETE: move database to seperate bdb.php
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.14 2017/05/21 04:15:27 Administrator Exp $
+d38 1
+a38 1
+  private $bdb;
+d58 1
+a58 1
+    if ($this->bdb){
+d140 1
+a140 1
+    if ($this->bdb) {
+@
+
+
+1.14
+log
+@UPDATE: statistic num of tag and order by desc
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.13 2017/05/20 16:22:21 Administrator Exp $
+d38 4
+a41 9
+  /// Maybe need not use try/catch
+  /// return PDO object / null
+  private function getDbInstance(){
+    try {
+      $who = isset($_SESSION['isLogin'])?$_SESSION['isLogin']:'1';
+      if($who != 'shuw' && $who != 'liyan') return null;
+      $db = new PDO("sqlite:./Archive/$who.db");
+      return $db;
+    } catch (PDOException $e) {return null;}
+d58 6
+a63 21
+    $db = $this->getDbInstance();
+    if ($db){
+      $stmt = $db->query('SELECT DISTINCT attr FROM blog', PDO::FETCH_ASSOC);
+      $rec = $stmt->fetchAll();
+      foreach ($rec as &$tag){
+        if ($tag['attr'] != ''){
+          $tagName = $tag['attr'];
+          $rnum = $db->query("SELECT count(attr) FROM blog WHERE attr='".$tagName."';");
+          $recnum = $rnum->fetch();
+          $num = $recnum[0];
+          $tagElem = '<a href="/index.php/blog/tag/'.$tagName.'">'.$tagName.'('.$num.')</a> ';
+          $tglst[] = $tagElem;
+        }
+      }
+
+      $stmt = $db->query("SELECT * FROM blog ORDER BY date DESC LIMIT ${pageNum} OFFSET ${whichPage}", PDO::FETCH_ASSOC);
+      $rec = $stmt->fetchAll();
+
+      $stmt = $db->query("SELECT count(date) FROM blog");
+      $dcountRec = $stmt->fetch();
+      $dcount = $dcountRec[0];
+d84 3
+a86 4
+  $db = $this->getDbInstance();
+  if ($db) {
+    $stmt = $db->query("select content, attr from blog where date=${whichDay}", PDO :: FETCH_ASSOC);
+    $rec = $stmt->fetch(); //only need one record
+a126 13
+  private function consFindWord($word){
+    $retStr = '';
+    if ( 0 != strlen($word) ){
+      if ( '-' == $word[0]){
+        $word = substr($word, 1);
+        $retStr = "content NOT LIKE '%${word}%' ";
+      }
+      else{
+        $retStr = "content LIKE '%${word}%' ";
+      }
+    }
+    return $retStr;
+  }
+a130 1
+    $db = $this->getDbInstance();
+d137 1
+a138 12
+    $cmd = "select date, content from blog where ";
+    $wordLen = count($wordCol);
+    $findKey = $wordCol[0];
+    $toSql = $this->consFindWord($findKey);
+    $cmd .= $toSql;
+    for($i=1; $i<$wordLen; $i++){
+      $toSql = $this->consFindWord($wordCol[$i]);
+      if (0 != strlen($toSql)){
+        $cmd = $cmd . "AND " . $toSql;
+      }
+    }
+    $cmd .= ' ORDER BY date DESC';
+d140 2
+a141 5
+
+    if ($db) {
+      $rec = $db->query($cmd);
+      $rec->setFetchMode(PDO::FETCH_ASSOC);
+      $essay = $rec->fetchAll();
+a167 1
+    $db = $this->getDbInstance();
+d169 3
+a171 3
+    if ($db) {
+      $stmt = $db->query("SELECT date, content FROM blog WHERE attr LIKE '%".$tag."%' ORDER BY date DESC", PDO::FETCH_ASSOC);
+      $rec = $stmt->fetchAll();
+@
+
+
+1.13
+log
+@INSERT: support show tag list and jump to tag assoc blog
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.12 2017/05/20 14:31:37 Administrator Exp $
+d70 4
+a73 1
+          $tagElem = '<a href="/index.php/blog/tag/'.$tagName.'">'.$tagName.'</a> ';
+d220 1
+a220 1
+      $stmt = $db->query("SELECT date, content FROM blog WHERE attr LIKE '%".$tag."%'", PDO::FETCH_ASSOC);
+@
+
+
+1.12
+log
+@UPDATE: let blog has TAG attribute
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.11 2017/05/19 12:25:51 Administrator Exp $
+d59 1
+d65 10
+d92 1
+d212 18
+@
+
+
+1.11
+log
+@UPDATE: from now two owner who enter this will see different page, use _SESSION instead of file in disk
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.10 2017/05/18 16:33:10 Administrator Exp $
+d86 3
+a88 3
+/// get markdown origin text from day
+private function getTextFromDay($whichDay){
+  $text = '';
+d91 1
+a91 1
+    $stmt = $db->query("select content from blog where date=${whichDay}", PDO :: FETCH_ASSOC);
+d93 2
+a94 1
+    $text = $rec['content'];
+d96 1
+a96 1
+  return $text;
+d115 2
+a116 1
+      $text = $this->getTextFromDay($whichDay);
+d190 2
+a191 2
+    $text = $this->getTextFromDay($whichDay);
+    echo $text;
+@
+
+
+1.10
+log
+@UPDATE: support 2 individual blog file, use file to persistent
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.9 2017/03/12 10:02:11 Administrator Exp $
+a37 1
+  private  $filewho = './Archive/who';
+d42 2
+a43 1
+      $who = file_get_contents($this->filewho);
+a56 1
+    $db = $this->getDbInstance();
+d59 4
+a69 1
+    }
+d71 3
+a73 4
+    $abs = array();
+    foreach ($rec as &$fn){
+      $abs[] = tmpOutputParagraph($fn['date'], $fn['content']);
+    }
+d75 4
+a78 4
+    /// generate page navi list, from 0 to last page
+    $plst = array();
+    for ($i=0; $i<$dcount/$pageNum; ++$i){
+      $plst[] = '<a href="/index.php/blog/index/'.$i.'">'.$i.'</a> ';
+d168 1
+a176 2
+      /// show search content
+      $this->save('essay', $essay);
+d178 2
+a197 11
+  /// remember who is current blog, and redirect
+  public function change($param){
+    $who = file_get_contents($this->filewho);
+    if ($who == 'shuw') {
+      $who = 'liyan';
+    } else {
+      $who = 'shuw';
+    }
+    file_put_contents($this->filewho, $who);
+    header('Location: /');
+  }
+@
+
+
+1.9
+log
+@UPDATE: forbiden null input
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.8 2017/03/02 15:04:26 Administrator Exp $
+d38 1
+d43 2
+a44 1
+      $db = new PDO('sqlite:./Archive/blog.db');
+d196 11
+@
+
+
+1.8
+log
+@UPDATE: search result order by date
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.7 2017/02/05 08:47:49 Administrator Exp $
+d148 4
+@
+
+
+1.7
+log
+@DELETE: read from directory is deprecated, remove opendir/readdir/any other functions
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.6 2017/02/05 07:39:26 Administrator Exp $
+d160 1
+@
+
+
+1.6
+log
+@UPDATE: first page use DB instead of directory files
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.5 2017/02/05 06:20:50 Administrator Exp $
+a6 58
+/// @@param [in] $axiv :string, Top dirctory contain markdown, Usually 'Archive'
+/// @@param [in] $year :string, year in 2 digit like '16'
+/// @@param [in] $where :string 'navi' use in navi, 'abs' use in content
+/// @@return :array navi like ('160505', '160424') abs like ('Archive\16\0505.md', 'Archive\16\0424.md')
+function &getListFormDir($axiv, $year, $where){
+  $handle = opendir($axiv.DIRECTORY_SEPARATOR.$year);
+  $yearFileList = array();
+  if ($handle) {
+    while ( false  !== ( $file  =  readdir ( $handle ))) {
+        if (false !== strpos($file, '.md')){
+      if ('navi' == $where){
+        $yearFileList[] = $year.substr($file, 0, 4);
+      }
+      else { /// get abstract list
+        $yearFileList[] = $axiv.DIRECTORY_SEPARATOR.$year.DIRECTORY_SEPARATOR.$file;
+      }
+    }
+    }
+      closedir($handle);
+      rsort($yearFileList);
+    }
+  return $yearFileList;
+}
+
+/// @@param [in] $axiv :string, Top dir of markdown
+/// @@param [in] $year :number, year like '16'
+function showYear($axiv, $year){
+  $yearList = getListFormDir($axiv, $year, 'navi');
+  $rs = showNaviList($yearList);
+  return $rs;
+}
+
+/// output navigator
+/// @@param [in] $monthFile :array, like ('160505', '160424')
+function showNaviList(&$monthFile){
+  $rs = array();
+  foreach ($monthFile as $anday){
+    $mon = substr($anday, 2, 2);
+  $day = substr($anday, 4, 2);
+  $rs[] = '<a href="/index.php/blog/timeline/'.$anday.'"><p>'.$mon.'月'.$day.'日</p></a>';
+  }
+  return $rs;
+}
+
+/// @@param $fn  :string, file path of markdown
+function &getAbsFromFile($fn){
+  $absContent = array();
+  $handle = fopen($fn, 'r');
+  while (false !== ($line = fgets($handle)) ){
+  if (12 < strlen($line)){/// TODO how to deal graceful?
+      $absContent[] = rtrim($line); /// trim \r\n in file
+  }
+  if (2 == sizeof($absContent)) break;
+  }
+  fclose($handle);
+  return $absContent;
+}
+
+d23 1
+a23 1
+  $abst = substr($ctx, 0, 120);
+@
+
+
+1.5
+log
+@UPDATE: timeline use DB instead of directory file
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.4 2017/02/04 05:43:57 Administrator Exp $
+d66 1
+d68 1
+a68 1
+function tmpOutputParagraph($fn){
+d74 2
+a75 2
+  preg_match("/(\d{2}).(\d{2})(\d{2})/", $fn, $dateArr);
+  $year = $dateArr[1];
+d81 2
+a82 1
+  $absContent = getAbsFromFile($fn);
+d105 1
+d107 28
+a134 14
+  if (empty($pth)){
+    $whichYear = 17;
+  } else {
+    $whichYear = $pth[0];
+  }
+  $this->save('whichYear', $whichYear);
+  $rs = showYear('Archive', $whichYear);
+  $this->save('arivList', $rs);
+
+  $blogList = getListFormDir('Archive', $whichYear, 'abs');
+  $abs = array();
+  foreach ($blogList as $fn){
+    $abs[] = tmpOutputParagraph($fn);
+  }
+d136 3
+a138 2
+  $this->save('abstractList', $abs);
+  $this->show();
+@
+
+
+1.4
+log
+@DELETE: move saveArticle to admin.php
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.3 2017/01/16 14:45:00 Administrator Exp $
+d94 9
+d125 7
+a131 7
+  $year = substr($whichDay, 0, 2);
+  $day = substr($whichDay, 2);
+  $mdFilePath =
+    './Archive'.DIRECTORY_SEPARATOR.$year.DIRECTORY_SEPARATOR.$day.'.md';
+  // Read file and pass content through the Markdown parser
+  $text = file_get_contents($mdFilePath);
+
+d147 2
+a148 8
+  if (empty($whichDay)) {
+    return -1;
+  }
+  else {
+    $text = $this->getTextFromDay($whichDay);
+
+    if ($text){
+      $content = $this->transformMarkdown($text);
+d151 8
+a158 2
+      return -1;
+    }
+d160 5
+a164 5
+    /// 打开博客全文的赋值
+    $this->save('content', $content);
+    $this->save('whichDay', $whichDay);
+    $this->show();
+    return 0;
+d185 1
+a185 1
+    $db = new PDO('sqlite:./Archive/blog.db');
+d201 9
+a209 5
+    $rec = $db->query($cmd);
+    $rec->setFetchMode(PDO::FETCH_ASSOC);
+    $essay = $rec->fetchAll();
+    foreach ($essay as &$page){
+      $page['content'] = $this->transformMarkdown($page['content']);
+a210 2
+    /// 展示搜索内容
+    $this->save('essay', $essay);
+@
+
+
+1.3
+log
+@UPDATE: seperate magic function autoload and caller file. Distill autoload and UrlRoute class from index.php into Cemve/Cemvc.php
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.2 2017/01/14 09:37:26 Administrator Exp $
+d109 1
+d111 1
+a111 2
+
+    $this->show();
+d206 1
+a206 1
+  public function edit($param){
+d208 2
+a209 2
+  $text = $this->getTextFromDay($whichDay);
+  echo $text;
+d215 1
+a215 1
+  echo $content;
+a217 14
+/// \param[in] param array, has `day' and `ctx' field
+  public function saveArticle($param){
+  $year = substr($param['day'], 0, 2);
+  $day = substr($param['day'], 2);
+  $mdFilePath =
+    './Archive'.DIRECTORY_SEPARATOR.$year.DIRECTORY_SEPARATOR.$day.'.md';
+  $ret = file_put_contents($mdFilePath, $param['ctx']);
+  if (ret){
+    echo '保存成功';
+  }
+  else {
+    echo '保存失败';
+  }
+  }
+@
+
+
+1.2
+log
+@1.use parse_url instead of selfwrite parse uri, keep sty same mean. 2.use space as multiword separator, so change explode param
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.1 2017/01/09 14:45:47 Administrator Exp $
+d176 1
+a176 1
+    $db = new PDO('sqlite:'.WebRoot.'./Archive/blog.db');
+@
+
+
+1.1
+log
+@merge blog and pmvc into one repo
+@
+text
+@d2 1
+a2 1
+//$Id: blog.php,v 1.3 2017/01/09 14:43:40 Administrator Exp $
+d179 1
+a179 1
+    $wordCol = explode('+', $word); // into multi word
+@
+

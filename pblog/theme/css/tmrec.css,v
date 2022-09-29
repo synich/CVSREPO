@@ -1,0 +1,47 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.03.15.15.34.39;	author android;	state Exp;
+branches;
+next	;
+commitid	Y2oMNZ5dGviq3qLC;
+
+
+desc
+@@
+
+
+1.1
+log
+@init release
+@
+text
+@body {
+margin: 0px auto;
+width: 90%;
+background-color: #f0f0f0;
+}
+table {
+border-collapse: collapse;
+}
+td.imp1 {
+background-color: pink;
+}
+td.imp2 {
+background-color: orange;
+}
+td.imp3 {
+background-color: yellow;
+}
+td.imp4 {
+background-color: yellowgreen;
+}
+td.imp5 {
+background-color: lightgreen;
+}
+@

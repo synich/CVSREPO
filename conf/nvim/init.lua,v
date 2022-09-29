@@ -1,0 +1,83 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2022.03.18.17.09.11;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	1006234BCB75A82B699;
+
+1.1
+date	2022.03.09.15.25.42;	author android;	state Exp;
+branches;
+next	;
+commitid	1006228C6F60CD760A4;
+
+
+desc
+@@
+
+
+1.2
+log
+@add some global varible definition in nvim init.lua
+@
+text
+@local vim = vim
+if vim.g.shuw_nvim_has_init then return end
+
+
+local function def_global_vars()
+  local v = {}
+  local os_name = vim.loop.os_uname().sysname
+  v.is_mac = os_name == "Darwin"
+  v.is_linux = os_name == "Linux"
+  v.is_windows = os_name == "Windows_NT"
+  v.vim_path = vim.fn.stdpath("config")
+  local path_sep = v.is_windows and "\\" or "/"
+  v.home = v.is_windows and os.getenv("USERPROFILE") or
+                   os.getenv("HOME")
+  v.cache_dir = v.home .. path_sep .. ".cache" .. path_sep .. "nvim" ..
+                       path_sep
+  v.modules_dir = v.vim_path .. path_sep .. "modules"
+  v.data_dir = string.format("%s/site/", vim.fn.stdpath("data"))
+  return v
+end
+
+
+local function init()
+  vim.g.shuw_nvim_has_init = def_global_vars()
+  -- disable remote python to speedy up init
+  vim.g.loaded_python_provider = 0
+  vim.g.loaded_python3_provider = 0
+  -- source VimL script
+  vim.cmd('source ~/.FAVORITE_DIRNAME/init.vim')
+end
+
+init()
+
+@
+
+
+1.1
+log
+@add nvim/init.lua
+@
+text
+@d2 28
+a29 2
+if vim.g.shuw_nvim_has_init then return
+else vim.g.shuw_nvim_has_init = 1
+d31 2
+a32 5
+-- disable remote python to speedy up init
+vim.g.loaded_python_provider = 0
+vim.g.loaded_python3_provider = 0
+-- source VimL script
+vim.cmd('source ~/.shuw/init.vim')
+@
+

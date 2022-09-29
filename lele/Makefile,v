@@ -1,0 +1,176 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2018.09.17.15.27.10;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.08.12.02.10.22;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.08.09.15.21.17;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.08.06.15.18.28;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.06.17.11.51.40;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.06.17.10.26.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@UPDATE: make o into seperate dir
+@
+text
+@CXX = gcc
+CFLAGS = -c -Wall -g -O2 -ID:\code\op3rd\include\lua53 -ID:\code\op3rd\include
+OBJS = obj/parse.o obj/lex.yy.o obj/main.o
+LUALIBS = -LD:\code\op3rd\lib32 -llua53
+JSLIBS = -LD:\code\op3rd\lib32 -lmujs
+EXENAME = lele.exe
+
+OPT_HEADERS := $(wildcard *.lua)
+
+all:
+	@@echo choose lua or js
+
+lua: $(OBJS)
+#	@@sed -i "4c\\#define USE_SCRIPT 1" main.c
+	$(CXX)  -o $(EXENAME) $(OBJS) $(LUALIBS)
+
+relua1: main.c
+	rm main.o
+	dyn2str script.lua
+	$(CXX) -DAS_RELEASE $(CFLAGS) -o main.o $<
+
+relua: relua1 lua
+
+js: $(OBJS)
+	$(CXX)  -o $(EXENAME) $(OBJS) $(JSLIBS)
+
+rejs1: main.c
+	rm main.o
+	dyn2str script.js
+	$(CXX) -DAS_RELEASE $(CFLAGS) -o main.o $<
+
+rejs: rejs1 js
+
+obj/%.o : %.c
+	$(CXX) $(CFLAGS) -o $@@ $<
+
+parse.c: parse.y
+	@@lemon parse.y
+
+main.c: forward.h
+	$(CXX) $(CFLAGS) $@@
+
+lex.yy.c: lex.l
+	@@flex lex.l
+
+t:
+	@@$(EXENAME) proto.h head.js
+
+count:
+	@@cat lex.l parse.y main.c | wc -l
+
+clean:
+	-rm *.o
+
+@
+
+
+1.5
+log
+@INSERT: support use js
+@
+text
+@d3 1
+a3 1
+OBJS = parse.o lex.yy.o main.o
+d34 1
+a34 1
+%.o : %.c
+@
+
+
+1.4
+log
+@UPDATE: use static lib instead of so
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -g -O2 -ID:\code\op3rd\include\lua53
+d5 1
+d19 1
+d24 10
+@
+
+
+1.3
+log
+@UPDATE: support embed script into binary file, and first use sequenece target in Makefile
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -g -O2 -ID:\code\op3rd\include\lua51
+d4 1
+a4 1
+LUALIBS = lua5.1.dll
+d41 1
+a41 1
+	rm *.o
+@
+
+
+1.2
+log
+@UPDATE: support lua compile
+@
+text
+@d16 6
+@
+
+
+1.1
+log
+@INSERT: initial upload
+@
+text
+@d2 1
+a2 1
+CFLAGS = -c -Wall -g -O2
+d4 1
+d9 6
+a14 2
+all: $(OBJS)
+	$(CXX)  -o $(EXENAME) $(OBJS)
+d19 1
+a19 1
+parse.c: parse.y parsedecl.h
+@
+

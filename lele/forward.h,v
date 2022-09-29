@@ -1,0 +1,172 @@
+head	1.7;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.7
+date	2018.08.12.02.10.22;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.08.11.04.42.27;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.07.22.07.41.02;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.07.22.03.39.47;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.07.21.04.59.24;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.06.17.11.39.05;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.06.17.10.26.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@INSERT: support use js
+@
+text
+@#ifndef _FORWARD_H_
+#define _FORWARD_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* parse declare, you can change p2a but be same as parse.y %name */
+void *p2aAlloc(void *(*mallocProc)(size_t));
+void p2a(
+  void *yyp,       /* The parser */
+  int yymajor,     /* The major token code number */
+  char* yyminor,   /* The value for the token, type is same as %token_type */
+  void* dynVm
+);
+void p2aFree(
+  void *p,                    /* The parser to be deleted */
+  void (*freeProc)(void*)     /* Function used to reclaim memory */
+);
+
+/* parse to lua or js script */
+void* scriptInit(int *err);
+void scriptPush(void* vm, int major, const char* val);
+void scriptClean(void* vm);
+
+/* export function from lex which drive eval */
+void leleEvalString(const char* src);
+
+#endif
+@
+
+
+1.6
+log
+@UPDATE: move pasre and script function into lex, use parse string instead of file. and export parse string entry
+@
+text
+@d21 1
+a21 1
+void* scriptInit(const char* fname, int *err);
+@
+
+
+1.5
+log
+@UPDATE: change script function name
+@
+text
+@a6 12
+/* lex declare */
+struct LexExtra
+{
+  void *parser;
+  void *vm;
+};
+int yylex_init(void** ptr_yy_globals);
+void yyset_in (FILE *  in_str , void* yyscanner);
+void yyset_extra (void*  user_defined , void* yyscanner);
+int yylex(void* ptr_yy_globals);
+int yylex_destroy(void* ptr_yy_globals);
+
+d21 1
+d23 5
+@
+
+
+1.4
+log
+@UPDATE: make dynamic language reentrant
+@
+text
+@d33 1
+a33 1
+void p2aPush(void* vm, int major, const char* val);
+@
+
+
+1.3
+log
+@UPDATE: improve comment
+@
+text
+@d8 5
+d22 4
+a25 3
+  void *yyp,              /* The parser */
+  int yymajor,            /* The major token code number */
+  char* yyminor           /* The value for the token, type is same as %token_type */
+d33 1
+a33 1
+void p2aPush(int major, const char* val);
+@
+
+
+1.2
+log
+@INSERT: add push declare
+@
+text
+@d14 1
+a14 1
+/* parse declare, for my favour fixed is as p2a */
+d19 1
+a19 1
+  char* yyminor           /* The value for the token */
+@
+
+
+1.1
+log
+@INSERT: initial upload
+@
+text
+@d17 3
+a19 3
+  void *yyp,                   /* The parser */
+  int yymajor,                 /* The major token code number */
+  int yyminor       /* The value for the token */
+d26 2
+@
+

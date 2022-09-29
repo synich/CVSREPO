@@ -1,0 +1,45 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2022.07.03.15.44.11;	author android;	state Exp;
+branches;
+next	;
+commitid	10062C1B94B6986CA54;
+
+
+desc
+@@
+
+
+1.1
+log
+@cgi-bin style blog start
+@
+text
+@#!/usr/bin/env fennel
+
+;/foo/bar  dt=20220531&hr=18  a=1&b=2
+(fn req-entry [p q c]
+    (print "path-info" p)
+    (print "query" q)
+    (match p
+        :/foo (print q)
+        :/bar (print "content" c)
+        _ (print "ERROR")))
+
+;entry for cgi-bin
+(let [path-info (os.getenv :PATH_INFO)
+      query-str (os.getenv :QUERY_STRING)
+      urlencoded-content (io.read "a")
+         ;droidscript CONTENT_TYPE=application/x-www-form-urlencoded
+     ]
+  (do
+    (print "Content-Type: text/html\n")
+    (req-entry path-info query-str urlencoded-content)))
+
+@

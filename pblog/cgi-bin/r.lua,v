@@ -1,0 +1,135 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2022.08.27.05.45.47;	author games;	state Exp;
+branches;
+next	1.2;
+commitid	1006309AF8B5BE0651F;
+
+1.2
+date	2022.08.19.16.31.40;	author games;	state Exp;
+branches;
+next	1.1;
+commitid	10062FFBAEC59C90F26;
+
+1.1
+date	2022.08.15.16.18.54;	author games;	state Exp;
+branches;
+next	;
+commitid	10062FA71ED25C91C6F;
+
+
+desc
+@@
+
+
+1.3
+log
+@move cgi template into r.lua
+@
+text
+@#!/usr/bin/env lua
+--USAGE: provide xx.lua when query /xx.cgi/do?arg=1
+--       must has cgi method, which will get 3 table
+--       p: {do}
+--       q: {arg=1}(exclude ?)
+--       c: {a=1,b=2}(urlencoed)
+
+
+local function _url_str_tbl(s)
+  -- split urlencoed into table
+  local t = {}
+  local p_start, p_next = 1, 1
+  local s_sec, p_eq = "", 1
+  repeat
+    p_next = s:find("&", p_start, true)
+    if p_next then
+      s_sec = s:sub(p_start, p_next-1)
+      p_start = p_next + 1
+    else
+      s_sec = s:sub(p_start)
+    end
+    p_eq = s_sec:find("=", 1, true)
+    if p_eq then
+      t[s_sec:sub(1, p_eq-1)] = s_sec:sub(p_eq+1)
+    end
+  until not p_next
+  return t
+end
+
+
+local function _path_tbl(s)
+  local t = {}
+  local p_start, p_next = 2, 1
+  repeat
+    p_next = s:find("/", p_start, true)
+    if p_next then
+      table.insert(t, s:sub(p_start, p_next-1))
+      p_start = p_next + 1
+    else
+      table.insert(t, s:sub(p_start))
+    end
+  until not p_next
+  return t
+end
+
+
+local function errlog(msg)
+  os.execute("echo "..'"`date` '..msg..'">>cgi-err.log')
+end
+
+
+-- cgi entry, register bussness into fn
+local fn = {}
+cgi = function(p,q,c)
+    local ptf = fn[p[1]]
+    if ptf then
+      ptf(q,c)
+    else
+      errlog("not found ["..p[1].."] request")
+    end
+end
+
+
+local function main()
+  -- part after r.cgi, e.g r.cgi/foo/bar, path_info is /foo/bar
+  local path_info = os.getenv("PATH_INFO")
+  -- part after ?(exclude ?), e.g r.cgi/foo?arg=3, query is arg=3
+  local query_str = os.getenv("QUERY_STRING")
+  local urlencoded_content = io.read("a")
+  -- ensure html render
+  print("Content-Type: text/html; charset=UTF-8\n")
+  -- cal module's cgi function
+  cgi(_path_tbl(path_info),
+      _url_str_tbl(query_str),
+      _url_str_tbl(urlencoded_content))
+end
+
+@
+
+
+1.2
+log
+@cgi-bin errlog and utf8
+@
+text
+@d52 12
+@
+
+
+1.1
+log
+@cgi-bin r.template -> r.lua
+@
+text
+@d47 5
+d59 1
+a59 1
+  print("Content-Type: text/html\n")
+@
+

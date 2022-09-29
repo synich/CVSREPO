@@ -1,0 +1,1520 @@
+head	1.43;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.43
+date	2022.09.29.15.10.14;	author games;	state Exp;
+branches;
+next	1.42;
+commitid	1006335B55613380FD3;
+
+1.42
+date	2022.09.12.14.50.24;	author games;	state Exp;
+branches;
+next	1.41;
+commitid	100631F47301398A12D;
+
+1.41
+date	2022.04.23.04.56.53;	author android;	state Exp;
+branches;
+next	1.40;
+commitid	1006263871576C11684;
+
+1.40
+date	2021.12.16.14.28.16;	author android;	state Exp;
+branches;
+next	1.39;
+commitid	JxbUCEOhGrYBOSkD;
+
+1.39
+date	2021.11.07.14.07.01;	author android;	state Exp;
+branches;
+next	1.38;
+commitid	IVg7SQ6ZnsL2XRfD;
+
+1.38
+date	2021.08.14.12.12.59;	author android;	state Exp;
+branches;
+next	1.37;
+commitid	qjodSLNnDUOj3W4D;
+
+1.37
+date	2021.02.12.10.43.44;	author FOTEN;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2019.10.27.14.18.27;	author WIN7;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2019.09.08.15.47.33;	author WIN7;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2019.08.11.12.30.11;	author WIN7;	state Exp;
+branches;
+next	1.33;
+
+1.33
+date	2019.05.01.10.21.05;	author WIN7;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2019.05.01.09.59.01;	author WIN7;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2019.03.31.06.43.12;	author Administrator;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2019.03.03.14.07.18;	author Administrator;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2019.02.05.11.37.15;	author Administrator;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2019.01.19.13.13.54;	author Administrator;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2018.10.28.12.17.39;	author Administrator;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2018.09.04.16.18.16;	author Administrator;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2018.08.18.22.52.44;	author Administrator;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2018.08.18.07.35.16;	author Administrator;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2018.08.05.06.50.23;	author Administrator;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2018.07.09.00.38.13;	author Administrator;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2018.05.28.14.30.38;	author Administrator;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2018.05.06.12.15.39;	author Administrator;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2018.04.20.16.19.21;	author Administrator;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2018.04.05.13.01.11;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.04.05.04.03.47;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.03.11.15.00.17;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.03.04.13.21.08;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.03.04.13.04.10;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.03.03.08.41.06;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.03.03.08.05.04;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.03.02.15.42.19;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.02.27.15.24.16;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.02.27.14.44.49;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.02.26.15.15.49;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.02.25.13.36.36;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.02.25.05.17.49;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.02.24.14.34.23;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.02.23.11.07.56;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.02.23.09.26.12;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.01.01.16.04.14;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.01.01.09.03.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.43
+log
+@trans tmrec to sdf
+@
+text
+@/// Global variable declare
+var g_date = 0
+var g_off=0;
+
+/// d0/t0->12 d1/t1->18 d2/t2->24
+/// success return 12/18/24 fail return false
+function tag2hour(str){
+  var idx = parseInt(str.substring(1));
+  var ret = false;
+  if (0<=idx && idx<=2) {
+    ret = 12+idx*6
+  }
+  return ret
+}
+
+/// check date is like 180210, ajust 6 digit
+/// return true date OK / false date wrong
+function checkDate(day){
+  return day.length==6;
+}
+
+/// use Base64 to convert multiword into ASCII, so Droid can send
+function convertTxt(str){
+  var can_out = str.replace(/\n/g, "")
+  str = Base64.encode(can_out);//encodeURI(str);
+  return str;
+}
+
+function trimFirstLF(str){
+  var needStr = str;
+  if (str.charAt(0) == "\n" || str.charAt(0) == " ") {
+    needStr = str.slice(1);
+  }
+  return needStr
+}
+
+////////////////////////////
+/// callback for http ajax
+function HandleHint(error, response){
+  showHint(response);
+}
+
+function HandleShowLong(error, response){
+  showHint(response, 2);
+}
+
+function HandleEditTm( error, response ) {
+  var txt = document.getElementById("eNow");
+  txt.value = trimFirstLF(response)
+}
+
+function HandleEditBlog(error, response) {
+  var txt = document.getElementById("eNow");
+  response = trimFirstLF(response)
+  var st = response.indexOf('|')
+  var tag = response.slice(0, st);
+  var etg = document.getElementById("eBtg");
+  //etg.value = tag;
+  //var ctx = response.slice(st+1);
+  var ctx = response
+  txt.value = ctx
+  //also preview in div
+  setDivShow("eDone", marked.parse(ctx));
+}
+
+function HandleDone( error, response ){
+  setDivShow("eDone", trimFirstLF(response));
+}
+
+function HandleMD(error, response){
+  setDivShow("eDone", marked.parse(response));
+}
+
+function HandleStdout(error, response){
+  var can_out = response.replace(/\n/g, "<br />")
+  setDivShow("eDone", can_out);
+}
+
+function HandleBlst(error, response){
+  setDivShow("eBlst", trimFirstLF(response));
+}
+
+function HandleUpPic(error, response){
+  showHint(response, 1)
+}
+/////////////////////////////////////////
+/// button callback function
+
+/// return [0]-pub or priv [1]-blog or tmrec
+function sepraDB(){
+  var edb = getElemValue("eDb");
+  return edb.split('-');
+}
+
+/// get tmrec text
+function onEdit(eYear, eMonth, eTb){
+  var fdb = sepraDB();
+  if (fdb[1]=='tmrec') {
+    var d = getElemValue('eTag');
+    d = tag2hour(d);
+    if(d==false){
+      showHint('Get tmrec fail, hour is wrong!');
+      return;
+    }
+    httpPost("/digest/justDo/"+fdb[0]+"/"+curDay()+"/"+d, 'mth=get',
+      HandleEditTm);
+  }else if(fdb[1]=='blog'){
+    var day = getElemValue("eNow");
+    if ( !checkDate(day) ) {
+      showHint('Your input day is illegal!');
+      return;
+    }
+    g_date = day; // next upload use this day
+    httpPost("/blog.cgi/read?dt="+day, '',
+      HandleEditBlog);
+  }
+}
+
+function getDone(){
+  var fdb = sepraDB();
+  if(fdb[1]=='tmrec'){
+    httpPost("/digest/rec/"+fdb[0]+"/"+curDay(), 'mth=get',
+      HandleDone);
+  }else{
+    showHint('Choose is not Tmrec!');
+  }
+}
+
+///\param[in] fdb DB name
+///\param[in] day which day to save
+function saveRec(fdb, day){
+  var hour = getElemValue("eTag");
+  hour = tag2hour(hour)
+  if(hour==false){
+    showHint('Up fail, hour is wrong!');
+    return;
+  }
+  var rec = getElemValue("eNow");
+  var pct = "hour="+hour+"|txt="+convertTxt(rec);
+  httpPost("/tmrec.cgi/edit?dt="+day,
+    pct, HandleDone );
+}
+
+function saveBlog(fdb, day) {
+  var txt = getElemValue("eNow");
+  var tag = getElemValue("eBtg");
+  var pct = "tag="+tag+"|ctx="+convertTxt(txt);
+  httpPost("/digest/blog/"+fdb+'/'+day, pct, HandleHint );
+}
+
+function previewMd(src, dst){
+  setDivShow(dst, marked.parse(getElemValue(src)));
+}
+
+function uploadDB(){
+  var er = sepraDB();
+  var day = curDay();
+  if (er[1]=='tmrec') {
+    saveRec(er[0], day);
+  } else if(er[1]=='blog') {
+    // save to another day, avoid of overwrite
+    var rep = getElemValue('eDay');
+    if (rep<10){
+      var day = day.replace(/\d$/, rep);
+      if (g_date) {
+        day = g_date;  // use last date
+      }
+      if ( confirm("upload blog "+er[0]+day) ){
+        saveBlog(er[0], day);
+        previewMd('eNow', 'eDone');
+      }
+    } else{
+      showHint('Choose day is exceed 10!');
+    }
+  }
+}
+
+/// local db
+function getDB() {
+  var tag = getElemValue("eTag");
+  var txt = document.getElementById("eNow");
+  var tmp = app.LoadText( tag, "" );
+  txt.value = tmp;
+}
+
+function setDB() {
+  var tag = getElemValue("eTag");
+  var txt = getElemValue("eNow");
+  app.SaveText( tag, txt );
+  showHint("SETLOCAL OK!");
+}
+
+// get recent blog date-title or some month tmrec
+function recentDigest() {
+  var fdb = sepraDB();
+  if(fdb[1]=='blog'){
+    var page = parseInt(getElemValue("eNow"));
+    if (!page || page > 20) { //TODO limit page
+      page = 0;
+    }
+    var tag = getElemValue("eBtg");
+    // default get recent some blog
+    if (tag == "unknown" ) {
+      httpPost("/digest/recentBlog/"+fdb[0]+"/"+page, '', HandleBlst);
+    } else { // otherwise get specify tag blog
+      httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
+    }
+  }else if(fdb[1]=='tmrec') {
+    var yearmon = parseInt(getElemValue("eNow"));
+    if (yearmon && yearmon >1000 && yearmon < 9999) {
+      yearmon += '';
+    } else {
+      var mon = curDay();
+      var year = mon.substring(0, 2);// trieve year
+      var curmon = mon.substring(2, 4);//trieve month
+      mon = getElemValue("eDay");
+      if (mon<10){
+        mon = '0'+mon;
+      }
+      if (mon>curmon) {//over current month, get last year
+        year--; year += '';
+      }
+      yearmon = year + mon;
+    }
+    httpPost("/tmrec.cgi/read?dt="+yearmon, '', HandleStdout);
+  }
+}
+
+function removeDay(){
+  var day = getElemValue("eNow");
+  if ( !checkDate(day) ) {
+    showHint('Your input day is illegal!');
+    return;
+  }
+  var iswant = confirm("Do you really want to delete");
+  if (iswant) {
+    var fdb = sepraDB();
+    httpGet("/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+      HandleShowLong);
+  }
+}
+
+/// find with page as offset
+function queryBlogTmKwd(page) {
+  var kwd = getElemValue("eNow");
+  httpGet("/blog.cgi/keyword?kwd="+convertTxt(kwd),  HandleStdout);
+}
+
+function clearContent() {
+  var txt = document.getElementById("eNow");
+  txt.value = '';
+  g_date = 0;
+}
+
+function viewBlog(to) {
+  var fdb = sepraDB();
+  var off = parseInt(getElemValue("eDay"));
+  if (to=='m') { off = 0-off; }
+  else if (to=='s') { off = 10*off; } //skip 10 times
+  g_off += off;
+  httpGet("/digest/blogIdx/"+fdb[0]+"/"+g_off,
+      HandleMD);
+}
+
+function exitView() {
+    $("#eP1").show();
+    $("#eP2").hide();
+}
+
+//Called when user touches our button.
+function uploadFile( elemFile, upName ) {
+  var f = document.getElementById(elemFile).files[0];
+  var extName = f.name.replace(/.*\./, '');
+  var fn = getElemValue(upName);
+  if (fn == '') {alert("must input pic name!"); return;}
+  var reader = new FileReader();
+  reader.readAsDataURL(f);
+  reader.onload = function(e){
+    var pic = this.result;
+    var param = {pic:pic, ext:extName, fn:fn}
+    httpPost("/pic/upload", param, HandleUpPic)
+  }
+}
+
+function onMenu( ) {
+    var m = document.getElementById("eMenu");
+    var item = m.value;
+  /// enter menu, item is undefined, use if to ban it
+  if (item=="PASTE") {
+    var cp = app.GetClipboardText();
+    var txt = document.getElementById("eNow");
+    txt.value += cp;
+  } else if (item=="QUERYKEY") {
+    queryBlogTmKwd(0);
+  } else if(item=="WITHPAGE"){
+    var page = getElemValue("eDay");
+    queryBlogTmKwd(page);
+  } else if(item=="PREVIEW"){
+    var txt = marked.parse(getElemValue("eNow"));
+    setDivShow("eDone", txt);
+  } else if(item=="CLEAR"){
+    clearContent();
+  } else if (item=="VIEW") {
+    $("#eP2").show();
+    $("#eP1").hide();
+  } else if (item=="DELETE") {
+    removeDay();
+  }
+  m.value = "MENU";
+}
+
+function get_dahua_stock(){
+  httpPost("/stock.cgi", '', HandleDone );
+}
+@
+
+
+1.42
+log
+@change to sdf.org
+@
+text
+@d24 2
+a25 1
+  str = Base64.encode(str);//encodeURI(str);
+d139 3
+a141 3
+  var pct = "hour="+hour+"|rec="+convertTxt(rec);
+  httpPost("/digest/rec/"+fdb+"/"+day,
+    pct, HandleHint );
+d225 1
+a225 1
+    httpPost("/digest/recentTmrec/"+fdb[0]+"/"+yearmon, '', HandleDone);
+@
+
+
+1.41
+log
+@layout.css
+@
+text
+@d57 3
+a59 2
+  etg.value = tag;
+  var ctx = response.slice(st+1);
+d73 5
+d113 1
+a113 1
+    httpPost("/digest/blogDay/"+fdb[0]+"/"+day, '',
+d245 1
+a245 2
+  var pct = "page="+page+"|kwd="+convertTxt(kwd);
+  httpPost("/digest/keyword", pct, HandleMD);
+d312 1
+a312 1
+  httpPost("/pgext/dahuaPrice/", '', HandleDone );
+@
+
+
+1.40
+log
+@change edit blog to post
+@
+text
+@d61 1
+a61 1
+  setDivShow("eDone", marked(ctx));
+d69 1
+a69 1
+  setDivShow("eDone", marked(response));
+d145 1
+a145 1
+  setDivShow(dst, marked(getElemValue(src)));
+d293 1
+a293 1
+    var txt = marked(getElemValue("eNow"));
+@
+
+
+1.39
+log
+@change recent to POST
+@
+text
+@d107 1
+a107 1
+    httpGet("/digest/blogDay/"+fdb[0]+"/"+day,
+@
+
+
+1.38
+log
+@use post instead of get in droidtmrec
+@
+text
+@d197 1
+a197 1
+      httpGet("/digest/recentBlog/"+fdb[0]+"/"+page, HandleBlst);
+d199 1
+a199 1
+      httpGet("/digest/tagBlog/"+fdb[0]+"/"+tag, HandleBlst);
+d218 1
+a218 1
+    httpPost("/digest/recentTmrec/"+fdb[0]+"/"+yearmon, 'mth=get', HandleDone);
+d305 4
+@
+
+
+1.37
+log
+@add recent any month diary
+@
+text
+@d98 1
+a98 1
+    httpGet("/digest/justDo/"+fdb[0]+"/"+curDay()+"/"+d,
+d115 1
+a115 1
+    httpGet("/digest/rec/"+fdb[0]+"/"+curDay(),
+d218 1
+a218 1
+    httpGet("/digest/recentTmrec/"+fdb[0]+"/"+yearmon, HandleDone);
+@
+
+
+1.36
+log
+@UPDATE: merge rest.php into one and rename to r.php
+@
+text
+@d1 4
+a50 1
+var g_date = 0
+d161 1
+a161 1
+	  if ( confirm("upload blog "+er[0]+day) ){
+d164 1
+a164 1
+	  }
+d186 1
+d202 15
+a216 6
+    var mon = curDay();
+    var year = mon.substring(0, 2);// trieve year
+    var curmon = mon.substring(2, 4);//trieve month
+    mon = getElemValue("eDay");
+    if (mon<10){
+      mon = '0'+mon;
+d218 1
+a218 4
+    if (mon>curmon) {//over current month, get last year
+      year--; year += '';
+    }
+    httpGet("/digest/recentTmrec/"+fdb[0]+"/"+year+mon, HandleDone);
+d246 1
+a248 1
+var g_off=0;
+a273 1
+    //var param = "pic="+pic+ "|ext="+extName + "|fn="+fn;
+d280 2
+a281 2
+	var m = document.getElementById("eMenu");
+	var item = m.value;
+@
+
+
+1.35
+log
+@INSERT: data tag for blog
+@
+text
+@d95 1
+a95 1
+    httpGet("/rest.php/digest/justDo/"+fdb[0]+"/"+curDay()+"/"+d,
+d104 1
+a104 1
+    httpGet("/rest.php/digest/blogDay/"+fdb[0]+"/"+day,
+d112 1
+a112 1
+    httpGet("/rest.php/digest/rec/"+fdb[0]+"/"+curDay(),
+d130 1
+a130 1
+  httpPost("/rest.php/digest/rec/"+fdb+"/"+day,
+d138 1
+a138 1
+  httpPost("/rest.php/digest/blog/"+fdb+'/'+day, pct, HandleHint );
+d193 1
+a193 1
+      httpGet("/rest.php/digest/recentBlog/"+fdb[0]+"/"+page, HandleBlst);
+d195 1
+a195 1
+      httpGet("/rest.php/digest/tagBlog/"+fdb[0]+"/"+tag, HandleBlst);
+d208 1
+a208 1
+    httpGet("/rest.php/digest/recentTmrec/"+fdb[0]+"/"+year+mon, HandleDone);
+d221 1
+a221 1
+    httpGet("/rest.php/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+d230 1
+a230 1
+  httpPost("/rest.php/digest/keyword", pct, HandleMD);
+d245 1
+a245 1
+  httpGet("/rest.php/digest/blogIdx/"+fdb[0]+"/"+g_off,
+d266 1
+a266 1
+    httpPost("/rest.php/pic/upload", param, HandleUpPic)
+@
+
+
+1.34
+log
+@UPDATE: get tag blog when choose tag
+@
+text
+@d134 1
+a134 1
+function saveDraft(fdb, day) {
+d159 1
+a159 1
+        saveDraft(er[0], day);
+@
+
+
+1.33
+log
+@UPDATE fix upload picture favour
+@
+text
+@d95 1
+a95 1
+    httpGet("/index.php/digest/getJustDo/"+fdb[0]+"/"+curDay()+"/"+d,
+d104 1
+a104 1
+    httpGet("/index.php/digest/getBlogDay/"+fdb[0]+"/"+day,
+d112 1
+a112 1
+    httpGet("/index.php/digest/getRec/"+fdb[0]+"/"+curDay(),
+d130 1
+a130 1
+  httpPost("/index.php/digest/saveRec/"+fdb+"/"+day,
+d138 1
+a138 1
+  httpPost("/index.php/digest/saveBlog/"+fdb+'/'+day, pct, HandleHint );
+d190 7
+a196 1
+    httpGet("/index.php/digest/recentBlog/"+fdb[0]+"/"+page, HandleBlst);
+d208 1
+a208 1
+    httpGet("/index.php/digest/recentTmrec/"+fdb[0]+"/"+year+mon, HandleDone);
+d221 1
+a221 1
+    httpGet("/index.php/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+d230 1
+a230 1
+  httpPost("/index.php/digest/keyword", pct, HandleMD);
+d245 1
+a245 1
+  httpGet("/index.php/digest/getBlogIdx/"+fdb[0]+"/"+g_off,
+@
+
+
+1.32
+log
+@INSERT: support upload picture
+@
+text
+@d74 1
+a74 1
+  showHint(response)
+@
+
+
+1.31
+log
+@UPDATE: support choose tag for blog
+@
+text
+@a20 1
+  str = str.replace(/=/g, '~');
+d73 3
+d248 16
+@
+
+
+1.30
+log
+@UPDATE: combine menu and delete button into one
+@
+text
+@a47 1
+var g_tag = 'draft'
+d53 3
+a55 1
+  g_tag = response.slice(0, st);
+d134 2
+a135 1
+  var pct = "tag="+g_tag+"|ctx="+convertTxt(txt);
+@
+
+
+1.29
+log
+@UPDATE: upload blog need confirm, avoid of overwrite
+@
+text
+@d239 3
+a241 3
+/// Some Android no menu button, explicit trick menu
+function showMenu(){
+  app.ShowMenu()
+d244 3
+a246 2
+/// DroidScript require must name as OnMenu
+function OnMenu( item ) {
+a261 3
+  } else if(item=="EDIT"){
+    $("#eP1").show();
+    $("#eP2").hide();
+d265 2
+d268 1
+a269 1
+
+@
+
+
+1.28
+log
+@INSERT: view blog by prev or next
+@
+text
+@d154 4
+a157 2
+      saveDraft(er[0], day);
+      previewMd('eNow', 'eDone');
+@
+
+
+1.27
+log
+@UPDATE: make illegal content as 0
+@
+text
+@d226 11
+d259 6
+a264 4
+  } else if(item=="ABOUT"){
+    var oput = "Ver:20180905\n";
+    //for (k in app) { oput += k + "\n" }
+    showHint(oput, 2);
+d267 1
+@
+
+
+1.26
+log
+@UPDATE: move recent blog list to individual div, make edit blog continualy
+@
+text
+@d180 2
+a181 2
+    var page = getElemValue("eNow");
+    if (!page) {
+@
+
+
+1.25
+log
+@UPDATE: improve http call
+@
+text
+@d69 4
+d180 5
+a184 1
+    httpGet("/index.php/digest/recentBlog/"+fdb[0], HandleDone);
+d249 1
+a249 1
+    var oput = "Ver:20180805\n";
+@
+
+
+1.24
+log
+@UPDATE: divide function and common code
+@
+text
+@d88 2
+a89 2
+    httpAjax("get", "/index.php/digest/getJustDo/"+fdb[0]+"/"+curDay()+"/"+d,
+      '', HandleEditTm);
+d97 2
+a98 2
+    httpAjax("get", "/index.php/digest/getBlogDay/"+fdb[0]+"/"+day,
+      '', HandleEditBlog);
+d105 2
+a106 2
+    httpAjax("get", "/index.php/digest/getRec/"+fdb[0]+"/"+curDay(),
+    '', HandleDone);
+d123 1
+a123 1
+  httpAjax("post", "/index.php/digest/saveRec/"+fdb+"/"+day,
+d130 1
+a130 1
+  httpAjax("post", "/index.php/digest/saveBlog/"+fdb+'/'+day, pct, HandleHint );
+d176 1
+a176 1
+    httpAjax("get", "/index.php/digest/recentBlog/"+fdb[0], '', HandleDone);
+d188 1
+a188 1
+    httpAjax("get", "/index.php/digest/recentTmrec/"+fdb[0]+"/"+year+mon, '', HandleDone);
+d201 2
+a202 2
+    httpAjax("get", "/index.php/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+      '', HandleShowLong);
+d210 1
+a210 1
+  httpAjax("post", "/index.php/digest/keyword", pct, HandleMD);
+@
+
+
+1.23
+log
+@UPDATE: use timeout instead of Android toast, because it has been removed from 8
+@
+text
+@a0 50
+// return string type day like '180205'
+function curDay(){
+  var d = new Date();
+  var day = d.getFullYear() - 2000; //save last 2 digit
+  var tmp = d.getMonth() + 1;
+
+  if (tmp < 10) {day += '0'; //month less 10, append 0 after year
+  }else {day += ''}
+  day += tmp;
+  tmp = d.getDate();
+  if (tmp < 10) {
+    day += '0';
+  }
+  day += tmp;
+  return day;
+}
+
+/// \param[in] showLong 1-long 2-forever other-alert default short
+function showHint(str, showLong){
+  var helem
+  if (showLong==2) {
+    alert(str);
+  } else if (showLong==1) {
+    setDivShow("eHint", str);
+    setTimeout('setDivShow("eHint", "")', 5000);
+  } else {
+    setDivShow("eHint", str);
+    setTimeout('setDivShow("eHint", "")', 2000);
+  }
+}
+
+/// only used for FORM element
+function getElemValue(elemId){
+  var elem = document.getElementById(elemId);
+  return elem.value
+}
+
+/// only used for DIV element
+function setDivShow(elemId, ctx){
+  var elem = document.getElementById(elemId);
+  elem.innerHTML = ctx
+}
+
+/// param is urlencode format, use | instead of &(DroidScript feature)
+function httpAjax(mth, path, param, cb){
+  var dst = "http://waer.f3322.net:55555";
+  //var dst = "http://192.168.2.115:80"
+  app.HttpRequest(mth, dst, path, param, cb);
+}
+
+d18 1
+a18 1
+/// make multiword char into ASCII char
+a70 3
+function showMenu(){
+  app.ShowMenu()
+}
+a215 2
+  /*var txt = document.getElementById("eDone");
+  txt.innerHTML = '';*/
+d218 6
+@
+
+
+1.22
+log
+@INSERT: see markdown preview when upload blog
+@
+text
+@d18 1
+a18 1
+/// \param[in] showLong 1-long 2-alert default is short
+d20 1
+d24 2
+a25 1
+    app.ShowPopup(str, "Bottom");
+d27 2
+a28 1
+    app.ShowPopup(str, "Bottom,Short");
+d38 6
+d108 1
+a108 2
+  txt = document.getElementById("eDone");
+  txt.innerHTML = marked(ctx);
+d112 1
+a112 2
+  var txt = document.getElementById("eDone");
+  txt.innerHTML = trimFirstLF(response)
+d116 1
+a116 2
+  var txt = document.getElementById("eDone");
+  txt.innerHTML = marked(response);
+d187 1
+a187 2
+  var pdiv = document.getElementById(dst);
+  pdiv.innerHTML = marked(getElemValue(src));
+d286 1
+a286 2
+    var dn = document.getElementById("eDone");
+    dn.innerHTML = txt;
+d290 1
+a290 1
+    var oput = "Ver:20180528\n";
+@
+
+
+1.21
+log
+@UPDATE: support preview blog and only clear edit area
+@
+text
+@d180 5
+d199 1
+@
+
+
+1.20
+log
+@UPDATE: remember blog date, so can edit history blog
+@
+text
+@d98 3
+d258 2
+a259 2
+  var txt = document.getElementById("eDone");
+  txt.innerHTML = '';
+d280 2
+a281 4
+    var oput = "Ver:20180405\n";
+    for (k in app) {
+      oput += k + "\n"
+    }
+@
+
+
+1.19
+log
+@UDPATE: fixed tm first char is space
+@
+text
+@d90 1
+d140 1
+d187 3
+@
+
+
+1.18
+log
+@UPDATE: support blog tag
+@
+text
+@d68 1
+a68 1
+  if (str.charAt(0) == "\n") {
+@
+
+
+1.17
+log
+@UPDATE: add pure css, change into base64
+@
+text
+@d66 8
+d84 7
+a90 1
+function HandleEdit( error, response ) {
+d92 5
+a96 1
+  txt.value = response.slice(1);
+d101 1
+a101 1
+  txt.innerHTML = response.slice(1);
+d122 1
+a122 1
+function getRec(eYear, eMonth, eTb){
+d132 1
+a132 1
+      '', HandleEdit);
+d140 1
+a140 1
+      '', HandleEdit);
+d171 1
+a171 1
+  var pct = "tag=draft|ctx="+convertTxt(txt);
+d272 1
+a272 1
+    var oput = "Ver:20180317\n";
+@
+
+
+1.16
+log
+@UPDATE: support get blog into edit area, avoid miss = by droidscript bug
+@
+text
+@d61 1
+a61 1
+  str = encodeURI(str);
+d253 6
+@
+
+
+1.15
+log
+@UPDATE: move blog list into DIV
+@
+text
+@d53 13
+a104 6
+  var d = getElemValue('eTag');
+  d = tag2hour(d);
+  if(d==false){
+    showHint('Get fail, hour is wrong!');
+    return;
+  }
+d107 6
+d114 9
+a122 3
+    '', HandleEdit);
+  }else{
+    showHint('Choose is not Tmrec!');
+a126 1
+  var whichMonth = curDay();
+d146 1
+a146 1
+  var pct = "hour="+hour+"|rec="+encodeURI(rec);
+d153 1
+a153 1
+  var pct = "tag=draft|ctx="+encodeURI(txt);
+d162 1
+a162 1
+  } else {// temprary blog
+d193 1
+a193 1
+  }else {
+d210 1
+a210 1
+  if (day.length!=6) {
+d225 1
+a225 1
+  var pct = "page="+page+"|kwd="+encodeURI(kwd);
+@
+
+
+1.14
+log
+@UPDATE: support get a year diary
+@
+text
+@d174 1
+a174 1
+    httpAjax("get", "/index.php/digest/recentBlog/"+fdb[0], '', HandleShowLong);
+@
+
+
+1.13
+log
+@INSERT: support remove with day
+@
+text
+@d7 1
+a7 1
+  if (tmp < 10) {day += '0'
+d147 6
+a152 2
+    var day = day.replace(/\d$/, rep);
+    saveDraft(er[0], day);
+d177 10
+a186 2
+    mon = mon.substring(0, 4);// trieve month
+    httpAjax("get", "/index.php/digest/recentTmrec/"+fdb[0]+"/"+mon, '', HandleDone);
+@
+
+
+1.12
+log
+@UPDATE: merge diary,blog and pub,priv into one selection
+@
+text
+@d55 1
+a55 1
+function HandleSave(error, response){
+d130 1
+a130 1
+    pct, HandleSave );
+d136 1
+a136 1
+  httpAjax("post", "/index.php/digest/saveBlog/"+fdb+'/'+day, pct, HandleSave );
+d178 14
+@
+
+
+1.11
+log
+@UPDATE: add markdown support
+@
+text
+@d63 1
+a63 1
+function HandleGet( error, response ) {
+d84 7
+a90 1
+/// get markdown original text
+d98 7
+a104 2
+  var fdb = getElemValue("eDb");
+  httpAjax("get", "/index.php/digest/getJustDo/"+fdb+"/"+curDay()+"/"+d, '', HandleGet);
+d109 3
+a111 2
+  var fdb = getElemValue("eDb");
+  httpAjax("get", "/index.php/digest/getRec/"+fdb+"/"+curDay(),
+d113 3
+d118 3
+a120 2
+//\param[in] whichDay like 170518, editId blog content, tagId tag
+function saveRec(whichHour, dosth){
+a127 1
+  var fdb = getElemValue("eDb");
+d129 1
+a129 1
+  httpAjax("post", "/index.php/digest/saveRec/"+fdb+"/"+curDay(),
+d133 19
+d168 8
+a175 13
+  var fdb = getElemValue("eDb");
+  httpAjax("get", "/index.php/digest/recentBlog/"+fdb, '', HandleShowLong);
+}
+
+function saveDraft() {
+  var txt = getElemValue("eNow");
+  var pct = "tag=draft|ctx="+encodeURI(txt);
+  var day = getElemValue("eDay");
+  var saveTo = curDay();
+  // save to another day, avoid of overwrite
+  saveTo = saveTo.replace(/\d$/, day);
+  var fdb = getElemValue("eDb");
+  httpAjax("post", "/index.php/digest/saveBlog/"+fdb+'/'+saveTo, pct, HandleSave );
+@
+
+
+1.10
+log
+@INSERT: add menu button for zte phone
+@
+text
+@d18 9
+a26 2
+function showHint(str){
+  app.ShowPopup(str, "Bottom,Short");
+d53 26
+a95 5
+function HandleGet( error, response ) {
+    var txt = document.getElementById("eNow");
+    txt.value = response.slice(1);
+}
+
+a102 5
+function HandleDone( error, response ){
+    var txt = document.getElementById("eDone");
+    txt.innerHTML = response.slice(1);
+}
+
+a117 4
+function HandleSave(error, response){
+    showHint(response);
+}
+
+d133 5
+a148 5
+function recentDigest() {
+  var fdb = getElemValue("eDb");
+  httpAjax("get", "/index.php/digest/recentBlog/"+fdb, '', HandleSave);
+}
+
+d153 1
+a153 1
+  httpAjax("post", "/index.php/digest/keyword", pct, HandleDone);
+d174 4
+@
+
+
+1.9
+log
+@UPDATE: merge hour and tag into one, delete hour tag
+@
+text
+@d47 4
+@
+
+
+1.8
+log
+@UPDATE: save digest into tmrec, so no need title, change blog tag from digest to draft
+@
+text
+@d35 11
+d49 6
+a54 1
+  var d = getElemValue('eHour');
+d78 7
+a84 2
+  var hour = document.getElementById("eHour");
+  var rec = document.getElementById("eNow");
+d86 1
+a86 1
+  var pct = "hour="+hour.value+"|rec="+encodeURI(rec.value);
+@
+
+
+1.7
+log
+@INSERT: add query and reduce get value from form value
+@
+text
+@d39 2
+a40 1
+  httpAjax("get", "/index.php/tmrec/getJustDo/"+curDay()+"/"+d, '', HandleGet);
+d50 2
+a51 1
+  httpAjax("get", "/index.php/tmrec/getRecClnt/"+curDay(),
+d64 1
+d66 1
+a66 1
+  httpAjax("post", "/index.php/tmrec/saveRec/"+curDay(),
+d89 1
+a89 1
+function saveDigest() {
+d91 1
+a91 1
+  var pct = "tag=digest|ctx="+encodeURI(txt);
+d97 1
+a97 1
+  httpAjax("post", "/index.php/digest/save/"+fdb+'/'+saveTo, pct, HandleSave );
+d102 1
+a102 1
+  httpAjax("get", "/index.php/digest/recent/"+fdb, '', HandleSave);
+@
+
+
+1.6
+log
+@UPDATE: upload can choose date, add menu
+@
+text
+@d18 10
+d35 1
+d38 2
+a39 3
+  var d = document.getElementById('eHour');
+  httpAjax("get", "/index.php/tmrec/getJustDo/"+curDay()+"/"+d.value,
+    '', HandleGet);
+d68 1
+a68 1
+    alert(response);
+d73 1
+a73 1
+  var tag = document.getElementById("eTag");
+d75 1
+a75 1
+  var tmp = app.LoadText( tag.value, "" );
+d80 4
+a83 4
+  var tag = document.getElementById("eTag");
+  var txt = document.getElementById("eNow");
+  app.SaveText( tag.value, txt.value );
+  alert("SETLOCAL OK!");
+d87 3
+a89 3
+  var txt = document.getElementById("eNow");
+  var pct = "tag=digest|ctx="+encodeURI(txt.value);
+  var day = document.getElementById("eDay");
+d92 3
+a94 3
+  saveTo = saveTo.replace(/\d$/, day.value);
+  var fdb = document.getElementById("eDb");
+  httpAjax("post", "/index.php/digest/save/"+fdb.value+'/'+saveTo, pct, HandleSave );
+d98 9
+a106 2
+  var fdb = document.getElementById("eDb");
+  httpAjax("get", "/index.php/digest/recent/"+fdb.value, '', HandleSave);
+d118 10
+a127 1
+  if(item=="CLEAR"){
+@
+
+
+1.5
+log
+@UPDATE: support choose pub and priv DB
+@
+text
+@d1 1
+d78 5
+d84 1
+a84 3
+  var pct = "tag=digest|ctx="+encodeURI(txt.value);
+  httpAjax("post", "/index.php/digest/save/"+fdb.value+'/'+curDay(),
+    pct, HandleSave );
+d98 7
+@
+
+
+1.4
+log
+@UPDATE: add clear and recent digest
+@
+text
+@d72 1
+d77 1
+d79 1
+a79 1
+  httpAjax("post", "/index.php/digest/save/"+curDay(),
+d84 2
+a85 1
+  httpAjax("get", "/index.php/digest/recent/", '', HandleSave);
+d91 2
+@
+
+
+1.3
+log
+@UPDATE: add local DB and save digest
+@
+text
+@d80 9
+@
+
+
+1.2
+log
+@UPDATE: add destinaion choose
+@
+text
+@d59 21
+@
+
+
+1.1
+log
+@INSERT: first version of diary in droidscript
+@
+text
+@d19 3
+a21 2
+  app.HttpRequest(mth, "http://waer.f3322.net:55555",
+    path, param, cb);
+d31 1
+a31 2
+function HandleGet( error, response )
+{
+d42 1
+a42 2
+function HandleDone( error, response )
+{
+@
+

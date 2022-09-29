@@ -1,0 +1,312 @@
+head	1.14;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.14
+date	2018.09.28.15.16.33;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.09.25.14.53.02;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.23.16.51.48;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.23.13.00.25;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.23.03.02.27;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.22.16.04.48;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.13.38.07;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.21.15.23.47;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.20.17.17.27;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.18.15.03.27;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.17.13.41.29;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.16.15.52.43;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.16.15.25.28;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@UPDATE: use function instead of global varible
+@
+text
+@#ifndef _RUA_POOL_H_
+#define _RUA_POOL_H_
+
+#include <stdint.h>
+
+/* Memory Pool */
+#define rh_alloc(n) rh_alloc_(n, __FILE__, __LINE__)
+char* rh_alloc_(int n, const char* f, int l);
+#define rh_revert(p) rh_revert_((char*)(p), __FILE__, __LINE__);(p)=NULL
+void rh_revert_(char* p, const char* f, int l);
+void rh_finalize();
+char* rh_dupstr(const char* p);
+char* rh_dupbin(const char* b, int len);
+void rh_memreport();
+
+/* Shortten String to Integer */
+uint64_t tokey(const char* str);
+void keyrdc(uint64_t k, char* val);
+uint64_t toikey(const char* str);
+void keyirdc(uint64_t k, char* val);
+
+/* use toikey as default policy */
+#ifdef CASECHARATER
+#define TOKEY tokey
+#else
+#define TOKEY toikey
+#define KEYRDC keyirdc
+#endif
+
+/* Hash Table */
+#define HASH_BUCKET 14
+/*2-Level container, has fixed number of val and dynamic link*/
+struct Env_val
+{
+  uint16_t used;
+  uint8_t reserved[6];
+  uint64_t key[HASH_BUCKET];
+  char* val[HASH_BUCKET];  // almost need free
+  struct Env_val* next;
+};
+/*return int means: 1-ok 0-fail*/
+int rh_rpstbl(struct Env_val** e, const char* key, char* val);
+int rh_rpbtbl(struct Env_val** e, const char* key, char* val, int len);
+int rh_deltbl(struct Env_val** e, const char* key);
+char* rh_gettbl(struct Env_val* e, const char* key);
+#define rh_clstbl(e) rh_clstbl_(e);e=NULL
+void rh_clstbl_(struct Env_val* e);
+/* Env_val not dispose iter func, so provide clear function*/
+typedef void (pf_destructElem)(void*);
+void rh_tblclear(struct Env_val* e, pf_destructElem f);
+void rh_hshreport(struct Env_val* e);
+
+/*0x1-open alloc detail*/
+int rh_dbgflg(int i);
+
+#endif
+@
+
+
+1.13
+log
+@INSERT: simple release for Env and change global flag to function
+@
+text
+@d31 1
+a31 1
+#define HASH_BUCKET 31
+d54 1
+a54 1
+void rh_dbgflg(int i);
+@
+
+
+1.12
+log
+@UPDATE: make deltbl meanful
+@
+text
+@d16 14
+a40 4
+uint64_t tokey(const char* str);
+void keyrdc(uint64_t k, char* val);
+uint64_t toikey(const char* str);
+void keyirdc(uint64_t k, char* val);
+d46 2
+a47 1
+void rh_hshreport(struct Env_val* e);
+d51 1
+d53 2
+a54 7
+/* use toikey as default policy */
+#ifdef CASECHARATER
+#define TOKEY tokey
+#else
+#define TOKEY toikey
+#define KEYRDC keyirdc
+#endif
+@
+
+
+1.11
+log
+@UPDATE: make Env_val outside and make alloc report controllable
+@
+text
+@d31 1
+d34 1
+a34 1
+void rh_deltbl(struct Env_val** e, const char* key);
+@
+
+
+1.10
+log
+@UPDATE: introduce macro wrap alloc and revert friendly
+@
+text
+@d17 10
+a26 1
+struct Env_val;
+@
+
+
+1.9
+log
+@INSERT: reduce uint64_t to char*, fixed dupstr and dupbin bug when input is 0
+@
+text
+@d7 4
+a10 2
+char* rh_alloc(int n);
+void rh_revert(char* p);
+@
+
+
+1.8
+log
+@INSERT: add Env_val destructor callback
+@
+text
+@d17 1
+d19 1
+d34 1
+@
+
+
+1.7
+log
+@UPDATE: add binary hash operation, and fixed genfunc error
+@
+text
+@d23 3
+@
+
+
+1.6
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d11 1
+d18 2
+a19 1
+int rh_savetbl(struct Env_val** e, const char* key, char* val);
+d25 3
+a27 1
+#ifndef CASECHARATER
+a28 2
+#else
+#define TOKEY tokey
+@
+
+
+1.5
+log
+@UPDATE: let hash reentrant, and this make proto useful
+@
+text
+@d22 7
+@
+
+
+1.4
+log
+@INSERT: add toikey
+@
+text
+@d14 1
+d17 4
+a20 3
+int rh_savetbl(const char* key, char* val);
+void rh_deltbl(const char* key);
+char* rh_gettbl(const char* key);
+@
+
+
+1.3
+log
+@INSERT: add dupstr, simple but useful for parser
+@
+text
+@d15 1
+@
+
+
+1.2
+log
+@INSERT: Hash table function
+@
+text
+@d10 1
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d6 1
+a6 1
+uint64_t tokey(const char* str);
+d12 6
+@
+

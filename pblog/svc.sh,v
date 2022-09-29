@@ -1,0 +1,46 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.03.15.15.18.27;	author android;	state Exp;
+branches;
+next	;
+commitid	6MTIYTZ5hbTRXpLC;
+
+
+desc
+@@
+
+
+1.1
+log
+@svc file and README
+@
+text
+@#!/bin/sh
+action=$1
+cd ~/pblog
+
+case $action in
+  "start")
+    php -S 0.0.0.0:8080 2>/dev/null &
+    ;;
+  "stop")
+    killall php
+    ;;
+  "status")
+    ps aux | grep ph[p]
+    ;;
+  "monbug")
+    php -S 0.0.0.0:8080 &
+    ;;
+  *)
+    echo "$0 start|stop|status|monbug"
+    ;;
+esac
+
+@

@@ -1,0 +1,180 @@
+head	1.10;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2022.05.03.06.40.59;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	1006270CE7B14DE6E06;
+
+1.9
+date	2022.04.04.12.03.17;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	100624ADE8517E3B39C;
+
+1.8
+date	2022.03.22.14.07.48;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	1006239D83465411379;
+
+1.7
+date	2022.03.07.14.31.34;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	100622617462EAFDA41;
+
+1.6
+date	2021.06.20.23.53.07;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	f74Z5BFBAwf7HVXC;
+
+1.5
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	Ib9ovegQE2iAfQXC;
+
+1.4
+date	2020.10.08.07.54.20;	author alarm;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2020.10.01.08.22.47;	author alarm;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2020.10.01.07.49.29;	author alarm;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.10
+log
+@vim dict add to tar
+@
+text
+@all:
+	tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+	mv envconf.tar.gz ~/pblog/Archive/
+
+@
+
+
+1.9
+log
+@add rv.txt into vimrc/doc
+@
+text
+@d2 1
+a2 1
+	tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ bin/ share/ nvim/
+@
+
+
+1.8
+log
+@move plgrc.vim into plugin, no pack it
+@
+text
+@d2 1
+a2 2
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ bin/ share/ nvim/
+	gzip envconf.tar
+@
+
+
+1.7
+log
+@use new init.lua to setup nvim
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plgrc.vim vimrc/plugin/ vimrc/autoload/ bin/ share/ nvim/
+@
+
+
+1.6
+log
+@fix tab in complete
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plgrc.vim vimrc/plugin/ vimrc/autoload/ bin/ share/
+@
+
+
+1.5
+log
+@use autoload instead of plugin
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ bin/ share/
+@
+
+
+1.4
+log
+@UPDATE: tar share folder
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/ share/
+@
+
+
+1.3
+log
+@UPDATE: fix ps grep bug
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/
+@
+
+
+1.2
+log
+@UPDATE: ver up to 2
+@
+text
+@d2 1
+a2 1
+	tar cf --exclude=CVS* --exclude=bin/.goto* envconf.tar bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/
+@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d2 1
+a2 1
+	tar cf envconf.tar bash.sh.tpl init.vim.tpl .gitconfig vimrc/*.vim vimrc/autoload/ bin/ --exclude CVS* --exclude bin/.goto*
+@
+

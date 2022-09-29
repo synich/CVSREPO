@@ -1,0 +1,68 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2021.09.05.10.44.19;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	O3sKZdjlIEP3RK7D;
+
+1.1
+date	2021.03.15.15.27.08;	author android;	state Exp;
+branches;
+next	;
+commitid	9E9TXtmZPVwQ0qLC;
+
+
+desc
+@@
+
+
+1.2
+log
+@record latest update blog
+@
+text
+@<?php
+function print_error($str){
+  if (LOG_LEVEL && LOG_LEVEL>=1) {
+    error_log($_SERVER['PATH_INFO'].' '.$str);
+  }
+}
+
+function print_warn($str){
+  if (LOG_LEVEL && LOG_LEVEL>=2) {
+    error_log($_SERVER['PATH_INFO'].' '.$str);
+  }
+}
+
+function print_info($str){
+  if (LOG_LEVEL && LOG_LEVEL>=3) {
+    error_log($_SERVER['PATH_INFO'].' '.$str);
+  }
+}
+
+?>
+@
+
+
+1.1
+log
+@init release logger and parsedown
+@
+text
+@d4 1
+a4 1
+    error_log($_SERVER['PATH_INFO'].$str);
+d10 1
+a10 1
+    error_log($_SERVER['PATH_INFO'].$str);
+d16 1
+a16 1
+    error_log($_SERVER['PATH_INFO'].$str);
+@
+

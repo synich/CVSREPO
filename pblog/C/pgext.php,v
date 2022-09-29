@@ -1,0 +1,251 @@
+head	1.7;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.7
+date	2021.11.07.14.08.13;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	2LDHleFgqllsXRfD;
+
+1.6
+date	2019.11.19.12.37.28;	author WIN7;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2019.11.18.16.14.46;	author WIN7;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2019.11.16.14.17.18;	author WIN7;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2019.11.14.13.20.30;	author WIN7;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2019.10.28.13.51.44;	author WIN7;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2019.10.26.16.48.16;	author WIN7;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@adapt to mobile, change GET to POST
+@
+text
+@<?php
+define('S_TKT', 'holy'); // fixed password
+/// for static page extention
+class C_pgext {
+  private function replaceHrefInGoo($html) {
+    $nh = preg_replace_callback('|href="/url\?q=([^&]*)[^>]*|',
+  function($match) {
+    $inb = base64_encode($match[1]);
+    return 'href="/r.php/pgext/crosswall/'.$inb.'?t='.S_TKT.'&act=o"';
+  }, $html);
+    return $nh;
+  }
+
+  private function getGooRes($url, $onlyBody) {
+    $html = file_get_contents($url);
+    $ret = $this->replaceHrefInGoo($html);
+    if ($onlyBody) {
+      $m1 = preg_match('/<body[^>]*>/', $html, $startpos, PREG_OFFSET_CAPTURE);
+      $m2 = preg_match('/<\/body>/', $html, $endpos, PREG_OFFSET_CAPTURE);
+      $ret = 'your request html content not have body tag';
+      if ( ($m1 == 1) && ($m2==1) ) {
+        $spos = $startpos[0][1] + strlen($startpos[0][0] );
+        $epos = $endpos[0][1] ;
+        $ret = substr($html, $spos, $epos-$spos);
+      }
+    }
+    return $ret;
+  }
+
+  private function getHtml($url, $onlyBody) {
+    $html = file_get_contents($url);
+    $ret = $html;
+    if ($onlyBody) {
+      $m1 = preg_match('/<body[^>]*>/', $html, $startpos, PREG_OFFSET_CAPTURE);
+      $m2 = preg_match('/<\/body>/', $html, $endpos, PREG_OFFSET_CAPTURE);
+      $ret = 'your request html content not have body tag';
+      if ( ($m1 == 1) && ($m2==1) ) {
+        $spos = $startpos[0][1] + strlen($startpos[0][0] );
+        $epos = $endpos[0][1] ;
+        $ret = substr($html, $spos, $epos-$spos);
+      }
+    }
+    return $ret;
+  }
+
+  public function getInfo() {
+    echo phpinfo();
+  }
+
+  public function getIni() {
+    var_dump(ini_get_all() );
+  }
+
+  public function getPic($param) {
+    $i = $param[0];
+    echo '<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta></head>
+<body>
+<img src="/Archive/bt/'.$i.'.j" alt="" />
+</body></html>';
+  }
+
+  public function getVd($param) {
+    $i = $param[0];
+    header("Accept-Ranges: bytes");
+    echo '<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta></head>
+<body><video width="640" height="480" controls>
+ <source src="/Archive/bt/'.$i.'.mp4" type="video/mp4">
+</video></body></html>';
+  }
+
+  public function getDn($param) {
+    $name = $param[0];
+    $f = dirname(__FILE__). "/../Archive/". $name . ".zip" ;
+    $fsize = filesize($f);
+    header("Content-Type: application/octet-stream");
+    header("Content-Length: ".$fsize);
+    header("Content-Disposition: attachment; filename=".$name. ".zip" );
+    @@ob_clean();
+    flush();
+    readfile($f);
+    exit;
+  }
+
+  //$param[0] : keyword
+  //$param[1] : start, default is 0
+  public function getGoosearch($param, $qry){
+    $tkt = $qry['t'];
+    $html = 'Shame on you!';
+    if ($tkt == S_TKT) {
+      $url = 'https://www.google.com/search?q='.$param[0];
+      if (isset($param[1] ) ) {
+        $url = $url . '&start='.$param[1];
+      }
+      $html = $this->getGooRes($url, $qry['act']=='i' ? true : false);
+    }
+    echo $html;
+  }
+
+  //$param[0] : base64 url
+  public function getCrosswall($param, $qry) {
+    $tkt = $qry['t'];
+    $html = 'Shame on you!';
+    if ($tkt == S_TKT) {
+      $url = base64_decode($param[0] );
+      if ( (FALSE===strpos($url, 'http://')) && (FALSE===strpos($url, 'https://') )) {
+        $url = 'http://' . $url;
+      }
+      $html = $this->getHtml($url, $qry['act']=='i' ? true : false);
+    }
+    echo $html;
+  }
+
+  public function postDahuaPrice($param, $qry) {
+    $f = popen("get_dahua_stock", "r");
+    echo  fread($f, 1024);
+    pclose($f);
+  }
+}
+@
+
+
+1.6
+log
+@UPDATE: global varible value not found(dont know why), use define instead
+@
+text
+@d114 6
+@
+
+
+1.5
+log
+@UPDATE: support google search jump to href
+@
+text
+@d2 1
+a4 1
+  private $s_tkt = 'holy';  // fixed password
+d9 1
+a9 2
+    $s_tkt = 'holy';
+    return 'href="/r.php/pgext/crosswall/'.$inb.'?t='.$s_tkt.'&act=o"';
+d91 1
+a91 1
+    if ($tkt == $this->s_tkt) {
+d105 1
+a105 1
+    if ($tkt == $this->s_tkt) {
+@
+
+
+1.4
+log
+@UPDATE: add default http:// prefix
+@
+text
+@d4 27
+a46 2
+  private $s_tkt = 'holy';  // fixed password
+
+d97 1
+a97 1
+      $html = $this->getHtml($url, $qry['act']=='i' ? true : false);
+d108 1
+a108 1
+      if (FALSE === strpos($url, 'http://') ) {
+@
+
+
+1.3
+log
+@UPDATE: improve pic and video
+@
+text
+@d83 3
+@
+
+
+1.2
+log
+@INSERT: support download zip file
+@
+text
+@d26 4
+d39 10
+@
+
+
+1.1
+log
+@add page extend file
+@
+text
+@d35 13
+@
+

@@ -1,0 +1,428 @@
+head	1.12;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.12
+date	2022.03.22.14.05.44;	author android;	state Exp;
+branches;
+next	1.11;
+commitid	1006239D7B864A53436;
+
+1.11
+date	2022.03.20.14.31.50;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	10062373AD678AC52ED;
+
+1.10
+date	2021.06.20.09.20.27;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	mxyiEjQZSxWJRQXC;
+
+1.9
+date	2021.06.20.05.52.59;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	kIG1s45upKdzIPXC;
+
+1.8
+date	2021.01.02.09.26.01;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	1005FF03C29143F8E53;
+
+1.7
+date	2021.01.02.07.39.59;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	1005FF0234F1197A5B7;
+
+1.6
+date	2020.12.28.09.33.01;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	1005FE9A64D0E0031B3;
+
+1.5
+date	2020.12.14.04.58.02;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	1005FD6F0DA22D41DB9;
+
+1.4
+date	2020.12.13.15.51.08;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1005FD6386C19AB9F3F;
+
+1.3
+date	2020.12.05.14.18.58;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005FCB96D23A0102AB;
+
+1.2
+date	2020.05.31.15.55.41;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	2f0a5ed3d37d0000;
+
+1.1
+date	2020.05.22.15.36.09;	author android;	state Exp;
+branches;
+next	;
+commitid	627f5ec7f1690000;
+
+
+desc
+@@
+
+
+1.12
+log
+@move plgrc.vim into plugin, not manual load it
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker:
+" }
+
+" Init once {
+    set nocompatible            " Must be first line
+    if exists('g:shuw_vim_has_init')
+        finish
+    endif
+    let g:shuw_vim_has_init=1
+" }
+
+" Environment {
+    " Identify platform {
+        silent function! OSX()
+            return has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+        silent function! WINDOWS()
+            return  (has('win32') || has('win64'))
+        endfunction
+    " }
+
+    " Basics {
+        if !WINDOWS()
+            set shell=bash
+            let g:mvcf_path='~/.FAVORITE_DIRNAME/vimrc/'
+        else
+            let g:mvcf_path='E:/.FAVORITE_DIRNAME/vimrc/'
+        endif
+        let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
+        let g:mvcf_bundle_groups=['go', ]
+        " add self script to rtp and 3rd to packpath
+        execute 'set rtp+='.g:mvcf_path
+    " }
+
+    " Arrow Key Fix {
+        " https://github.com/spf13/spf13-vim/issues/780
+        if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+            inoremap <silent> <C-[>OC <RIGHT>
+        endif
+    " }
+" }
+
+" Leader Define {
+    " The default leader is '\', but many people prefer ',' or ' ' as it's in a
+    " standard location. To override this behavior and set it back to '\' :
+    map <Space> <Leader>
+    let maplocalleader = ','
+" }
+
+" Load all rc config {
+    filetype plugin indent on   " Automatically detect file types.
+    syntax on                   " Syntax highlighting
+" }
+
+@
+
+
+1.11
+log
+@use vim8 packpath instead of plug
+@
+text
+@d33 2
+a36 6
+        if v:version >= 800
+            execute 'set packpath+='.g:mvcf_path
+        endif
+        let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
+        let g:mvcf_bundle_groups=['go', ]
+        let g:mvcf_plug_rmt=1   "0 use local plugin
+a56 2
+    "Not good, but dont know how to fix
+    execute 'source '.g:mvcf_path.'plgrc.vim'
+@
+
+
+1.10
+log
+@manual source plugin until find solution
+@
+text
+@d33 1
+a33 1
+        " Very important to add rtp to load plugin manager
+d35 3
+@
+
+
+1.9
+log
+@use plugin instead of manual source vim
+@
+text
+@d6 1
+a55 1
+    set nocompatible            " Must be first line
+d58 2
+@
+
+
+1.8
+log
+@move path_bundle from plgrc into init
+@
+text
+@a49 1
+    "let mapleader = ','
+a57 4
+
+for file in split(glob(g:mvcf_path.'*.vim'), '\n')
+  execute 'source '.file
+endfor
+@
+
+
+1.7
+log
+@move some setting from init into style
+@
+text
+@d34 1
+@
+
+
+1.6
+log
+@move bundle_groups to init, add scheme interpretor
+@
+text
+@d54 1
+a54 2
+" General {
+
+a57 20
+    set mouse=                  " Disable mouse usage
+    set encoding=utf-8
+    scriptencoding utf-8
+
+    if has('clipboard')
+        if has('unnamedplus')  " When possible use + register for copy-paste
+            set clipboard=unnamed,unnamedplus
+        else         " On mac and Windows, use * register for copy-paste
+            set clipboard=unnamed
+        endif
+    endif
+
+    " Most prefer to automatically switch to the current file directory when
+    " a new buffer is opened; to prevent this behavior, add the following to
+    " your .vimrc.before.local file:
+    "   let g:spf13_no_autochdir = 1
+    if !exists('g:spf13_no_autochdir')
+        autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+        " Always switch to the current file directory
+    endif
+a58 25
+    set autoread                    " Automatically read a file when detect modified
+    set autowrite                   " Automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+    set virtualedit=onemore         " Allow for cursor beyond last character
+    set history=1000                " Store a ton of history (default is 20)
+    set nospell                     " Spell checking off
+    set hidden                      " Allow buffer switching without saving
+    set iskeyword-=.                " '.' is an end of word designator
+    set iskeyword-=#                " '#' is an end of word designator
+    set iskeyword-=-                " '-' is an end of word designator
+    set timeoutlen=800              " make timeout wait faster
+    set complete=.,w,b,t,i          " no need unloaded buffer complete
+    set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+    set nobackup                    " Backups are nice ...
+    set noswapfile                  " Not save .swp in disk
+    if has('persistent_undo')
+        set noundofile              " So is persistent undo ...
+        set undolevels=1000         " Maximum number of changes that can be undone
+        set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+    endif
+
+" }
+
+" Load all rc config {
+@
+
+
+1.5
+log
+@bugfix restore vim path to FAVORITE_DIRNAME
+@
+text
+@d34 2
+@
+
+
+1.4
+log
+@adjust vim config
+@
+text
+@d28 1
+a28 1
+            let g:mvcf_path='~/.shuw/vimrc/'
+d30 1
+a30 1
+            let g:mvcf_path='E:/.shuw/vimrc/'
+@
+
+
+1.3
+log
+@seperate plug switch into another file
+@
+text
+@a2 27
+"
+"                    __ _ _____              _
+"         ___ _ __  / _/ |___ /      __   __(_)_ __ ___
+"        / __| '_ \| |_| | |_ \ _____\ \ / /| | '_ ` _ \
+"        \__ \ |_) |  _| |___) |_____|\ V / | | | | | | |
+"        |___/ .__/|_| |_|____/        \_/  |_|_| |_| |_|
+"            |_|
+"
+"   This is the personal .vimrc file of Steve Francia.
+"   While much of it is beneficial for general use, I would
+"   recommend picking out the parts you want and understand.
+"
+"   You can find me at http://spf13.com
+"
+"   Copyright 2014 Steve Francia
+"
+"   Licensed under the Apache License, Version 2.0 (the "License");
+"   you may not use this file except in compliance with the License.
+"   You may obtain a copy of the License at
+"
+"       http://www.apache.org/licenses/LICENSE-2.0
+"
+"   Unless required by applicable law or agreed to in writing, software
+"   distributed under the License is distributed on an "AS IS" BASIS,
+"   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+"   See the License for the specific language governing permissions and
+"   limitations under the License.
+d28 1
+a28 1
+            let g:mvcf_path='~/.FAVORITE_DIRNAME/vimrc/'
+d54 1
+a54 19
+    set nocompatible        " Must be first line
+
+    set background=dark         " Assume a dark background
+
+    " Allow to trigger background
+    function! ToggleBG()
+        let s:tbg = &background
+        " Inversion
+        if s:tbg == "dark"
+            set background=light
+        else
+            set background=dark
+        endif
+    endfunction
+    noremap <leader>bg :call ToggleBG()<CR>
+
+    " if !has('gui')
+        "set term=$TERM          " Make arrow and other keys work
+    " endif
+d78 3
+a80 3
+    set autoread                        " Automatically read a file when detect modified
+    set autowrite                       " Automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
+d82 9
+a90 9
+    set virtualedit=onemore             " Allow for cursor beyond last character
+    set history=1000                    " Store a ton of history (default is 20)
+    set nospell                         " Spell checking off
+    set hidden                          " Allow buffer switching without saving
+    set iskeyword-=.                    " '.' is an end of word designator
+    set iskeyword-=#                    " '#' is an end of word designator
+    set iskeyword-=-                    " '-' is an end of word designator
+    set timeoutlen=800                  " make timeout wait faster
+    set complete=.,w,b,t,i              " no need unloaded buffer complete
+d92 6
+a97 21
+
+    " Instead of reverting the cursor to the last position in the buffer, we
+    " set it to the first line when editing a git commit message
+    au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+    " http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
+    " Restore cursor to file position in previous editing session
+    " To disable this, add the following to your .vimrc.before.local file:
+    "   let g:spf13_no_restore_cursor = 1
+    if !exists('g:spf13_no_restore_cursor')
+        function! ResCur()
+            if line("'\"") <= line("$")
+                silent! normal! g`"
+                return 1
+            endif
+        endfunction
+
+        augroup resCur
+            autocmd!
+            autocmd BufWinEnter * call ResCur()
+        augroup END
+a99 10
+    " Setting up the directories {
+        set nobackup                  " Backups are nice ...
+        if has('persistent_undo')
+            set noundofile                " So is persistent undo ...
+            set undolevels=1000         " Maximum number of changes that can be undone
+            set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+        endif
+
+    " }
+
+@
+
+
+1.2
+log
+@UPDATE: use comma as local leader
+@
+text
+@d136 1
+@
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d76 1
+a76 1
+    let maplocalleader = '_'
+@
+

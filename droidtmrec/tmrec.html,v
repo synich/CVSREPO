@@ -1,0 +1,754 @@
+head	1.30;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.30
+date	2021.11.07.14.07.01;	author android;	state Exp;
+branches;
+next	1.29;
+commitid	IVg7SQ6ZnsL2XRfD;
+
+1.29
+date	2021.07.31.06.44.14;	author android;	state Exp;
+branches;
+next	1.28;
+commitid	gaTLgXwFeXhrG63D;
+
+1.28
+date	2021.02.12.10.43.43;	author FOTEN;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2019.09.08.15.47.33;	author WIN7;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2019.08.11.13.26.36;	author WIN7;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2019.05.01.10.21.05;	author WIN7;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2019.05.01.09.59.01;	author WIN7;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2019.03.31.06.43.12;	author Administrator;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2019.03.03.14.07.17;	author Administrator;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2019.01.19.13.13.54;	author Administrator;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2018.09.04.16.18.16;	author Administrator;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2018.08.18.08.13.34;	author Administrator;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2018.08.18.07.35.16;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.08.05.06.50.23;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.04.05.13.01.11;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.04.05.04.03.47;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.03.04.13.04.10;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.03.03.08.41.06;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.03.03.08.05.04;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.03.02.15.42.19;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.02.27.15.24.15;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.02.27.14.44.48;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.02.26.15.15.49;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.02.25.13.36.36;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.02.25.05.17.49;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.02.24.14.34.23;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.02.23.11.33.05;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.02.23.11.07.56;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.02.23.09.26.12;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.01.01.09.03.34;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.30
+log
+@change recent to POST
+@
+text
+@<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+    <meta name="viewport" content="width=device-width">
+    <script src='file:///android_asset/app.js'></script>
+	<script src="aio.js"></script>
+<script>
+    //Called after application is started.
+    function OnStart(){
+      var d = new Date();
+      tmp = d.getDate();
+      tmp = tmp % 10;
+	  elem = document.getElementById("eDay");
+	  elem.value=tmp;
+	  $("#eP2").hide();//not show navi bar for blog by default
+      get_dahua_stock();
+    }
+</script>
+
+<style type="text/css" media="all">
+@@import "aio.css";
+</style>
+</head>
+
+<body onload="app.Start()">
+<div id="eP1">
+	<textarea class="article" name="myTag" id="eNow"></textarea>
+	<select id="eMenu" onchange="onMenu()">
+	  <option value="MENU">MENU</option>
+	  <option value="PASTE">PASTE</option>
+	  <option value="QUERYKEY">QUERYKEY</option>
+	  <option value="WITHPAGE">WITHPAGE</option>
+	  <option value="VIEW">VIEW</option>
+	  <option value="CLEAR">CLEAR</option>
+	  <option value="DELETE">DELETE</option>
+	</select>
+	<input type="button" value="EDITTHIS" onclick="onEdit()"/>
+	<input type="button" value="TODAY" onclick="getDone()"/>
+	<input type="button" value="UPLOAD" onclick="uploadDB()"/>
+	<hr />
+	<input type="button" value="GETLOCAL" class="pure-u-1-3" onclick="getDB()"/>
+	<select id="eTag" class="pure-u-1-4">
+		<option value="mm">MEMO</option>
+		<option value="d0">DST1</option>
+		<option value="d1">DST2</option>
+		<option value="d2">DST3</option>
+		<option value="t0">TM12</option>
+		<option value="t1">TM18</option>
+		<option value="t2">TM24</option>
+	</select>
+	<input type="button" value="SETLOCAL" class="pure-u-1-3" onclick="setDB()"/>
+	<hr />
+</div>
+
+<input type="button" value="RECENT" onclick="recentDigest()"/>
+<select id="eDb" class="pure-u-1-5">
+	<option value="shuw-tmrec">Diary</option>
+	<option value="shiro-tmrec">Digest</option>
+	<option value="shuw-blog">Blog</option>
+	<option value="shiro-blog">Property</option>
+</select>
+Day<select id="eDay" class="pure-u-1-6">
+	<option value="0">0</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+</select>
+<select id="eBtg" class="pure-u-1-4">
+	<option value="unknown">unknown</option>
+	<option value="lang">lang</option>
+	<option value="web">web</option>
+	<option value="protocol">protocol</option>
+	<option value="os">os</option>
+	<option value="design">design</option>
+	<option value="tool">tool</option>
+	<option value="lua">lua</option>
+	<option value="net">net</option>
+	<option value="think">think</option>
+	<option value="data">data</option>
+	<option value="book">book</option>
+	<option value="security">security</option>
+</select>
+<hr />
+
+<div id="eHint"></div>
+<div id="eDone"></div>
+<div id="eP2">
+<input type="button" value="prev" class="pure-u-1-4" onclick="viewBlog('m')"/>
+<input type="button" value="next" class="pure-u-1-4" onclick="viewBlog('p')"/>
+<input type="button" value="skip" class="pure-u-1-4" onclick="viewBlog('s')"/>
+<input type="button" value="exit" class="pure-u-1-5" onclick="exitView()"/>
+<hr />
+<input type="file" class="pure-u-2-3" id="eChFile" />
+<input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
+<input type="input" id="eUpFileName" />
+</div>
+<div id="eBlst"></div>
+</body>
+</html>
+@
+
+
+1.29
+log
+@resotre layout.css and fix css class, but maybe wrong
+@
+text
+@a10 5
+      /*tmp = d.getHours();
+      tmp = Math.ceil(tmp/6)*6;
+      if (tmp<12){ tmp = 12;}
+      var elem = document.getElementById("eHour");
+      elem.value=tmp;*/
+d16 1
+@
+
+
+1.28
+log
+@add recent any month diary
+@
+text
+@d31 1
+a31 1
+	<textarea class="hello" name="myTag" id="eNow"></textarea>
+@
+
+
+1.27
+log
+@INSERT: data tag for blog
+@
+text
+@d6 1
+a6 4
+	<script src="common.js"></script>
+    <script src='tmrec.js'></script>
+	<script src='marked.min.js'></script>
+	<script src='jquery.js'></script>
+d25 1
+a25 2
+@@import "ayout.css";
+@@import "pure.css"
+@
+
+
+1.26
+log
+@UPDATE: renew js file name
+@
+text
+@d96 1
+@
+
+
+1.25
+log
+@UPDATE fix upload picture favour
+@
+text
+@d7 1
+a7 1
+    <script src='autil.js'></script>
+@
+
+
+1.24
+log
+@INSERT: support upload picture
+@
+text
+@d109 3
+a111 3
+<input type="file" class="pure-u-2-3" id="eChFile"/>
+<input type="button" value="upload" onclick="uploadFile('eChFile', 'eFileName')" />
+<input type="input" id="eFileName" />
+@
+
+
+1.23
+log
+@UPDATE: support choose tag for blog
+@
+text
+@d108 4
+@
+
+
+1.22
+log
+@UPDATE: combine menu and delete button into one
+@
+text
+@d64 1
+a64 1
+<select id="eDb">
+d70 1
+a70 1
+Day<select id="eDay" class="pure-u-1-4">
+d85 14
+@
+
+
+1.21
+log
+@INSERT: view blog by prev or next
+@
+text
+@a22 1
+      app.SetMenu("PASTE,QUERYKEY,WITHPAGE,EDIT,VIEW,CLEAR");
+d36 9
+a44 1
+	<input type="button" value="DELETE" onclick="removeDay()"/>
+d70 1
+a70 1
+Day<select id="eDay">
+a84 1
+<input type="button" value="MENU" onclick="showMenu()"/>
+d93 1
+@
+
+
+1.20
+log
+@UPDATE: move recent blog list to individual div, make edit blog continualy
+@
+text
+@d9 1
+d23 2
+a24 1
+      app.SetMenu("PASTE,QUERYKEY,ABOUT,WITHPAGE,CLEAR");
+d35 1
+d37 1
+a37 1
+	<input type="button" value="MENU" onclick="showMenu()"/>
+d41 1
+a41 1
+<hr />
+d53 26
+d80 1
+a80 24
+	<input type="button" value="RECENT" onclick="recentDigest()"/>
+	<select id="eDb">
+		<option value="shuw-tmrec">Diary</option>
+		<option value="shiro-tmrec">Digest</option>
+		<option value="shuw-blog">Blog</option>
+		<option value="shiro-blog">Property</option>
+	</select>
+	Day<select id="eDay">
+		<option value="0">0</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+	</select>
+	<input type="button" value="DELETE" onclick="removeDay()"/>
+<hr />
+d83 5
+@
+
+
+1.19
+log
+@UPDATE: merge base64 into common
+@
+text
+@d77 1
+@
+
+
+1.18
+log
+@UPDATE: divide function and common code
+@
+text
+@a5 1
+	<script src='base64.min.js'></script>
+@
+
+
+1.17
+log
+@UPDATE: use timeout instead of Android toast, because it has been removed from 8
+@
+text
+@d6 2
+a9 1
+	<script src='base64.min.js'></script>
+@
+
+
+1.16
+log
+@UPDATE: support blog tag
+@
+text
+@d75 1
+@
+
+
+1.15
+log
+@UPDATE: add pure css, change into base64
+@
+text
+@d6 1
+a6 1
+    <script src='util.js'></script>
+d27 1
+a27 1
+@@import "layout.css";
+d35 1
+a35 1
+	<input type="button" value="EDITTHIS" onclick="getRec()"/>
+a37 1
+	<div id="eDone"></div>
+d74 2
+@
+
+
+1.14
+log
+@UPDATE: support get a year diary
+@
+text
+@d3 1
+d8 1
+a8 2
+</head>
+
+d22 1
+a22 1
+      app.SetMenu("PASTE,QUERYKEY,WITHPAGE,CLEAR");
+d26 3
+a28 11
+<style>
+	body { background-color: #f0f0f0; }
+    .hello
+    {
+        font-size: 18;
+        width: 100%;
+        height: 48%;
+        margin-top: 1em;
+        /*text-align: center;*/
+        color: blue;
+    }
+d30 1
+d40 2
+a41 2
+	<input type="button" value="GETLOCAL" onclick="getDB()"/>
+	<select id="eTag">
+d50 1
+a50 1
+	<input type="button" value="SETLOCAL" onclick="setDB()"/>
+@
+
+
+1.13
+log
+@INSERT: support remove with day
+@
+text
+@d67 1
+d77 3
+a79 1
+		<option value="0">0</option>
+@
+
+
+1.12
+log
+@UPDATE: merge diary,blog and pub,priv into one selection
+@
+text
+@d78 1
+@
+
+
+1.11
+log
+@UPDATE: add markdown support
+@
+text
+@d42 3
+a44 3
+	<input type="button" value="THISTIME" onclick="getRec()"/>
+	<input type="button" value="WRITTEN" onclick="getDone()"/>
+	<input type="button" value="UP-TMREC" onclick="saveRec()"/>
+d61 4
+a64 2
+		<option value="shuw">PUB</option>
+		<option value="shiro">PRIV</option>
+a77 1
+	<input type="button" value="UP-BLOG" onclick="saveDraft()"/>
+@
+
+
+1.10
+log
+@INSERT: add menu button for zte phone
+@
+text
+@d4 1
+d6 1
+a6 1
+    <script src='file:///android_asset/app.js'></script>
+d59 1
+a59 1
+	<input type="button" value="RECENT-5" onclick="recentDigest()"/>
+d76 1
+a76 1
+	<input type="button" value="UP-DRAFT" onclick="saveDraft()"/>
+@
+
+
+1.9
+log
+@UPDATE: merge hour and tag into one, delete hour tag
+@
+text
+@d31 1
+a31 1
+        height: 50%;
+d40 2
+a41 1
+	Diary:<input type="button" value="THISTIME" onclick="getRec()"/>
+@
+
+
+1.8
+log
+@UPDATE: save digest into tmrec, so no need title, change blog tag from digest to draft
+@
+text
+@d12 1
+a12 1
+      tmp = d.getHours();
+d16 1
+a16 1
+      elem.value=tmp;
+d40 1
+a40 6
+	<select id="eHour">
+		<option value="12">12点</option>
+		<option value="18">18点</option>
+		<option value="24">24点</option>
+	</select>：
+	<input type="button" value="THISTIME" onclick="getRec()"/>
+d47 7
+a53 7
+		<option value="tag0">DIGEST</option>
+		<option value="tag1">DRAFT</option>
+		<option value="tag2">TM12</option>
+		<option value="tag3">TM18</option>
+		<option value="tag4">TM24</option>
+		<option value="tag5">TODO</option>
+		<option value="tag6">CUSTOM</option>
+@
+
+
+1.7
+log
+@INSERT: add query and reduce get value from form value
+@
+text
+@d45 1
+a45 1
+	<input type="button" value="NOWTIME" onclick="getRec()"/>
+d53 1
+a53 1
+		<option value="tag1">TODO</option>
+d57 2
+a58 1
+		<option value="tag5">CUSTOM</option>
+d64 1
+a65 1
+		<option value="shuw">PUB</option>
+d79 1
+a79 1
+	<input type="button" value="UP-BLOG" onclick="saveDigest()"/>
+@
+
+
+1.6
+log
+@UPDATE: upload can choose date, add menu
+@
+text
+@d21 1
+a21 1
+      app.SetMenu("CLEAR");
+d45 3
+a47 3
+	<input type="button" value="这个时段" onclick="getRec()"/>
+	<input type="button" value="已写完的" onclick="getDone()"/>
+	<input type="button" value="保存内容" onclick="saveRec()"/>
+d78 1
+a78 1
+	<input type="button" value="UPLOAD" onclick="saveDigest()"/>
+@
+
+
+1.5
+log
+@UPDATE: support choose pub and priv DB
+@
+text
+@d15 7
+a21 2
+      var hour = document.getElementById("eHour");
+      hour.value=tmp;
+a60 1
+	<input type="button" value="CLEARDATA" onclick="clearContent()"/>
+d66 12
+@
+
+
+1.4
+log
+@UPDAE: adjust button layout
+@
+text
+@d57 5
+a61 1
+	<input type="button" value="RECENT5DATE" onclick="recentDigest()"/>
+@
+
+
+1.3
+log
+@UPDATE: add clear and recent digest
+@
+text
+@d45 1
+a45 1
+	<input type="button" value="GET" onclick="getDB()"/>
+d55 3
+a58 2
+	<input type="button" value="RECENT" onclick="recentDigest()"/>
+	<input type="button" value="CLEAR" onclick="clearContent()"/>
+@
+
+
+1.2
+log
+@UPDATE: add local DB and save digest
+@
+text
+@d47 6
+a52 3
+		<option value="tag0">tag0</option>
+		<option value="tag1">tag1</option>
+		<option value="tag2">tag2</option>
+d56 2
+@
+
+
+1.1
+log
+@INSERT: first version of diary in droidscript
+@
+text
+@d26 1
+a26 1
+        height: 40%;
+d44 9
+@
+

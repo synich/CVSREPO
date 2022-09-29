@@ -1,0 +1,252 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2021.09.12.09.19.39;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	xHhhuva8k0M3aE8D;
+
+1.3
+date	2021.09.08.14.48.10;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	4VCL8ja3L5NJ6a8D;
+
+1.2
+date	2021.06.20.07.29.14;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	Ib9ovegQE2iAfQXC;
+
+1.1
+date	2021.06.20.05.52.12;	author android;	state Exp;
+branches;
+next	;
+commitid	CX8ej6OirlxiIPXC;
+
+
+desc
+@@
+
+
+1.4
+log
+@adjust window scroll
+@
+text
+@" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker spell:
+" }
+
+" General {
+
+    set mouse=                      " Disable mouse usage
+    set autoread                    " Automatically read a file when detect modified
+    set autowrite                   " Automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtTc     " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+    set virtualedit=onemore         " Allow for cursor beyond last character
+    set history=1000                " Store a ton of history (default is 20)
+    set nospell                     " Spell checking off
+    set hidden                      " Allow buffer switching without saving
+    set iskeyword-=.                " '.' is an end of word designator
+    set iskeyword-=#                " '#' is an end of word designator
+    set iskeyword-=-                " '-' is an end of word designator
+    set timeoutlen=600              " make timeout wait faster
+    set complete=.,w,b,t,k          " no need unloaded buffer complete
+    set completeopt=menu,menuone    " preview,longest
+    if v:version >= 800
+      set completeopt+=noselect
+    endif
+    set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+    set nobackup                    " Backups are nice ...
+    set noswapfile                  " Not save .swp in disk
+    set encoding=utf-8
+    scriptencoding utf-8
+    if has('persistent_undo')
+        set noundofile              " So is persistent undo ...
+        set undolevels=1000         " Maximum number of changes that can be undone
+        set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+    endif
+
+    if has('clipboard')
+        if has('unnamedplus')  " When possible use + register for copy-paste
+            set clipboard=unnamed,unnamedplus
+        else         " On mac and Windows, use * register for copy-paste
+            set clipboard=unnamed
+        endif
+    endif
+
+    " Always switch to the current file directory
+    if 0
+        autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+    endif
+
+" }
+
+" Vim UI {
+
+    set tabpagemax=15               " Only show 15 tabs
+    set showmode                    " Display the current mode
+    set cursorline                  " Highlight current line
+
+    highlight clear SignColumn      " SignColumn should match background
+    highlight clear LineNr          " Current line number row will have same background color in relative mode
+    "highlight clear CursorLineNr    " Remove highlight color from current line number
+
+    if has('cmdline_info')
+        set ruler                   " Show the ruler
+        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+        set showcmd                 " Show partial commands in status line and
+                                    " Selected characters/lines in visual mode
+    endif
+
+    if has('statusline')
+        set laststatus=2
+
+        " Broken down into easily includeable segments
+        set statusline=%<%f\                     " Filename
+        set statusline+=%w%h%m%r                 " Options
+        set statusline+=\ [%{&ff}/%Y]            " Filetype
+        set statusline+=\ [%{getcwd()}]          " Current dir
+        set statusline+=%=%-8.(%l,%c%V%)\ %p%%,%L " Right aligned file nav info
+    endif
+
+    set backspace=indent,eol,start  " Backspace for dummies
+    set linespace=0                 " No extra spaces between rows
+    set number
+    set relativenumber              " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set winminheight=1              " Windows can be 0 line high
+    set ignorecase                  " Case insensitive search
+    set smartcase                   " Case sensitive when uc present
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set scrolljump=3                " Lines to scroll when cursor leaves screen
+    set scrolloff=2                 " Minimum lines to keep above and below cursor
+    set foldenable                  " Auto fold code
+    set list
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+    " Allow to trigger background
+    set background=dark             " Assume a dark background
+
+    " if !has('gui')
+        "set term=$TERM          " Make arrow and other keys work
+    " endif
+
+" }
+
+" GUI Settings {
+
+    " GVIM- (here instead of .gvimrc)
+    if has('gui_running')
+        winpos 50 5
+        set lines=50 columns=120
+        set guioptions-=m
+        set guioptions-=T
+        set guioptions-=e
+        set guifont=Consolas:h14:cANSI:qDRAFT
+        color koehler
+    else
+        if &term == 'xterm' || &term == 'screen'
+            set t_Co=256   " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+        endif
+        color ron
+        "set term=builtin_ansi  " Make arrow and other keys work
+    endif
+
+" }
+
+@
+
+
+1.3
+log
+@minor improve config for vim
+@
+text
+@d86 1
+a86 1
+    set winminheight=0              " Windows can be 0 line high
+d92 2
+a93 2
+    set scrolljump=5                " Lines to scroll when cursor leaves screen
+    set scrolloff=3                 " Minimum lines to keep above and below cursor
+@
+
+
+1.2
+log
+@use autoload instead of plugin
+@
+text
+@d2 1
+a2 1
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+d7 1
+a7 1
+    set mouse=                  " Disable mouse usage
+d19 1
+a19 1
+    set timeoutlen=800              " make timeout wait faster
+@
+
+
+1.1
+log
+@move into plugin
+@
+text
+@a48 15
+    " find top dir
+    function! s:gototopdir()
+       let i = 1
+       while i < 10
+          if filereadable("tags") || isdirectory(".git")
+            echo "Found top dir"
+            return
+          else
+            lcd ..
+            let i += 1
+          endif
+       endwhile
+    endfunction
+    nnoremap <Plug>GotoTopDir :call <SID>gototopdir()<CR>
+
+a96 1
+
+a98 24
+    function! s:toggleBG()
+        let l:tbg = &background
+        " Inversion
+        if l:tbg == "dark"
+            set background=light
+        else
+            set background=dark
+        endif
+    endfunction
+    nnoremap <Plug>ToggleBG  :call <SID>toggleBG()<CR>
+
+    " Change between relativenumber and nonumber
+    function! s:toggleNumber()
+        let l:tbg = &relativenumber
+        " Inversion
+        if l:tbg == 1
+            set norelativenumber
+            set nonumber
+        else
+            set number
+            set relativenumber
+        endif
+    endfunction
+    nnoremap <Plug>ToggleNumber :call <SID>toggleNumber()<CR>
+@
+

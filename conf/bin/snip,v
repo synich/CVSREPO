@@ -1,0 +1,1008 @@
+head	1.35;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.35
+date	2022.08.15.16.25.38;	author games;	state Exp;
+branches;
+next	1.34;
+commitid	10062FA7382263F044A;
+
+1.34
+date	2022.07.30.16.26.39;	author android;	state Exp;
+branches;
+next	1.33;
+commitid	10062E55BBF37F1C798;
+
+1.33
+date	2022.07.28.16.46.34;	author android;	state Exp;
+branches;
+next	1.32;
+commitid	10062E2BD6A0286A635;
+
+1.32
+date	2022.06.21.16.18.31;	author android;	state Exp;
+branches;
+next	1.31;
+commitid	10062B1EF5771D12195;
+
+1.31
+date	2022.06.21.16.08.19;	author android;	state Exp;
+branches;
+next	1.30;
+commitid	10062B1ECF37113900B;
+
+1.30
+date	2022.06.19.15.19.50;	author android;	state Exp;
+branches;
+next	1.29;
+commitid	10062AF3E966B969385;
+
+1.29
+date	2022.05.29.11.04.01;	author android;	state Exp;
+branches;
+next	1.28;
+commitid	100629353212EB3694B;
+
+1.28
+date	2022.04.23.10.26.54;	author android;	state Exp;
+branches;
+next	1.27;
+commitid	1006263D46E496F74EB;
+
+1.27
+date	2022.02.22.02.13.47;	author android;	state Exp;
+branches;
+next	1.26;
+commitid	100621446DB69A6382C;
+
+1.26
+date	2022.02.07.13.27.43;	author android;	state Exp;
+branches;
+next	1.25;
+commitid	10062011E4F0D7B9AE0;
+
+1.25
+date	2022.02.06.13.57.38;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	10061FFD3D23F91D0A2;
+
+1.24
+date	2022.02.06.07.20.41;	author android;	state Exp;
+branches;
+next	1.23;
+commitid	10061FF76C93856A8CD;
+
+1.23
+date	2022.01.11.04.49.15;	author android;	state Exp;
+branches;
+next	1.22;
+commitid	10061DD0C4B6B4DD3FE;
+
+1.22
+date	2021.12.21.11.47.45;	author android;	state Exp;
+branches;
+next	1.21;
+commitid	10061C1BEE109ED7CC4;
+
+1.21
+date	2021.12.08.16.22.55;	author android;	state Exp;
+branches;
+next	1.20;
+commitid	S3fzBf3NLIZSHRjD;
+
+1.20
+date	2021.11.21.06.19.54;	author android;	state Exp;
+branches;
+next	1.19;
+commitid	k6UAznFjmxDTUChD;
+
+1.19
+date	2021.10.30.10.17.50;	author android;	state Exp;
+branches;
+next	1.18;
+commitid	3BwO0Cyar4DmWOeD;
+
+1.18
+date	2021.10.16.12.23.59;	author android;	state Exp;
+branches;
+next	1.17;
+commitid	xQKFaUwa7WOx52dD;
+
+1.17
+date	2021.09.30.14.52.49;	author android;	state Exp;
+branches;
+next	1.16;
+commitid	g96UtYY45V7uqZaD;
+
+1.16
+date	2021.09.25.14.51.20;	author android;	state Exp;
+branches;
+next	1.15;
+commitid	a7yr4lmrnJsWzlaD;
+
+1.15
+date	2021.09.25.01.46.44;	author android;	state Exp;
+branches;
+next	1.14;
+commitid	xXAwyZWCg17MehaD;
+
+1.14
+date	2021.08.23.10.20.49;	author android;	state Exp;
+branches;
+next	1.13;
+commitid	4puTl5cODNYT856D;
+
+1.13
+date	2021.05.13.13.06.39;	author android;	state Exp;
+branches;
+next	1.12;
+commitid	F1ZojhOy7YE4lZSC;
+
+1.12
+date	2021.05.01.03.13.03;	author android;	state Exp;
+branches;
+next	1.11;
+commitid	V5pbSB6aaEDlroRC;
+
+1.11
+date	2021.05.01.03.10.57;	author android;	state Exp;
+branches;
+next	1.10;
+commitid	H3KWfBthRULCqoRC;
+
+1.10
+date	2021.01.10.15.41.37;	author android;	state Exp;
+branches;
+next	1.9;
+commitid	1005FFB20310DF574A9;
+
+1.9
+date	2021.01.02.09.52.21;	author android;	state Exp;
+branches;
+next	1.8;
+commitid	1005FF042551560A034;
+
+1.8
+date	2021.01.02.09.25.44;	author android;	state Exp;
+branches;
+next	1.7;
+commitid	1005FF03C18143A079C;
+
+1.7
+date	2021.01.02.06.48.24;	author android;	state Exp;
+branches;
+next	1.6;
+commitid	1005FF0173810650901;
+
+1.6
+date	2021.01.01.15.07.49;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	1005FEF3AC51B88B2B6;
+
+1.5
+date	2021.01.01.11.41.17;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	1005FEF0A5D10FCA452;
+
+1.4
+date	2020.12.14.05.14.38;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	1005FD6F4BE23554985;
+
+1.3
+date	2020.10.26.08.10.57;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	1005F96849115B20A94;
+
+1.2
+date	2020.10.01.07.26.14;	author FOTEN;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2020.05.22.15.36.32;	author android;	state Exp;
+branches;
+next	;
+commitid	629c5ec7f1800000;
+
+
+desc
+@@
+
+
+1.35
+log
+@snip lua add elseif
+@
+text
+@#!/bin/bash
+
+_snip_sh() {
+  local kwd=(if for var)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]}; do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  f*) cat <<"EOF"
+while : ;  # endless loop
+for k in ${arr[@@]};
+for ((i=0;i<10;i++));
+do
+done
+EOF
+  ;;
+  i*) cat <<"EOF"
+if [ -a -o ]; then
+if [[ && || ]]; then         # bash feature
+if [[ "$i" =~ a.* ]]; then   # bash regex, no quote right
+if [[ "$i" == a* ]]; then    # bash glob, no quote right
+if [[ "$i" == *" "* ]]; then # compare to space
+elif
+fi
+
+case $1 in
+  x*)
+  ;;
+esac
+EOF
+  ;;
+  v*) cat <<"EOF"
+res=${var:-abc}  # if $var not assign, $res is 'abc'. beside ${var-abc} means $var not declare
+sub=${str:start:len}   # substr from left,start from 0
+sub=${str:0-start:len} # substr from right, start from 1
+res=${var#*\"}   # glob left drop, no-greedy: 'abc"def"gh' -> 'def"gh'
+res=${var%%\"*}  # glob right drop, greedy:   'abc"def"gh' -> 'abc'
+res=${var/-*./.} # glob replace once, greedy: '-anychars.' -> '.' aka drop '-anychars' except '.'
+res=($spcstr)    # $spcstr spilt by space and asign array to $res
+declare -A dct;dct=([a]=b [1]=2) # local associate array
+res=$(ls)        # save ls result into res
+res=$((1+2))     # calc
+EOF
+  ;;
+esac
+}
+
+_snip_awk() {
+  local kwd=(syntax var lib)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]}; do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  s*) cat <<"EOF"
+$1 !~ /abc/ {print $1, $2}
+print "foo" > (a < 3 ? 2 : 1)  # a decide where to print
+{if($1 > 1.0 && $(NF-1) != 2){print $1, $2} else if($1 == 3){}}
+if (idx in arr){print arr[idx]}
+for (expr1; expr2; expr3)
+for (idx in arr){print arr[idx]}
+BEGIN{cmd="seq 1 5"}{while((cmd|getline)>0){print};close(cmd)}
+EOF
+  ;;
+  v*) cat <<"EOF"
+FS  # Feild Separator
+NF  # Number Field
+RS  # Record Separator. ""-paragraph "\0"or"^$"-AllFile, LaterIsBetter "\n+"-ByLine,SkipWhiteLine
+RT  # When RS is regex, it is the result of regex match
+NR  # Number Record(Count for all file)
+FNR # File Number Record(each file reset 0)
+OFS # Output Field Separator
+ORS # Output Record Separator, default "\n"
+IGNORECASE=1     # use in cmd, because awk not support -i option
+OFMT="%.6g"      # affect num in print format
+CONVFMT="%.2f"   # affect num->str, specify str format
+re=@@/abc/        # regex type variable
+function foo(){} # suggest define after END block
+EOF
+  ;;
+  l*) cat <<"EOF"
+srand/rand                               # () -> 0.234168
+sin/cos/atan2/log/exp/sqrt               # (0.6) accept 1 float
+and/or/xor/lshift/rshift                 # (3, 1) accept 2 integer
+length(str/num/arr)                      # (1234) -> 4
+int/tolower/toupper                      # int(12ab)->12 int(ab1)->0 toupper(ab1)->AB1
+index(str, sub)                          # (abc, b) -> 2
+substr(str, start/1st is 1 not 0, [len]) # (abcde,2,3) -> bcd
+split(str, arr, sep, [arsep])            # ("a-b", ar, "-") -> ar[1]=a, ar[2]=b
+match(str, reg, [cap]) RSTART/RLENGTH    # ("fooba", "(fo+).*(ba+)", ar) ar[0]:all, ar[1]:foo
+sub/gsub(reg, replace, [target])         # (/[[:digit:]]+/, "b&c", a9d) -> ab9cd
+gensub(reg, replace, how, [target])      # replace support \\1, how support g and 1,2,3
+system(str)                              # shell cmd
+mktime(y M d h m s)                      # ("2019 2 23 12 -1 59") -> 1512345678(s)
+systime/strftime                         # 1512345678/Sat Jan  2 17:46:07 2021
+=============== Not POSIX ===============
+asort/asorti(ar, [to])                   # rerange array by value or index
+strtonum(str)                            # (0xa) -> 10, oct/dec/hex
+EOF
+  ;;
+  esac
+}
+
+_snip_lua() {
+  #if [ $# -eq 0 ]; then
+  case "$1" in
+  l*)
+  cat <<"EOF"
+str.find("abc","bc",1,true)   -- return (2,3)/nil true means plain off regex
+str.match("abc","(a)b(c)",1)  -- return ("a","c")/nil, not capture then all
+str.sub("abcd",2,3)           -- return "bc", 3 omit means -1 "bcd"
+str.gmatch
+str.gsub
+table.concat({"a","b"},"-")   -- return "a-b"
+table.insert({"a","b"},1,"c") -- no return, change inplace and get {"c","a","b"}
+table.remove({"a","b","c"},2) -- return b, change inplace and get {"a","c"}
+table.sort
+EOF
+  ;;
+  *)
+  cat <<"EOF"
+-- scaffold, type `lib`
+function foo(a, b)
+  local t = {k=1, v=2}
+  while true do
+    if t ~= nil then
+      return t.k
+    elseif t%2 == 1 then
+      t = t~1   -- bitwise XOR
+    end
+  end
+end
+EOF
+  ;;
+esac
+}
+
+_snip_vim() {
+  cat <<"EOF"
+" scaffold, type more hint
+function! s:foo(p, ...) abort
+  for v in a:000
+    let t =
+    \ {'b':'', 'f':0}
+  endfor
+  while true do
+    for [k, v] in items(l:t)
+      if a:p =~# 's'. ref && a:0 == 1
+        return l:t.k  "default return 0
+      endif
+    endfor
+  endwhile
+endfunction
+EOF
+}
+
+_snip_py() {
+  cat <<"EOF"
+# filter value not equal 2 from dict
+  { k:v for k,v in diction.items() if v!=2 }
+  dict(filter(lambda v: v[1]!=2, d.items()))    # v[0] is k, v[1] is v
+EOF
+}
+
+_snip_t() {
+  cat <<"EOF"
+date -d "1 day [ago] 2020-07-01" "+%Y-%m-%d %H:%M:%S"
+date -d @@1612345678
+curl -k -H "Content-type: application/json" -X POST -d '{"a":1}' https://ip:port/path
+ssh -fN -L 0.0.0.0:l_port:r_ip:r_port -p r_port r_ip
+EOF
+}
+
+_comp_vim(){
+  local kwd=(fn)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]}; do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  fn*) cat <<"EOF"
+function! ()
+endfunction
+EOF
+  ;;
+  esac
+}
+
+_comp_lua(){
+  local kwd=(fn)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]}; do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  fn*) cat <<"EOF"
+function ()
+  return
+end
+EOF
+  ;;
+  esac
+}
+
+_comp_go(){
+  local kwd=(fn)
+  if [ $# -eq 0 ]; then
+    for k in ${kwd[@@]}; do
+      echo $k
+    done
+    return
+  fi
+  case $1 in
+  fn*) cat <<"EOF"
+func () {
+  return
+}
+EOF
+  ;;
+  esac
+}
+
+showallsnip() {
+  local kwd=(sh awk lua vim py t)
+  echo support hint lang or tool:
+  for k in ${kwd[@@]}; do
+    echo $k
+  done
+  local cmp=(lua vim go)
+  echo support completion language:
+  for k in ${cmp[@@]}; do
+    echo $k
+  done
+}
+
+# use in editor for completion
+comp_snip(){
+  type _comp_$1 1>/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    _comp_$1 $2
+  fi
+}
+
+# use in shell for human read
+hint_snip(){
+  type _snip_$1 1>/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    _snip_$1 $2
+  else
+    echo language $1 not exists
+  fi
+}
+
+main() {
+  if [ $# -eq 0 ]; then
+    showallsnip
+    return
+  fi
+  if [ $1 = "!" ]; then
+    shift
+    comp_snip $@@
+  else
+    hint_snip $@@
+  fi
+}
+
+main $@@
+
+@
+
+
+1.34
+log
+@more snip lua lib
+@
+text
+@d133 2
+@
+
+
+1.33
+log
+@show snip lib in faker preview window
+@
+text
+@d116 7
+@
+
+
+1.32
+log
+@improve snip awk
+@
+text
+@d110 9
+a118 1
+  if [ $# -eq 0 ]; then
+d120 1
+a120 1
+-- scaffold, type more hint
+d130 2
+a131 1
+  fi
+@
+
+
+1.31
+log
+@busybox awk builtin functions
+@
+text
+@d87 3
+d91 1
+a95 5
+srand/rand                               # () -> 0.234168
+int                                      # (12ab) -> 12 (ab12) -> 0
+system(str)                              # shell cmd
+sin/cos/atan2/log/exp/sqrt               # (0.6) accept 1 float
+and/or/xor/lshift/rshift                 # (3, 1) accept 2 integer
+d98 1
+@
+
+
+1.30
+log
+@more snip awk
+@
+text
+@a91 1
+sub/gsub(reg, replace, [target])         # (/[[:digit:]]+/, "b&c", a9d) -> ab9cd
+d93 1
+a93 1
+int/sqrt/log                             # (12ab) -> 12 (ab12) -> 0
+d95 6
+a101 1
+gensub(reg, replace, how, [target])      # replace support \\1, how support g and 1,2,3
+a103 2
+mktime(y M d h m s)                      # ("2019 2 23 12 -1 59") -> 1512345678(s)
+systime/strftime                         # 1512345678/Sat Jan  2 17:46:07 2021
+@
+
+
+1.29
+log
+@snip add python
+@
+text
+@d52 1
+a52 1
+  local kwd=(if for var lib)
+d60 1
+a60 2
+  i*) cat <<"EOF"
+{if($1 > 1.0 && $(NF-1) != 2){print $1, $2} else if($1 == 3){}}
+d63 5
+a67 6
+EOF
+  ;;
+  f*) cat <<"EOF"
+  for (expr1; expr2; expr3)
+  for (idx in arr){print arr[idx]}
+  BEGIN{cmd="seq 1 5"}{while((seq 1 5|getline)>0){print};close(cmd)}
+d95 1
+@
+
+
+1.28
+log
+@ssh tunnel
+@
+text
+@d143 8
+d214 1
+a214 1
+  local kwd=(sh awk lua vim t)
+@
+
+
+1.27
+log
+@vim snip continue line
+@
+text
+@d148 1
+@
+
+
+1.26
+log
+@snip vim optional variable
+@
+text
+@d129 2
+a130 1
+    let t = {'b':'', 'f':0}
+@
+
+
+1.25
+log
+@snip add vim, improve vim complete experince
+@
+text
+@d128 3
+a130 1
+  let t = {'b':'', 'f':0}
+d133 1
+a133 1
+      if a:p =~# 's'. ref && !a:000
+@
+
+
+1.24
+log
+@snip add lua
+@
+text
+@d109 1
+d111 2
+a112 1
+function f(a, b)
+d121 17
+d202 1
+a202 1
+  local kwd=(sh awk lua t)
+@
+
+
+1.23
+log
+@add date convert timestamp
+@
+text
+@d108 13
+d183 1
+a183 1
+  local kwd=(sh awk t)
+@
+
+
+1.22
+log
+@add curl hint POST
+@
+text
+@d111 1
+@
+
+
+1.21
+log
+@more hint on date
+@
+text
+@d111 1
+@
+
+
+1.20
+log
+@add hint for date and vim c-d and c-u small
+@
+text
+@d110 1
+a110 1
+date -d "1 day [ago] 2020-07-01" +%Y-%m-%d
+@
+
+
+1.19
+log
+@add go
+@
+text
+@d108 6
+d168 2
+a169 2
+  local kwd=(sh awk)
+  echo support hint language:
+@
+
+
+1.18
+log
+@add bash variable drop syntax
+@
+text
+@d136 1
+d143 18
+d167 1
+a167 1
+  local cmp=(lua vim)
+@
+
+
+1.17
+log
+@drop color man
+@
+text
+@d39 3
+a41 1
+res=${var/-*./.} # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
+@
+
+
+1.16
+log
+@rename func in snip
+@
+text
+@d4 1
+a4 1
+  kwd=(if for var)
+d50 1
+a50 1
+  kwd=(if for var lib)
+d107 1
+a107 1
+  kwd=(fn)
+d123 17
+d141 2
+a142 2
+  kwd=(sh awk)
+  echo support language:
+d146 5
+@
+
+
+1.15
+log
+@make snip work in editor
+@
+text
+@d107 1
+a107 1
+  kwd=(if for fn)
+d140 1
+a140 1
+read_snip(){
+d158 1
+a158 1
+    read_snip $@@
+@
+
+
+1.14
+log
+@fix git br and add more hint in snip sh
+@
+text
+@d106 17
+d131 18
+d154 3
+a156 3
+  type _snip_$1 1>/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    _snip_$1 $2
+d158 1
+a158 1
+    echo language $1 not exists
+@
+
+
+1.13
+log
+@add var not assign default value
+@
+text
+@d37 2
+d41 1
+@
+
+
+1.12
+log
+@make comment alien right
+@
+text
+@d36 1
+@
+
+
+1.11
+log
+@add bash compare glob and regex hint
+@
+text
+@d22 4
+a25 4
+if [[ && || ]]; then     # bash feature
+if [[ "$i" =~ a.* ]]; then # bash regex, no quote right
+if [[ "$i" == a* ]]; then  # bash glob, no quote right
+if [[ "$i" == *" "* ]]; then  # compare to space
+@
+
+
+1.10
+log
+@add more function explain of awk
+@
+text
+@d22 4
+a25 1
+if [[ && || ]]; then
+@
+
+
+1.9
+log
+@add time/int func
+@
+text
+@a80 1
+strtonum(str)                            # (0xa) -> 10, oct/dec/hex
+d86 4
+d91 1
+a91 2
+srand/rand                               # () -> 0.234168
+int/sqrt                                 # (12ab) -> 12 (ab12) -> 0
+@
+
+
+1.8
+log
+@add lib explain
+@
+text
+@d73 2
+a74 2
+OFMT="%.6g"      # output format
+CONVFMT="%.2f"   # specify print format
+d80 3
+d85 1
+a85 1
+match(str, reg, [cap])                   # ("fooba", "(fo+).*(ba+)", ar) ar[0]:all, ar[1]:foo
+d87 5
+@
+
+
+1.7
+log
+@enrich awk syntax
+@
+text
+@d43 1
+a43 1
+  kwd=(if for var)
+d72 1
+d79 7
+@
+
+
+1.6
+log
+@rich awk syntax hint
+@
+text
+@d33 4
+a36 3
+$res=${var/-*./.} # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
+$res=$(ls)        # save ls result into res
+$res=$((1+2))     # calc
+d52 1
+a52 1
+{if($1 > 1.0 && $2 != 2){print $1, $2} else if($1 == 3){}}
+d64 2
+d70 3
+@
+
+
+1.5
+log
+@combine snip branch
+@
+text
+@d6 1
+a6 2
+    for k in ${kwd[@@]};
+    do
+d42 10
+a51 2
+cat <<"EOF"
+{if($1 > 1.0) print $1, $2}
+d53 1
+d55 18
+d78 1
+a78 2
+  for k in ${kwd[@@]};
+  do
+@
+
+
+1.4
+log
+@add more snip in sh
+@
+text
+@d4 1
+a4 1
+  kwd=(for case if substitude)
+d14 1
+d16 1
+a16 1
+for ((i=0;i<10;i++))
+a20 7
+  c*) cat <<EOF
+case v in
+  x)
+  ;;
+esac
+EOF
+  ;;
+d26 5
+d33 4
+a36 2
+  s*) cat <<"EOF"
+${var/-*./.}  # glob match, replace '-anychars.' -> '.' aka drop '-anychars' except '.'
+@
+
+
+1.3
+log
+@add awk and drop function keyword
+@
+text
+@d4 1
+a4 1
+  kwd=(for case if)
+d15 1
+d28 2
+a29 1
+if []; then
+d34 4
+@
+
+
+1.2
+log
+@INSERT: shell if, git https, ps handy command
+@
+text
+@d3 1
+a3 1
+function _snip_sh() {
+d35 9
+a43 2
+function showallsnip() {
+  kwd=(sh xx)
+d51 1
+a51 1
+function main() {
+@
+
+
+1.1
+log
+@bin file
+@
+text
+@d3 2
+a4 2
+function shsnip() {
+  kwd=(for case)
+d26 6
+d49 1
+a49 1
+  type $1snip 1>/dev/null 2>&1
+d51 1
+a51 1
+    $1snip $2
+@
+

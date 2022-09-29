@@ -1,0 +1,250 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2022.08.13.14.21.30;	author android;	state Exp;
+branches;
+next	1.5;
+commitid	10062F7B36A114F936C;
+
+1.5
+date	2022.03.01.13.19.00;	author android;	state Exp;
+branches;
+next	1.4;
+commitid	100621E1D434A84C2B7;
+
+1.4
+date	2021.08.07.14.34.34;	author android;	state Exp;
+branches;
+next	1.3;
+commitid	J2dV4PrgdveQ334D;
+
+1.3
+date	2021.03.15.15.10.06;	author android;	state Exp;
+branches;
+next	1.2;
+commitid	XWfzMKaawyh0VpLC;
+
+1.2
+date	2020.10.26.14.13.20;	author android;	state Exp;
+branches;
+next	1.1;
+commitid	1005F96D9801C1B9B0F;
+
+1.1
+date	2020.05.22.15.36.32;	author android;	state Exp;
+branches;
+next	;
+commitid	629c5ec7f1800000;
+
+
+desc
+@@
+
+
+1.6
+log
+@goto choose ssh or dbclient
+@
+text
+@#!/bin/bash
+
+histfile=$(dirname $0)/.gotohist
+
+if [ -x "$(command -v ssh)" ]; then
+  SSHCMD=ssh
+elif [ -x "$(command -v dbclient)" ]; then
+  SSHCMD=dbclient
+else
+  echo "no ssh client"
+fi
+
+helpshow() {
+  ename=$(basename $0)
+  echo "$ename -e                   # edit host file"
+  echo "$ename nick or user@@ip:port # new host must has ':'"
+  echo "$ename host file1 file2     # scp file"
+  echo " "
+  echo available host list:
+  cat $histfile
+  exit 1
+}
+
+edithost() {
+  if [ -x "$(command -v vi)" ]; then
+    exec vi $histfile
+  else
+    echo no vi editor
+  fi
+  exit 1
+}
+
+# format like "port user@@ip"
+g_portip=
+
+#$1: "ip:port"
+addnewhost() {
+  read -p "detect new host, input name: " newname
+  port=${1#*:}
+  ip=${1%:*}
+  ctx=`grep "^$newname " $histfile`
+  if [ -n "$ctx" ]; then
+    read -p "exist same name: $ctx, overwite(y) or new name? " ans
+    if [ $ans = "y" ]; then
+      sed -e "/^$newname /d" $histfile -i
+    else
+      newname=$ans
+    fi
+  fi
+  echo "$newname $port $ip 1" >> $histfile
+  g_portip="$port $ip"
+}
+
+# no argument show help
+# return 0-goto exist 1-add newhost
+parsearg() {
+  if [ $# -eq 0 ]; then
+    helpshow
+  elif [ $1 = "-e" ]; then
+    edithost
+  elif [[ $1 == *:* ]]; then #TODO new host must have :port in tail
+    addnewhost $1
+    return 1
+  fi
+  return 0
+}
+
+# $1: host nick name
+getportip(){
+  h=$1
+  # get host ip and port
+  while true
+  do
+    gtmpf=`grep "^$h" $histfile | sort -k 4nr`
+    if [ -z "$gtmpf" ]; then
+        cnt=0
+    else
+        cnt=`echo "$gtmpf" |wc -l|cut -d ' ' -f 1`
+    fi
+
+    if [ $cnt -eq 1 ]; then
+        break
+    elif [ $cnt -eq 0 ]; then
+        cat $histfile
+        read -p "cant find host, which one? " h
+    else
+        echo "$gtmpf"
+        read -p "there are $cnt host, which one? " h
+    fi
+  done
+  g_portip=`echo "$gtmpf" | cut -d ' ' -f 2,3`
+}
+
+main() {
+  parsearg $@@
+  # exist host need parse ip and port
+  if [ $? -eq 0 ]; then
+    getportip $1
+  fi
+
+  if [ $# -eq 1 ]; then
+    ${SSHCMD} -p $g_portip
+  else
+    shift 1
+    file="$@@"
+    scp -P ${g_portip% *} $file ${g_portip#* }:~
+  fi
+}
+
+main $@@
+
+@
+
+
+1.5
+log
+@more hint in conftool.sh and goto
+@
+text
+@d5 8
+d102 1
+a102 1
+    ssh -p $g_portip
+@
+
+
+1.4
+log
+@improve goto comment
+@
+text
+@d7 3
+a9 3
+  echo "$ename -e                  # edit host file"
+  echo "$ename nickname or ip:port # new host must has ':'"
+  echo "$ename host file1 file2    # scp file"
+@
+
+
+1.3
+log
+@improve vim setting
+@
+text
+@d8 1
+a8 1
+  echo "$ename nickname or ip:port # ssh to host"
+@
+
+
+1.2
+log
+@support add new host into history
+@
+text
+@d7 3
+a9 3
+  echo "$ename -e  # edit host file"
+  echo "$ename host # ssh to host"
+  echo "$ename host file1 file2 # scp file"
+d88 1
+@
+
+
+1.1
+log
+@bin file
+@
+text
+@d5 1
+a5 1
+function helpshow() {
+d16 1
+a16 1
+function edithost() {
+d25 21
+d47 2
+a48 1
+function parsearg() {
+d53 3
+d57 1
+d60 2
+a61 3
+function main() {
+  parsearg $@@
+
+d83 8
+a90 1
+  portip=`echo "$gtmpf" | cut -d ' ' -f 2,3`
+d93 1
+a93 1
+    ssh -p $portip
+d97 1
+a97 1
+    scp -P ${portip% *} $file ${portip#* }:~
+@
+

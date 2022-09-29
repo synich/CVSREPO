@@ -1,0 +1,45 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2017.10.08.12.37.55;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@UPDATE: use macro and uniform entry fsm.c to include different engine
+@
+text
+@#include "fsm.h"
+
+#ifdef WITH_LUA
+#include "fsmlua.c"
+#endif
+
+#ifdef WITH_MUJS
+#include "fsmmujs.c"
+#endif
+
+char* p2a_accessRootVar(int act, char* name){
+  static char varName[32];
+  char *p;
+  if (1==act) {
+    strncpy(varName, name, sizeof(varName)-1);
+    p = strchr(varName, '.');
+    if (p != NULL){
+      *p = 0;//just save file name, drop ext name
+    }
+  }
+  return varName;
+}
+@

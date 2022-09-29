@@ -1,0 +1,27 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.03.15.15.18.27;	author android;	state Exp;
+branches;
+next	;
+commitid	6MTIYTZ5hbTRXpLC;
+
+
+desc
+@@
+
+
+1.1
+log
+@svc file and README
+@
+text
+@when first check out, enter Page and execute next command
+*make*
+
+@

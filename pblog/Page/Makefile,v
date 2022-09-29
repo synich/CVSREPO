@@ -1,0 +1,33 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2021.03.15.15.27.44;	author android;	state Exp;
+branches;
+next	;
+commitid	yPb8WDqboXo31qLC;
+
+
+desc
+@@
+
+
+1.1
+log
+@init release Makefile
+@
+text
+@all: html js
+
+html:
+	cp index.html ../
+
+js:
+	cat tool.js blog.js admin.js tmrec.js > door.js
+	mv door.js ../theme/js/
+
+@

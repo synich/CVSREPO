@@ -1,0 +1,808 @@
+head	1.28;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.28
+date	2021.12.16.14.28.34;	author android;	state Exp;
+branches;
+next	1.27;
+commitid	l8BwB02Pw5rIOSkD;
+
+1.27
+date	2021.11.07.14.08.13;	author android;	state Exp;
+branches;
+next	1.26;
+commitid	2LDHleFgqllsXRfD;
+
+1.26
+date	2021.08.14.12.15.22;	author android;	state Exp;
+branches;
+next	1.25;
+commitid	NXx8SvF6lHB84W4D;
+
+1.25
+date	2021.03.15.15.28.31;	author android;	state Exp;
+branches;
+next	1.24;
+commitid	T9QCef5Qcm8k1qLC;
+
+1.24
+date	2020.08.09.12.06.40;	author android;	state Exp;
+branches;
+next	1.23;
+commitid	O1HNzvAldQHwUnjC;
+
+1.23
+date	2019.08.11.12.15.18;	author WIN7;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2019.05.12.03.02.56;	author WIN7;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2019.02.13.06.01.19;	author Administrator;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2019.01.19.13.07.44;	author Administrator;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2018.08.19.00.19.43;	author Administrator;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2018.08.19.00.04.03;	author Administrator;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2018.04.05.13.19.19;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.04.05.04.01.32;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.03.13.14.39.38;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.03.11.14.55.06;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.03.04.13.19.46;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.03.03.08.42.12;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.03.03.08.04.23;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.03.02.15.18.47;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.02.27.14.59.03;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.02.27.14.45.08;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.02.26.15.08.38;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.02.26.14.41.42;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.02.25.13.32.55;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.02.23.12.33.11;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.02.23.11.06.04;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.02.23.09.19.07;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.02.23.09.07.38;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.28
+log
+@change edit blog to post
+@
+text
+@<?php
+/// for mobile save article which can choose pub or priv DB
+class C_digest
+{
+  /// get tmrec which just do
+  public function postJustDo($param){
+    $tmrec = new C_tdb($param[0]);
+    $date = $param[1];
+    $hour = $param[2];
+    $ret = $tmrec->getTmRecByHour($date, $hour);
+    echo ' '.$ret;//TODO mobile code strip first character
+  }
+
+  /// used as pure interface
+  public function _getRec($param){
+    $tdb = new C_tdb($param[0]);
+    $date = $param[1];
+    $tbl = '';
+    if ($tdb->isValid()) {
+      $one = $tdb->getTmRecByDay($date);
+      $recCol = explode('|', $one);
+      $cntCol = count($recCol);
+
+      $row = '';
+      for($i=1; $i<$cntCol; $i ++){ // first elem is empty, skip it
+        $doth = $recCol[$i];
+        $row .= $doth."<hr/>";
+      }
+      $tbl .= $row;
+    }
+    echo $tbl;
+  }
+
+  /// match droidscript request convert rule
+  private function decodeTxt($str){
+    $str = rawurldecode($str);//not convert '+' to ' '
+    $str = str_replace('~', '=', $str);
+    return base64_decode($str);
+  }
+
+  public function postRec($param, $qry){
+    if ($_POST['mth']=='get'){
+      return $this->_getRec($param);
+    }
+    $tdb = new C_tdb($param[0]);
+    $date = $param[1];
+    $rec = $this->decodeTxt($_POST['rec']);
+    $hour = $_POST['hour'];
+    $ret = $tdb->appendTmRec($date, $hour, $rec);
+    echo 'record len:'.mb_strlen($ret);
+  }
+
+  /// get blog content by date like 180210
+  public function postBlogDay($param, $qry){
+    $bdb = new C_bdb($param[0]);
+    $date = $param[1];
+    $rec;
+    $bdb->getTextByDate($date, $rec);
+    echo $rec['attr'].'|'.$rec['content'];
+  }
+
+  /// $param[0] DB name shuw|shiro
+  /// $param[1] date
+  public function postBlog($param, $qry){
+    $bdb = new C_bdb($param[0]);
+    $date = $param[1];
+    $content = $this->decodeTxt($_POST['ctx']);
+    $tag = $_POST['tag'];
+
+    /// mobile has no title, use tag as fake title
+    $ret = $bdb->putBlogCtx($date, $content, $tag);
+    if ($ret){
+      echo $date.' Blog OK!';
+    }
+    else {
+      echo $date.' Blog NO!';
+    }
+  }
+
+  /// get recent blog date
+  public function postRecentBlog($param, $qry){
+    $bdb = new C_bdb($param[0]);
+    $recUp = array();
+    $page=0;
+    if (!empty($param[1])){
+      $page=intval($param[1]);
+    }
+    $count=50;
+    $bdb->getRecentUpdate($count, $recUp, $page);
+    $br = '<br/>';
+    $ret = " Recent Blog ".$page*$count."-".($page+1)*$count.$br;
+    foreach($recUp as &$one) {
+      $pos = strpos($one['content'], "\n");
+      $title = substr($one['content'], 0, $pos);
+      $ret .= $one['date'].':'.$title.$br;
+    }
+    echo $ret;
+  }
+
+  public function postTagBlog($param, $qry){
+    $bdb = new C_bdb($param[0] );
+    $rec = array();
+    $bdb->getTagList($param[1], $rec);
+    $ret = "Tag:".$param[1]. "<br/>" ;
+    foreach($rec as &$one) {
+      $pos = strpos($one['content'], '==');
+      $ttile = substr($one['content'], 0, $pos-1);
+      $ret .= $one['date'] . ':' . $ttile . '<br/>' ;
+    }
+    echo $ret;
+  }
+
+  private function weekOfDay($date){
+    // $hour,$minute,$second,$month,$day,$year
+    $strap = mktime(12,0,0,intval(substr($date, 2, 2)),intval(substr($date, 4, 2)),2000+intval(substr($date, 0, 2)));
+    // 获取数字型星期几
+    return date("w",$strap);
+  }
+
+  public function postRecentTmrec($param, $qry){
+    $tdb = new C_tdb($param[0]);
+    $whichMonth = $param[1];
+    $rec;
+    $tdb->getTmRecByMonth($whichMonth, $rec);
+    $output = ' ';
+    $br = "<br />";
+    foreach($rec as & $one){
+      $wk = $this->weekOfDay($one['date']);
+      $output .= $one['date'].'-'.$wk.$br.$one['record'].$br;
+    }
+    echo $output;
+  }
+
+  /// limit find blog or tmrec num with offset and count
+  /// $dbrec some rows from DB
+  /// $offset from 0
+  /// $pNum one page has how much item, typically 3 or 5
+  /// $bort 0-blog 1-tmrec
+  private function getWithPageByType(&$dbrec, $offset, $pNum, $bort, &$res){
+    $npg = 0;
+    $offset *= $pNum; // in is page, so multi with $maxPage
+    $br = "<br />";
+    $totalNum = count($dbrec);
+    for(; $offset<$totalNum; $offset++){
+      $ctx = '';
+      if ($bort=='blog') {// blog limit charater
+        $ctx=$dbrec[$offset]['content'];
+      } else if ($bort=='tmrec') {// diary is all
+        $ctx=$dbrec[$offset]['record'];
+      }
+      $res .= $dbrec[$offset]['date'].$br.$ctx.$br."\n\n";//will be markdown, so append 2 \n
+      if (++$npg >= $pNum){break;}
+    }
+  }
+
+  /// return totalnum which match word
+  private function findBlog($dbname, $word, $offset, &$res){
+    $bdb = new C_bdb($dbname);
+    $essay = array();
+    $bdb->getByKeyword($word, $essay);
+    $totalNum = count($essay);
+    $this->getWithPageByType($essay, $offset, 2, 'blog', $res);
+    return $totalNum;
+  }
+
+  /// return totalnum which match word
+  private function findTmrec($dbname, $word, $offset, &$res){
+    $tdb = new C_tdb($dbname);
+    $tmr = array();
+    $tdb->getTmRecByKwd($word, $tmr);
+    $totalNum = count($tmr);
+    $this->getWithPageByType($tmr, $offset, 3, 'tmrec', $res);
+    return $totalNum;
+  }
+
+  public function postKeyword($param, $qry){
+    $kwd = $this->decodeTxt($_POST['kwd']);
+    $page = $_POST['page'];
+    $br = "<br />"; // maybe HTML or Normal Txt
+    $ret = '';
+    $totalNum = 0;
+    $output = '';
+
+    /// Find public blog
+    $totalNum = $this->findBlog('shuw', $kwd, $page, $ret);
+    $output .= ' Pub Blog '.$totalNum.$br."\n\n".$ret;
+
+    /// Find private blog
+    $ret = '';
+    $totalNum = $this->findBlog('shiro', $kwd, $page, $ret);
+    $output .= $br.'Priv Blog '.$totalNum.$br."\n\n".$ret;
+
+    /// Find public tmrec
+    $ret = '';
+    $totalNum = $this->findTmrec('shuw', $kwd, $page, $ret);
+    $output .= $br.'Tmrec '.$totalNum.$br.$ret;
+
+    /// Find private tmrec
+    $ret = '';
+    $totalNum = $this->findTmrec('shiro', $kwd, $page, $ret);
+    $output .= $br.'Digest '.$totalNum.$br.$ret;
+
+    echo $output;
+  }
+
+  public function getRemoveDay($param, $qry){
+    $db = new C_basedb($param[0]);
+    $num = $db->removeDay($param[1], $param[2]);
+    if ($num >0) {
+      echo $param[0].$param[1].$param[2].' is delete success!';
+    }else {
+      echo $param[0].$param[1].$param[2].' is not exist!';
+    }
+  }
+
+  public function getBlogIdx($param, $qry){
+    $db = new C_bdb($param[0]);
+    $off = intval($param[1]);
+    if ($off < 0) {$off = 0;}
+    $rec;
+    $db->getDayByOff($off, $rec);
+    $d = intval($rec['date']);
+    $rec = array();
+    $db->getTextByDate($d, $rec);
+    $off++; //first show as 1 not 0
+    echo $off.':'.$d.':'.$rec['content'];
+  }
+} // End of C_digest
+?>
+@
+
+
+1.27
+log
+@adapt to mobile, change GET to POST
+@
+text
+@d54 1
+a54 1
+  public function getBlogDay($param, $qry){
+@
+
+
+1.26
+log
+@adapt for droidtmrec post change
+@
+text
+@d81 1
+a81 1
+  public function getRecentBlog($param, $qry){
+d100 1
+a100 1
+  public function getTagBlog($param, $qry){
+@
+
+
+1.25
+log
+@C/digest.php
+@
+text
+@d6 1
+a6 1
+  public function getJustDo($param){
+d15 1
+a15 1
+  public function getRec($param){
+d42 3
+d120 1
+a120 1
+  public function getRecentTmrec($param, $qry){
+@
+
+
+1.24
+log
+@UPDATE: make query result show right in markdown
+@
+text
+@d110 7
+d125 2
+a126 1
+      $output .= $one['date'].$br.$one['record'].$br;
+@
+
+
+1.23
+log
+@INSERT: get specify tag blog
+@
+text
+@d135 1
+a135 1
+      if ($bort==0) {// blog limit charater
+d137 1
+a137 1
+      } else if ($bort==1) {// diary is all
+d140 1
+a140 1
+      $res .= $dbrec[$offset]['date'].$br.$ctx.$br."\n";//will be markdown, so append \n
+d151 1
+a151 1
+    $this->getWithPageByType($essay, $offset, 2, 0, $res);
+d161 1
+a161 1
+    $this->getWithPageByType($tmr, $offset, 3, 1, $res);
+d175 1
+a175 1
+    $output .= ' Pub Blog '.$totalNum.$br.$ret;
+d180 1
+a180 1
+    $output .= $br.'Priv Blog '.$totalNum.$br.$ret;
+@
+
+
+1.22
+log
+@UPDATE: change to rest, add get or post before function name
+@
+text
+@d97 13
+@
+
+
+1.21
+log
+@UPDATE: iconv_strlen return error 22 in PHP5.5.9, manual say mb_strlen work right, so we change
+@
+text
+@d41 1
+a41 1
+  public function saveRec($param, $qry){
+d61 1
+a61 1
+  public function saveBlog($param, $qry){
+d78 1
+a78 1
+  public function recentBlog($param, $qry){
+d97 1
+a97 1
+  public function recentTmrec($param, $qry){
+d152 1
+a152 1
+  public function keyword($param, $qry){
+d182 1
+a182 1
+  public function removeDay($param, $qry){
+@
+
+
+1.20
+log
+@INSERT: support view blog by idx
+@
+text
+@d47 1
+a47 1
+    echo 'record len:'.iconv_strlen($ret);
+@
+
+
+1.19
+log
+@UPDATE: avoid non-number and show page list
+@
+text
+@d191 13
+@
+
+
+1.18
+log
+@UPDATE: support recent blog query by page
+@
+text
+@d83 1
+a83 1
+      $page=$param[1];
+d85 2
+a86 1
+    $bdb->getRecentUpdate(50, $recUp, $page);
+d88 1
+a88 1
+    $ret = " Recent Blog".$br;
+@
+
+
+1.17
+log
+@UPDATE: support retain blog tag
+@
+text
+@d81 5
+a85 1
+    $bdb->getRecentUpdate(60, $recUp);
+@
+
+
+1.16
+log
+@UPDATE: change base64 encode reduce net trans flow
+@
+text
+@d56 1
+a56 1
+    echo $rec['content'];
+@
+
+
+1.15
+log
+@UPDATE: drop dummy =head, because support =upload
+@
+text
+@d36 1
+d38 1
+a38 1
+    return rawurldecode($str);//not convert '+' to ' '
+@
+
+
+1.14
+log
+@UPDATE: support get blog into edit area, match js convert =/~
+@
+text
+@d67 1
+a67 1
+    $ret = $bdb->putBlogCtx($date, $tag."\n====\n".$content, $tag);
+@
+
+
+1.13
+log
+@UPDATE: show recent blog in DIV
+@
+text
+@d34 6
+d43 1
+a43 1
+    $rec = rawurldecode($_POST['rec']);//not convert '+' to ' '
+d49 9
+d63 1
+a63 1
+    $content = urldecode($_POST['ctx']);
+d147 2
+a148 2
+    $kwd = urldecode($_POST['kwd']);
+    $page = urldecode($_POST['page']);
+@
+
+
+1.12
+log
+@INSERT: support remove with day
+@
+text
+@d65 3
+a67 2
+    $bdb->getRecentUpdate(10, $recUp);
+    $ret = "Recent Blog\n";
+d71 1
+a71 1
+      $ret .= $one['date'].':'.$title."\n";
+@
+
+
+1.11
+log
+@INSERT: get diary month
+@
+text
+@d159 10
+@
+
+
+1.10
+log
+@UPDATE: fixed + convert to space bug
+@
+text
+@d75 13
+d105 1
+a105 1
+      $res .= $dbrec[$offset]['date'].$br.$ctx.$br;
+@
+
+
+1.9
+log
+@UPDATE: mobile use tdb, reserve tmrec for brower simple construct
+@
+text
+@d37 1
+a37 1
+    $rec = urldecode($_POST['rec']);
+d65 2
+a66 2
+    $bdb->getRecentUpdate(5, $recUp);
+    $ret = "Recent 5 Blog\n";
+d68 3
+a70 1
+      $ret .= $one['date'].':'.iconv_substr($one['content'], 0, 9)."\n";
+@
+
+
+1.8
+log
+@UPDATE: improve hint
+@
+text
+@d7 5
+a11 3
+    $tmrec = new C_tmrec($param[0]);//TODO
+    array_shift($param); // shift first elem
+    $tmrec->getJustDo($param, null);
+@
+
+
+1.7
+log
+@UPDATE: fix tmrec default construct bug, add search in digest
+@
+text
+@d52 1
+a52 1
+      echo $date.' OK!';
+d55 1
+a55 1
+      echo $date.' NO!';
+@
+
+
+1.6
+log
+@UPDATE: fix tmrec write any order, move mobile api to digest
+@
+text
+@d130 1
+a130 1
+    /// Find tmrec
+d134 6
+@
+
+
+1.5
+log
+@INSERT: find blog and tmrec from mobile
+@
+text
+@d5 36
+d43 1
+a43 1
+  public function save($param, $qry){
+d59 2
+a60 2
+  /// get recent digest date
+  public function recent($param, $qry){
+d84 1
+a84 1
+        $ctx=iconv_substr($dbrec[$offset]['content'], 0, 150);
+d99 1
+a99 1
+    $this->getWithPageByType($essay, $offset, 3, 0, $res);
+@
+
+
+1.4
+log
+@UPDATE: support change DB
+@
+text
+@a4 2
+  private $bdb;
+
+d8 1
+a8 1
+    $this->bdb = new C_bdb($param[0]);
+d14 1
+a14 1
+    $ret = $this->bdb->putBlogCtx($date, $tag."\n====\n".$content, $tag);
+d25 1
+a25 1
+    $this->bdb = new C_bdb($param[0]);
+d27 1
+a27 1
+    $this->bdb->getRecentUpdate(5, $recUp);
+d34 66
+@
+
+
+1.3
+log
+@UPDATE: get recent digest
+@
+text
+@d2 1
+a2 1
+/// for mobile save digest
+d7 2
+a8 4
+  function __construct() {
+    $this->bdb = new C_bdb('shiro');//TODO: fixed use shiro.db
+  }
+
+d10 2
+a11 1
+    $date = $param[0];
+d27 1
+d30 1
+a30 1
+    $ret = "Recent 5 Private\n";
+d32 1
+a32 1
+      $ret .= $one['date']."\n";
+@
+
+
+1.2
+log
+@UPDATE: fix strcat bug
+@
+text
+@d16 2
+a17 2
+    /// mobile has no title, add fake title
+    $ret = $this->bdb->putBlogCtx($date, "digest\n====\n".$content, $tag);
+d25 11
+@
+
+
+1.1
+log
+@ADD: support mobile save digest
+@
+text
+@d16 1
+d19 1
+a19 1
+      echo $date+' OK!';
+d22 1
+a22 1
+      echo 'NO!';
+@
+

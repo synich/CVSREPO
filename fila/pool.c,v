@@ -1,0 +1,1088 @@
+head	1.17;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.17
+date	2018.09.28.15.16.33;	author Administrator;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2018.09.25.14.53.02;	author Administrator;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2018.09.24.07.21.34;	author Administrator;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2018.09.23.16.51.48;	author Administrator;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2018.09.23.13.00.25;	author Administrator;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2018.09.23.05.47.42;	author Administrator;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2018.09.23.03.02.27;	author Administrator;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2018.09.22.16.04.48;	author Administrator;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2018.09.22.13.38.06;	author Administrator;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2018.09.22.10.25.11;	author Administrator;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2018.09.21.15.23.47;	author Administrator;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2018.09.20.17.17.27;	author Administrator;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2018.09.18.15.03.27;	author Administrator;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2018.09.17.13.41.29;	author Administrator;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2018.09.16.15.52.43;	author Administrator;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2018.09.16.15.25.28;	author Administrator;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.09.16.12.58.00;	author Administrator;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.17
+log
+@UPDATE: use function instead of global varible
+@
+text
+@#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "pool.h"
+
+/* All Constant Here */
+#define SMALL_BULK 30
+#define SMALL_PAGE 32
+#define MAX_SMALL_PAGE 16
+#define BIG_BULK 191
+#define BIG_PAGE 8
+#define MAX_BIG_PAGE 16
+
+
+/** Memory Pool */
+
+struct SmallBulk {
+  uint16_t i;
+  char c[SMALL_BULK];
+};
+
+struct BigBulk {
+  uint8_t i;
+  char c[BIG_BULK];
+};
+
+// index of rightmost position
+static struct SmallBulk* small_mem = NULL;
+static uint8_t small_pagei = 1;
+static uint8_t* small_canuse = NULL;
+static int small_used = 0;
+static struct BigBulk* big_mem = NULL;
+static uint8_t big_pagei = 1;
+static uint8_t* big_canuse = NULL;
+static int big_used = 0;
+static int large_used = 0;
+
+static char* sf_borrow_small(){
+  char* p = NULL;
+  if (NULL == small_mem) {
+    int i;
+    small_mem = (struct SmallBulk*)malloc(sizeof(struct SmallBulk)*SMALL_PAGE);
+    small_canuse = (uint8_t*)malloc(SMALL_PAGE);
+    for (i=0; i<SMALL_PAGE; i++){
+      small_mem[i].i = i; // remember idx, this will be used in revert
+      small_canuse[i] = i;
+    }
+    small_used = 0;
+  }
+
+  if (small_used < small_pagei*SMALL_PAGE) {
+    p = small_mem[small_canuse[small_used]].c;
+    small_used++;
+  } else if(small_pagei<MAX_SMALL_PAGE) {
+    int i = small_pagei*SMALL_PAGE;
+    small_pagei++;
+    int nxtend = small_pagei * SMALL_PAGE;
+    small_mem = realloc(small_mem, sizeof(struct SmallBulk)*SMALL_PAGE*small_pagei );
+    small_canuse = realloc(small_canuse, SMALL_PAGE*small_pagei);
+    for (; i<nxtend; i++){
+      small_mem[i].i = i;
+      small_canuse[i] = i;
+    }
+    p = small_mem[small_canuse[small_used]].c;
+    small_used++;
+  }
+  return p;
+}
+
+static char* sf_borrow_big(){
+  char* p = NULL;
+  if (NULL == big_mem) {
+    int i;
+    big_mem = (struct BigBulk*)malloc(sizeof(struct BigBulk)*BIG_PAGE);
+    big_canuse = (uint8_t*)malloc(BIG_PAGE);
+    for (i=0; i<BIG_PAGE; i++){
+      big_mem[i].i = i; // remember idx, this will be used in revert
+      big_canuse[i] = i;
+    }
+    big_used = 0;
+  }
+
+  if (big_used < big_pagei*BIG_PAGE) {
+    p = big_mem[big_canuse[big_used]].c;
+    big_used++;
+  } else if(big_pagei<MAX_BIG_PAGE) {
+    int i = big_pagei*BIG_PAGE;
+    big_pagei++;
+    int nxtend = big_pagei * BIG_PAGE;
+    big_mem = realloc(big_mem, sizeof(struct BigBulk)*BIG_PAGE*big_pagei );
+    big_canuse = realloc(big_canuse, BIG_PAGE*big_pagei);
+    for (; i<nxtend; i++){
+      big_mem[i].i = i;
+      big_canuse[i] = i;
+    }
+    p = big_mem[big_canuse[big_used]].c;
+    big_used++;
+  }
+  return p;
+}
+
+/*debug flag*/
+static int sv_pooldbgflg =0;
+
+int rh_dbgflg(int i){
+  int tmp = sv_pooldbgflg;
+  sv_pooldbgflg = i;
+  return tmp;
+}
+
+char* rh_alloc_(int n, const char* f, int l){
+  char* p=NULL;
+  int flag=0;
+  if (0>=n) {
+    return NULL;
+  }
+
+  if (n<SMALL_BULK){
+    flag=1;
+    p = sf_borrow_small();
+  } else if (n<BIG_BULK){
+    flag=2;
+    p = sf_borrow_big();
+  } else {
+    flag=3;
+    p = (char*)malloc(n);
+    large_used++;
+  }
+  if (sv_pooldbgflg&0x1){
+  printf("rh_alloc  %-5s. %s:%d, p:%p,len:%d\n", flag==1?"small":(flag==2?"big":"large"),
+    f, l, p, n);
+  }
+  return p;
+}
+
+//Not use this directly, use MACRO instead, which always set p NULL
+void rh_revert_(char* p, const char* f, int l){
+  int mask = ((intptr_t)p)&0x3;
+  int flag = 0;
+  if(NULL==p){return;}
+
+  if (2==mask){
+    flag = 1;
+    struct SmallBulk *m = (struct SmallBulk*)(p-2);
+    small_used--;
+    small_canuse[small_used] = m->i;
+  } else if (1==mask) {
+    flag = 2;
+    struct BigBulk *m = (struct BigBulk *)(p-1);
+    big_used--;
+    big_canuse[big_used] = m->i;
+  } else {
+    flag = 3;
+    free(p);
+    large_used--;
+  }
+  if (sv_pooldbgflg&0x1){
+  printf("rh_revert %-5s. %s:%d, p:%p.\n", flag==1?"small":(flag==2?"big":"large"),
+    f, l, p);
+  }
+}
+
+void rh_finalize(){
+  if (small_mem) {
+    free(small_mem);
+    free(small_canuse);
+  }
+  if (big_mem) {
+    free(big_mem);
+    free(big_canuse);
+  }
+}
+
+char* rh_dupstr(const char* p){
+  if (NULL==p){
+    return NULL;
+  }
+  int len = strlen(p)+1;
+  char *dst = rh_alloc(len);
+  strcpy(dst, p);
+  return dst;
+}
+
+char* rh_dupbin(const char* b, int len){
+  if (0==len){
+    return NULL;
+  }
+  char* dst = rh_alloc(len);
+  memcpy(dst, b, len);
+  return dst;
+}
+
+void rh_memreport(){
+  puts("------ MEMORY POOL REPORT -----");
+  printf("| Small total:%-4d, used:%-4d |\n", small_pagei*SMALL_PAGE, small_used);
+  printf("|  Big  total:%-4d, used:%-4d |\n", big_pagei*BIG_PAGE, big_used);
+  printf("| Large             used:%-4d |\n", large_used);
+  puts("-------------------------------");
+}
+
+/* Hash Table */
+
+static uint64_t append_bit(uint64_t val, uint64_t c, int n){
+  val = val | c<<n;
+  return val;
+}
+
+#define IS_VALID(c) ((('a'<=(c)&&(c)<='z')||('A'<=(c)&&(c)<='Z')||('0'<=(c)&&(c)<='9')||(c)=='_')?1:0)
+static int to_range(char c){
+   if ((c)=='_') {
+     return 1;
+   }else if ('a'<=(c)&&(c)<='z') {
+     return 2+c-'a';
+   }else if ('0'<=(c)&&(c)<='9') {
+     return 28+c-'0';
+   }else if ('A'<=(c)&&(c)<='Z') {
+     return 38+c-'A';
+   }else {
+     return 0;
+   }
+}
+
+// make string as uint64_t representation
+uint64_t tokey(const char* str){
+  uint64_t val=0;
+  int offset=0;
+  const char *p = str;
+  if (NULL==str) {
+    return val;
+  }
+  if (*p=='_') {
+    val = append_bit(val, to_range(*p), offset);
+    p++;
+  }
+  offset+=4;
+  while (*p){
+    if (IS_VALID(*p)&&(offset<=58)){
+      val = append_bit(val, to_range(*p), offset);
+      offset+=6;
+    }else{
+      val=0;
+      break;
+    }
+    p++;
+  }
+  return val;
+}
+
+void keyrdc(uint64_t k, char* val){
+  int i = 0;
+  uint64_t tmp = k&0xF;
+  char col[]={0, '_', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '0', '1', '2', '3',
+    '4', '5', '6', '7', '8', '9', 'A', 'B',
+    'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+  if (tmp){
+    val[i]='_';i++;
+  }
+  k = k>>4;
+  while (k){
+    tmp = k&0x3F;
+    val[i] = col[tmp];i++;
+    k=k>>6;
+  }
+}
+
+#undef IS_VALID
+
+#define IS_VALID(c) ((('a'<=(c)&&(c)<='z')||('A'<=(c)&&(c)<='Z')||('0'<=(c)&&(c)<='3')||(c)=='_')?1:0)
+static int to_irange(char c){
+   if ((c)=='_') {
+     return 1;
+   }else if ('a'<=(c)&&(c)<='z') {
+     return 2+c-'a';
+   }else if ('A'<=(c)&&(c)<='Z') {
+     return 2+c-'A';
+   }else if ('0'<=(c)&&(c)<='3') {
+     return 28+c-'0';
+   }else {
+     return 0;
+   }
+}
+
+// incase key
+uint64_t toikey(const char* str){
+  uint64_t val=0;
+  int offset=0;
+  const char *p = str;
+  if (NULL==str) {
+    return val;
+  }
+  if (*p=='_') {
+    val = append_bit(val, to_range(*p), offset);
+    p++;
+  }
+  offset+=4;
+  while (*p){
+    if (IS_VALID(*p)&&(offset<=59)){
+      val = append_bit(val, to_irange(*p), offset);
+      offset+=5;
+    }else{
+      val=0;
+      break;
+    }
+    p++;
+  }
+  return val;
+}
+
+void keyirdc(uint64_t k, char* val){
+  int i = 0;
+  uint64_t tmp = k&0xF;
+  char col[]={0, '_', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+    'w', 'x', 'y', 'z', '0', '1', '2', '3' };
+  if (tmp){
+    val[i]='_';i++;
+  }
+  k = k>>4;
+  while (k){
+    tmp = k&0x1F;
+    val[i] = col[tmp];i++;
+    k=k>>5;
+  }
+}
+
+#undef IS_VALID
+
+/* Hash Table */
+
+static struct Env_val* sf_crttbl(){
+  int i = 0;
+  struct Env_val* t = NULL;
+  t = (struct Env_val*)rh_alloc(sizeof(struct Env_val));
+  t->used = 0;
+  t->next = NULL;
+  for (; i<HASH_BUCKET; i++){
+    t->val[i] = NULL;
+  }
+  return t;
+}
+
+static void sf_instbl(struct Env_val* t, uint64_t k, char* val){
+  t->key[t->used] = k;
+  t->val[t->used] = rh_dupstr(val);
+  t->used++;
+}
+
+static void sf_inbtbl(struct Env_val* t, uint64_t k, char* val, int len){
+  t->key[t->used] = k;
+  t->val[t->used] = rh_dupbin(val, len);
+  t->used++;
+}
+
+// move last available into need del pos, and make used--
+static void sf_delonet(struct Env_val* t, const char* key, int i){
+  uint64_t k = TOKEY(key);
+  if (k==t->key[i]) {
+    rh_revert(t->val[i]); // need del, so revert
+    t->used--; // this is last available value
+    // not last one should move
+    if (i < t->used) {
+      // after these 2 step, last pos will wait for next alloc
+      t->key[i] = t->key[t->used];
+      t->val[i] = t->val[t->used];
+    }
+  }
+}
+
+static char* sf_getonet(struct Env_val* t, const char* key, int* upos){
+  int i = 0;
+  char* p=NULL;
+  uint64_t k = TOKEY(key);
+  for (; i < t->used; i++){
+    if (k==t->key[i]) {
+      p = t->val[i];
+      upos ? *upos = i :0;
+      break;
+    }
+  }
+  return p;
+}
+
+// return 1-ok 0-fail
+static int sf_savetbl(struct Env_val** e, const char* key, char* val){
+  int ret = 0;
+  uint64_t k = TOKEY(key);
+  if (k) { // key is legal
+    struct Env_val* t = *e;
+    while (t) {
+      if (t->used < HASH_BUCKET) {
+        sf_instbl(t, k, val);
+        ret = 1;
+        break;
+      }
+      t = t->next;
+    }
+    if (0==ret){
+      t = sf_crttbl();
+      t->next = *e;
+      *e = t;
+      ret = sf_savetbl(e, key, val);
+    }
+  }
+  return ret;
+}
+
+// binary version of savetbl
+static int sf_bavetbl(struct Env_val** e, const char* key, char* val, int len){
+  int ret = 0;
+  uint64_t k = TOKEY(key);
+  if (k) { // key is legal
+    struct Env_val* t = *e;
+    while (t) {
+      if (t->used < HASH_BUCKET) {
+        sf_inbtbl(t, k, val, len);
+        ret = 1;
+        break;
+      }
+      t = t->next;
+    }
+    if (0==ret){
+      t = sf_crttbl();
+      t->next = *e;
+      *e = t;
+      ret = sf_bavetbl(e, key, val, len);
+    }
+  }
+  return ret;
+}
+
+int rh_deltbl(struct Env_val** e, const char* key){
+  int delok = 0;
+  struct Env_val* t = *e;
+  struct Env_val* resv = NULL;//reserve to link when remove
+  int upos = 0;
+  while (t){
+    char* val = sf_getonet(t, key, &upos);
+    if (val){
+      delok = 1;
+      sf_delonet(t, key, upos);
+      if (0 == t->used){
+        if (resv){
+          resv->next = t->next;
+          rh_revert(t);
+        } else {//Link head need del
+          *e = t->next;
+          rh_revert(t);
+        }
+      }
+      break;
+    }
+    resv = t;
+    t = t->next;
+  }
+  return delok;
+}
+
+char* rh_gettbl(struct Env_val* e, const char* key){
+  char* val=NULL;
+  struct Env_val* t = e;
+  if (NULL==key){
+    return NULL;
+  }
+  while (t){
+    val = sf_getonet(t, key, NULL);
+    if (val) {
+      break;
+    }
+    t = t->next;
+  }
+  return val;
+}
+
+// insert or replace use string
+int rh_rpstbl(struct Env_val** e, const char* key, char* val) {
+  char* p = rh_gettbl(*e, key);
+  if (p) { // if already alloc, replace it
+    rh_revert(p);
+    p = rh_dupstr(val);
+    return 1;
+  } else {
+    return sf_savetbl(e, key, val);
+  }
+}
+
+// insert or replace use binary data
+int rh_rpbtbl(struct Env_val** e, const char* key, char* val, int len){
+  char* p = rh_gettbl(*e, key);
+  if (p) { // if already alloc, replace it
+    rh_revert(p);
+    p = rh_dupbin(val, len);
+    return 1;
+  } else {
+    return sf_bavetbl(e, key, val, len);
+  }
+}
+
+/*clear all table element and itself but val must be simple*/
+void sf_simpledes(void* p){
+  rh_revert(p);
+}
+
+void rh_clstbl_(struct Env_val* e){
+  rh_tblclear(e, sf_simpledes);
+}
+
+void rh_tblclear(struct Env_val* e, pf_destructElem f){
+  while (e) {
+    int i = 0;
+    for (; i < e->used; i++) {
+      f(e->val[i]);
+    }
+    struct Env_val* tmp = e->next;
+    rh_revert(e);
+    e = tmp;
+  }
+}
+
+void rh_hshreport(struct Env_val* e){
+  int bi = 0, ui = 0;
+  while (e){
+    bi++;
+    ui += e->used;
+    e = e->next;
+  }
+  printf("Hash(0x%p): block:%d, used:%d\n", e, bi, ui);
+}
+@
+
+
+1.16
+log
+@INSERT: simple release for Env and change global flag to function
+@
+text
+@d11 1
+a11 1
+#define BIG_BULK 127
+d106 4
+a109 2
+void rh_dbgflg(int i){
+  sv_pooldbgflg |= i;
+@
+
+
+1.15
+log
+@UPDATE: make tokey and gettbl robus when meet NULL
+@
+text
+@d104 5
+a108 1
+int g_pooldbg =0;
+d128 1
+a128 1
+  if (g_pooldbg&0x1){
+d156 1
+a156 1
+  if (g_pooldbg&0x1){
+d503 9
+d531 1
+a531 1
+  printf("Hash block:%d, used:%d\n", bi, ui);
+@
+
+
+1.14
+log
+@UPDATE: make deltbl meanful
+@
+text
+@d223 3
+d288 3
+d462 3
+@
+
+
+1.13
+log
+@UPDATE: make Env_val outside and make alloc report controllable
+@
+text
+@d426 2
+a427 1
+void rh_deltbl(struct Env_val** e, const char* key){
+d434 1
+d450 1
+@
+
+
+1.12
+log
+@INSERT: watch large memory
+@
+text
+@a14 1
+#define HASH_BUCKET 31
+d102 4
+a105 1
+//#define RH_MEMDEBUG 1
+d124 1
+a124 1
+#ifdef RH_MEMDEBUG
+d127 1
+a127 1
+#endif
+d152 1
+a152 1
+#ifdef RH_MEMDEBUG
+d155 1
+a155 1
+#endif
+d323 1
+a323 10
+/*2-Level container, has fixed number of val and dynamic link*/
+struct Env_val
+{
+  uint16_t used;
+  uint8_t reserved[6];
+  uint64_t key[HASH_BUCKET];
+  char* val[HASH_BUCKET];  // almost need free
+  struct Env_val* next;
+};
+
+@
+
+
+1.11
+log
+@UPDATE: introduce macro wrap alloc and revert friendly
+@
+text
+@d38 1
+d103 1
+a103 1
+
+d106 2
+a107 1
+  if (0==n) {
+d112 1
+d115 1
+d118 1
+d120 1
+d123 2
+a124 1
+  printf("rh_alloc in %s:%d, point is %p\n", f, l, p);
+d132 1
+d136 1
+d141 1
+d146 1
+d148 1
+d151 2
+a152 1
+  printf("rh_revert in %s:%d, point is %p.\n", f, l, p);
+d190 1
+@
+
+
+1.10
+log
+@INSERT: reduce uint64_t to char*, fixed dupstr and dupbin bug when input is 0
+@
+text
+@d103 6
+a108 1
+char* rh_alloc(int n){
+d110 1
+a110 1
+    return sf_borrow_small();
+d112 1
+a112 1
+    return sf_borrow_big();
+d114 1
+a114 1
+    return (char*)malloc(n);
+d116 4
+d122 2
+a123 2
+//TODO: cant revert twice, must maualy set p to NULL
+void rh_revert(char* p){
+d138 3
+d174 4
+a177 2
+  printf("Small total:%d, used:%d\n", small_pagei*SMALL_PAGE, small_used);
+  printf("Big total:%d, used:%d\n", big_pagei*BIG_PAGE, big_used);
+d430 1
+a430 1
+          rh_revert((char*)t);
+d433 1
+a433 1
+          rh_revert((char*)t);
+d487 1
+a487 1
+    rh_revert((char*)e);
+@
+
+
+1.9
+log
+@INSERT: add Env_val destructor callback
+@
+text
+@d143 3
+d153 3
+d177 2
+d180 1
+a180 3
+     return 2+c-'0';
+   }else if ('a'<=(c)&&(c)<='z') {
+     return 12+c-'a';
+d182 1
+a182 1
+     return 37+c-'A';
+d210 23
+d272 19
+d416 1
+a416 1
+          rh_revert(t);
+d419 1
+a419 1
+          rh_revert(t);
+d473 1
+a473 1
+    rh_revert(e);
+@
+
+
+1.8
+log
+@UPDATE: fixed del from hash bug, hash is different from pool, so canuse is useless.
+@
+text
+@d245 1
+d251 1
+a251 1
+  char* val[HASH_BUCKET];
+d259 1
+a259 1
+  t = (struct Env_val*)malloc(sizeof(struct Env_val));
+a299 1
+    //if (upos) { printf("SF_GET:%s, %d, used:%d, k:%lu, s:%lu\n", key, *upos, t->used, k, t->key[i]); }
+d368 1
+a368 1
+          free(t);
+d371 1
+a371 1
+          free(t);
+d418 12
+@
+
+
+1.7
+log
+@UPDATE: add binary hash operation, and fixed genfunc error
+@
+text
+@d60 1
+d92 1
+d116 2
+d134 1
+d138 1
+d247 2
+a248 2
+  uint8_t used;
+  uint8_t canuse[HASH_BUCKET];
+a261 1
+    t->canuse[i] = i;
+d268 2
+a269 2
+  t->key[t->canuse[t->used]] = k;
+  t->val[t->canuse[t->used]] = rh_dupstr(val);
+d274 2
+a275 2
+  t->key[t->canuse[t->used]] = k;
+  t->val[t->canuse[t->used]] = rh_dupbin(val, len);
+d279 11
+a289 9
+static void sf_delonet(struct Env_val* t, const char* key){
+  uint64_t k = tokey(key);
+  int i = 0;
+  for (; i < t->used; i++){
+    if (k==t->key[t->canuse[i]]) {
+      t->used--;
+      t->canuse[t->used] = t->canuse[i];
+      rh_revert(t->val[t->canuse[t->used]]);
+      break;
+d294 1
+a294 1
+static char* sf_getonet(struct Env_val* t, const char* key){
+d299 4
+a302 2
+    if (k==t->key[t->canuse[i]]) {
+      p = t->val[t->canuse[i]];
+d360 1
+d362 1
+a362 1
+    char* val = sf_getonet(t, key);
+d364 1
+a364 1
+      sf_delonet(t, key);
+d385 1
+a385 1
+    val = sf_getonet(t, key);
+@
+
+
+1.6
+log
+@UPDATE: change inner name, use TOKEY instead of fixed, change hash table value assign
+@
+text
+@d39 1
+a39 1
+char* rh_borrow_small(){
+d70 1
+a70 1
+char* rh_borrow_big(){
+d103 1
+a103 1
+    return rh_borrow_small();
+d105 1
+a105 1
+    return rh_borrow_big();
+d143 6
+d268 6
+d301 1
+a301 1
+int rh_savetbl(struct Env_val** e, const char* key, char* val){
+d318 25
+a342 1
+      ret = rh_savetbl(e, key, val);
+d384 24
+@
+
+
+1.5
+log
+@UPDATE: let hash reentrant, and this make proto useful
+@
+text
+@d5 1
+d251 1
+d258 1
+a258 1
+  t->val[t->canuse[t->used]] = val;
+d269 1
+d278 1
+a278 1
+  uint64_t k = tokey(key);
+d291 1
+a291 1
+  uint64_t k = tokey(key);
+@
+
+
+1.4
+log
+@INSERT: add toikey
+@
+text
+@a240 1
+static struct Env_val* s_tblist = NULL;
+d286 1
+a286 1
+int rh_savetbl(const char* key, char* val){
+d290 1
+a290 1
+    struct Env_val* t = s_tblist;
+d301 3
+a303 3
+      t->next = s_tblist;
+      s_tblist = t;
+      ret = rh_savetbl(key, val);
+d309 3
+a311 2
+void rh_deltbl(const char* key){
+  struct Env_val* t = s_tblist;
+d316 9
+d327 1
+d332 1
+a332 1
+char* rh_gettbl(const char* key){
+d334 1
+a334 1
+  struct Env_val* t = s_tblist;
+d345 9
+@
+
+
+1.3
+log
+@INSERT: add dupstr, simple but useful for parser
+@
+text
+@d149 5
+a154 1
+
+a168 5
+static uint64_t append_bit(uint64_t val, uint64_t c, int n){
+  val = val | c<<n;
+  return val;
+}
+
+d191 40
+@
+
+
+1.2
+log
+@INSERT: Hash table function
+@
+text
+@d4 1
+d135 7
+@
+
+
+1.1
+log
+@INSERT: try my first language short for fila
+@
+text
+@d5 1
+a5 50
+struct Env_val
+{
+  uint64_t key;
+  char* val;
+};
+
+#define IS_VALID(c) ((('a'<=(c)&&(c)<='z')||('A'<=(c)&&(c)<='Z')||('0'<=(c)&&(c)<='9')||(c)=='_')?1:0)
+
+static int to_range(char c){
+   if ((c)=='_') {
+     return 1;
+   }else if ('0'<=(c)&&(c)<='9') {
+     return 2+c-'0';
+   }else if ('a'<=(c)&&(c)<='z') {
+     return 12+c-'a';
+   }else if ('A'<=(c)&&(c)<='Z') {
+     return 37+c-'A';
+   }else {
+     return 0;
+   }
+}
+
+static uint64_t append_bit(uint64_t val, uint64_t c, int n){
+  val = val | c<<n;
+  return val;
+}
+
+// make string as uint64_t representation
+uint64_t tokey(const char* str){
+  uint64_t val=0;
+  int offset=0;
+  char *p = str;
+  if (*p=='_') {
+    val = append_bit(val, to_range(*p), offset);
+    p++;
+  }
+  offset+=4;
+  while (*p){
+    if (IS_VALID(*p)&&(offset<=58)){
+      val = append_bit(val, to_range(*p), offset);
+      offset+=6;
+    }else{
+      val=0;
+      break;
+    }
+    p++;
+  }
+  return val;
+}
+
+d13 4
+d109 1
+d138 150
+@
+
