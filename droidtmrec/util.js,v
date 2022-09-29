@@ -1,9 +1,15 @@
-head	1.43;
+head	1.44;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.44
+date	2022.09.29.16.30.38;	author u0_a111;	state Exp;
+branches;
+next	1.43;
+commitid	1006335C82E0DD670DD;
 
 1.43
 date	2022.09.29.15.10.14;	author games;	state Exp;
@@ -231,9 +237,9 @@ desc
 @@
 
 
-1.43
+1.44
 log
-@trans tmrec to sdf
+@tmrec today and edit work
 @
 text
 @/// Global variable declare
@@ -284,7 +290,8 @@ function HandleShowLong(error, response){
 
 function HandleEditTm( error, response ) {
   var txt = document.getElementById("eNow");
-  txt.value = trimFirstLF(response)
+  // tmrec startwith "221001", so skip first 6 char
+  txt.value = trimFirstLF(response).substring(6)
 }
 
 function HandleEditBlog(error, response) {
@@ -340,8 +347,7 @@ function onEdit(eYear, eMonth, eTb){
       showHint('Get tmrec fail, hour is wrong!');
       return;
     }
-    httpPost("/digest/justDo/"+fdb[0]+"/"+curDay()+"/"+d, 'mth=get',
-      HandleEditTm);
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleEditTm);
   }else if(fdb[1]=='blog'){
     var day = getElemValue("eNow");
     if ( !checkDate(day) ) {
@@ -357,8 +363,7 @@ function onEdit(eYear, eMonth, eTb){
 function getDone(){
   var fdb = sepraDB();
   if(fdb[1]=='tmrec'){
-    httpPost("/digest/rec/"+fdb[0]+"/"+curDay(), 'mth=get',
-      HandleDone);
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleDone);
   }else{
     showHint('Choose is not Tmrec!');
   }
@@ -550,6 +555,25 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/stock.cgi", '', HandleDone );
 }
+@
+
+
+1.43
+log
+@trans tmrec to sdf
+@
+text
+@d49 2
+a50 1
+  txt.value = trimFirstLF(response)
+d106 1
+a106 2
+    httpPost("/digest/justDo/"+fdb[0]+"/"+curDay()+"/"+d, 'mth=get',
+      HandleEditTm);
+d122 1
+a122 2
+    httpPost("/digest/rec/"+fdb[0]+"/"+curDay(), 'mth=get',
+      HandleDone);
 @
 
 

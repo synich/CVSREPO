@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
+branches;
+next	1.4;
+commitid	1006335C3D00A0DEA03;
 
 1.4
 date	2022.08.27.05.45.47;	author games;	state Exp;
@@ -34,12 +40,12 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@move cgi template into r.lua
+@lua cgi-bin
 @
 text
-@all: blog
+@all: blog tmrec
 
 blog: blog.lua
 	@@cat r.lua $^ > $^.cgi
@@ -47,7 +53,27 @@ blog: blog.lua
 	@@chmod 755 $^.cgi
 	@@mv $^.cgi blog.cgi
 
+tmrec: tmrec.lua
+	@@cat r.lua $^ > $^.cgi
+	@@echo "main()" >> $^.cgi
+	@@chmod 755 $^.cgi
+	@@mv $^.cgi tmrec.cgi
 
+ad:
+	@@termux-fix-shebang *.cgi
+
+@
+
+
+1.4
+log
+@move cgi template into r.lua
+@
+text
+@d1 1
+a1 1
+all: blog
+d9 8
 @
 
 
