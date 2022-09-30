@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2022.09.30.14.13.14;	author u0_a111;	state Exp;
+branches;
+next	1.4;
+commitid	1006336F97A767E92AA;
 
 1.4
 date	2022.09.29.16.05.29;	author u0_a111;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@base64 and urlencdec for lua
+@restore urlencode in entry
 @
 text
 @#!/usr/bin/env lua
@@ -149,12 +155,27 @@ local function main()
   local urlencoded_content = io.read("a")
   -- ensure html render
   print("Content-Type: text/html; charset=UTF-8\n")
-  -- cal module's cgi function
+  -- cal module's cgi function, urlencoded will make +/ to %2B%2F, restore them
   cgi(_path_tbl(path_info),
-      _url_str_tbl(query_str),
-      _url_str_tbl(urlencoded_content))
+      _url_str_tbl( res_urlenc(query_str) ),
+      _url_str_tbl( res_urlenc(urlencoded_content) ))
 end
 
+@
+
+
+1.4
+log
+@base64 and urlencdec for lua
+@
+text
+@d111 1
+a111 1
+  -- cal module's cgi function
+d113 2
+a114 2
+      _url_str_tbl(query_str),
+      _url_str_tbl(urlencoded_content))
 @
 
 

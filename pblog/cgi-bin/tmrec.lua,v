@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2022.09.30.14.13.14;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	1006336F97A767E92AA;
 
 1.1
 date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@lua cgi-bin
+@restore urlencode in entry
 @
 text
 @-- tmrec.cgi/read?dt=2208
@@ -39,7 +45,7 @@ function edit(q, c)
   local belong = dt:sub(1,1)
   local mon = dt:sub(1,4)
   local day = dt:sub(5,6)
-  local txt = b64dec(res_urlenc(c["txt"]))
+  local txt = b64dec(c["txt"])
   local tm_name = " ../Archive/t"..belong.."/"..mon..".txt "
   local cmd = "sed -e '"..day.."c \\\n"..dt..txt.."'"..tm_name.." >tmp_tmrec"
   print(cmd)
@@ -51,6 +57,19 @@ fn["read"]=read
 fn["edit"]=edit
 --read({dt="2209"})
 
-main()
 
 @
+
+
+1.1
+log
+@lua cgi-bin
+@
+text
+@d19 1
+a19 1
+  local txt = b64dec(res_urlenc(c["txt"]))
+a30 1
+main()
+@
+
