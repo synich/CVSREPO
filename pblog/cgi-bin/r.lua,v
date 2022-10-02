@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2022.10.02.14.21.38;	author u0_a111;	state Exp;
+branches;
+next	1.5;
+commitid	10063399E721FE59B39;
 
 1.5
 date	2022.09.30.14.13.14;	author u0_a111;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@restore urlencode in entry
+@blog show recent
 @
 text
 @#!/usr/bin/env lua
@@ -140,7 +146,8 @@ local fn = {}
 cgi = function(p,q,c)
     local ptf = fn[p[1]]
     if ptf then
-      ptf(q,c)
+      isok, msg = pcall(ptf, q, c)
+      if not isok then errlog(p[1]..": "..msg) end
     else
       errlog("not found ["..p[1].."] request")
     end
@@ -161,6 +168,17 @@ local function main()
       _url_str_tbl( res_urlenc(urlencoded_content) ))
 end
 
+@
+
+
+1.5
+log
+@restore urlencode in entry
+@
+text
+@d96 2
+a97 1
+      ptf(q,c)
 @
 
 

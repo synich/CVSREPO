@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2022.10.02.14.21.38;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	10063399E721FE59B39;
 
 1.1
 date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
@@ -16,15 +22,16 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@lua cgi-bin
+@blog show recent
 @
 text
 @-- blog.cgi/read?dt=220204
 function read(q)
   local dt = q["dt"]
-  local fd = io.open("../Archive/"..dt..".md", "r")
+  local belong = dt:sub(1,1)
+  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "r")
   if fd then
     local txt = fd:read("*a")
     print(txt)
@@ -33,11 +40,35 @@ end
 
 function keyword(q)
   local kwd = b64dec(q["kwd"])
-  os.execute("grep '"..kwd.."' ../Archive/*.md")
+  os.execute("grep '"..kwd.."' ../Archive/b*/*.md")
+end
+
+function title(q)
+  local p = tonumber(q["page"])
+  local s,e = p*50+1, p*50+50
+  local cmd = "cat ../Archive/blog_title | sed -ne '"..tostring(s)..","..tostring(e).."p'"
+  os.execute(cmd)
 end
 
 fn["read"]=read
 fn["keyword"]=keyword
+fn["title"]=title
 --read({dt="220115"})
 
 @
+
+
+1.1
+log
+@lua cgi-bin
+@
+text
+@d4 2
+a5 1
+  local fd = io.open("../Archive/"..dt..".md", "r")
+d14 8
+a21 1
+  os.execute("grep '"..kwd.."' ../Archive/*.md")
+d26 1
+@
+
