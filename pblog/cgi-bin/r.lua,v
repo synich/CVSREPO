@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2022.10.03.09.42.04;	author u0_a111;	state Exp;
+branches;
+next	1.6;
+commitid	100633AAE6C319048A0;
 
 1.6
 date	2022.10.02.14.21.38;	author u0_a111;	state Exp;
@@ -46,9 +52,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@blog show recent
+@edit blog
 @
 text
 @#!/usr/bin/env lua
@@ -163,11 +169,21 @@ local function main()
   -- ensure html render
   print("Content-Type: text/html; charset=UTF-8\n")
   -- cal module's cgi function, urlencoded will make +/ to %2B%2F, restore them
+  if nil then errlog(path_info..":"..query_str..":"..urlencoded_content) end
   cgi(_path_tbl(path_info),
       _url_str_tbl( res_urlenc(query_str) ),
       _url_str_tbl( res_urlenc(urlencoded_content) ))
 end
 
+@
+
+
+1.6
+log
+@blog show recent
+@
+text
+@d113 1
 @
 
 

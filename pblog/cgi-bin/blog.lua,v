@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2022.10.03.09.42.04;	author u0_a111;	state Exp;
+branches;
+next	1.2;
+commitid	100633AAE6C319048A0;
 
 1.2
 date	2022.10.02.14.21.38;	author u0_a111;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@blog show recent
+@edit blog
 @
 text
 @-- blog.cgi/read?dt=220204
@@ -43,6 +49,17 @@ function keyword(q)
   os.execute("grep '"..kwd.."' ../Archive/b*/*.md")
 end
 
+function edit(q, c)
+  local dt = q["dt"]
+  local belong = dt:sub(1,1)
+  print()
+  local ctx = b64dec(c["ctx"])
+  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "w")
+  fd:write(ctx)
+  fd:close()
+  print("len:"..#ctx)
+end
+
 function title(q)
   local p = tonumber(q["page"])
   local s,e = p*50+1, p*50+50
@@ -52,9 +69,20 @@ end
 
 fn["read"]=read
 fn["keyword"]=keyword
+fn["edit"]=edit
 fn["title"]=title
 --read({dt="220115"})
 
+@
+
+
+1.2
+log
+@blog show recent
+@
+text
+@d17 11
+d37 1
 @
 
 
