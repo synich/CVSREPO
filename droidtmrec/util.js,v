@@ -1,9 +1,15 @@
-head	1.44;
+head	1.45;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.45
+date	2022.10.03.09.36.15;	author u0_a111;	state Exp;
+branches;
+next	1.44;
+commitid	100633AAD0F30BCBA5B;
 
 1.44
 date	2022.09.29.16.30.38;	author u0_a111;	state Exp;
@@ -237,9 +243,9 @@ desc
 @@
 
 
-1.44
+1.45
 log
-@tmrec today and edit work
+@edit blog
 @
 text
 @/// Global variable declare
@@ -264,7 +270,7 @@ function checkDate(day){
 }
 
 /// use Base64 to convert multiword into ASCII, so Droid can send
-function convertTxt(str){
+function dropnl_encb64(str){
   var can_out = str.replace(/\n/g, "")
   str = Base64.encode(can_out);//encodeURI(str);
   return str;
@@ -322,7 +328,8 @@ function HandleStdout(error, response){
 }
 
 function HandleBlst(error, response){
-  setDivShow("eBlst", trimFirstLF(response));
+  var can_out = response.replace(/\n/g, "<br />")
+  setDivShow("eBlst", can_out);
 }
 
 function HandleUpPic(error, response){
@@ -379,7 +386,7 @@ function saveRec(fdb, day){
     return;
   }
   var rec = getElemValue("eNow");
-  var pct = "hour="+hour+"|txt="+convertTxt(rec);
+  var pct = "hour="+hour+"|txt="+dropnl_encb64(rec);
   httpPost("/tmrec.cgi/edit?dt="+day,
     pct, HandleDone );
 }
@@ -387,8 +394,8 @@ function saveRec(fdb, day){
 function saveBlog(fdb, day) {
   var txt = getElemValue("eNow");
   var tag = getElemValue("eBtg");
-  var pct = "tag="+tag+"|ctx="+convertTxt(txt);
-  httpPost("/digest/blog/"+fdb+'/'+day, pct, HandleHint );
+  var pct = "tag="+tag+"|ctx="+ Base64.encode(txt);
+  httpPost("/blog.cgi/edit?dt="+day, pct, HandleHint );
 }
 
 function previewMd(src, dst){
@@ -444,7 +451,7 @@ function recentDigest() {
     var tag = getElemValue("eBtg");
     // default get recent some blog
     if (tag == "unknown" ) {
-      httpPost("/digest/recentBlog/"+fdb[0]+"/"+page, '', HandleBlst);
+      httpPost("/blog.cgi/title?page="+page, '', HandleBlst);
     } else { // otherwise get specify tag blog
       httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
     }
@@ -486,7 +493,7 @@ function removeDay(){
 /// find with page as offset
 function queryBlogTmKwd(page) {
   var kwd = getElemValue("eNow");
-  httpGet("/blog.cgi/keyword?kwd="+convertTxt(kwd),  HandleStdout);
+  httpGet("/blog.cgi/keyword?kwd="+dropnl_encb64(kwd), HandleStdout);
 }
 
 function clearContent() {
@@ -555,6 +562,33 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/stock.cgi", '', HandleDone );
 }
+@
+
+
+1.44
+log
+@tmrec today and edit work
+@
+text
+@d23 1
+a23 1
+function convertTxt(str){
+d81 2
+a82 1
+  setDivShow("eBlst", trimFirstLF(response));
+d139 1
+a139 1
+  var pct = "hour="+hour+"|txt="+convertTxt(rec);
+d147 2
+a148 2
+  var pct = "tag="+tag+"|ctx="+convertTxt(txt);
+  httpPost("/digest/blog/"+fdb+'/'+day, pct, HandleHint );
+d204 1
+a204 1
+      httpPost("/digest/recentBlog/"+fdb[0]+"/"+page, '', HandleBlst);
+d246 1
+a246 1
+  httpGet("/blog.cgi/keyword?kwd="+convertTxt(kwd),  HandleStdout);
 @
 
 
