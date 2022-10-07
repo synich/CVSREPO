@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2022.10.07.16.35.57;	author u0_a111;	state Exp;
+branches;
+next	1.8;
+commitid	1006340556D390C1B79;
 
 1.8
 date	2022.10.07.16.11.54;	author u0_a111;	state Exp;
@@ -58,9 +64,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@lua format string function
+@make cgi template clarity
 @
 text
 @#!/usr/bin/env lua
@@ -71,44 +77,9 @@ text
 --       c: {a=1,b=2}(urlencoed)
 
 
-local function _url_str_tbl(s)
-  -- split urlencoed into table
-  local t = {}
-  local p_start, p_next = 1, 1
-  local s_sec, p_eq = "", 1
-  repeat
-    p_next = s:find("&", p_start, true)
-    if p_next then
-      s_sec = s:sub(p_start, p_next-1)
-      p_start = p_next + 1
-    else
-      s_sec = s:sub(p_start)
-    end
-    p_eq = s_sec:find("=", 1, true)
-    if p_eq then
-      t[s_sec:sub(1, p_eq-1)] = s_sec:sub(p_eq+1)
-    end
-  until not p_next
-  return t
-end
-
-
-local function _path_tbl(s)
-  local t = {}
-  local p_start, p_next = 2, 1
-  repeat
-    p_next = s:find("/", p_start, true)
-    if p_next then
-      table.insert(t, s:sub(p_start, p_next-1))
-      p_start = p_next + 1
-    else
-      table.insert(t, s:sub(p_start))
-    end
-  until not p_next
-  return t
-end
-
-
+-------------------------------
+-- handy function for write cgi
+-------------------------------
 -- format/template string
 function format(body, hole, ...)
   local lst = {...}
@@ -117,6 +88,14 @@ function format(body, hole, ...)
     body = body:gsub(hole, lst[i], 1)
   end
   return body
+end
+
+-- easy wrap for io.popen
+function popen(cmd)
+  local fd = io.popen(cmd)
+  local txt = fd:read("*a")
+  fd:close()
+  return txt:sub(1, -2)  -- last is \n, drop it
 end
 
 local function errlog(msg)
@@ -156,16 +135,44 @@ local function b64dec(data)
     end))
 end
 
--- cgi entry, register bussness into fn
-local fn = {}
-cgi = function(p,q,c)
-    local ptf = fn[p[1]]
-    if ptf then
-      isok, msg = pcall(ptf, q, c)
-      if not isok then errlog(p[1]..": "..msg) end
+
+---------------------------
+-- construct for http parse
+---------------------------
+local function _url_str_tbl(s)
+  -- split urlencoed into table
+  local t = {}
+  local p_start, p_next = 1, 1
+  local s_sec, p_eq = "", 1
+  repeat
+    p_next = s:find("&", p_start, true)
+    if p_next then
+      s_sec = s:sub(p_start, p_next-1)
+      p_start = p_next + 1
     else
-      errlog("not found ["..p[1].."] request")
+      s_sec = s:sub(p_start)
     end
+    p_eq = s_sec:find("=", 1, true)
+    if p_eq then
+      t[s_sec:sub(1, p_eq-1)] = s_sec:sub(p_eq+1)
+    end
+  until not p_next
+  return t
+end
+
+local function _path_tbl(s)
+  local t = {}
+  local p_start, p_next = 2, 1
+  repeat
+    p_next = s:find("/", p_start, true)
+    if p_next then
+      table.insert(t, s:sub(p_start, p_next-1))
+      p_start = p_next + 1
+    else
+      table.insert(t, s:sub(p_start))
+    end
+  until not p_next
+  return t
 end
 
 -- base64 in body will change by urlencoded, restore it
@@ -174,7 +181,6 @@ local function _res_urlenc(str)
   str = str:gsub("%%2F", "/")
   return str
 end
-
 
 local function main()
   -- part after r.cgi, e.g r.cgi/foo/bar, path_info is /foo/bar
@@ -191,6 +197,87 @@ local function main()
       _url_str_tbl( _res_urlenc(urlencoded_content) ))
 end
 
+
+---------------------------------------
+-- cgi entry, register bussness into fn
+---------------------------------------
+local fn = {}
+cgi = function(p,q,c)
+    local ptf = fn[p[1]]
+    if ptf then
+      isok, msg = pcall(ptf, q, c)
+      if not isok then errlog(p[1]..": "..msg) end
+    else
+      errlog("not found ["..p[1].."] request")
+    end
+end
+
+
+@
+
+
+1.8
+log
+@lua format string function
+@
+text
+@d9 3
+a11 38
+local function _url_str_tbl(s)
+  -- split urlencoed into table
+  local t = {}
+  local p_start, p_next = 1, 1
+  local s_sec, p_eq = "", 1
+  repeat
+    p_next = s:find("&", p_start, true)
+    if p_next then
+      s_sec = s:sub(p_start, p_next-1)
+      p_start = p_next + 1
+    else
+      s_sec = s:sub(p_start)
+    end
+    p_eq = s_sec:find("=", 1, true)
+    if p_eq then
+      t[s_sec:sub(1, p_eq-1)] = s_sec:sub(p_eq+1)
+    end
+  until not p_next
+  return t
+end
+
+
+local function _path_tbl(s)
+  local t = {}
+  local p_start, p_next = 2, 1
+  repeat
+    p_next = s:find("/", p_start, true)
+    if p_next then
+      table.insert(t, s:sub(p_start, p_next-1))
+      p_start = p_next + 1
+    else
+      table.insert(t, s:sub(p_start))
+    end
+  until not p_next
+  return t
+end
+
+
+d22 8
+d67 33
+a99 7
+-- cgi entry, register bussness into fn
+local fn = {}
+cgi = function(p,q,c)
+    local ptf = fn[p[1]]
+    if ptf then
+      isok, msg = pcall(ptf, q, c)
+      if not isok then errlog(p[1]..": "..msg) end
+d101 1
+a101 1
+      errlog("not found ["..p[1].."] request")
+d103 2
+a113 1
+
+d129 16
 @
 
 
