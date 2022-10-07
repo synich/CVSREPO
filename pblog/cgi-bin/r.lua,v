@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2022.10.07.16.11.54;	author u0_a111;	state Exp;
+branches;
+next	1.7;
+commitid	10063404FCA37244B29;
 
 1.7
 date	2022.10.03.09.42.04;	author u0_a111;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@edit blog
+@lua format string function
 @
 text
 @#!/usr/bin/env lua
@@ -103,15 +109,18 @@ local function _path_tbl(s)
 end
 
 
-local function errlog(msg)
-  os.execute("echo "..'"`date` '..msg..'">>cgi-err.log')
+-- format/template string
+function format(body, hole, ...)
+  local lst = {...}
+  if hole == "$" then hole = "%$" end
+  for i=1,#lst do
+    body = body:gsub(hole, lst[i], 1)
+  end
+  return body
 end
 
--- base64 in body will change by urlencoded, restore it
-local function res_urlenc(str)
-  str = str:gsub("%%2B", "+")
-  str = str:gsub("%%2F", "/")
-  return str
+local function errlog(msg)
+  os.execute("echo "..'"`date` '..msg..'">>cgi-err.log')
 end
 
 -- character table string
@@ -159,6 +168,13 @@ cgi = function(p,q,c)
     end
 end
 
+-- base64 in body will change by urlencoded, restore it
+local function _res_urlenc(str)
+  str = str:gsub("%%2B", "+")
+  str = str:gsub("%%2F", "/")
+  return str
+end
+
 
 local function main()
   -- part after r.cgi, e.g r.cgi/foo/bar, path_info is /foo/bar
@@ -171,10 +187,32 @@ local function main()
   -- cal module's cgi function, urlencoded will make +/ to %2B%2F, restore them
   if nil then errlog(path_info..":"..query_str..":"..urlencoded_content) end
   cgi(_path_tbl(path_info),
-      _url_str_tbl( res_urlenc(query_str) ),
-      _url_str_tbl( res_urlenc(urlencoded_content) ))
+      _url_str_tbl( _res_urlenc(query_str) ),
+      _url_str_tbl( _res_urlenc(urlencoded_content) ))
 end
 
+@
+
+
+1.7
+log
+@edit blog
+@
+text
+@d47 10
+a60 7
+-- base64 in body will change by urlencoded, restore it
+local function res_urlenc(str)
+  str = str:gsub("%%2B", "+")
+  str = str:gsub("%%2F", "/")
+  return str
+end
+
+d106 7
+d125 2
+a126 2
+      _url_str_tbl( res_urlenc(query_str) ),
+      _url_str_tbl( res_urlenc(urlencoded_content) ))
 @
 
 

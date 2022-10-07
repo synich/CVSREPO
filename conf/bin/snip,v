@@ -1,9 +1,15 @@
-head	1.35;
+head	1.36;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.36
+date	2022.10.07.15.41.03;	author u0_a111;	state Exp;
+branches;
+next	1.35;
+commitid	1006340488F350885D5;
 
 1.35
 date	2022.08.15.16.25.38;	author games;	state Exp;
@@ -219,9 +225,9 @@ desc
 @@
 
 
-1.35
+1.36
 log
-@snip lua add elseif
+@lua snip for vararg and for step
 @
 text
 @#!/bin/bash
@@ -351,8 +357,10 @@ EOF
   *)
   cat <<"EOF"
 -- scaffold, type `lib`
-function foo(a, b)
+function foo(a, b, ...)
   local t = {k=1, v=2}
+  local lst = {...} -- v1, v2, v3 = ... ok but no robust
+  for v = 1, #lst do end
   while true do
     if t ~= nil then
       return t.k
@@ -501,6 +509,18 @@ main() {
 
 main $@@
 
+@
+
+
+1.35
+log
+@snip lua add elseif
+@
+text
+@d128 1
+a128 1
+function foo(a, b)
+d130 2
 @
 
 
