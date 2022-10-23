@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2022.10.23.06.45.23;	author u0_a111;	state Exp;
+branches;
+next	1.3;
+commitid	1006354E3033F510A91;
 
 1.3
 date	2022.10.03.09.42.04;	author u0_a111;	state Exp;
@@ -28,16 +34,16 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@edit blog
+@use pub instead of Archive
 @
 text
 @-- blog.cgi/read?dt=220204
 function read(q)
   local dt = q["dt"]
   local belong = dt:sub(1,1)
-  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "r")
+  local fd = io.open("../pub/b"..belong.."/"..dt..".md", "r")
   if fd then
     local txt = fd:read("*a")
     print(txt)
@@ -46,7 +52,7 @@ end
 
 function keyword(q)
   local kwd = b64dec(q["kwd"])
-  os.execute("grep '"..kwd.."' ../Archive/b*/*.md")
+  os.execute("grep '"..kwd.."' ../pub/b*/*.md")
 end
 
 function edit(q, c)
@@ -54,7 +60,7 @@ function edit(q, c)
   local belong = dt:sub(1,1)
   print()
   local ctx = b64dec(c["ctx"])
-  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "w")
+  local fd = io.open("../pub/b"..belong.."/"..dt..".md", "w")
   fd:write(ctx)
   fd:close()
   print("len:"..#ctx)
@@ -63,7 +69,7 @@ end
 function title(q)
   local p = tonumber(q["page"])
   local s,e = p*50+1, p*50+50
-  local cmd = "cat ../Archive/blog_title | sed -ne '"..tostring(s)..","..tostring(e).."p'"
+  local cmd = "cat ../pub/blog_title | sed -ne '"..tostring(s)..","..tostring(e).."p'"
   os.execute(cmd)
 end
 
@@ -73,6 +79,26 @@ fn["edit"]=edit
 fn["title"]=title
 --read({dt="220115"})
 
+@
+
+
+1.3
+log
+@edit blog
+@
+text
+@d5 1
+a5 1
+  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "r")
+d14 1
+a14 1
+  os.execute("grep '"..kwd.."' ../Archive/b*/*.md")
+d22 1
+a22 1
+  local fd = io.open("../Archive/b"..belong.."/"..dt..".md", "w")
+d31 1
+a31 1
+  local cmd = "cat ../Archive/blog_title | sed -ne '"..tostring(s)..","..tostring(e).."p'"
 @
 
 

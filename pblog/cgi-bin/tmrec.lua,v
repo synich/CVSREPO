@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2022.10.23.06.45.23;	author u0_a111;	state Exp;
+branches;
+next	1.3;
+commitid	1006354E3033F510A91;
 
 1.3
 date	2022.10.07.16.11.54;	author u0_a111;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@lua format string function
+@use pub instead of Archive
 @
 text
 @-- tmrec.cgi/read?dt=2208
@@ -39,9 +45,9 @@ function read(q)
   local belong = dt:sub(1,1)
   local mon = dt:sub(1,4)
   local day = dt:sub(5,6)
-  local cmd = "sed -n -e '"..day.."p' ../Archive/t"..belong.."/"..mon..".txt"
+  local cmd = "sed -n -e '"..day.."p' ../pub/t"..belong.."/"..mon..".txt"
   if day == '' then
-    local cmd = "cat ../Archive/t"..belong.."/"..mon..".txt"
+    local cmd = "cat ../pub/t"..belong.."/"..mon..".txt"
   end
   os.execute(cmd)
 end
@@ -52,7 +58,7 @@ function edit(q, c)
   local mon = dt:sub(1,4)
   local day = dt:sub(5,6)
   local txt = b64dec(c["txt"])
-  local tm_name = format(" ../Archive/t$/$.txt ", "$", belong, mon)
+  local tm_name = format(" ../pub/t$/$.txt ", "$", belong, mon)
   local cmd = "sed -e '"..day.."c \\\n"..dt..txt.."'"..tm_name.." >tmp_tmrec"
   print(cmd)
   os.execute(cmd)
@@ -64,6 +70,23 @@ fn["edit"]=edit
 --read({dt="2209"})
 
 
+@
+
+
+1.3
+log
+@lua format string function
+@
+text
+@d7 1
+a7 1
+  local cmd = "sed -n -e '"..day.."p' ../Archive/t"..belong.."/"..mon..".txt"
+d9 1
+a9 1
+    local cmd = "cat ../Archive/t"..belong.."/"..mon..".txt"
+d20 1
+a20 1
+  local tm_name = format(" ../Archive/t$/$.txt ", "$", belong, mon)
 @
 
 
