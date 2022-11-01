@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2022.11.01.16.09.42;	author u0_a111;	state Exp;
+branches;
+next	1.4;
+commitid	100636144C653E484F2;
 
 1.4
 date	2022.10.23.06.45.23;	author u0_a111;	state Exp;
@@ -34,13 +40,13 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@use pub instead of Archive
+@guard and local
 @
 text
 @-- blog.cgi/read?dt=220204
-function read(q)
+local function read(q)
   local dt = q["dt"]
   local belong = dt:sub(1,1)
   local fd = io.open("../pub/b"..belong.."/"..dt..".md", "r")
@@ -50,12 +56,12 @@ function read(q)
   end
 end
 
-function keyword(q)
+local function keyword(q)
   local kwd = b64dec(q["kwd"])
-  os.execute("grep '"..kwd.."' ../pub/b*/*.md")
+  os.execute("grep -i '"..kwd.."' ../pub/b*/*.md")
 end
 
-function edit(q, c)
+local function edit(q, c)
   local dt = q["dt"]
   local belong = dt:sub(1,1)
   print()
@@ -66,7 +72,7 @@ function edit(q, c)
   print("len:"..#ctx)
 end
 
-function title(q)
+local function title(q)
   local p = tonumber(q["page"])
   local s,e = p*50+1, p*50+50
   local cmd = "cat ../pub/blog_title | sed -ne '"..tostring(s)..","..tostring(e).."p'"
@@ -77,8 +83,41 @@ fn["read"]=read
 fn["keyword"]=keyword
 fn["edit"]=edit
 fn["title"]=title
+fn["nedit"]=nedit
 --read({dt="220115"})
 
+local function nedit(q, c)
+  local dt = q["dt"]
+  local txt = c["txt"]
+  local sql = format("INSERT OR REPLACE INTO blog VALUES($, '$', '$')", "$", dt, txt, "lang")
+  print(sql_exec("shuw", sql))
+end
+
+@
+
+
+1.4
+log
+@use pub instead of Archive
+@
+text
+@d2 1
+a2 1
+function read(q)
+d12 1
+a12 1
+function keyword(q)
+d14 1
+a14 1
+  os.execute("grep '"..kwd.."' ../pub/b*/*.md")
+d17 1
+a17 1
+function edit(q, c)
+d28 1
+a28 1
+function title(q)
+d39 1
+d42 7
 @
 
 

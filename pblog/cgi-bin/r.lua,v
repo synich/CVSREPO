@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2022.11.01.16.09.42;	author u0_a111;	state Exp;
+branches;
+next	1.9;
+commitid	100636144C653E484F2;
 
 1.9
 date	2022.10.07.16.35.57;	author u0_a111;	state Exp;
@@ -64,24 +70,24 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@make cgi template clarity
+@guard and local
 @
 text
 @#!/usr/bin/env lua
---USAGE: provide xx.lua when query /xx.cgi/do?arg=1
---       must has cgi method, which will get 3 table
---       p: {do}
---       q: {arg=1}(exclude ?)
---       c: {a=1,b=2}(urlencoed)
+-- USAGE: provide xx.lua, must has cgi method as entry
+-- cgi will get 3 table, first `p: {do}` is router
+-- when query /xx.cgi/sth?arg=1, sth will get 2 table
+-- q: {arg=1}(exclude ?)
+-- c: {a=1,b=2}(urlencoed)
 
 
 -------------------------------
 -- handy function for write cgi
 -------------------------------
 -- format/template string
-function format(body, hole, ...)
+local function format(body, hole, ...)
   local lst = {...}
   if hole == "$" then hole = "%$" end
   for i=1,#lst do
@@ -91,11 +97,17 @@ function format(body, hole, ...)
 end
 
 -- easy wrap for io.popen
-function popen(cmd)
+local function popen(cmd)
+  cmd = cmd:gsub("`", "\\`") -- avoid ` work in shell
   local fd = io.popen(cmd)
   local txt = fd:read("*a")
   fd:close()
   return txt:sub(1, -2)  -- last is \n, drop it
+end
+
+local function sql_exec(db, sql_stmt)
+  local cmd = format([[sqlite3 $.db "$"]], "$", db, sql_stmt)
+  return popen(cmd)
 end
 
 local function errlog(msg)
@@ -213,6 +225,28 @@ cgi = function(p,q,c)
 end
 
 
+@
+
+
+1.9
+log
+@make cgi template clarity
+@
+text
+@d2 5
+a6 5
+--USAGE: provide xx.lua when query /xx.cgi/do?arg=1
+--       must has cgi method, which will get 3 table
+--       p: {do}
+--       q: {arg=1}(exclude ?)
+--       c: {a=1,b=2}(urlencoed)
+d13 1
+a13 1
+function format(body, hole, ...)
+d23 2
+a24 1
+function popen(cmd)
+d31 5
 @
 
 
