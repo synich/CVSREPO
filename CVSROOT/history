@@ -435,3 +435,7 @@ M6354e303|u0_a111|~/*0|pblog/cgi-bin|1.4|tmrec.lua
 M636144c6|u0_a111|~/*0|pblog/cgi-bin|1.5|blog.lua
 M636144c6|u0_a111|~/*0|pblog/cgi-bin|1.10|r.lua
 M636923cf|u0_a111|~/*0|pblog/cgi-bin|1.11|r.lua
+P63692457|alarm|<remote>|pblog/cgi-bin|1.11|r.lua
+M6369314b|alarm|<remote>|pblog/cgi-bin|1.6|Makefile
+M6369314b|alarm|<remote>|pblog/cgi-bin|1.6|blog.lua
+M6369314b|alarm|<remote>|pblog/cgi-bin|1.12|r.lua

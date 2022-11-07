@@ -1,9 +1,14 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2022.11.07.16.24.43;	author alarm;	state Exp;
+branches;
+next	1.5;
 
 1.5
 date	2022.11.01.16.09.42;	author u0_a111;	state Exp;
@@ -40,9 +45,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@guard and local
+@query blog use sqlite
 @
 text
 @-- blog.cgi/read?dt=220204
@@ -58,7 +63,16 @@ end
 
 local function keyword(q)
   local kwd = b64dec(q["kwd"])
-  os.execute("grep -i '"..kwd.."' ../pub/b*/*.md")
+  local arr = str_split(kwd, " ")
+  local cmd = format("select date, substr(content, 1, 50) from blog where content like '%$%' ", "$", arr[1])
+  local i = 2
+  if i <= #arr then
+    cmd = cmd .. format("and content like '%$%' ", "$", arr[i])
+    i = i + 1
+  end
+  cmd = cmd ..";"
+  local ans = sql_exec("shuw", cmd)
+  print(ans)
 end
 
 local function edit(q, c)
@@ -93,6 +107,17 @@ local function nedit(q, c)
   print(sql_exec("shuw", sql))
 end
 
+@
+
+
+1.5
+log
+@guard and local
+@
+text
+@d14 10
+a23 1
+  os.execute("grep -i '"..kwd.."' ../pub/b*/*.md")
 @
 
 

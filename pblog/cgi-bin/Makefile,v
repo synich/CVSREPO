@@ -1,9 +1,14 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2022.11.07.16.24.43;	author alarm;	state Exp;
+branches;
+next	1.5;
 
 1.5
 date	2022.09.29.16.12.00;	author u0_a111;	state Exp;
@@ -40,21 +45,21 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@lua cgi-bin
+@query blog use sqlite
 @
 text
 @all: blog tmrec
 
 blog: blog.lua
-	@@cat r.lua $^ > $^.cgi
+	@@cat r.lua blog.lua > $^.cgi
 	@@echo "main()" >> $^.cgi
 	@@chmod 755 $^.cgi
 	@@mv $^.cgi blog.cgi
 
 tmrec: tmrec.lua
-	@@cat r.lua $^ > $^.cgi
+	@@cat r.lua tmrec.lua > $^.cgi
 	@@echo "main()" >> $^.cgi
 	@@chmod 755 $^.cgi
 	@@mv $^.cgi tmrec.cgi
@@ -62,6 +67,20 @@ tmrec: tmrec.lua
 ad:
 	@@termux-fix-shebang *.cgi
 
+@
+
+
+1.5
+log
+@lua cgi-bin
+@
+text
+@d4 1
+a4 1
+	@@cat r.lua $^ > $^.cgi
+d10 1
+a10 1
+	@@cat r.lua $^ > $^.cgi
 @
 
 

@@ -1,9 +1,14 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2022.11.07.16.24.43;	author alarm;	state Exp;
+branches;
+next	1.11;
 
 1.11
 date	2022.11.07.15.27.11;	author u0_a111;	state Exp;
@@ -76,9 +81,9 @@ desc
 @@
 
 
-1.11
+1.12
 log
-@str_split
+@query blog use sqlite
 @
 text
 @#!/usr/bin/env lua
@@ -129,6 +134,8 @@ local function str_split(s, delim)
 end
 
 local function sql_exec(db, sql_stmt)
+  -- make write SQL literal, ugly but only this way
+  sql_stmt = sql_stmt:gsub("%%", "%%%%")
   local cmd = format([[sqlite3 $.db "$"]], "$", db, sql_stmt)
   return popen(cmd)
 end
@@ -248,6 +255,15 @@ cgi = function(p,q,c)
 end
 
 
+@
+
+
+1.11
+log
+@str_split
+@
+text
+@d49 2
 @
 
 
