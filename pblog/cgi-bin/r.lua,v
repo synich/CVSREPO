@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2022.11.07.15.27.11;	author u0_a111;	state Exp;
+branches;
+next	1.10;
+commitid	100636923CF5477DB30;
 
 1.10
 date	2022.11.01.16.09.42;	author u0_a111;	state Exp;
@@ -70,9 +76,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@guard and local
+@str_split
 @
 text
 @#!/usr/bin/env lua
@@ -103,6 +109,23 @@ local function popen(cmd)
   local txt = fd:read("*a")
   fd:close()
   return txt:sub(1, -2)  -- last is \n, drop it
+end
+
+local function str_split(s, delim)
+  local t = {}
+  local p_start, p_next = 1, 1
+  local s_sec, p_eq = "", 1
+  repeat
+    p_next = s:find(delim, p_start, true)
+    if p_next then
+      s_sec = s:sub(p_start, p_next-1)
+      p_start = p_next + 1
+    else
+      s_sec = s:sub(p_start)
+    end
+    table.insert(t, s_sec)
+  until not p_next
+  return t
 end
 
 local function sql_exec(db, sql_stmt)
@@ -225,6 +248,15 @@ cgi = function(p,q,c)
 end
 
 
+@
+
+
+1.10
+log
+@guard and local
+@
+text
+@d31 17
 @
 
 
