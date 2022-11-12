@@ -1,9 +1,14 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2022.11.12.06.21.05;	author alarm;	state Exp;
+branches;
+next	1.6;
 
 1.6
 date	2022.11.07.16.24.43;	author alarm;	state Exp;
@@ -45,9 +50,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@query blog use sqlite
+@record updated blog
 @
 text
 @-- blog.cgi/read?dt=220204
@@ -78,11 +83,11 @@ end
 local function edit(q, c)
   local dt = q["dt"]
   local belong = dt:sub(1,1)
-  print()
   local ctx = b64dec(c["ctx"])
   local fd = io.open("../pub/b"..belong.."/"..dt..".md", "w")
   fd:write(ctx)
   fd:close()
+  os.execute(format("echo $ >>upblog", "$", dt))
   print("len:"..#ctx)
 end
 
@@ -107,6 +112,17 @@ local function nedit(q, c)
   print(sql_exec("shuw", sql))
 end
 
+@
+
+
+1.6
+log
+@query blog use sqlite
+@
+text
+@a28 1
+  print()
+d33 1
 @
 
 
