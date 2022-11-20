@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2022.11.20.06.45.43;	author u0_a111;	state Exp;
+branches;
+next	1.8;
+commitid	1006379CD1729FE8A84;
 
 1.8
 date	2022.11.12.07.14.05;	author games;	state Exp;
@@ -55,9 +61,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@mv db to pub
+@adapt lua5.1 and more hint when not found
 @
 text
 @-- blog.cgi/read?dt=220204
@@ -68,6 +74,8 @@ local function read(q)
   if fd then
     local txt = fd:read("*a")
     print(txt)
+  else
+    print(dt, " not exists")
   end
 end
 
@@ -117,6 +125,15 @@ local function nedit(q, c)
   print(sql_exec("shuw", sql))
 end
 
+@
+
+
+1.8
+log
+@mv db to pub
+@
+text
+@d9 2
 @
 
 

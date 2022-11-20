@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2022.11.20.06.45.43;	author u0_a111;	state Exp;
+branches;
+next	1.12;
+commitid	1006379CD1729FE8A84;
 
 1.12
 date	2022.11.07.16.24.43;	author alarm;	state Exp;
@@ -81,9 +87,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@query blog use sqlite
+@adapt lua5.1 and more hint when not found
 @
 text
 @#!/usr/bin/env lua
@@ -229,7 +235,7 @@ local function main()
   local path_info = os.getenv("PATH_INFO")
   -- part after ?(exclude ?), e.g r.cgi/foo?arg=3, query is arg=3
   local query_str = os.getenv("QUERY_STRING")
-  local urlencoded_content = io.read("a")
+  local urlencoded_content = io.read("*a")
   -- ensure html render
   print("Content-Type: text/html; charset=UTF-8\n")
   -- cal module's cgi function, urlencoded will make +/ to %2B%2F, restore them
@@ -255,6 +261,17 @@ cgi = function(p,q,c)
 end
 
 
+@
+
+
+1.12
+log
+@query blog use sqlite
+@
+text
+@d144 1
+a144 1
+  local urlencoded_content = io.read("a")
 @
 
 

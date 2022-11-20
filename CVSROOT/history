@@ -365,3 +365,8 @@ M6369314b|alarm|<remote>|pblog/cgi-bin|1.6|blog.lua
 M6369314b|alarm|<remote>|pblog/cgi-bin|1.12|r.lua
 M636f3b51|alarm|<remote>|pblog/cgi-bin|1.7|blog.lua
 M636f47be|games|<remote>|pblog/cgi-bin|1.8|blog.lua
+U6379ccfe|u0_a111|~/*0|pblog/cgi-bin|1.6|Makefile
+G6379ccfe|u0_a111|~/*0|pblog/cgi-bin|1.8|blog.lua
+G6379ccfe|u0_a111|~/*0|pblog/cgi-bin|1.12|r.lua
+M6379cd17|u0_a111|~/*0|pblog/cgi-bin|1.9|blog.lua
+M6379cd17|u0_a111|~/*0|pblog/cgi-bin|1.13|r.lua
