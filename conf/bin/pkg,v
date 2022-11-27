@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2022.11.27.13.42.34;	author u0_a111;	state Exp;
+branches;
+next	1.12;
+commitid	1006383694A559BD90F;
 
 1.12
 date	2022.01.09.08.14.51;	author android;	state Exp;
@@ -82,14 +88,14 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@improve pkg -py and let ps1 to 7
+@pkg hint to -py
 @
 text
 @#!/bin/bash
 # A wrap tool for Debian/Arch/CentOS/Alpine/Void or Python package manager in same way
-# Usage: pkg [-lang] command [arguments]
+# Usage: pkg [-py] command [arguments]
 # Commands:
 #   files <packages>
 #   add/install <packages>
@@ -275,6 +281,17 @@ main(){
 
 main $@@
 
+@
+
+
+1.12
+log
+@improve pkg -py and let ps1 to 7
+@
+text
+@d3 1
+a3 1
+# Usage: pkg [-lang] command [arguments]
 @
 
 
