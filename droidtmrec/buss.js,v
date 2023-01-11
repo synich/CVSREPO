@@ -1,0 +1,338 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2023.01.10.23.58.56;	author u0_a111;	state Exp;
+branches;
+next	;
+commitid	10063BDFBC021F2E81B;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: change url by WURL menu
+@
+text
+@/// Global variable declare
+var g_date = 0
+var g_off=0;
+
+/// d0/t0->12 d1/t1->18 d2/t2->24
+/// success return 12/18/24 fail return false
+function tag2hour(str){
+  var idx = parseInt(str.substring(1));
+  var ret = false;
+  if (0<=idx && idx<=2) {
+    ret = 12+idx*6
+  }
+  return ret
+}
+
+/// check date is like 180210, ajust 6 digit
+/// return true date OK / false date wrong
+function checkDate(day){
+  return day.length==6;
+}
+
+/// use Base64 to convert multiword into ASCII, so Droid can send
+function dropnl_encb64(str){
+  var can_out = str.replace(/\n/g, "")
+  str = Base64.encode(can_out);//encodeURI(str);
+  return str;
+}
+
+function trimFirstLF(str){
+  var needStr = str;
+  if (str.charAt(0) == "\n" || str.charAt(0) == " ") {
+    needStr = str.slice(1);
+  }
+  return needStr
+}
+
+////////////////////////////
+/// callback for http ajax
+function HandleHint(error, response){
+  showHint(response);
+}
+
+function HandleShowLong(error, response){
+  showHint(response, 2);
+}
+
+function HandleEditTm( error, response ) {
+  var txt = document.getElementById("eNow");
+  // tmrec startwith "221001", so skip first 6 char
+  txt.value = trimFirstLF(response).substring(6)
+}
+
+function HandleEditBlog(error, response) {
+  var txt = document.getElementById("eNow");
+  response = trimFirstLF(response)
+  var st = response.indexOf('|')
+  var tag = response.slice(0, st);
+  var etg = document.getElementById("eBtg");
+  //etg.value = tag;
+  //var ctx = response.slice(st+1);
+  var ctx = response
+  txt.value = ctx
+  //also preview in div
+  setDivShow("eDone", marked.parse(ctx));
+}
+
+function HandleDone( error, response ){
+  setDivShow("eDone", trimFirstLF(response));
+}
+
+function HandleMD(error, response){
+  setDivShow("eDone", marked.parse(response));
+}
+
+function HandleStdout(error, response){
+  var can_out = response.replace(/\n/g, "<br />")
+  setDivShow("eDone", can_out);
+}
+
+function HandleBlst(error, response){
+  var can_out = response.replace(/\n/g, "<br />")
+  setDivShow("eBlst", can_out);
+}
+
+function HandleUpPic(error, response){
+  showHint(response, 1)
+}
+/////////////////////////////////////////
+/// button callback function
+
+/// return [0]-pub or priv [1]-blog or tmrec
+function sepraDB(){
+  var edb = getElemValue("eDb");
+  return edb.split('-');
+}
+
+/// get tmrec text
+function onEdit(eYear, eMonth, eTb){
+  var fdb = sepraDB();
+  if (fdb[1]=='tmrec') {
+    var d = getElemValue('eTag');
+    d = tag2hour(d);
+    if(d==false){
+      showHint('Get tmrec fail, hour is wrong!');
+      return;
+    }
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleEditTm);
+  }else if(fdb[1]=='blog'){
+    var day = getElemValue("eNow");
+    if ( !checkDate(day) ) {
+      showHint('Your input day is illegal!');
+      return;
+    }
+    g_date = day; // next upload use this day
+    httpPost("/blog.cgi/read?dt="+day, '',
+      HandleEditBlog);
+  }
+}
+
+function getDone(){
+  var fdb = sepraDB();
+  if(fdb[1]=='tmrec'){
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleDone);
+  }else{
+    showHint('Choose is not Tmrec!');
+  }
+}
+
+///\param[in] fdb DB name
+///\param[in] day which day to save
+function saveRec(fdb, day){
+  var hour = getElemValue("eTag");
+  hour = tag2hour(hour)
+  if(hour==false){
+    showHint('Up fail, hour is wrong!');
+    return;
+  }
+  var rec = getElemValue("eNow");
+  var pct = "hour="+hour+"|txt="+dropnl_encb64(rec);
+  httpPost("/tmrec.cgi/edit?dt="+day,
+    pct, HandleDone );
+}
+
+function saveBlog(fdb, day) {
+  var txt = getElemValue("eNow");
+  var tag = getElemValue("eBtg");
+  var pct = "tag="+tag+"|ctx="+ Base64.encode(txt);
+  httpPost("/blog.cgi/edit?dt="+day, pct, HandleHint );
+}
+
+function previewMd(src, dst){
+  setDivShow(dst, marked.parse(getElemValue(src)));
+}
+
+function uploadDB(){
+  var er = sepraDB();
+  var day = curDay();
+  if (er[1]=='tmrec') {
+    saveRec(er[0], day);
+  } else if(er[1]=='blog') {
+    // save to another day, avoid of overwrite
+    var rep = getElemValue('eDay');
+    if (rep<10){
+      var day = day.replace(/\d$/, rep);
+      if (g_date) {
+        day = g_date;  // use last date
+      }
+      if ( confirm("upload blog "+er[0]+day) ){
+        saveBlog(er[0], day);
+        previewMd('eNow', 'eDone');
+      }
+    } else{
+      showHint('Choose day is exceed 10!');
+    }
+  }
+}
+
+/// local db
+function getDB() {
+  var tag = getElemValue("eTag");
+  var txt = document.getElementById("eNow");
+  var tmp = app.LoadText( tag, "" );
+  txt.value = tmp;
+}
+
+function setDB() {
+  var tag = getElemValue("eTag");
+  var txt = getElemValue("eNow");
+  app.SaveText( tag, txt );
+  showHint("SETLOCAL OK!");
+}
+
+// get recent blog date-title or some month tmrec
+function recentDigest() {
+  var fdb = sepraDB();
+  if(fdb[1]=='blog'){
+    var page = parseInt(getElemValue("eNow"));
+    if (!page || page > 20) { //TODO limit page
+      page = 0;
+    }
+    var tag = getElemValue("eBtg");
+    // default get recent some blog
+    if (tag == "unknown" ) {
+      httpPost("/blog.cgi/title?page="+page, '', HandleBlst);
+    } else { // otherwise get specify tag blog
+      httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
+    }
+  }else if(fdb[1]=='tmrec') {
+    var yearmon = parseInt(getElemValue("eNow"));
+    if (yearmon && yearmon >1000 && yearmon < 9999) {
+      yearmon += '';
+    } else {
+      var mon = curDay();
+      var year = mon.substring(0, 2);// trieve year
+      var curmon = mon.substring(2, 4);//trieve month
+      mon = getElemValue("eDay");
+      if (mon<10){
+        mon = '0'+mon;
+      }
+      if (mon>curmon) {//over current month, get last year
+        year--; year += '';
+      }
+      yearmon = year + mon;
+    }
+    httpPost("/tmrec.cgi/read?dt="+yearmon, '', HandleStdout);
+  }
+}
+
+function removeDay(){
+  var day = getElemValue("eNow");
+  if ( !checkDate(day) ) {
+    showHint('Your input day is illegal!');
+    return;
+  }
+  var iswant = confirm("Do you really want to delete");
+  if (iswant) {
+    var fdb = sepraDB();
+    httpGet("/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+      HandleShowLong);
+  }
+}
+
+/// find with page as offset
+function queryBlogTmKwd(page) {
+  var kwd = getElemValue("eNow");
+  httpGet("/blog.cgi/keyword?kwd="+dropnl_encb64(kwd), HandleStdout);
+}
+
+function clearContent() {
+  var txt = document.getElementById("eNow");
+  txt.value = '';
+  g_date = 0;
+}
+
+function viewBlog(to) {
+  var fdb = sepraDB();
+  var off = parseInt(getElemValue("eDay"));
+  if (to=='m') { off = 0-off; }
+  else if (to=='s') { off = 10*off; } //skip 10 times
+  g_off += off;
+  httpGet("/digest/blogIdx/"+fdb[0]+"/"+g_off,
+      HandleMD);
+}
+
+function exitView() {
+    $("#eP1").show();
+    $("#eP2").hide();
+}
+
+//Called when user touches our button.
+function uploadFile( elemFile, upName ) {
+  var f = document.getElementById(elemFile).files[0];
+  var extName = f.name.replace(/.*\./, '');
+  var fn = getElemValue(upName);
+  if (fn == '') {alert("must input pic name!"); return;}
+  var reader = new FileReader();
+  reader.readAsDataURL(f);
+  reader.onload = function(e){
+    var pic = this.result;
+    var param = {pic:pic, ext:extName, fn:fn}
+    httpPost("/pic/upload", param, HandleUpPic)
+  }
+}
+
+function onMenu( ) {
+    var m = document.getElementById("eMenu");
+    var item = m.value;
+  /// enter menu, item is undefined, use if to ban it
+  if (item=="PASTE") {
+    var cp = app.GetClipboardText();
+    var txt = document.getElementById("eNow");
+    txt.value += cp;
+  } else if (item=="QUERYKEY") {
+    queryBlogTmKwd(0);
+  } else if(item=="WITHPAGE"){
+    var page = getElemValue("eDay");
+    queryBlogTmKwd(page);
+  } else if(item=="PREVIEW"){
+    var txt = marked.parse(getElemValue("eNow"));
+    setDivShow("eDone", txt);
+  } else if(item=="CLEAR"){
+    clearContent();
+  } else if (item=="VIEW") {
+    $("#eP2").show();
+    $("#eP1").hide();
+  } else if (item=="DELETE") {
+    removeDay();
+  }
+  m.value = "MENU";
+}
+
+function get_dahua_stock(){
+  httpPost("/stock.cgi", '', HandleDone );
+}
+@
