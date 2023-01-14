@@ -1,9 +1,15 @@
-head	1.52;
+head	1.53;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.53
+date	2023.01.14.13.42.42;	author u0_a111;	state Exp;
+branches;
+next	1.52;
+commitid	10063C2B152449BC8BD;
 
 1.52
 date	2022.05.21.14.32.45;	author android;	state Exp;
@@ -313,9 +319,9 @@ desc
 @@
 
 
-1.52
+1.53
 log
-@let conftool download configable
+@drop awk -e, can work on mawk
 @
 text
 @# avoid init interative
@@ -386,9 +392,9 @@ if [ $CONFHOSTNAME = localhost ]; then
 fi
 # get first ip's 4th number
 if [ -x "$(command -v ip)" ]; then
-  CONFIP4=`ip a|grep 'inet '|grep -v 127.0.0.1|head -1|awk -e '{print $2}'|cut -d. -f 4 |sed -e 's=/.*=='`_
+  CONFIP4=`ip a|grep 'inet '|grep -v 127.0.0.1|head -1|awk '{print $2}'|cut -d. -f 4 |sed -e 's=/.*=='`_
 elif [ -x "$(command -v ifconfig)" ]; then
-  CONFIP4=`ifconfig|grep 'inet '|grep -v 127.0.0.1|head -1|awk -e '{print $2}'|cut -d. -f 4`_
+  CONFIP4=`ifconfig|grep 'inet '|grep -v 127.0.0.1|head -1|awk '{print $2}'|cut -d. -f 4`_
 fi
 set_ps1(){
   # The various escape codes that we can use to color our prompt.
@@ -578,6 +584,20 @@ psp() {
   fi
 }
 
+@
+
+
+1.52
+log
+@let conftool download configable
+@
+text
+@d69 1
+a69 1
+  CONFIP4=`ip a|grep 'inet '|grep -v 127.0.0.1|head -1|awk -e '{print $2}'|cut -d. -f 4 |sed -e 's=/.*=='`_
+d71 1
+a71 1
+  CONFIP4=`ifconfig|grep 'inet '|grep -v 127.0.0.1|head -1|awk -e '{print $2}'|cut -d. -f 4`_
 @
 
 
