@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2023.01.15.06.01.26;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	10063C396B61EBD70B7;
 
 1.1
 date	2023.01.10.23.58.56;	author u0_a111;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: change url by WURL menu
+@fix: edit blog with tag
 @
 text
 @/// Global variable declare
@@ -79,9 +85,8 @@ function HandleEditBlog(error, response) {
   var st = response.indexOf('|')
   var tag = response.slice(0, st);
   var etg = document.getElementById("eBtg");
-  //etg.value = tag;
-  //var ctx = response.slice(st+1);
-  var ctx = response
+  etg.value = tag;
+  var ctx = response.slice(st+1);
   txt.value = ctx
   //also preview in div
   setDivShow("eDone", marked.parse(ctx));
@@ -336,3 +341,17 @@ function get_dahua_stock(){
   httpPost("/stock.cgi", '', HandleDone );
 }
 @
+
+
+1.1
+log
+@feat: change url by WURL menu
+@
+text
+@d59 2
+a60 3
+  //etg.value = tag;
+  //var ctx = response.slice(st+1);
+  var ctx = response
+@
+
