@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2023.01.21.15.21.57;	author u0_a111;	state Exp;
+branches;
+next	1.2;
+commitid	10063CC03153D6350D5;
 
 1.2
 date	2023.01.15.06.01.26;	author u0_a111;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@fix: edit blog with tag
+@fix: use self host default
 @
 text
 @/// Global variable declare
@@ -140,7 +146,7 @@ function onEdit(eYear, eMonth, eTb){
       return;
     }
     g_date = day; // next upload use this day
-    httpPost("/blog.cgi/read?dt="+day, '',
+    httpPost("/blog.cgi/read?dt="+day, 'dt='+day,
       HandleEditBlog);
   }
 }
@@ -340,6 +346,17 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/stock.cgi", '', HandleDone );
 }
+@
+
+
+1.2
+log
+@fix: edit blog with tag
+@
+text
+@d114 1
+a114 1
+    httpPost("/blog.cgi/read?dt="+day, '',
 @
 
 

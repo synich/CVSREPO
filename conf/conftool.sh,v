@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2023.01.21.12.31.30;	author u0_a111;	state Exp;
+branches;
+next	1.13;
+commitid	10063CBDB22390D2884;
 
 1.13
 date	2023.01.20.02.53.51;	author u0_a111;	state Exp;
@@ -87,15 +93,15 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@feat: conftool can specify download url
+@fix: new conftool download
 @
 text
 @#!/bin/sh
 
 FAVORITE_DIRNAME=shuw
-AR_URL=http://waer.f3322.net:55555/Archive/
+AR_URL=http://www.158370.xyz/Archive/
 CONFVER=V20230121
 
 if [ $# -eq 0 ]; then
@@ -238,6 +244,17 @@ main() {
 
 main $@@
 
+@
+
+
+1.13
+log
+@feat: conftool can specify download url
+@
+text
+@d4 1
+a4 1
+AR_URL=http://waer.f3322.net:55555/Archive/
 @
 
 

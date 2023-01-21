@@ -1,9 +1,15 @@
-head	1.32;
+head	1.33;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.33
+date	2023.01.21.15.21.57;	author u0_a111;	state Exp;
+branches;
+next	1.32;
+commitid	10063CC03153D6350D5;
 
 1.32
 date	2023.01.10.23.58.56;	author u0_a111;	state Exp;
@@ -174,9 +180,9 @@ desc
 @@
 
 
-1.32
+1.33
 log
-@feat: change url by WURL menu
+@fix: use self host default
 @
 text
 @<html>
@@ -223,7 +229,7 @@ text
 	<input type="button" value="GETLOCAL" class="pure-u-1-3" onclick="getDB()"/>
 	<select id="eTag" class="pure-u-1-4">
 		<option value="mm">MEMO</option>
-		<option value="ur">WURL</option>
+		<option value="ur">UR-ht://ip/bin</option>
 		<option value="t0">TM12</option>
 		<option value="t1">TM18</option>
 		<option value="t2">TM24</option>
@@ -286,6 +292,17 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.32
+log
+@feat: change url by WURL menu
+@
+text
+@d45 1
+a45 1
+		<option value="ur">WURL</option>
 @
 
 

@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2023.01.21.15.21.57;	author u0_a111;	state Exp;
+branches;
+next	1.8;
+commitid	10063CC03153D6350D5;
 
 1.8
 date	2023.01.10.23.58.56;	author u0_a111;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@feat: change url by WURL menu
+@fix: use self host default
 @
 text
 @//Base64.encode/decode
@@ -93,9 +99,10 @@ function _httpDispatch(mth){
   var host = 1 // default is release
   if (host == 1) {
     // default value can be replace by tag WURL
-    host = "http://synich.sdf.org/cgi-bin"
+    // host = "http://synich.sdf.org/cgi-bin"
+    host = "http://www.158370.xyz/cgi-bin"
     var wurl = app.LoadText( "ur", "");
-    if (wurl) {host = "http://"+wurl}
+    if (wurl) {host = wurl}
   } else {
     host = "http://192.168.2.218:80/r.php";
   }
@@ -138,6 +145,20 @@ function showHint(str, showLong){
     setTimeout('setDivShow("eHint", "")', 2000);
   }
 }
+@
+
+
+1.8
+log
+@feat: change url by WURL menu
+@
+text
+@d37 2
+a38 1
+    host = "http://synich.sdf.org/cgi-bin"
+d40 1
+a40 1
+    if (wurl) {host = "http://"+wurl}
 @
 
 
