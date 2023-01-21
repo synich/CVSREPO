@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2023.01.20.02.53.51;	author u0_a111;	state Exp;
+branches;
+next	1.12;
+commitid	10063CA023F29AD31D4;
 
 1.12
 date	2022.05.29.09.10.20;	author android;	state Exp;
@@ -81,19 +87,19 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@adjust conftool.sh,drop git useless alias
+@feat: conftool can specify download url
 @
 text
 @#!/bin/sh
 
 FAVORITE_DIRNAME=shuw
 AR_URL=http://waer.f3322.net:55555/Archive/
-CONFVER=ver20220521
+CONFVER=V20230121
 
 if [ $# -eq 0 ]; then
-    echo "$0 setup|update|evolve|clean|plugvim [package]"
+    echo "$0 [-u url] setup|update|evolve|clean|plugvim [package]"
     echo $CONFVER.$FAVORITE_DIRNAME@@$AR_URL
     exit 1
 fi
@@ -189,6 +195,19 @@ plugvim() {
 }
 
 main() {
+  opts=`getopt -o u: -- "$@@"`
+  eval set -- "$opts"
+  while true; do
+    case "$1" in
+      -u) AR_URL=$2; shift 2;;
+      --) shift; break;;
+      *) break;;
+    esac
+  done
+  if [ "$*" = "" ]; then
+    echo "error: no command found"
+    exit 1
+  fi
   action=$1
   package=$2
   # make sure package and run place is HOME
@@ -213,13 +232,34 @@ main() {
           downloadfile conftool.sh ./conftool.sh
           ;;
       *)
-          echo dont known what to do
-          ;;
+          echo dont known what to do ;;
   esac
 }
 
-main $1 $2
+main $@@
 
+@
+
+
+1.12
+log
+@adjust conftool.sh,drop git useless alias
+@
+text
+@d5 1
+a5 1
+CONFVER=ver20220521
+d8 1
+a8 1
+    echo "$0 setup|update|evolve|clean|plugvim [package]"
+d104 13
+d141 1
+a141 2
+          echo dont known what to do
+          ;;
+d145 1
+a145 1
+main $1 $2
 @
 
 

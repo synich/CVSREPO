@@ -1,9 +1,15 @@
-head	1.36;
+head	1.37;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.37
+date	2023.01.20.03.09.53;	author u0_a111;	state Exp;
+branches;
+next	1.36;
+commitid	10063CA06012AEC4CAF;
 
 1.36
 date	2022.10.07.15.41.03;	author u0_a111;	state Exp;
@@ -225,9 +231,9 @@ desc
 @@
 
 
-1.36
+1.37
 log
-@lua snip for vararg and for step
+@snip bat
 @
 text
 @#!/bin/bash
@@ -240,7 +246,7 @@ _snip_sh() {
     done
     return
   fi
-  case $1 in
+  case "$1" in
   f*) cat <<"EOF"
 while : ;  # endless loop
 for k in ${arr[@@]};
@@ -258,7 +264,7 @@ if [[ "$i" == *" "* ]]; then # compare to space
 elif
 fi
 
-case $1 in
+case "$1" in
   x*)
   ;;
 esac
@@ -395,9 +401,19 @@ EOF
 
 _snip_py() {
   cat <<"EOF"
-# filter value not equal 2 from dict
+# filter value not  2 from dict
   { k:v for k,v in diction.items() if v!=2 }
   dict(filter(lambda v: v[1]!=2, d.items()))    # v[0] is k, v[1] is v
+EOF
+}
+
+_snip_bat() {
+  cat <<"EOF"
+if "%1" == "" (
+  cmd1
+) else if %1 equ/leq/geq/neq 123 (
+  cmd2
+)
 EOF
 }
 
@@ -464,7 +480,7 @@ EOF
 }
 
 showallsnip() {
-  local kwd=(sh awk lua vim py t)
+  local kwd=(sh py lua awk vim bat t)
   echo support hint lang or tool:
   for k in ${kwd[@@]}; do
     echo $k
@@ -509,6 +525,27 @@ main() {
 
 main $@@
 
+@
+
+
+1.36
+log
+@lua snip for vararg and for step
+@
+text
+@d11 1
+a11 1
+  case $1 in
+d29 1
+a29 1
+case $1 in
+d166 1
+a166 1
+# filter value not equal 2 from dict
+d172 10
+d245 1
+a245 1
+  local kwd=(sh awk lua vim py t)
 @
 
 

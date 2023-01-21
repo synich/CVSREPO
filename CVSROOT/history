@@ -387,3 +387,5 @@ R63c38aa4|u0_a111|~/*0|pblog/cgi-bin|1.14|r.lua
 R63c38aa4|u0_a111|~/*0|pblog/cgi-bin|1.5|tmrec.lua
 R63c38b5a|u0_a111|~/*0|pblog/cgi-bin|1.2|proto.scm
 M63c396b6|u0_a111|~/src/*0|droidtmrec|1.2|buss.js
+M63ca023f|u0_a111|~/*0|conf|1.13|conftool.sh
+M63ca0601|u0_a111|~/*0|conf/bin|1.37|snip
