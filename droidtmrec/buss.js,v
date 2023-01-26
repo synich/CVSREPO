@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2023.01.26.13.23.29;	author u0_a111;	state Exp;
+branches;
+next	1.3;
+commitid	10063D27ED14EB3E074;
 
 1.3
 date	2023.01.21.15.21.57;	author u0_a111;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@fix: use self host default
+@fix: remove limit to edit tmrec
 @
 text
 @/// Global variable declare
@@ -81,8 +87,8 @@ function HandleShowLong(error, response){
 
 function HandleEditTm( error, response ) {
   var txt = document.getElementById("eNow");
-  // tmrec startwith "221001", so skip first 6 char
-  txt.value = trimFirstLF(response).substring(6)
+  // tmrec startwith "221001|", so skip leader char
+  txt.value = trimFirstLF(response).substring(7)
 }
 
 function HandleEditBlog(error, response) {
@@ -132,12 +138,6 @@ function sepraDB(){
 function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
   if (fdb[1]=='tmrec') {
-    var d = getElemValue('eTag');
-    d = tag2hour(d);
-    if(d==false){
-      showHint('Get tmrec fail, hour is wrong!');
-      return;
-    }
     httpGet("/tmrec.cgi/read?dt="+curDay(), HandleEditTm);
   }else if(fdb[1]=='blog'){
     var day = getElemValue("eNow");
@@ -346,6 +346,25 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/stock.cgi", '', HandleDone );
 }
+@
+
+
+1.3
+log
+@fix: use self host default
+@
+text
+@d49 2
+a50 2
+  // tmrec startwith "221001", so skip first 6 char
+  txt.value = trimFirstLF(response).substring(6)
+a99 6
+    var d = getElemValue('eTag');
+    d = tag2hour(d);
+    if(d==false){
+      showHint('Get tmrec fail, hour is wrong!');
+      return;
+    }
 @
 
 
