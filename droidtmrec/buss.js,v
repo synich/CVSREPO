@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2023.01.27.12.25.21;	author u0_a111;	state Exp;
+branches;
+next	1.4;
+commitid	10063D3C2B1597CE4F9;
 
 1.4
 date	2023.01.26.13.23.29;	author u0_a111;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix: remove limit to edit tmrec
+@feat: tmrec add db
 @
 text
 @/// Global variable declare
@@ -138,7 +144,7 @@ function sepraDB(){
 function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
   if (fdb[1]=='tmrec') {
-    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleEditTm);
+    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleEditTm);
   }else if(fdb[1]=='blog'){
     var day = getElemValue("eNow");
     if ( !checkDate(day) ) {
@@ -165,13 +171,9 @@ function getDone(){
 function saveRec(fdb, day){
   var hour = getElemValue("eTag");
   hour = tag2hour(hour)
-  if(hour==false){
-    showHint('Up fail, hour is wrong!');
-    return;
-  }
   var rec = getElemValue("eNow");
   var pct = "hour="+hour+"|txt="+dropnl_encb64(rec);
-  httpPost("/tmrec.cgi/edit?dt="+day,
+  httpPost("/tmrec.cgi/edit?db="+fdb+"&dt="+day,
     pct, HandleDone );
 }
 
@@ -344,8 +346,30 @@ function onMenu( ) {
 }
 
 function get_dahua_stock(){
-  httpPost("/stock.cgi", '', HandleDone );
+  httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.4
+log
+@fix: remove limit to edit tmrec
+@
+text
+@d100 1
+a100 1
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleEditTm);
+a126 4
+  if(hour==false){
+    showHint('Up fail, hour is wrong!');
+    return;
+  }
+d129 1
+a129 1
+  httpPost("/tmrec.cgi/edit?dt="+day,
+d302 1
+a302 1
+  httpPost("/stock.cgi", '', HandleDone );
 @
 
 
