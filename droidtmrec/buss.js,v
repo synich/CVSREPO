@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2023.01.27.13.19.05;	author u0_a111;	state Exp;
+branches;
+next	1.5;
+commitid	10063D3CF495F9E307A;
 
 1.5
 date	2023.01.27.12.25.21;	author u0_a111;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@feat: tmrec add db
+@fix: all tmrec with db
 @
 text
 @/// Global variable declare
@@ -144,7 +150,8 @@ function sepraDB(){
 function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
   if (fdb[1]=='tmrec') {
-    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleEditTm);
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay();
+    httpGet(req, HandleEditTm);
   }else if(fdb[1]=='blog'){
     var day = getElemValue("eNow");
     if ( !checkDate(day) ) {
@@ -157,10 +164,11 @@ function onEdit(eYear, eMonth, eTb){
   }
 }
 
+/// tmrec today
 function getDone(){
   var fdb = sepraDB();
   if(fdb[1]=='tmrec'){
-    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleDone);
+    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleDone);
   }else{
     showHint('Choose is not Tmrec!');
   }
@@ -258,7 +266,7 @@ function recentDigest() {
       }
       yearmon = year + mon;
     }
-    httpPost("/tmrec.cgi/read?dt="+yearmon, '', HandleStdout);
+    httpPost("/tmrec.cgi/read?db="+fdb[0]+"&dt="+yearmon, '', HandleStdout);
   }
 }
 
@@ -348,6 +356,24 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.5
+log
+@feat: tmrec add db
+@
+text
+@d100 2
+a101 1
+    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleEditTm);
+d114 1
+d118 1
+a118 1
+    httpGet("/tmrec.cgi/read?dt="+curDay(), HandleDone);
+d216 1
+a216 1
+    httpPost("/tmrec.cgi/read?dt="+yearmon, '', HandleStdout);
 @
 
 
