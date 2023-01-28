@@ -1,9 +1,21 @@
-head	1.6;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2023.01.28.05.52.58;	author u0_a111;	state Exp;
+branches;
+next	1.7;
+commitid	10063D4B83A0B52C6E5;
+
+1.7
+date	2023.01.28.05.29.31;	author u0_a111;	state Exp;
+branches;
+next	1.6;
+commitid	10063D4B2BB08E56A0C;
 
 1.6
 date	2023.01.27.13.19.05;	author u0_a111;	state Exp;
@@ -46,9 +58,9 @@ desc
 @@
 
 
-1.6
+1.8
 log
-@fix: all tmrec with db
+@fix: append a useless arg in query_string
 @
 text
 @/// Global variable declare
@@ -159,18 +171,8 @@ function onEdit(eYear, eMonth, eTb){
       return;
     }
     g_date = day; // next upload use this day
-    httpPost("/blog.cgi/read?dt="+day, 'dt='+day,
+    httpPost("/tmrec.cgi/blread?dt="+day+"&n=0", 'dt='+day,
       HandleEditBlog);
-  }
-}
-
-/// tmrec today
-function getDone(){
-  var fdb = sepraDB();
-  if(fdb[1]=='tmrec'){
-    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleDone);
-  }else{
-    showHint('Choose is not Tmrec!');
   }
 }
 
@@ -189,14 +191,15 @@ function saveBlog(fdb, day) {
   var txt = getElemValue("eNow");
   var tag = getElemValue("eBtg");
   var pct = "tag="+tag+"|ctx="+ Base64.encode(txt);
-  httpPost("/blog.cgi/edit?dt="+day, pct, HandleHint );
+  httpPost("/tmrec.cgi/bledit?dt="+day, pct, HandleHint );
 }
 
 function previewMd(src, dst){
   setDivShow(dst, marked.parse(getElemValue(src)));
 }
 
-function uploadDB(){
+/// upload blog and tmrec
+function onUpload(){
   var er = sepraDB();
   var day = curDay();
   if (er[1]=='tmrec') {
@@ -235,7 +238,7 @@ function setDB() {
 }
 
 // get recent blog date-title or some month tmrec
-function recentDigest() {
+function onRecent() {
   var fdb = sepraDB();
   if(fdb[1]=='blog'){
     var page = parseInt(getElemValue("eNow"));
@@ -245,7 +248,7 @@ function recentDigest() {
     var tag = getElemValue("eBtg");
     // default get recent some blog
     if (tag == "unknown" ) {
-      httpPost("/blog.cgi/title?page="+page, '', HandleBlst);
+      httpPost("/tmrec.cgi/title?page="+page, '', HandleBlst);
     } else { // otherwise get specify tag blog
       httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
     }
@@ -287,7 +290,7 @@ function removeDay(){
 /// find with page as offset
 function queryBlogTmKwd(page) {
   var kwd = getElemValue("eNow");
-  httpGet("/blog.cgi/keyword?kwd="+dropnl_encb64(kwd), HandleStdout);
+  httpGet("/tmrec.cgi/keyword?kwd="+dropnl_encb64(kwd)+"&n=0", HandleStdout);
 }
 
 function clearContent() {
@@ -356,6 +359,57 @@ function onMenu( ) {
 function get_dahua_stock(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.7
+log
+@fix: optimise layout of html and common.js
+@
+text
+@d109 1
+a109 1
+    httpPost("/tmrec.cgi/blread", 'dt='+day,
+d228 1
+a228 1
+  httpGet("/tmrec.cgi/keyword?kwd="+dropnl_encb64(kwd), HandleStdout);
+@
+
+
+1.6
+log
+@fix: all tmrec with db
+@
+text
+@d109 1
+a109 1
+    httpPost("/blog.cgi/read?dt="+day, 'dt='+day,
+a113 10
+/// tmrec today
+function getDone(){
+  var fdb = sepraDB();
+  if(fdb[1]=='tmrec'){
+    httpGet("/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay(), HandleDone);
+  }else{
+    showHint('Choose is not Tmrec!');
+  }
+}
+
+d129 1
+a129 1
+  httpPost("/blog.cgi/edit?dt="+day, pct, HandleHint );
+d136 2
+a137 1
+function uploadDB(){
+d176 1
+a176 1
+function recentDigest() {
+d186 1
+a186 1
+      httpPost("/blog.cgi/title?page="+page, '', HandleBlst);
+d228 1
+a228 1
+  httpGet("/blog.cgi/keyword?kwd="+dropnl_encb64(kwd), HandleStdout);
 @
 
 
