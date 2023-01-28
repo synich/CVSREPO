@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2023.01.28.13.06.01;	author u0_a111;	state Exp;
+branches;
+next	1.14;
+commitid	10063D51DB92B70118B;
 
 1.14
 date	2023.01.21.12.31.30;	author u0_a111;	state Exp;
@@ -93,15 +99,15 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@fix: new conftool download
+@fix: update ar place
 @
 text
 @#!/bin/sh
 
 FAVORITE_DIRNAME=shuw
-AR_URL=http://www.158370.xyz/Archive/
+AR_URL=http://www.158370.xyz/ar/
 CONFVER=V20230121
 
 if [ $# -eq 0 ]; then
@@ -238,12 +244,26 @@ main() {
           downloadfile conftool.sh ./conftool.sh
           ;;
       *)
-          echo dont known what to do ;;
+          echo dont known "$action" mean ;;
   esac
 }
 
 main $@@
 
+@
+
+
+1.14
+log
+@fix: new conftool download
+@
+text
+@d4 1
+a4 1
+AR_URL=http://www.158370.xyz/Archive/
+d141 1
+a141 1
+          echo dont known what to do ;;
 @
 
 
