@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2023.01.29.07.49.26;	author u0_a111;	state Exp;
+branches;
+next	1.8;
+commitid	10063D625065F4D0AA5;
 
 1.8
 date	2023.01.28.05.52.58;	author u0_a111;	state Exp;
@@ -58,9 +64,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@fix: append a useless arg in query_string
+@feat: drop useless button and view blog random
 @
 text
 @/// Global variable declare
@@ -287,7 +293,7 @@ function removeDay(){
   }
 }
 
-/// find with page as offset
+/// find keyword (deprecate page)
 function queryBlogTmKwd(page) {
   var kwd = getElemValue("eNow");
   httpGet("/tmrec.cgi/keyword?kwd="+dropnl_encb64(kwd)+"&n=0", HandleStdout);
@@ -299,13 +305,14 @@ function clearContent() {
   g_date = 0;
 }
 
+// to: deprecated, now random view
 function viewBlog(to) {
   var fdb = sepraDB();
   var off = parseInt(getElemValue("eDay"));
   if (to=='m') { off = 0-off; }
   else if (to=='s') { off = 10*off; } //skip 10 times
   g_off += off;
-  httpGet("/digest/blogIdx/"+fdb[0]+"/"+g_off,
+  httpGet("/tmrec.cgi/blrand?db="+fdb[0]+"&tbl="+fdb[1]+"&n=0",
       HandleMD);
 }
 
@@ -319,13 +326,13 @@ function uploadFile( elemFile, upName ) {
   var f = document.getElementById(elemFile).files[0];
   var extName = f.name.replace(/.*\./, '');
   var fn = getElemValue(upName);
-  if (fn == '') {alert("must input pic name!"); return;}
+  if (fn == '') {alert("must input file name!"); return;}
   var reader = new FileReader();
   reader.readAsDataURL(f);
   reader.onload = function(e){
     var pic = this.result;
     var param = {pic:pic, ext:extName, fn:fn}
-    httpPost("/pic/upload", param, HandleUpPic)
+    httpPost("/upload.php", param, HandleUpPic)
   }
 }
 
@@ -339,9 +346,6 @@ function onMenu( ) {
     txt.value += cp;
   } else if (item=="QUERYKEY") {
     queryBlogTmKwd(0);
-  } else if(item=="WITHPAGE"){
-    var page = getElemValue("eDay");
-    queryBlogTmKwd(page);
   } else if(item=="PREVIEW"){
     var txt = marked.parse(getElemValue("eNow"));
     setDivShow("eDone", txt);
@@ -356,9 +360,37 @@ function onMenu( ) {
   m.value = "MENU";
 }
 
-function get_dahua_stock(){
+function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.8
+log
+@fix: append a useless arg in query_string
+@
+text
+@d225 1
+a225 1
+/// find with page as offset
+d237 1
+d244 1
+a244 1
+  httpGet("/digest/blogIdx/"+fdb[0]+"/"+g_off,
+d258 1
+a258 1
+  if (fn == '') {alert("must input pic name!"); return;}
+d264 1
+a264 1
+    httpPost("/pic/upload", param, HandleUpPic)
+a277 3
+  } else if(item=="WITHPAGE"){
+    var page = getElemValue("eDay");
+    queryBlogTmKwd(page);
+d292 1
+a292 1
+function get_dahua_stock(){
 @
 
 

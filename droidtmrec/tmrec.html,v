@@ -1,9 +1,15 @@
-head	1.34;
+head	1.35;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.35
+date	2023.01.29.07.49.26;	author u0_a111;	state Exp;
+branches;
+next	1.34;
+commitid	10063D625065F4D0AA5;
 
 1.34
 date	2023.01.28.05.29.31;	author u0_a111;	state Exp;
@@ -186,9 +192,9 @@ desc
 @@
 
 
-1.34
+1.35
 log
-@fix: optimise layout of html and common.js
+@feat: drop useless button and view blog random
 @
 text
 @<html>
@@ -207,7 +213,7 @@ text
 	  elem = document.getElementById("eDay");
 	  elem.value=tmp;
 	  $("#eP2").hide();//not show navi bar for blog by default
-      get_dahua_stock();
+      start_show();
     }
 </script>
 
@@ -223,7 +229,6 @@ text
 	  <option value="MENU">MENU</option>
 	  <option value="PASTE">PASTE</option>
 	  <option value="QUERYKEY">QUERYKEY</option>
-	  <option value="WITHPAGE">WITHPAGE</option>
 	  <option value="VIEW">VIEW</option>
 	  <option value="CLEAR">CLEAR</option>
 	  <option value="DELETE">DELETE</option>
@@ -285,10 +290,8 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eHint"></div>
 <div id="eDone"></div>
 <div id="eP2">
-<input type="button" value="prev" class="pure-u-1-4" onclick="viewBlog('m')"/>
-<input type="button" value="next" class="pure-u-1-4" onclick="viewBlog('p')"/>
-<input type="button" value="skip" class="pure-u-1-4" onclick="viewBlog('s')"/>
-<input type="button" value="exit" class="pure-u-1-5" onclick="exitView()"/>
+<input type="button" value="random-view" class="pure-u-1-2" onclick="viewBlog('m')"/>
+<input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
 <hr />
 <input type="file" class="pure-u-2-3" id="eChFile" />
 <input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
@@ -297,6 +300,25 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.34
+log
+@fix: optimise layout of html and common.js
+@
+text
+@d17 1
+a17 1
+      get_dahua_stock();
+a32 1
+	  <option value="WITHPAGE">WITHPAGE</option>
+d94 2
+a95 4
+<input type="button" value="prev" class="pure-u-1-4" onclick="viewBlog('m')"/>
+<input type="button" value="next" class="pure-u-1-4" onclick="viewBlog('p')"/>
+<input type="button" value="skip" class="pure-u-1-4" onclick="viewBlog('s')"/>
+<input type="button" value="exit" class="pure-u-1-5" onclick="exitView()"/>
 @
 
 
