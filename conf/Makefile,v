@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2023.02.05.06.48.38;	author u0_a111;	state Exp;
+branches;
+next	1.10;
+commitid	10063DF514642B20236;
 
 1.10
 date	2022.05.03.06.40.59;	author android;	state Exp;
@@ -67,15 +73,26 @@ desc
 @@
 
 
+1.11
+log
+@js into snip
+@
+text
+@all:
+	tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+	mv envconf.tar.gz ~/pblog/ar/
+
+@
+
+
 1.10
 log
 @vim dict add to tar
 @
 text
-@all:
-	tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+@d3 1
+a3 1
 	mv envconf.tar.gz ~/pblog/Archive/
-
 @
 
 

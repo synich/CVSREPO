@@ -1,9 +1,15 @@
-head	1.37;
+head	1.38;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.38
+date	2023.02.05.06.48.38;	author u0_a111;	state Exp;
+branches;
+next	1.37;
+commitid	10063DF514642B20236;
 
 1.37
 date	2023.01.20.03.09.53;	author u0_a111;	state Exp;
@@ -231,9 +237,9 @@ desc
 @@
 
 
-1.37
+1.38
 log
-@snip bat
+@js into snip
 @
 text
 @#!/bin/bash
@@ -401,9 +407,17 @@ EOF
 
 _snip_py() {
   cat <<"EOF"
-# filter value not  2 from dict
+# filter value not 2 from dict
   { k:v for k,v in diction.items() if v!=2 }
   dict(filter(lambda v: v[1]!=2, d.items()))    # v[0] is k, v[1] is v
+EOF
+}
+
+_snip_js() {
+  cat <<"EOF"
+  if (e1 || e2) {} else if {e1 && e2}
+  for (let x in arr) {} // x is key of arr
+  str = `plain ${var}`
 EOF
 }
 
@@ -480,7 +494,7 @@ EOF
 }
 
 showallsnip() {
-  local kwd=(sh py lua awk vim bat t)
+  local kwd=(sh py lua js awk vim bat t)
   echo support hint lang or tool:
   for k in ${kwd[@@]}; do
     echo $k
@@ -525,6 +539,21 @@ main() {
 
 main $@@
 
+@
+
+
+1.37
+log
+@snip bat
+@
+text
+@d166 1
+a166 1
+# filter value not  2 from dict
+d172 8
+d253 1
+a253 1
+  local kwd=(sh py lua awk vim bat t)
 @
 
 
