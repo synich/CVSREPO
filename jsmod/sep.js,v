@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2023.03.07.16.58.17;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	10064076D2912A0B952;
 
 1.1
 date	2023.02.13.16.04.59;	author u0_a111;	state Exp;
@@ -16,24 +22,50 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@js observe
+@feat: embed observe and post into dict
 @
 text
-@// wrap DOM elem easy access
-function observe(elemId){
+@!(function(top){
+top.W||(top.W={})
+// wrap DOM elem easy access
+top.W.observe=function(elemId){
   var elem = document.getElementById(elemId);
   if (elem === null) {alert(elemId+' not exist');return}
   var st = new Set(["INPUT","TEXTAREA","SELECT"]);
   var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
   var ret = function(val){
     if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
-    else {ndCh=='v'?elem.value=val:elem.innerHTML=val}
-    return elem
+    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
   }
   ret.o = elem;
   return ret
 }
+// fn(resp:str=http_body, status:str='success', xhr:object)
+top.W.post=function(url, data, fn){if (!typeof $)return;
+  var dstr='';for(k in data){if(dstr==''){dstr=`${k}=${encodeURIComponent(data[k])}`}else{dstr=dstr+`&${k}=${encodeURIComponent(data[k])}`}}
+  $.ajax({type:"POST", url:url, data:dstr, success: fn})
+}
+})(this)
+@
+
+
+1.1
+log
+@js observe
+@
+text
+@d1 2
+d4 1
+a4 1
+function observe(elemId){
+d11 1
+a11 2
+    else {ndCh=='v'?elem.value=val:elem.innerHTML=val}
+    return elem
+d16 6
+a21 1
 
 @
+
