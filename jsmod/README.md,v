@@ -1,0 +1,36 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2023.04.29.05.32.05;	author u0_a111;	state Exp;
+branches;
+next	;
+commitid	100644CABD533226715;
+
+
+desc
+@@
+
+
+1.1
+log
+@fix: README for jsmod
+@
+text
+@# Introduce
+this repo has 2 function
+
+1. personal js lib use on web develop
+2. patch to js engine(mujs/duktape) and lib
+
+## usage
+
+1. use `make sep` to generate dep.js, this has some utility include DOM and AJAX op.
+AJAX depend on psquery.js
+2. use `make release` or `make debug` to build mujs/duktape
+
+@
