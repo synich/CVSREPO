@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2023.04.29.05.25.26;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	100644CAA4632190F2E;
 
 1.1
 date	2017.10.16.15.32.25;	author Administrator;	state Exp;
@@ -15,9 +21,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@INSERT: mujs and duktape patch
+@feat: add get into sep.js
 @
 text
 @CC	= gcc
@@ -59,4 +65,18 @@ release:	$(DUKTAPE_SOURCES)
 
 debug:	$(DUKTAPE_SOURCES)
 	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
+
+sep:
+	@@cat sep.js psquery.js > dep.js
+
 @
+
+
+1.1
+log
+@INSERT: mujs and duktape patch
+@
+text
+@d40 4
+@
+

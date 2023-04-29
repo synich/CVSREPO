@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2023.04.29.05.25.26;	author u0_a111;	state Exp;
+branches;
+next	1.2;
+commitid	100644CAA4632190F2E;
 
 1.2
 date	2023.03.07.16.58.17;	author u0_a111;	state Exp;
@@ -22,12 +28,13 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@feat: embed observe and post into dict
+@feat: add get into sep.js
 @
 text
-@!(function(top){
+@/*230429;global 'W' as entry;dep on psquery*/
+!(function(top){
 top.W||(top.W={})
 // wrap DOM elem easy access
 top.W.observe=function(elemId){
@@ -42,11 +49,29 @@ top.W.observe=function(elemId){
   ret.o = elem;
   return ret
 }
-// fn(resp:str=http_body, status:str='success', xhr:object)
+// data: json; fn(resp:str=http_body, status:str='success', xhr:object)
 top.W.post=function(url, data, fn){if (!typeof $)return;
   var dstr='';for(k in data){if(dstr==''){dstr=`${k}=${encodeURIComponent(data[k])}`}else{dstr=dstr+`&${k}=${encodeURIComponent(data[k])}`}}
   $.ajax({type:"POST", url:url, data:dstr, success: fn})
 }
+top.W.get=function(url, fn){if (!typeof $)return;
+  $.ajax({url:url, success: fn})
+}
+})(this);
+@
+
+
+1.2
+log
+@feat: embed observe and post into dict
+@
+text
+@d1 1
+d17 1
+a17 1
+// fn(resp:str=http_body, status:str='success', xhr:object)
+d22 4
+a25 1
 })(this)
 @
 
