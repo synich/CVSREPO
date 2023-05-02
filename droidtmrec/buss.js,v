@@ -1,9 +1,15 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2023.05.02.15.59.12;	author u0_a111;	state Exp;
+branches;
+next	1.11;
+commitid	100645133507C7701BA;
 
 1.11
 date	2023.05.02.15.01.44;	author u0_a111;	state Exp;
@@ -76,14 +82,14 @@ desc
 @@
 
 
-1.11
+1.12
 log
-@feat: change font
+@feat: show gdate on tmrec
 @
 text
 @/// Global variable declare
 var g_date = 0
-var g_off=0;
+function viewGDate(){var d = document.getElementById("gdate");d.innerHTML=g_date}
 
 /// d0/t0->12 d1/t1->18 d2/t2->24
 /// success return 12/18/24 fail return false
@@ -181,14 +187,15 @@ function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
   var day = getElemValue("eNow");
   if (fdb[1]=='tmrec') {
-    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(checkDate(day)?day:curDay());
+    if (checkDate(day)) { g_date = day; viewGDate() } else {day=curDay()}
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(day);
     httpGet(req, HandleEditTm);
   }else if(fdb[1]=='blog'){
     if ( !checkDate(day) ) {
       showHint('Your input day is illegal!');
       return;
     }
-    g_date = day; // next upload use this day
+    g_date = day; viewGDate();// next upload use this day
     httpPost("/tmrec.cgi/blread?dt="+day+"&n=0", 'dt='+day,
       HandleEditBlog);
   }
@@ -218,7 +225,7 @@ function previewMd(src, dst){
 /// upload blog and tmrec
 function onUpload(){
   var er = sepraDB();
-  var day = curDay();
+  var day = g_date==0 ? curDay() : g_date;
   if (er[1]=='tmrec') {
     uploadRec(er[0], day);
   } else if(er[1]=='blog') {
@@ -313,7 +320,7 @@ function queryBlogTmKwd(page) {
 function clearContent() {
   var txt = document.getElementById("eNow");
   txt.value = '';
-  g_date = 0;
+  g_date = 0; viewGDate()
 }
 
 // to: deprecated, now random view
@@ -322,7 +329,6 @@ function viewBlog(to) {
   var off = parseInt(getElemValue("eDay"));
   if (to=='m') { off = 0-off; }
   else if (to=='s') { off = 10*off; } //skip 10 times
-  g_off += off;
   httpGet("/tmrec.cgi/blrand?db="+fdb[0]+"&tbl="+fdb[1]+"&n=0",
       HandleMD);
 }
@@ -374,6 +380,31 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.11
+log
+@feat: change font
+@
+text
+@d3 1
+a3 1
+var g_off=0;
+d101 2
+a102 1
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(checkDate(day)?day:curDay());
+d109 1
+a109 1
+    g_date = day; // next upload use this day
+d139 1
+a139 1
+  var day = curDay();
+d234 1
+a234 1
+  g_date = 0;
+a242 1
+  g_off += off;
 @
 
 
