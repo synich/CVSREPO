@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
+branches;
+next	1.10;
+commitid	1006450D50B4B37CD19;
 
 1.10
 date	2023.01.28.05.29.31;	author u0_a111;	state Exp;
@@ -64,9 +70,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fix: optimise layout of html and common.js
+@fix: let random view outside and survive delete
 @
 text
 @// return string type day like '180205'
@@ -111,7 +117,11 @@ function _httpDispatch(mth){
   }
   if (mth=='get') {
     return function(path, cb){
-      app.HttpRequest('GET', host, path, '', cb);
+      var pos = path.indexOf("?") // path and param
+      if (pos!=-1) {
+        path = path+"&dummy=0" // last param will be 0?, let it dummy
+      }
+      app.HttpRequest('GET', host, path, null, cb);
     }
   } else {
 /// param is urlencode format, use | instead of &(DroidScript feature)
@@ -148,6 +158,17 @@ function showHint(str, showLong){
     setTimeout('setDivShow("eHint", "")', 2000);
   }
 }
+@
+
+
+1.10
+log
+@fix: optimise layout of html and common.js
+@
+text
+@d43 5
+a47 1
+      app.HttpRequest('GET', host, path, '', cb);
 @
 
 

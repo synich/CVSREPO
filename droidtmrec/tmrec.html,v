@@ -1,9 +1,21 @@
-head	1.35;
+head	1.37;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.37
+date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
+branches;
+next	1.36;
+commitid	1006450D50B4B37CD19;
+
+1.36
+date	2023.05.01.07.46.29;	author u0_a111;	state Exp;
+branches;
+next	1.35;
+commitid	100644F6E554594B442;
 
 1.35
 date	2023.01.29.07.49.26;	author u0_a111;	state Exp;
@@ -192,9 +204,9 @@ desc
 @@
 
 
-1.35
+1.37
 log
-@feat: drop useless button and view blog random
+@fix: let random view outside and survive delete
 @
 text
 @<html>
@@ -250,9 +262,9 @@ text
 </div>
 
 <select id="eDb" class="pure-u-1-4">
-	<option value="shuw-tmrec">Diary</option>
-	<option value="shiro-tmrec">Digest</option>
+	<option value="shuw-tmrec">Digest</option>
 	<option value="shuw-blog">Blog</option>
+	<option value="shiro-tmrec">Diary</option>
 	<option value="shiro-blog">Property</option>
 </select>
 Day<select id="eDay" class="pure-u-1-4">
@@ -286,11 +298,12 @@ Day<select id="eDay" class="pure-u-1-4">
 	<option value="security">security</option>
 </select>
 <hr />
+<input type="button" value="random-view" class="pure-u-1-2" onclick="viewBlog('m')"/>
+<hr />
 
 <div id="eHint"></div>
 <div id="eDone"></div>
 <div id="eP2">
-<input type="button" value="random-view" class="pure-u-1-2" onclick="viewBlog('m')"/>
 <input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
 <hr />
 <input type="file" class="pure-u-2-3" id="eChFile" />
@@ -300,6 +313,30 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.36
+log
+@fix: exchange diary and digest
+@
+text
+@d90 2
+a95 1
+<input type="button" value="random-view" class="pure-u-1-2" onclick="viewBlog('m')"/>
+@
+
+
+1.35
+log
+@feat: drop useless button and view blog random
+@
+text
+@d54 1
+a54 2
+	<option value="shuw-tmrec">Diary</option>
+	<option value="shiro-tmrec">Digest</option>
+d56 1
 @
 
 

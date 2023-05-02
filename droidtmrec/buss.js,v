@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
+branches;
+next	1.9;
+commitid	1006450D50B4B37CD19;
 
 1.9
 date	2023.01.29.07.49.26;	author u0_a111;	state Exp;
@@ -64,9 +70,9 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@feat: drop useless button and view blog random
+@fix: let random view outside and survive delete
 @
 text
 @/// Global variable declare
@@ -167,11 +173,11 @@ function sepraDB(){
 /// get tmrec text
 function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
+  var day = getElemValue("eNow");
   if (fdb[1]=='tmrec') {
-    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay();
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(checkDate(day)?day:curDay());
     httpGet(req, HandleEditTm);
   }else if(fdb[1]=='blog'){
-    var day = getElemValue("eNow");
     if ( !checkDate(day) ) {
       showHint('Your input day is illegal!');
       return;
@@ -184,16 +190,15 @@ function onEdit(eYear, eMonth, eTb){
 
 ///\param[in] fdb DB name
 ///\param[in] day which day to save
-function saveRec(fdb, day){
+function uploadRec(fdb, day){
   var hour = getElemValue("eTag");
   hour = tag2hour(hour)
   var rec = getElemValue("eNow");
-  var pct = "hour="+hour+"|txt="+dropnl_encb64(rec);
-  httpPost("/tmrec.cgi/edit?db="+fdb+"&dt="+day,
-    pct, HandleDone );
+  var pct = `hour=${hour}|txt=${dropnl_encb64(rec)}|db=${fdb}|dt=${day}`;
+  httpPost("/pyde.cgi/art/tmupload", pct, HandleDone );
 }
 
-function saveBlog(fdb, day) {
+function uploadBlog(fdb, day) {
   var txt = getElemValue("eNow");
   var tag = getElemValue("eBtg");
   var pct = "tag="+tag+"|ctx="+ Base64.encode(txt);
@@ -209,7 +214,7 @@ function onUpload(){
   var er = sepraDB();
   var day = curDay();
   if (er[1]=='tmrec') {
-    saveRec(er[0], day);
+    uploadRec(er[0], day);
   } else if(er[1]=='blog') {
     // save to another day, avoid of overwrite
     var rep = getElemValue('eDay');
@@ -219,7 +224,7 @@ function onUpload(){
         day = g_date;  // use last date
       }
       if ( confirm("upload blog "+er[0]+day) ){
-        saveBlog(er[0], day);
+        uploadBlog(er[0], day);
         previewMd('eNow', 'eDone');
       }
     } else{
@@ -285,10 +290,10 @@ function removeDay(){
     showHint('Your input day is illegal!');
     return;
   }
-  var iswant = confirm("Do you really want to delete");
+  var fdb = sepraDB();
+  var iswant = confirm(`Do you really want to delete ${fdb[0]}-${fdb[1]} ${day}`);
   if (iswant) {
-    var fdb = sepraDB();
-    httpGet("/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
+    httpGet(`/pyde.cgi/art/removeDay?db=${fdb[0]}&tbl=${fdb[1]}&dt=${day}`,
       HandleShowLong);
   }
 }
@@ -363,6 +368,44 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.9
+log
+@feat: drop useless button and view blog random
+@
+text
+@d99 1
+d101 1
+a101 1
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+curDay();
+a103 1
+    var day = getElemValue("eNow");
+d116 1
+a116 1
+function saveRec(fdb, day){
+d120 2
+a121 3
+  var pct = "hour="+hour+"|txt="+dropnl_encb64(rec);
+  httpPost("/tmrec.cgi/edit?db="+fdb+"&dt="+day,
+    pct, HandleDone );
+d124 1
+a124 1
+function saveBlog(fdb, day) {
+d140 1
+a140 1
+    saveRec(er[0], day);
+d150 1
+a150 1
+        saveBlog(er[0], day);
+d216 2
+a217 1
+  var iswant = confirm("Do you really want to delete");
+d219 1
+a219 2
+    var fdb = sepraDB();
+    httpGet("/digest/removeDay/"+fdb[0]+"/"+fdb[1]+"/"+day,
 @
 
 
