@@ -1,9 +1,15 @@
-head	1.37;
+head	1.38;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.38
+date	2023.05.02.15.01.44;	author u0_a111;	state Exp;
+branches;
+next	1.37;
+commitid	100645125D876670A98;
 
 1.37
 date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
@@ -204,9 +210,9 @@ desc
 @@
 
 
-1.37
+1.38
 log
-@fix: let random view outside and survive delete
+@feat: change font
 @
 text
 @<html>
@@ -231,13 +237,15 @@ text
 
 <style type="text/css" media="all">
 @@import "aio.css";
+.dk-font * {font-family:MyF !important;}
+@@font-face {font-family:"MyF";src:url("Misc/LXGWZhenKai.ttf");
 </style>
 </head>
 
-<body onload="app.Start()">
+<body onload="app.Start()" class="dk-font">
 <div id="eP1">
 	<textarea class="article" name="myTag" id="eNow"></textarea>
-	<select id="eMenu" onchange="onMenu()">
+	<select id="eMenu" onchange="onMenu()" class="pure-u-1-5">
 	  <option value="MENU">MENU</option>
 	  <option value="PASTE">PASTE</option>
 	  <option value="QUERYKEY">QUERYKEY</option>
@@ -301,6 +309,7 @@ Day<select id="eDay" class="pure-u-1-4">
 <input type="button" value="random-view" class="pure-u-1-2" onclick="viewBlog('m')"/>
 <hr />
 
+<div>"#|" is tmrec tag<br />1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 <div id="eHint"></div>
 <div id="eDone"></div>
 <div id="eP2">
@@ -313,6 +322,22 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.37
+log
+@fix: let random view outside and survive delete
+@
+text
+@d23 2
+d28 1
+a28 1
+<body onload="app.Start()">
+d31 1
+a31 1
+	<select id="eMenu" onchange="onMenu()">
+d95 1
 @
 
 

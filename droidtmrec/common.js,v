@@ -1,9 +1,15 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2023.05.02.15.01.44;	author u0_a111;	state Exp;
+branches;
+next	1.11;
+commitid	100645125D876670A98;
 
 1.11
 date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
@@ -70,9 +76,9 @@ desc
 @@
 
 
-1.11
+1.12
 log
-@fix: let random view outside and survive delete
+@feat: change font
 @
 text
 @// return string type day like '180205'
@@ -132,8 +138,8 @@ function _httpDispatch(mth){
       } else if (typeof(param) == "object" ) {
         var convstr = '';
         for (var key in param){
-          if (convstr=='') {convstr=key+ '='+param[key] }
-          else {convstr = convstr + '|'+key+ '='+param[key]}
+          if (convstr=='') {convstr = key+'='+(param[key]) }
+          else {convstr = convstr + '|'+key+ '='+(param[key])}
         }
         app.HttpRequest('POST', host, path, convstr, cb);
       } else { alert("POST param should be 'string' or 'object', check it!") }
@@ -158,6 +164,18 @@ function showHint(str, showLong){
     setTimeout('setDivShow("eHint", "")', 2000);
   }
 }
+@
+
+
+1.11
+log
+@fix: let random view outside and survive delete
+@
+text
+@d58 2
+a59 2
+          if (convstr=='') {convstr=key+ '='+param[key] }
+          else {convstr = convstr + '|'+key+ '='+param[key]}
 @
 
 

@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2023.05.02.15.01.44;	author u0_a111;	state Exp;
+branches;
+next	1.10;
+commitid	100645125D876670A98;
 
 1.10
 date	2023.05.02.09.16.59;	author u0_a111;	state Exp;
@@ -70,9 +76,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fix: let random view outside and survive delete
+@feat: change font
 @
 text
 @/// Global variable declare
@@ -99,7 +105,7 @@ function checkDate(day){
 /// use Base64 to convert multiword into ASCII, so Droid can send
 function dropnl_encb64(str){
   var can_out = str.replace(/\n/g, "")
-  str = Base64.encode(can_out);//encodeURI(str);
+  str = (Base64.encode(can_out)); // = is still =, but http will drop it, avoid this bug on server
   return str;
 }
 
@@ -194,7 +200,7 @@ function uploadRec(fdb, day){
   var hour = getElemValue("eTag");
   hour = tag2hour(hour)
   var rec = getElemValue("eNow");
-  var pct = `hour=${hour}|txt=${dropnl_encb64(rec)}|db=${fdb}|dt=${day}`;
+  var pct = {hour:hour,txt:(dropnl_encb64(rec)),db:fdb,dt:day};
   httpPost("/pyde.cgi/art/tmupload", pct, HandleDone );
 }
 
@@ -368,6 +374,20 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.10
+log
+@fix: let random view outside and survive delete
+@
+text
+@d25 1
+a25 1
+  str = Base64.encode(can_out);//encodeURI(str);
+d120 1
+a120 1
+  var pct = `hour=${hour}|txt=${dropnl_encb64(rec)}|db=${fdb}|dt=${day}`;
 @
 
 
