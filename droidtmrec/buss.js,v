@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2023.05.03.14.23.51;	author u0_a111;	state Exp;
+branches;
+next	1.12;
+commitid	10064526E77597FDD2F;
 
 1.12
 date	2023.05.02.15.59.12;	author u0_a111;	state Exp;
@@ -82,9 +88,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@feat: show gdate on tmrec
+@fix: change search keyword to pyde.cgi
 @
 text
 @/// Global variable declare
@@ -314,7 +320,7 @@ function removeDay(){
 /// find keyword (deprecate page)
 function queryBlogTmKwd(page) {
   var kwd = getElemValue("eNow");
-  httpGet("/tmrec.cgi/keyword?kwd="+dropnl_encb64(kwd)+"&n=0", HandleStdout);
+  httpGet("/pyde.cgi/art/any_kwd?kwd="+dropnl_encb64(kwd), HandleStdout);
 }
 
 function clearContent() {
@@ -380,6 +386,17 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.12
+log
+@feat: show gdate on tmrec
+@
+text
+@d228 1
+a228 1
+  httpGet("/tmrec.cgi/keyword?kwd="+dropnl_encb64(kwd)+"&n=0", HandleStdout);
 @
 
 

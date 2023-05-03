@@ -1,9 +1,15 @@
-head	1.39;
+head	1.40;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.40
+date	2023.05.03.14.23.51;	author u0_a111;	state Exp;
+branches;
+next	1.39;
+commitid	10064526E77597FDD2F;
 
 1.39
 date	2023.05.02.15.59.12;	author u0_a111;	state Exp;
@@ -216,9 +222,9 @@ desc
 @@
 
 
-1.39
+1.40
 log
-@feat: show gdate on tmrec
+@fix: change search keyword to pyde.cgi
 @
 text
 @<html>
@@ -254,7 +260,7 @@ text
 	<select id="eMenu" onchange="onMenu()" class="pure-u-1-5">
 	  <option value="MENU">MENU</option>
 	  <option value="PASTE">PASTE</option>
-	  <option value="QUERYKEY">QUERYKEY</option>
+	  <option value="QUERYKEY">QUERYKEY #tag</option>
 	  <option value="VIEW">VIEW</option>
 	  <option value="CLEAR">CLEAR</option>
 	  <option value="DELETE">DELETE</option>
@@ -312,7 +318,7 @@ Day<select id="eDay" class="pure-u-1-4">
 	<option value="security">security</option>
 </select>
 <hr />
-<input type="button" value="random-view" class="pure-u-2-5" onclick="viewBlog('m')"/>
+<input type="button" value="RANDOMVIEW" class="pure-u-1-3" onclick="viewBlog('m')"/>
 <span id="gdate"></span>
 <hr />
 
@@ -329,6 +335,20 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.39
+log
+@feat: show gdate on tmrec
+@
+text
+@d34 1
+a34 1
+	  <option value="QUERYKEY">QUERYKEY</option>
+d92 1
+a92 1
+<input type="button" value="random-view" class="pure-u-2-5" onclick="viewBlog('m')"/>
 @
 
 
