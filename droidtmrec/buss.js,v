@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2023.05.07.11.21.02;	author u0_a111;	state Exp;
+branches;
+next	1.13;
+commitid	1006457899E53E5F174;
 
 1.13
 date	2023.05.03.14.23.51;	author u0_a111;	state Exp;
@@ -88,9 +94,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@fix: change search keyword to pyde.cgi
+@feat: add twink and modify tmrec layout
 @
 text
 @/// Global variable declare
@@ -260,11 +266,16 @@ function getDB() {
   txt.value = tmp;
 }
 
-function setDB() {
+// write mode: w|a
+function setDB(mode) {
   var tag = getElemValue("eTag");
   var txt = getElemValue("eNow");
+  if (mode == "a") {
+    var n = new Date()
+    txt = `${n.getMonth()+1}.${n.getDate()} ${n.getHours()}:${n.getMinutes()} ` + txt + "\n--\n" + app.LoadText( tag, "" )
+  }
   app.SaveText( tag, txt );
-  showHint("SETLOCAL OK!");
+  showHint(`SETLOCAL(${mode}) OK!`);
 }
 
 // get recent blog date-title or some month tmrec
@@ -386,6 +397,21 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.13
+log
+@fix: change search keyword to pyde.cgi
+@
+text
+@d168 2
+a169 1
+function setDB() {
+d172 4
+d177 1
+a177 1
+  showHint("SETLOCAL OK!");
 @
 
 

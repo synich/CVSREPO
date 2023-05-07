@@ -1,9 +1,15 @@
-head	1.40;
+head	1.41;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.41
+date	2023.05.07.11.21.02;	author u0_a111;	state Exp;
+branches;
+next	1.40;
+commitid	1006457899E53E5F174;
 
 1.40
 date	2023.05.03.14.23.51;	author u0_a111;	state Exp;
@@ -222,9 +228,9 @@ desc
 @@
 
 
-1.40
+1.41
 log
-@fix: change search keyword to pyde.cgi
+@feat: add twink and modify tmrec layout
 @
 text
 @<html>
@@ -265,19 +271,19 @@ text
 	  <option value="CLEAR">CLEAR</option>
 	  <option value="DELETE">DELETE</option>
 	</select>
-	<input type="button" value="EDITTHIS" onclick="onEdit()"/>
-	<input type="button" value="RECENT" onclick="onRecent()"/>
-	<input type="button" value="UPLOAD" onclick="onUpload()"/>
+	<input type="button" value="RDTHIS" class="pure-u-1-4" onclick="onEdit()"/>
+	<input type="button" value="UPLOAD" class="pure-u-1-4" onclick="onUpload()"/>
+	<input type="button" value="TWINK" class="pure-u-1-5" onclick="setDB('a')"/>
 	<hr />
-	<input type="button" value="GETLOCAL" class="pure-u-1-3" onclick="getDB()"/>
-	<select id="eTag" class="pure-u-1-4">
+	<input type="button" value="GETLOCAL" class="pure-u-1-4" onclick="getDB()"/>
+	<select id="eTag" class="pure-u-1-5">
 		<option value="mm">MEMO</option>
 		<option value="ur">UR-ht://ip/bin</option>
 		<option value="t0">TM12</option>
 		<option value="t1">TM18</option>
 		<option value="t2">TM24</option>
 	</select>
-	<input type="button" value="SETLOCAL" class="pure-u-1-3" onclick="setDB()"/>
+	<input type="button" value="SETLOCAL" class="pure-u-1-4" onclick="setDB('w')"/>
 	<hr />
 </div>
 
@@ -319,6 +325,7 @@ Day<select id="eDay" class="pure-u-1-4">
 </select>
 <hr />
 <input type="button" value="RANDOMVIEW" class="pure-u-1-3" onclick="viewBlog('m')"/>
+<input type="button" value="RECENT" class="pure-u-1-4" onclick="onRecent()"/>
 <span id="gdate"></span>
 <hr />
 
@@ -335,6 +342,27 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.40
+log
+@fix: change search keyword to pyde.cgi
+@
+text
+@d39 3
+a41 3
+	<input type="button" value="EDITTHIS" onclick="onEdit()"/>
+	<input type="button" value="RECENT" onclick="onRecent()"/>
+	<input type="button" value="UPLOAD" onclick="onUpload()"/>
+d43 2
+a44 2
+	<input type="button" value="GETLOCAL" class="pure-u-1-3" onclick="getDB()"/>
+	<select id="eTag" class="pure-u-1-4">
+d51 1
+a51 1
+	<input type="button" value="SETLOCAL" class="pure-u-1-3" onclick="setDB()"/>
+d93 1
 @
 
 
