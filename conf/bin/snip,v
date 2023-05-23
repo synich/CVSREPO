@@ -1,9 +1,15 @@
-head	1.41;
+head	1.42;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.42
+date	2023.05.23.15.52.26;	author u0_a111;	state Exp;
+branches;
+next	1.41;
+commitid	100646CE13A4CDDE8A8;
 
 1.41
 date	2023.05.17.16.46.38;	author u0_a111;	state Exp;
@@ -255,9 +261,9 @@ desc
 @@
 
 
-1.41
+1.42
 log
-@feat: go syntax in snip
+@feat: bat syntax
 @
 text
 @#!/bin/bash
@@ -455,11 +461,16 @@ EOF
 
 _snip_bat() {
   cat <<"EOF"
-if "%1" == "" (
+%var:~0,3%      rem get first 3 char
+%var:~0,-3%     rem drop last 3 char. positive mean len, neg mean position
+%var:a=b%       rem replace a -> b
+set "a=%b% %c%" rem concat b+" "+c -> a
+if /i "%1" == "ABC" (  rem ignore case
   cmd1
-) else if %1 equ/leq/geq/neq 123 (
+) else if %errorlevel% equ/leq/geq/neq %random% (
   cmd2
 )
+for /f %%i in ('cmd') do (set var=%%i)
 EOF
 }
 
@@ -579,6 +590,21 @@ main() {
 
 main $@@
 
+@
+
+
+1.41
+log
+@feat: go syntax in snip
+@
+text
+@d196 5
+a200 1
+if "%1" == "" (
+d202 1
+a202 1
+) else if %1 equ/leq/geq/neq 123 (
+d205 1
 @
 
 
