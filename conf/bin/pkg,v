@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2023.05.28.07.01.14;	author u0_a111;	state Exp;
+branches;
+next	1.13;
+commitid	1006472FC3A30B17ED2;
 
 1.13
 date	2022.11.27.13.42.34;	author u0_a111;	state Exp;
@@ -88,9 +94,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@pkg hint to -py
+@fix: pkg-py upgrade
 @
 text
 @#!/bin/bash
@@ -250,18 +256,18 @@ pkgpy(){
   CMD=$1
   shift 1
 case "$CMD" in
-	f*) pip show -f "$@@";;
-	he*) show_help;;
-	add|ins*) pip install $@@;;
-	li*|ha*) pip list;;
-	se*) pip search "$@@";;
-	sh*|inf*) pip show "$@@";;
-	un*|rm|del*) pip uninstall "$@@";;
-	upd*) pip list --outdate; echo "Upgrade above one by one, use 'pkg add -U xx'";;
-    upg*) pip list -o --format freeze | cut -d = -f 1 | xargs -n1 pip install -U;;
-    dep*) pip show -f "$@@" | grep "Requires:";;
-    rdp*) pip show -f "$@@" | grep "Required-by:";;
-	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+  f*) pip show -f "$@@";;
+  he*) show_help;;
+  add|ins*) pip install $@@;;
+  li*|ha*) pip list;;
+  se*) pip search "$@@";;
+  sh*|inf*) pip show "$@@";;
+  un*|rm|del*) pip uninstall "$@@";;
+  upd*) pip list --outdate; echo "Upgrade above one by one, use 'pkg -py add -U xx'";;
+  upg*) pip list --outdate | sed -ne '3,$p' | awk '{print $1}' | xargs -n1 pip install -U;;
+  dep*) pip show -f "$@@" | grep "Requires:";;
+  rdp*) pip show -f "$@@" | grep "Required-by:";;
+  *) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
 esac
 }
 
@@ -281,6 +287,28 @@ main(){
 
 main $@@
 
+@
+
+
+1.13
+log
+@pkg hint to -py
+@
+text
+@d158 12
+a169 12
+	f*) pip show -f "$@@";;
+	he*) show_help;;
+	add|ins*) pip install $@@;;
+	li*|ha*) pip list;;
+	se*) pip search "$@@";;
+	sh*|inf*) pip show "$@@";;
+	un*|rm|del*) pip uninstall "$@@";;
+	upd*) pip list --outdate; echo "Upgrade above one by one, use 'pkg add -U xx'";;
+    upg*) pip list -o --format freeze | cut -d = -f 1 | xargs -n1 pip install -U;;
+    dep*) pip show -f "$@@" | grep "Requires:";;
+    rdp*) pip show -f "$@@" | grep "Required-by:";;
+	*) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
 @
 
 
