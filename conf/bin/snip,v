@@ -1,9 +1,21 @@
-head	1.43;
+head	1.45;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.45
+date	2023.06.06.09.33.54;	author u0_a111;	state Exp;
+branches;
+next	1.44;
+commitid	100647EFD8242728202;
+
+1.44
+date	2023.06.06.09.00.19;	author u0_a111;	state Exp;
+branches;
+next	1.43;
+commitid	100647EF5A33F24610D;
 
 1.43
 date	2023.06.04.03.56.04;	author u0_a111;	state Exp;
@@ -267,12 +279,61 @@ desc
 @@
 
 
-1.43
+1.45
 log
-@fix: align comment and little sed hint
+@fix: refactor snip, separate txt and program
 @
 text
-@#!/bin/bash
+@usage(){
+  echo $0 [!^] type1 type2
+  echo snip list:
+  grep "^# snip_" $PPR | grep -o '[a-z]*$'
+  echo !comp list:
+  grep "^# comp_" $PPR | grep -o '[a-z]*$'
+  echo ^tpl list:
+  grep "^# tpl_" $PPR | grep -o '[a-z]*$'
+}
+
+# syntax like "#[#] xxx_type1[ type2]"
+choose_p(){
+  begin_line="# $1_$2"
+  if [ $# -eq 3 ]; then
+    begin_line="$begin_line $3"
+  fi
+  sed -ne "/$begin_line\$/,/^@@@@/p" $PPR | head -n -1 | tail -n +2
+}
+
+
+main(){
+  PPR=$(dirname $(readlink -f $0))/_snip_txt
+  if [ $# -eq 0 ]; then
+    usage
+    return
+  fi
+  if [ "$1" = "!" ]; then
+    shift
+    choose_p comp $@@
+  elif [ "$1" = "^" ]; then
+    shift
+    choose_p tpl $@@
+  else
+    choose_p snip $@@
+  fi
+}
+
+main $@@
+
+@
+
+
+1.44
+log
+@fix: sed snip
+@
+text
+@d1 8
+a8 48
+#!/bin/bash
 
 _snip_sh() {
   local kwd=(if for var)
@@ -320,8 +381,8 @@ res=$((1+2))     # calc
 EOF
   ;;
 esac
-}
-
+d11 5
+a15 7
 _snip_awk() {
   local kwd=(syntax var lib)
   if [ $# -eq 0 ]; then
@@ -329,7 +390,8 @@ _snip_awk() {
       echo $k
     done
     return
-  fi
+d17 1
+a17 157
   case $1 in
   s*) cat <<"EOF"
 $1 !~ /abc/ {print $1, $2}
@@ -462,7 +524,7 @@ type T struct | interface { // if use inner then `t`
     cb func()
 func foo(p *Person) int {   // pass pointer
 p := &Person{}              // call new() and assign pointer
-if a==1 && err!=nil {
+else if len(a)==1 && err!=nil {
 EOF
 }
 
@@ -487,26 +549,27 @@ _snip_re() {
 (?<=xx)..     #lookbefore, assert `xx' before capture 2 char
 ..(?!xx)      #lookafter, capture 2 char assert after not `xx'
 EOF
-}
-
+a19 9
 _snip_t() {
   cat <<"EOF"
 date -d "1 day [ago] 2020-07-01" "+%Y-%m-%d %H:%M:%S"
 date -d @@1612345678
 curl -k -H "Content-type: application/json" -X POST -d '{"a":1}' https://ip:port/path
 ssh -fN -L 0.0.0.0:l_port:r_ip:r_port -p r_port r_ip
-sed "addr1[,addr2]{cmd1;cmd2}"
+sed "addr1[,addr2!]{cmd1;!cmd2}"
 EOF
 }
-
+d21 2
+a22 2
 _comp_vim(){
   local kwd=(fn)
-  if [ $# -eq 0 ]; then
+d24 1
+a24 3
     for k in ${kwd[@@]}; do
       echo $k
     done
-    return
-  fi
+d27 4
+a30 82
   case $1 in
   fn*) cat <<"EOF"
 function! ()
@@ -589,15 +652,26 @@ main() {
     return
   fi
   if [ $1 = "!" ]; then
-    shift
+d32 1
+a32 1
     comp_snip $@@
-  else
+d34 1
+a34 1
     hint_snip $@@
-  fi
-}
+@
 
-main $@@
 
+1.43
+log
+@fix: align comment and little sed hint
+@
+text
+@d191 1
+a191 1
+if a==1 && err!=nil {
+d224 1
+a224 1
+sed "addr1[,addr2]{cmd1;cmd2}"
 @
 
 
