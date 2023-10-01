@@ -1,9 +1,15 @@
-head	1.41;
+head	1.42;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.42
+date	2023.10.01.14.51.30;	author u0_a111;	state Exp;
+branches;
+next	1.41;
+commitid	100651987723835E3B4;
 
 1.41
 date	2023.05.07.11.21.02;	author u0_a111;	state Exp;
@@ -228,9 +234,9 @@ desc
 @@
 
 
-1.41
+1.42
 log
-@feat: add twink and modify tmrec layout
+@feat: anki instead random view
 @
 text
 @<html>
@@ -324,24 +330,52 @@ Day<select id="eDay" class="pure-u-1-4">
 	<option value="security">security</option>
 </select>
 <hr />
-<input type="button" value="RANDOMVIEW" class="pure-u-1-3" onclick="viewBlog('m')"/>
+<input type="button" value="ANKI" class="pure-u-1-4" onclick="ankiView()"/>
 <input type="button" value="RECENT" class="pure-u-1-4" onclick="onRecent()"/>
 <span id="gdate"></span>
 <hr />
 
 <div>"#|" is tmrec tag<br />1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 <div id="eHint"></div>
+<div id="eAnkiAct" style="display: none">
+  <div id="eAnkiMem"></div>act
+  <input type="button" value="hard" class="pure-u-1-4" onclick="ankiMakr(0)"/>
+  <input type="button" value="norm" class="pure-u-1-4" onclick="ankiMakr(1)"/>
+  <input type="button" value="easy" class="pure-u-1-4" onclick="ankiMakr(2)"/>
+</div>
+
 <div id="eDone"></div>
 <div id="eP2">
+  <input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
+  <hr />
+  <input type="file" class="pure-u-2-3" id="eChFile" />
+  <input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
+  <input type="input" id="eUpFileName" />
+</div>
+
+<div id="eBlst"></div>
+</body>
+</html>
+@
+
+
+1.41
+log
+@feat: add twink and modify tmrec layout
+@
+text
+@d92 1
+a92 1
+<input type="button" value="RANDOMVIEW" class="pure-u-1-3" onclick="viewBlog('m')"/>
+d99 7
+d108 5
+a112 5
 <input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
 <hr />
 <input type="file" class="pure-u-2-3" id="eChFile" />
 <input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
 <input type="input" id="eUpFileName" />
-</div>
-<div id="eBlst"></div>
-</body>
-</html>
+d114 1
 @
 
 

@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2023.10.01.14.51.30;	author u0_a111;	state Exp;
+branches;
+next	1.14;
+commitid	100651987723835E3B4;
 
 1.14
 date	2023.05.07.11.21.02;	author u0_a111;	state Exp;
@@ -94,9 +100,9 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@feat: add twink and modify tmrec layout
+@feat: anki instead random view
 @
 text
 @/// Global variable declare
@@ -180,6 +186,12 @@ function HandleStdout(error, response){
 function HandleBlst(error, response){
   var can_out = response.replace(/\n/g, "<br />")
   setDivShow("eBlst", can_out);
+}
+
+function HandleAnki(error, response){
+  var can_out = response.replace(/\n/g, "<br />")
+  g_date = can_out.substring(0, 6); viewGDate()
+  setDivShow("eAnkiMem", can_out);
 }
 
 function HandleUpPic(error, response){
@@ -340,14 +352,20 @@ function clearContent() {
   g_date = 0; viewGDate()
 }
 
-// to: deprecated, now random view
-function viewBlog(to) {
+function ankiView() {
   var fdb = sepraDB();
   var off = parseInt(getElemValue("eDay"));
-  if (to=='m') { off = 0-off; }
-  else if (to=='s') { off = 10*off; } //skip 10 times
-  httpGet("/tmrec.cgi/blrand?db="+fdb[0]+"&tbl="+fdb[1]+"&n=0",
-      HandleMD);
+  httpGet(`/pyde.cgi/art/ankiReview?db=${fdb[0]}&tbl=${fdb[1]}&n=0`,
+      HandleAnki);
+  $("#eAnkiAct").show();
+}
+
+/// d: 0-hard 1-norm 2-easy
+function ankiMakr(d){
+  var fdb = sepraDB();
+  httpGet(`/pyde.cgi/art/ankiMark?db=${fdb[0]}&tbl=${fdb[1]}&dt=${g_date}&d=${d}&n=0`,
+      HandleAnki);
+  $("#eAnkiAct").hide();
 }
 
 function exitView() {
@@ -397,6 +415,25 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.14
+log
+@feat: add twink and modify tmrec layout
+@
+text
+@d84 6
+d248 1
+a248 2
+// to: deprecated, now random view
+function viewBlog(to) {
+d251 11
+a261 4
+  if (to=='m') { off = 0-off; }
+  else if (to=='s') { off = 10*off; } //skip 10 times
+  httpGet("/tmrec.cgi/blrand?db="+fdb[0]+"&tbl="+fdb[1]+"&n=0",
+      HandleMD);
 @
 
 
