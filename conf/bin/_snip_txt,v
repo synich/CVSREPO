@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2023.06.23.15.10.19;	author u0_a111;	state Exp;
+branches;
+next	1.2;
+commitid	1006495B5DB4077F86F;
 
 1.2
 date	2023.06.06.13.53.14;	author u0_a111;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@feat: template for wingui
+@feat: snip enhance lua/js
 @
 text
 @
@@ -136,7 +142,7 @@ syn lib
 function foo(a, b, ...)
   local t = {k=1, v=2}
   local lst = {...} -- v1, v2, v3 = ... ok but no robust
-  for v = 1, #lst do end
+  for v = first, last, [step] #lst do end
   while true do
     if t ~= nil then
       return t.k
@@ -151,7 +157,7 @@ end
 ## snip_lua lib
 str.find("abc","bc",1,true)   -- return (2,3)/nil true means plain off regex
 str.match("abc","(a)b(c)",1)  -- return ("a","c")/nil, not capture then all
-str.sub("abcd",2,3)           -- return "bc", 3 omit means -1 "bcd"
+str.sub("abcd",2,3)           -- return "bc", 3(end pos) omit means -1 "bcd"
 str.gmatch
 str.gsub
 table.concat({"a","b"},"-")   -- return "a-b"
@@ -188,8 +194,8 @@ endfunction
 
 # snip_js
 if (e1 || e2) {} else if {e1 && e2}
-for (let k in arr) {} // iter key of arr
-for (let v of arr) {} // iter value of arr
+for (let k in arr/str) {} // iter key
+for (let v of arr/str) {} // iter value(ES6 only)
 str = `plain ${var}`
 @@@@
 
@@ -237,6 +243,18 @@ sed "addr1[,addr2!]{cmd1;!cmd2}"
 @@@@
 
 
+# snip_git
+-- remove large file from repo
+git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')"
+git filter-branch --force --index-filter 'git rm -rf --cached --ignore-unmatch big-file.jar' --prune-empty --tag-name-filter cat -- --all
+rm -rf .git/refs/original/
+git reflog expire --expire=now --all
+git gc --prune=now
+git gc --aggressive --prune=now
+git push origin master --force
+@@@@
+
+
 # comp_vim
 fn
 @@@@
@@ -245,7 +263,6 @@ fn
 function! ()
 endfunction
 @@@@
-
 
 # comp_lua
 fn
@@ -375,6 +392,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 @@@@
+
+@
+
+
+1.2
+log
+@feat: template for wingui
+@
+text
+@d110 1
+a110 1
+  for v = 1, #lst do end
+d125 1
+a125 1
+str.sub("abcd",2,3)           -- return "bc", 3 omit means -1 "bcd"
+d162 2
+a163 2
+for (let k in arr) {} // iter key of arr
+for (let v of arr) {} // iter value of arr
+d211 12
+a231 1
 
 @
 
