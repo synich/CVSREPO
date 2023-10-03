@@ -1,9 +1,21 @@
-head	1.42;
+head	1.44;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.44
+date	2023.10.03.09.44.55;	author u0_a111;	state Exp;
+branches;
+next	1.43;
+commitid	100651BE2964653BE67;
+
+1.43
+date	2023.10.02.14.54.22;	author u0_a111;	state Exp;
+branches;
+next	1.42;
+commitid	100651AD99D30ECBC31;
 
 1.42
 date	2023.10.01.14.51.30;	author u0_a111;	state Exp;
@@ -234,9 +246,9 @@ desc
 @@
 
 
-1.42
+1.44
 log
-@feat: anki instead random view
+@feat: add short paragraph sync to fix blog
 @
 text
 @<html>
@@ -279,7 +291,7 @@ text
 	</select>
 	<input type="button" value="RDTHIS" class="pure-u-1-4" onclick="onEdit()"/>
 	<input type="button" value="UPLOAD" class="pure-u-1-4" onclick="onUpload()"/>
-	<input type="button" value="TWINK" class="pure-u-1-5" onclick="setDB('a')"/>
+	<input type="button" value="SYNC" class="pure-u-1-5" onclick="onSync()"/>
 	<hr />
 	<input type="button" value="GETLOCAL" class="pure-u-1-4" onclick="getDB()"/>
 	<select id="eTag" class="pure-u-1-5">
@@ -290,6 +302,7 @@ text
 		<option value="t2">TM24</option>
 	</select>
 	<input type="button" value="SETLOCAL" class="pure-u-1-4" onclick="setDB('w')"/>
+	<input type="button" value="TWINK" class="pure-u-1-5" onclick="setDB('a')"/>
 	<hr />
 </div>
 
@@ -299,7 +312,7 @@ text
 	<option value="shiro-tmrec">Diary</option>
 	<option value="shiro-blog">Property</option>
 </select>
-Day<select id="eDay" class="pure-u-1-4">
+Day<select id="eDay" class="pure-u-1-6">
 	<option value="0">0</option>
 	<option value="1">1</option>
 	<option value="2">2</option>
@@ -331,17 +344,17 @@ Day<select id="eDay" class="pure-u-1-4">
 </select>
 <hr />
 <input type="button" value="ANKI" class="pure-u-1-4" onclick="ankiView()"/>
-<input type="button" value="RECENT" class="pure-u-1-4" onclick="onRecent()"/>
+<input type="button" value="REC_RND" class="pure-u-1-4" onclick="onRecent()"/>
 <span id="gdate"></span>
 <hr />
 
 <div>"#|" is tmrec tag<br />1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 <div id="eHint"></div>
-<div id="eAnkiAct" style="display: none">
+<div id="eAnkiAct" style="display: none;background: #fc9;" class="card">
   <div id="eAnkiMem"></div>act
-  <input type="button" value="hard" class="pure-u-1-4" onclick="ankiMakr(0)"/>
-  <input type="button" value="norm" class="pure-u-1-4" onclick="ankiMakr(1)"/>
-  <input type="button" value="easy" class="pure-u-1-4" onclick="ankiMakr(2)"/>
+  <input type="button" value="hard" class="pure-u-1-4" style="color: red;"   onclick="ankiMakr(0)"/>
+  <input type="button" value="norm" class="pure-u-1-4" style="color: green;" onclick="ankiMakr(1)"/>
+  <input type="button" value="easy" class="pure-u-1-4" style="color: blue;"  onclick="ankiMakr(2)"/>
 </div>
 
 <div id="eDone"></div>
@@ -356,6 +369,43 @@ Day<select id="eDay" class="pure-u-1-4">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.43
+log
+@feat: color to anki button and card style
+@
+text
+@d41 1
+a41 1
+	<input type="button" value="TWINK" class="pure-u-1-5" onclick="setDB('a')"/>
+d52 1
+d94 1
+a94 1
+<input type="button" value="RECRAND" class="pure-u-1-4" onclick="onRecent()"/>
+@
+
+
+1.42
+log
+@feat: anki instead random view
+@
+text
+@d61 1
+a61 1
+Day<select id="eDay" class="pure-u-1-4">
+d93 1
+a93 1
+<input type="button" value="RECENT" class="pure-u-1-4" onclick="onRecent()"/>
+d99 1
+a99 1
+<div id="eAnkiAct" style="display: none">
+d101 3
+a103 3
+  <input type="button" value="hard" class="pure-u-1-4" onclick="ankiMakr(0)"/>
+  <input type="button" value="norm" class="pure-u-1-4" onclick="ankiMakr(1)"/>
+  <input type="button" value="easy" class="pure-u-1-4" onclick="ankiMakr(2)"/>
 @
 
 

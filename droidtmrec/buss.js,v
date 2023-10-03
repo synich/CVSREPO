@@ -1,9 +1,21 @@
-head	1.15;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2023.10.03.09.44.55;	author u0_a111;	state Exp;
+branches;
+next	1.16;
+commitid	100651BE2964653BE67;
+
+1.16
+date	2023.10.02.14.54.21;	author u0_a111;	state Exp;
+branches;
+next	1.15;
+commitid	100651AD99D30ECBC31;
 
 1.15
 date	2023.10.01.14.51.30;	author u0_a111;	state Exp;
@@ -100,9 +112,9 @@ desc
 @@
 
 
-1.15
+1.17
 log
-@feat: anki instead random view
+@feat: add short paragraph sync to fix blog
 @
 text
 @/// Global variable declare
@@ -144,7 +156,7 @@ function trimFirstLF(str){
 ////////////////////////////
 /// callback for http ajax
 function HandleHint(error, response){
-  showHint(response);
+  showHint(response, 1);
 }
 
 function HandleShowLong(error, response){
@@ -184,14 +196,15 @@ function HandleStdout(error, response){
 }
 
 function HandleBlst(error, response){
-  var can_out = response.replace(/\n/g, "<br />")
-  setDivShow("eBlst", can_out);
+  g_date = response.substring(0, 6); viewGDate()
+  setDivShow("eDone", marked.parse(response));
 }
 
 function HandleAnki(error, response){
   var can_out = response.replace(/\n/g, "<br />")
   g_date = can_out.substring(0, 6); viewGDate()
   setDivShow("eAnkiMem", can_out);
+  setDivShow("eDone", "");
 }
 
 function HandleUpPic(error, response){
@@ -209,10 +222,10 @@ function sepraDB(){
 /// get tmrec text
 function onEdit(eYear, eMonth, eTb){
   var fdb = sepraDB();
-  var day = getElemValue("eNow");
+  var day = g_date==0 ? getElemValue("eNow") : g_date;
   if (fdb[1]=='tmrec') {
     if (checkDate(day)) { g_date = day; viewGDate() } else {day=curDay()}
-    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(day);
+    var req = `/pyde.cgi/art/tmread?db=${fdb[0]}&dt=${day}`;
     httpGet(req, HandleEditTm);
   }else if(fdb[1]=='blog'){
     if ( !checkDate(day) ) {
@@ -270,6 +283,13 @@ function onUpload(){
   }
 }
 
+/// quick sync to fix destination
+function onSync(){
+  var txt = getElemValue("eNow");
+  var pct = `txt=${Base64.encode(txt)}`;
+  httpPost("/pyde.cgi/art/blappd", pct, HandleHint );
+}
+
 /// local db
 function getDB() {
   var tag = getElemValue("eTag");
@@ -300,11 +320,7 @@ function onRecent() {
     }
     var tag = getElemValue("eBtg");
     // default get recent some blog
-    if (tag == "unknown" ) {
-      httpPost("/tmrec.cgi/title?page="+page, '', HandleBlst);
-    } else { // otherwise get specify tag blog
-      httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
-    }
+    httpPost(`/pyde.cgi/art/randBlog`, {db:fdb[0], tag:tag}, HandleBlst);
   }else if(fdb[1]=='tmrec') {
     var yearmon = parseInt(getElemValue("eNow"));
     if (yearmon && yearmon >1000 && yearmon < 9999) {
@@ -322,12 +338,12 @@ function onRecent() {
       }
       yearmon = year + mon;
     }
-    httpPost("/tmrec.cgi/read?db="+fdb[0]+"&dt="+yearmon, '', HandleStdout);
+    httpGet(`/pyde.cgi/art/tmread?db=${fdb[0]}&dt=${yearmon}`, HandleStdout);
   }
 }
 
 function removeDay(){
-  var day = getElemValue("eNow");
+  var day = g_date==0 ? getElemValue("eNow") : g_date;
   if ( !checkDate(day) ) {
     showHint('Your input day is illegal!');
     return;
@@ -364,7 +380,7 @@ function ankiView() {
 function ankiMakr(d){
   var fdb = sepraDB();
   httpGet(`/pyde.cgi/art/ankiMark?db=${fdb[0]}&tbl=${fdb[1]}&dt=${g_date}&d=${d}&n=0`,
-      HandleAnki);
+      HandleMD);
   $("#eAnkiAct").hide();
 }
 
@@ -415,6 +431,53 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.16
+log
+@feat: color to anki button and card style
+@
+text
+@d40 1
+a40 1
+  showHint(response);
+d109 1
+a109 1
+    var req = "/tmrec.cgi/read?db="+fdb[0]+"&dt="+(day);
+d167 7
+d222 1
+a222 1
+    httpPost("/tmrec.cgi/read?db="+fdb[0]+"&dt="+yearmon, '', HandleStdout);
+@
+
+
+1.15
+log
+@feat: anki instead random view
+@
+text
+@d80 2
+a81 2
+  var can_out = response.replace(/\n/g, "<br />")
+  setDivShow("eBlst", can_out);
+d88 1
+d106 1
+a106 1
+  var day = getElemValue("eNow");
+d197 1
+a197 5
+    if (tag == "unknown" ) {
+      httpPost("/tmrec.cgi/title?page="+page, '', HandleBlst);
+    } else { // otherwise get specify tag blog
+      httpPost("/digest/tagBlog/"+fdb[0]+"/"+tag, '', HandleBlst);
+    }
+d220 1
+a220 1
+  var day = getElemValue("eNow");
+d257 1
+a257 1
+      HandleAnki);
 @
 
 

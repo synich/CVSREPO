@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2023.10.03.09.44.55;	author u0_a111;	state Exp;
+branches;
+next	1.12;
+commitid	100651BE2964653BE67;
 
 1.12
 date	2023.05.02.15.01.44;	author u0_a111;	state Exp;
@@ -76,9 +82,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@feat: change font
+@feat: add short paragraph sync to fix blog
 @
 text
 @// return string type day like '180205'
@@ -150,7 +156,7 @@ function _httpDispatch(mth){
 var httpGet = _httpDispatch('get')
 var httpPost = _httpDispatch('post')
 
-/// \param[in] showLong 1-long 2-forever other-alert default short
+/// \param[in] showLong 1-long 2-forever alert default short
 /// Android 8 has not taste, use DIV(must named as eHint) instead
 function showHint(str, showLong){
   var helem
@@ -158,12 +164,29 @@ function showHint(str, showLong){
     alert(str);
   } else if (showLong==1) {
     setDivShow("eHint", str);
-    setTimeout('setDivShow("eHint", "")', 5000);
+    setTimeout('setDivShow("eHint", "")', 6000);
   } else {
     setDivShow("eHint", str);
-    setTimeout('setDivShow("eHint", "")', 2000);
+    setTimeout('setDivShow("eHint", "")', 3000);
   }
 }
+@
+
+
+1.12
+log
+@feat: change font
+@
+text
+@d70 1
+a70 1
+/// \param[in] showLong 1-long 2-forever other-alert default short
+d78 1
+a78 1
+    setTimeout('setDivShow("eHint", "")', 5000);
+d81 1
+a81 1
+    setTimeout('setDivShow("eHint", "")', 2000);
 @
 
 
