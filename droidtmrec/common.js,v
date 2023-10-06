@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
+branches;
+next	1.13;
+commitid	100651F991125A5B3A7;
 
 1.13
 date	2023.10.03.09.44.55;	author u0_a111;	state Exp;
@@ -82,9 +88,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@feat: add short paragraph sync to fix blog
+@feat: restore up picture
 @
 text
 @// return string type day like '180205'
@@ -131,7 +137,7 @@ function _httpDispatch(mth){
     return function(path, cb){
       var pos = path.indexOf("?") // path and param
       if (pos!=-1) {
-        path = path+"&dummy=0" // last param will be 0?, let it dummy
+        path = path+"&dmy=0" // last param will be 0?, let it dummy
       }
       app.HttpRequest('GET', host, path, null, cb);
     }
@@ -170,6 +176,17 @@ function showHint(str, showLong){
     setTimeout('setDivShow("eHint", "")', 3000);
   }
 }
+@
+
+
+1.13
+log
+@feat: add short paragraph sync to fix blog
+@
+text
+@d45 1
+a45 1
+        path = path+"&dummy=0" // last param will be 0?, let it dummy
 @
 
 

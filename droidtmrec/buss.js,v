@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
+branches;
+next	1.18;
+commitid	100651F991125A5B3A7;
 
 1.18
 date	2023.10.03.13.06.05;	author u0_a111;	state Exp;
@@ -118,9 +124,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@fix: move blog from lua to python
+@feat: restore up picture
 @
 text
 @/// Global variable declare
@@ -289,9 +295,9 @@ function onUpload(){
 
 /// quick sync to fix destination
 function onSync(){
-  var txt = getElemValue("eNow");
+  var txt = getElemValue("eNow"); txt = txt?txt:"nil" // TODO must less or eq 3
   var pct = `txt=${Base64.encode(txt)}`;
-  httpPost("/pyde.cgi/art/blappd", pct, HandleHint );
+  httpPost("/pyde.cgi/art/blappd", pct, txt!="nil"?HandleHint:HandleDone );
 }
 
 /// local db
@@ -398,13 +404,13 @@ function uploadFile( elemFile, upName ) {
   var f = document.getElementById(elemFile).files[0];
   var extName = f.name.replace(/.*\./, '');
   var fn = getElemValue(upName);
-  if (fn == '') {alert("must input file name!"); return;}
+  if (fn == '') {var dt=new Date();fn=`f${dt.getDate()}_${dt.getHours()}${dt.getMinutes()}_${dt.getMilliseconds()}`}
   var reader = new FileReader();
   reader.readAsDataURL(f);
   reader.onload = function(e){
     var pic = this.result;
     var param = {pic:pic, ext:extName, fn:fn}
-    httpPost("/upload.php", param, HandleUpPic)
+    httpPost("/pyde.cgi/art/upfile", param, HandleUpPic)
   }
 }
 
@@ -435,6 +441,26 @@ function onMenu( ) {
 function start_show(){
   httpPost("/startup.cgi", '', HandleDone );
 }
+@
+
+
+1.18
+log
+@fix: move blog from lua to python
+@
+text
+@d167 1
+a167 1
+  var txt = getElemValue("eNow");
+d169 1
+a169 1
+  httpPost("/pyde.cgi/art/blappd", pct, HandleHint );
+d276 1
+a276 1
+  if (fn == '') {alert("must input file name!"); return;}
+d282 1
+a282 1
+    httpPost("/upload.php", param, HandleUpPic)
 @
 
 

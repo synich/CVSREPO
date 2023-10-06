@@ -1,9 +1,15 @@
-head	1.44;
+head	1.45;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.45
+date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
+branches;
+next	1.44;
+commitid	100651F991125A5B3A7;
 
 1.44
 date	2023.10.03.09.44.55;	author u0_a111;	state Exp;
@@ -246,9 +252,9 @@ desc
 @@
 
 
-1.44
+1.45
 log
-@feat: add short paragraph sync to fix blog
+@feat: restore up picture
 @
 text
 @<html>
@@ -341,6 +347,7 @@ Day<select id="eDay" class="pure-u-1-6">
 	<option value="data">data</option>
 	<option value="book">book</option>
 	<option value="security">security</option>
+	<option value="finance">finance</option>
 </select>
 <hr />
 <input type="button" value="ANKI" class="pure-u-1-4" onclick="ankiView()"/>
@@ -359,16 +366,31 @@ Day<select id="eDay" class="pure-u-1-6">
 
 <div id="eDone"></div>
 <div id="eP2">
-  <input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
+  <input type="file" class="pure-u-1-2" id="eChFile" />
+  <input type="input" class="pure-u-1-4" id="eUpFileName" />
+  <input type="button" value="up" onclick="uploadFile('eChFile', 'eUpFileName') " />
   <hr />
-  <input type="file" class="pure-u-2-3" id="eChFile" />
-  <input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
-  <input type="input" id="eUpFileName" />
+  <input type="button" value="exit" class="pure-u-1-3" onclick="exitView()"/>
 </div>
 
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.44
+log
+@feat: add short paragraph sync to fix blog
+@
+text
+@d91 1
+d110 4
+a114 4
+  <hr />
+  <input type="file" class="pure-u-2-3" id="eChFile" />
+  <input type="button" value="upload" onclick="uploadFile('eChFile', 'eUpFileName') " />
+  <input type="input" id="eUpFileName" />
 @
 
 
