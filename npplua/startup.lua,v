@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2023.10.10.15.33.31;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	10065256ECB3EEBFF10;
 
 1.1
 date	2020.05.22.15.25.26;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@notepad++ lua plugin
+@feat: npp lua plugin md2tidwiki
 @
 text
 @-- Startup script
@@ -31,4 +37,15 @@ require 'FileTypeCmd'
 require 'Bracket'
 require 'Bookmark'
 require 'HighlightOccurrences'
+require 'Md2tidwiki'
 @
+
+
+1.1
+log
+@notepad++ lua plugin
+@
+text
+@d11 1
+@
+

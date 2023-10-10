@@ -1,9 +1,15 @@
-head	1.45;
+head	1.46;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.46
+date	2023.10.06.12.44.45;	author u0_a111;	state Exp;
+branches;
+next	1.45;
+commitid	1006520013D317EFD15;
 
 1.45
 date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
@@ -252,9 +258,9 @@ desc
 @@
 
 
-1.45
+1.46
 log
-@feat: restore up picture
+@fix: move startup to pyde
 @
 text
 @<html>
@@ -355,7 +361,7 @@ Day<select id="eDay" class="pure-u-1-6">
 <span id="gdate"></span>
 <hr />
 
-<div>"#|" is tmrec tag<br />1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
+<div>"##c[1-9]" tmrec tag: 1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 <div id="eHint"></div>
 <div id="eAnkiAct" style="display: none;background: #fc9;" class="card">
   <div id="eAnkiMem"></div>act
@@ -376,6 +382,17 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.45
+log
+@feat: restore up picture
+@
+text
+@d99 1
+a99 1
+<div>"#|" is tmrec tag<br />1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 @
 
 

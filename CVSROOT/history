@@ -448,3 +448,8 @@ M651c11bd|u0_a111|~/src/*0|droidtmrec|1.18|buss.js
 M651f9911|u0_a111|~/src/*0|droidtmrec|1.19|buss.js
 M651f9911|u0_a111|~/src/*0|droidtmrec|1.14|common.js
 M651f9911|u0_a111|~/src/*0|droidtmrec|1.45|tmrec.html
+M6520013d|u0_a111|~/src/*0|droidtmrec|1.20|buss.js
+M6520013d|u0_a111|~/src/*0|droidtmrec|1.46|tmrec.html
+O65256d50|u0_a111|~/src/*0|npplua||npplua
+M65256ecb|u0_a111|~/src/*0|npplua|1.2|startup.lua
+A65256ecb|u0_a111|~/src/npp*7|npplua/lua|1.1|Md2tidwiki.lua

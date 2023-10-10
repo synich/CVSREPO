@@ -1,9 +1,15 @@
-head	1.19;
+head	1.20;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.20
+date	2023.10.06.12.44.45;	author u0_a111;	state Exp;
+branches;
+next	1.19;
+commitid	1006520013D317EFD15;
 
 1.19
 date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
@@ -124,9 +130,9 @@ desc
 @@
 
 
-1.19
+1.20
 log
-@feat: restore up picture
+@fix: move startup to pyde
 @
 text
 @/// Global variable declare
@@ -424,9 +430,6 @@ function onMenu( ) {
     txt.value += cp;
   } else if (item=="QUERYKEY") {
     queryBlogTmKwd(0);
-  } else if(item=="PREVIEW"){
-    var txt = marked.parse(getElemValue("eNow"));
-    setDivShow("eDone", txt);
   } else if(item=="CLEAR"){
     clearContent();
   } else if (item=="VIEW") {
@@ -439,8 +442,23 @@ function onMenu( ) {
 }
 
 function start_show(){
-  httpPost("/startup.cgi", '', HandleDone );
+  httpPost("/pyde.cgi/art/startup", '', HandleDone );
 }
+@
+
+
+1.19
+log
+@feat: restore up picture
+@
+text
+@a295 3
+  } else if(item=="PREVIEW"){
+    var txt = marked.parse(getElemValue("eNow"));
+    setDivShow("eDone", txt);
+d308 1
+a308 1
+  httpPost("/startup.cgi", '', HandleDone );
 @
 
 
