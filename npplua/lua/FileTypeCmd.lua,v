@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2023.11.05.11.41.41;	author u0_a111;	state Exp;
+branches;
+next	1.1;
+commitid	10065477F755753B839;
 
 1.1
 date	2020.05.22.15.29.51;	author android;	state Exp;
@@ -16,17 +22,20 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@npplua file
+@feat: npplua dot in ctrl 1
 @
 text
-@local ENUM = {LUA="D:\\soft\\phpstudy\\PHPTutorial\\nginx\\luajit.exe",
-GO="D:\\soft\\msys\\wabin\\go.bat"}
+@-- EDIT ENUM WHEN FIRST USE
+local ENUM = {LUA="D:\\soft\\phpstudy\\PHPTutorial\\nginx\\luajit.exe",
+GO="D:\\soft\\msys\\wabin\\go.bat",
+DOT="D:\\soft\\wabin\\bin\\dot.bat"}
+
 local nlsys = require("nlsys")
 
 local luaFuncArray = {
-  function()  -- 1
+  function()  -- 1 run select piece code
     local txt, tlen = editor:GetSelText()
     if tlen == 0 then return end
 
@@ -39,19 +48,57 @@ local luaFuncArray = {
 }
 
 local goFuncArray = {
-  function()
-    local fname = npp:GetCurrentDirectory().."\\"..npp:GetFileName()
-    nlsys.fork(string.format('%s fmt "%s"&PAUSE', ENUM.GO, fname))
+  function()  -- 1 format code
+    local cur_flname = npp:GetCurrentDirectory().."\\"..npp:GetFileName()
+    nlsys.fork(string.format('%s fmt "%s"&PAUSE', ENUM.GO, cur_flname))
+  end
+}
+
+local dotFuncArray = {
+  function()  -- 1 generate png and show
+    local cur_flname = npp:GetCurrentDirectory().."\\"..npp:GetFileName()
+    nlsys.fork(string.format("%s %s %s", ENUM.DOT, "png", cur_flname))
   end
 }
 
 -- File type depend func array
-local extFnTbl = {lua=luaFuncArray, go=goFuncArray}
+local extFnTbl = {lua=luaFuncArray, go=goFuncArray, dot=dotFuncArray}
 
 local function runFileTypeCmd1()
   local fn = extFnTbl[npp:GetExtPart():sub(2)]
   if fn then fn[1]() end
 end
 
+local function runFileTypeCmd2()
+end
+
 npp.AddShortcut('FileTypeCmd1', 'Ctrl+1', runFileTypeCmd1)
+-- npp.AddShortcut('FileTypeCmd2', 'Ctrl+2', runFileTypeCmd2)
+
 @
+
+
+1.1
+log
+@npplua file
+@
+text
+@d1 1
+d3 3
+a5 1
+GO="D:\\soft\\msys\\wabin\\go.bat"}
+d9 1
+a9 1
+  function()  -- 1
+d22 10
+a31 3
+  function()
+    local fname = npp:GetCurrentDirectory().."\\"..npp:GetFileName()
+    nlsys.fork(string.format('%s fmt "%s"&PAUSE', ENUM.GO, fname))
+d36 1
+a36 1
+local extFnTbl = {lua=luaFuncArray, go=goFuncArray}
+d43 3
+d47 2
+@
+
