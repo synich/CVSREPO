@@ -1,0 +1,176 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2023.11.26.15.33.19;	author shuw;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2023.11.25.15.58.47;	author shuw;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2023.11.25.14.57.40;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@fix: use os.scandir instead of os.walk
+@
+text
+@#!/usr/bin/env python3
+
+def tid2md(j_fl):
+    def _wt2md(art):
+        import re
+        art = re.sub("^# ", "1. ", art, flags=re.M)
+        art = re.sub("^!!! ", "### ", art, flags=re.M)
+        art = re.sub("^!! ",  "## ", art, flags=re.M)
+        art = re.sub("^! ",  "# ", art, flags=re.M)
+        art = re.sub("''(.*?)''", "**\g<1>**", art)
+        return art
+    def _prop_tag(tid_tag):
+        right_tag = ""
+        md_tag = set(("lang","os","net","data","security","design","protocol","web","tool","think","finance"))
+        for i in tid_tag.split(" "):
+            if i in md_tag:
+                right_tag = i
+                break
+        return right_tag
+    import json
+    import sys
+    with open(j_fl, encoding="utf-8") as f:
+        j = json.loads(f.read())
+        for i in j:
+            cday = i["created"][2:8]
+            try:
+                tag = _prop_tag(i["tags"])
+                if tag == "":
+                    print(f"[{i['title']}] no right tag: [{i['tags']}]", file=sys.stderr)
+                    continue
+            except:
+                continue
+            fname = f'{cday}_{tag}.md'
+            with open(fname, "w", encoding="utf-8") as of:
+                of.write(f"# {i['title']}\n")
+                of.write(_wt2md(i["text"]))
+            print(cday)
+
+
+def md2json(fname):
+    import json
+    import os
+    import re
+    out = {}
+    with open(fname, "r", encoding="utf-8") as f:
+        txt = f.read()
+        basename = os.path.basename(fname)
+        pos = -1!=basename.find("_") and basename.find("_") or basename.find(".md")
+        out["id"] = basename[:pos]
+        pt = re.search("_[a-z0-9]{2,}\.md", basename)
+        out["tag"] = "unknown"
+        if pt is not None:
+            pos = pt.span()
+            out["tag"] = basename[pos[0]+1:pos[1]-3]
+        out["text"] = txt
+        return "jctx.push(JSON.parse("+repr(json.dumps(out, ensure_ascii=False))+"));"
+
+
+def up_for_tm(lastday: float):
+    """modify in lastday"""
+    import os
+    def _conv_in_day(nam, pos, pth, lastday):
+        import time
+        now = time.time()
+        mtime = os.path.getmtime(pth)
+        if (now-mtime) < lastday*86400:
+            fout = config["to"]+nam[:pos]+".mds"
+            print(nam, "to", fout)
+            with open(fout, "w", encoding="utf-8") as f:
+                f.write(md2json(pth))
+    def scan_f_in_dir(d):
+        for f in os.scandir(d):
+            if f.is_file():
+                pos = f.name.find(".md")
+                if -1 != pos:
+                    _conv_in_day(f.name, pos, f.path, lastday)
+            else:
+                scan_f_in_dir(f.path)
+    for d in config["from"]:
+        scan_f_in_dir(d)
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[2] == "default":
+        config = {
+            "from":["D:/code/essay/pub/"],
+            "to":"./mds/"}
+    else:
+        config = {
+            "from":["D:/code/essay/priv/"],
+            "to":"./mdp/"}
+    up_for_tm(float(sys.argv[1]))
+@
+
+
+1.2
+log
+@feat: multi build and link trans to strong style
+@
+text
+@d61 2
+a62 2
+    def _conv_in_day(src_d, dst_d, lastday):
+        import os
+d65 16
+a80 15
+        for path, _, f_lst in os.walk(src_d):
+            for i in f_lst:
+                pos = i.find(".md")
+                if -1 == pos:
+                    continue
+                src_f = src_d+i
+                mtime = os.path.getmtime(src_f)
+                if (now-mtime) < lastday*86400:
+                    fout = dst_d+i[:pos]+".mds"
+                    print(i, "to", fout)
+                    with open(fout, "w", encoding="utf-8") as f:
+                        f.write(md2json(src_f))
+    src_d = config["from"]
+    for ons in src_d:
+        _conv_in_day(ons, config["to"], lastday)
+d86 1
+a86 1
+            "from":["D:/code/essay/pub/b1/","D:/code/essay/pub/b2/"],
+d90 1
+a90 1
+            "from":["D:/code/essay/priv/b1/","D:/code/essay/priv/b2/"],
+@
+
+
+1.1
+log
+@fix: drop search space
+@
+text
+@a81 5
+    config = {
+        #"from":["D:/code/mytid/srcmd/"],
+        "from":["D:/code/essay/pub/b1/","D:/code/essay/pub/b2/"],
+        #"from":["D:/code/essay/priv/b1/","D:/code/essay/priv/b2/"],
+        "to":"./mds/"}
+d83 8
+@
+

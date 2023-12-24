@@ -1,0 +1,290 @@
+head	1.12;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.12
+date	2023.12.08.16.01.57;	author shuw;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2023.12.03.05.33.49;	author shuw;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2023.12.02.14.31.50;	author shuw;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2023.11.29.15.13.42;	author shuw;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2023.11.24.16.15.17;	author shuw;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2023.11.24.15.40.47;	author shuw;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2023.11.22.15.41.35;	author shuw;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2023.11.21.15.22.20;	author shuw;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2023.11.19.23.42.21;	author shuw;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2023.11.19.15.44.06;	author shuw;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2023.11.19.15.21.13;	author shuw;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2023.11.18.14.55.24;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@fix: move inline style to outside
+@
+text
+@<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>$TITLE</title>
+	<meta content="width=device-width,initial-scale=1,maximum-scale=1.0" name="viewport">
+<style>
+body{color:#111;background-color:#f4f4f4;font-family:Montserrat, sans-serif;}
+h1{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
+h2{font-size:1.5em;color:#037;padding-top:0.2em;margin:0.2em;}
+h3{color:#409eff;}
+p{font-size:1.2em;}
+em{color:#00f;font-style:normal;}strong{color:#f00;font-style:normal;}
+pre{white-space:pre-wrap;font-size:1.1em;}
+code{background-color:#f1f1f1;font-size:1.1em;color:#d73737;}
+pre code{display: block;border: 1px solid #cccccc;}
+blockquote{border-left:5px solid #bbb;padding-left:0.5em;}
+ul li{list-style:circle;}ol li{list-style:hiragana;}
+table{border-collapse:collapse;border:1px solid;}th{border:1px solid;}td{border:1px solid;}
+textarea{font-family:Montserrat, sans-serif;width:100%;height:80vh;font-size:1.1em}
+article{background-color:hsl(60, 9%, 87%);max-width:80rem;margin:0 auto;padding:0 1rem;}
+.card{opacity: 0.87;position: relative;max-width:80rem;margin:0 auto 8px;
+box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+border-radius: 8px;background: white;}
+div.card h1{font-size:1.8em;color:#026;background-color:#f0f0f0;}
+.sec_pad{padding: 8px 12px;}
+.art_pad{padding: 2px 12px;}
+.kwd_pad{padding: 0px 12px;}
+div.edit_zone{border: 4px solid blue;}
+div.auto_high{position: relative;line-height: 20px;}
+span.auto_high{display: block;white-space: pre-wrap;word-wrap: break-word;visibility: hidden;}
+textarea.auto_high{position: absolute;top: 0;height: 100%;line-height: 20px;padding:0px 4px;box-sizing: border-box;}
+div.sd_by_sd{flex:1;}
+.prv_pad{padding-left:8px;}
+span.kwd_em{color:red}
+.footer{margin: 0 auto;text-align: center}
+nav {background: #202020;max-width:80rem;padding:0 12px;margin:0 auto;display: flex;}
+nav h1 {flex: 3;}
+nav label {color: #fff;padding-top: 0.5em;}
+.s_item{margin: 10px auto;text-decoration: underline;color: blue;}
+@@media screen and (max-width: 400px) { #kwd{width: 100px;} }
+</style>
+<script type="text/javascript">
+!(function(top){ top.$tm||(top.$tm={})
+var jctx=[];
+function load_jctx(){
+/*include_mds_start*/
+/*include_mds_stop*/
+}var config_txt=`
+`;var config=JSON.parse(config_txt)
+/*buss_js*/
+})(this);
+/*dep_js*/
+</script>
+</head>
+<body onload="$tm.ev_boot()">
+<nav><h1>$TITLE</h1> <label><input id="kwd" type="search" oninput="$tm.ev_findkwd()" placeholder="search"></label>
+</nav>
+
+<div class="card kwd_pad" id="kwd_show"></div>
+
+<section id="eTopTag" class="card sec_pad">
+</section>
+
+<footer id="eFter" class="footer"></footer>
+</body></html>
+@
+
+
+1.11
+log
+@feat: edit and preview side by side
+@
+text
+@d32 1
+a32 1
+textarea.auto_high{position: absolute;top: 0;height: 100%;line-height: 20px;padding: 0;}
+d34 1
+@
+
+
+1.10
+log
+@fix: make search pad align
+@
+text
+@d33 1
+@
+
+
+1.9
+log
+@fix: align hori padding and p instead of pre
+@
+text
+@d28 1
+d58 1
+a58 1
+<div class="card" id="kwd_show" "></div>
+@
+
+
+1.8
+log
+@style: encapsule function in IIFE
+@
+text
+@d26 2
+a27 2
+.sec_pad{padding: 8px 16px;}
+.art_pad{padding: 2px 4px;}
+d34 1
+a34 1
+nav {background: #202020;max-width:80rem;padding:0 32px;margin:0 auto;display: flex;}
+@
+
+
+1.7
+log
+@style: all on event change name ev_
+@
+text
+@d41 2
+d44 3
+a46 3
+/*include_mds_start*/jctx=[];
+/*include_mds_stop*/}
+var config_txt=`
+d49 2
+d53 2
+a54 2
+<body onload="ev_boot()">
+<nav><h1>$TITLE</h1> <label><input id="kwd" type="search" oninput="ev_findkwd()" placeholder="search"></label>
+@
+
+
+1.6
+log
+@feat: search with brief em result
+@
+text
+@d49 2
+a50 2
+<body onload="boot()">
+<nav><h1>$TITLE</h1> <label><input id="kwd" type="search" oninput="kwd_search()" placeholder="search"></label>
+@
+
+
+1.5
+log
+@feat: plain text show in pre
+@
+text
+@d32 1
+@
+
+
+1.4
+log
+@style: font move to body
+@
+text
+@d10 1
+a10 1
+h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
+d25 1
+@
+
+
+1.3
+log
+@fix: draft hint and update textarea font
+@
+text
+@d8 3
+a10 3
+body{color:#111;background-color:#f4f4f4;}
+h1{font-family:Montserrat, sans-serif;font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
+h2{font-family:Montserrat, sans-serif;font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
+d12 1
+a12 1
+p{font-family:Montserrat, sans-serif;font-size:1.2em;}
+d20 1
+a20 1
+textarea{width:100%;height:80vh;font-size:1.1em}
+d30 1
+a30 1
+textarea.auto_high{font-family:Montserrat, sans-serif;position: absolute;top: 0;height: 100%;line-height: 20px;}
+@
+
+
+1.2
+log
+@feat: textarea auto height with content
+@
+text
+@d11 2
+a12 1
+h3{color:#409eff;}p{font-family:Montserrat, sans-serif;font-size:1.2em;}
+d30 1
+a30 1
+textarea.auto_high{position: absolute;top: 0;height: 100%;line-height: 20px;}
+@
+
+
+1.1
+log
+@style: refactor build
+@
+text
+@d26 4
+@
+
