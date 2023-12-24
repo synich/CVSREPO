@@ -1,4 +1,4 @@
-head	1.16;
+head	1.17;
 access;
 symbols
 	inter_scm:1.13
@@ -6,6 +6,11 @@ symbols
 locks; strict;
 comment	@ * @;
 
+
+1.17
+date	2023.12.24.13.29.04;	author shuw;	state Exp;
+branches;
+next	1.16;
 
 1.16
 date	2023.12.23.05.30.18;	author shuw;	state Exp;
@@ -48,39 +53,41 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@fix: move lua init outside and lua_call return 0 to avoid require crash
+@feat: lua package.cpath include pb_d
 @
 text
 @#include <stdio.h>
 #include <string.h>
-#ifdef _WIN32
-#include <windows.h>
-#define DIR_SEP "\\"
-#else
-#include <unistd.h>
-#define DIR_SEP "/"
-#endif
 #include "walib.h"
-#define SUPPORT_LUA
-#ifdef SUPPORT_LUA
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
-int luaopen_utf8(lua_State *L);
-int luaopen_enc(lua_State *L);
-int luaopen_dt(lua_State *L);
-#else
-void get_exe_path(char* wd);
-#include "dep/bignum.c"
-#include "dep/miniscm.c"
-#endif
-
 #define MAXLINE 256
 
+#ifdef _WIN32
+  #include <windows.h>
+  #define DIR_SEP "\\"
+  #define PATH_SEP ';'
+#else
+  #include <unistd.h>
+  #define DIR_SEP "/"
+  #define PATH_SEP ':'
+#endif
+
+#define SUPPORT_LUA
+#ifdef SUPPORT_LUA
+  #include "lua.h"
+  #include "lauxlib.h"
+  #include "lualib.h"
+  int luaopen_utf8(lua_State *L);
+  int luaopen_enc(lua_State *L);
+  int luaopen_dt(lua_State *L);
+#else
+  #include "dep/bignum.c"
+  #include "dep/miniscm.c"
+#endif
+
 void usage(){
-  puts("personal busybox ver231222\nascii\n"
+  puts("personal busybox ver231223\nascii\n"
   "dyn2str file -- convert script into C string file\n"
   "snip|comp [keyword]\n"
   "todo sth|[d line]\n"
@@ -90,8 +97,8 @@ void usage(){
 #else
   "lisp file\n"
 #endif
-  "hsc helper show cvs\n\tmf(list modified file)|ml(number modified line)|rv(repo version)\n"
-  "wph(WaProjectHelper)\n\twph c c -- create c project scafold\n\twph l p -- generate lua plugin by c\n"
+  "hsc helper show cvs\n  mf(list modified file)|ml(number modified line)|rv(repo version)\n"
+  "wph(WaProjectHelper)\n  wph c c -- create c project scafold\n  wph l p -- generate lua plugin by c\n"
   "xlispindent file|stdin"
   );
   exit(0);
@@ -576,7 +583,6 @@ void xlispindent(int argc, char** argv){
 
 
 /******** lua ********/
-char *s_lua_precode = "";
 void _debug_lua(void* L, char* hint_mess){
 #ifdef SUPPORT_LUA
   int stk_size = lua_gettop(L), i = 1;
@@ -600,6 +606,9 @@ void* linit(){
   if (L == NULL) {
     puts("cannot create lua_State: not enough memory");
   } else {
+    char s_lua_precode[MAXLINE]={0};
+    char pb_d_path[MAXLINE];
+    get_exe_path(pb_d_path);
     lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
     luaL_openlibs(L);  /* open libraries */
     luaopen_utf8(L);
@@ -608,7 +617,8 @@ void* linit(){
     lua_gc(L, LUA_GCRESTART, 0);
     lua_pop(L, 3);  // pop custom open_lib
     luafn_pb(L);
-    /* luaL_dostring(L, s_lua_precode); */
+    sprintf(s_lua_precode, "package.cpath=[[%s?.dll%c]]..package.cpath", pb_d_path, PATH_SEP);
+    luaL_dostring(L, s_lua_precode);
   }
 #endif
   return L;
@@ -779,6 +789,55 @@ int main(int argc, char** argv){
   }
   return 0;
 }
+@
+
+
+1.16
+log
+@fix: move lua init outside and lua_call return 0 to avoid require crash
+@
+text
+@d3 3
+d7 3
+a9 2
+#include <windows.h>
+#define DIR_SEP "\\"
+d11 3
+a13 2
+#include <unistd.h>
+#define DIR_SEP "/"
+d15 1
+a15 1
+#include "walib.h"
+d18 6
+a23 6
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+int luaopen_utf8(lua_State *L);
+int luaopen_enc(lua_State *L);
+int luaopen_dt(lua_State *L);
+d25 2
+a26 3
+void get_exe_path(char* wd);
+#include "dep/bignum.c"
+#include "dep/miniscm.c"
+a28 2
+#define MAXLINE 256
+
+d30 1
+a30 1
+  puts("personal busybox ver231222\nascii\n"
+d40 2
+a41 2
+  "hsc helper show cvs\n\tmf(list modified file)|ml(number modified line)|rv(repo version)\n"
+  "wph(WaProjectHelper)\n\twph c c -- create c project scafold\n\twph l p -- generate lua plugin by c\n"
+a525 1
+char *s_lua_precode = "";
+d549 3
+d560 2
+a561 1
+    /* luaL_dostring(L, s_lua_precode); */
 @
 
 
