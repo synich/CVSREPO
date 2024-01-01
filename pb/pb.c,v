@@ -1,4 +1,4 @@
-head	1.19;
+head	1.23;
 access;
 symbols
 	inter_scm:1.13
@@ -6,6 +6,26 @@ symbols
 locks; strict;
 comment	@ * @;
 
+
+1.23
+date	2024.01.01.15.30.27;	author shuw;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2024.01.01.07.28.42;	author shuw;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2024.01.01.06.47.08;	author shuw;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2023.12.28.16.49.30;	author shuw;	state Exp;
+branches;
+next	1.19;
 
 1.19
 date	2023.12.25.15.57.08;	author shuw;	state Exp;
@@ -63,9 +83,9 @@ desc
 @@
 
 
-1.19
+1.23
 log
-@feat: more lua debug info
+@fix: lsdir has full_path
 @
 text
 @#include <stdio.h>
@@ -97,7 +117,7 @@ text
 #endif
 
 void usage(){
-  puts("personal busybox ver231225\nascii\n"
+  puts("personal busybox ver240101\nascii\n"
   "dyn2str file -- convert script into C string file\n"
   "snip|comp [keyword]\n"
   "todo sth|[d line]\n"
@@ -251,7 +271,7 @@ static void convFile(unsigned char* str, int slen, FILE* fout){
   int i=0;
   char buf[8] = {0};
   for (; i<slen; i++) {
-    if (0 == i%10){
+    if (0 == i%16){
       fwrite("\n", 1, 1, fout);
     }
     snprintf(buf, sizeof(buf), "%u,", str[i]);
@@ -597,6 +617,7 @@ void xlispindent(int argc, char** argv){
 /*var_dump|split|popen*/
 #include "pb_lua.c"
 #include "modidx_lua.c"
+#include "fennel.c"
 
 static void _debug_lua(lua_State *L, char* hint_mess){
   int stk_size = lua_gettop(L), ri=-1, i, val_t;
@@ -604,11 +625,21 @@ static void _debug_lua(lua_State *L, char* hint_mess){
   for(i=stk_size;i>=1;i--){
     val_t = lua_type(L, i);
     char *idx_mean = "";
-    if (i==stk_size){idx_mean = "\t<- top";} else if (1==i){idx_mean = "\tbottom";}
+    if (i==stk_size){idx_mean = "\t<- top";} else if (1==i){idx_mean = "\t<- bot";}
     printf("  %d or %d: %s", i, ri, lua_typename(L, val_t));
     if (val_t==LUA_TSTRING) {printf(" %s", lua_tostring(L, i));}
     else if (val_t==LUA_TNUMBER) {printf(" %.2f", lua_tonumber(L, i));}
-    else if (val_t==LUA_TTABLE) {printf(" arrlen %d", lua_objlen(L, i));}
+    else if (val_t==LUA_TTABLE) {int j=1;printf(" arrlen %d, key:", lua_objlen(L, i));
+      lua_pushnil(L);
+      for(;j<=5;j++){if (0==lua_next(L,i)){break;} else {
+        val_t = lua_type(L, -2);
+        if (val_t==LUA_TSTRING) {printf(" %s",lua_tostring(L,-2));}
+        else if (val_t==LUA_TNUMBER) {printf(" %.0f",lua_tonumber(L,-2));}
+        else {printf(" %s", lua_typename(L, lua_type(L, -2)));}
+        //printf("-%s,", lua_typename(L, lua_type(L, -1)));
+        lua_pop(L, 1);/* removes 'value'; keeps 'key' for next iteration */
+        } }
+      }
     else if (val_t==LUA_TBOOLEAN) {printf(" %s", 1==lua_toboolean(L, i)?"true":"false");}
     printf("%s\n", idx_mean);
     ri--;
@@ -635,7 +666,7 @@ static int _traceback (lua_State *L) {
 }
 #endif
 
-void* linit(){
+static void* linit(){
   void *L = NULL;
 #ifdef SUPPORT_LUA
   L = (lua_State *)luaL_newstate();  /* create state */
@@ -660,13 +691,13 @@ void* linit(){
   return L;
 }
 
-int ldofile(void* L, char *fname, int narg){
+static int ldofile(void* L, char *fname, int narg){
   int status = 0, base;
 #ifdef SUPPORT_LUA
   status = luaL_loadfile(L, fname);
   if (0!=status) {
     printf("pb load %s fail[%d]: %s\n", fname, status, lua_tostring(L, -1));
-    lua_pop(L, 2);
+    lua_pop(L, lua_gettop(L));
     return status;
   }
   if (0<narg) {lua_insert(L, 1);}
@@ -682,7 +713,7 @@ int ldofile(void* L, char *fname, int narg){
   return status; /*0-ok 1-fail*/
 }
 
-void lclose(void* L){
+static void lclose(void* L){
 #ifdef SUPPORT_LUA
   lua_close((lua_State *)L);
 #endif
@@ -703,8 +734,9 @@ void run_lua(int argc, char** argv){
     luaL_dostring(L, exprbuff);
     puts(lua_tostring(L, -1));
   } else if (0==strcmp(argv[2], "-h")) {
-    puts("single: fmt/var_dump/string.split/os.popen/dt.datediff\n"
-    "module: enc.md5/sha1/b64enc/b64dec; json.encode/decode; utf8.len/char/codes");
+    puts("enhance with:\nfmt; var_dump; map/reduce/filter/range\n"
+    "string.split; os.popen; dt.datediff/lsdir/lsfile\n"
+    "enc.md5/sha1/b64enc/b64dec; json.encode/decode; utf8.len/char/codes");
   } else {
     int narr = argc - 3, i;
     lua_createtable(L, narr, 0);
@@ -714,7 +746,10 @@ void run_lua(int argc, char** argv){
     }
     lua_setglobal(L, "arg");
     if (0==strcmp(argv[2], "-y")) {
-      luafn_modidx(L);
+      if (argc>3) {
+        if (NULL != strstr(argv[3], ".yue")) {luafn_modidx(L);}
+        else {luafn_fennel(L);}
+      } else {puts("need a file like *.yue");}
     } else {
       ldofile(L, argv[2], 0);
     }
@@ -755,7 +790,7 @@ void enc_lua(int argc, char *argv[])
   *fl_pos = 0;
 
   *pos = 0; // let buf be the lua module name
-  sprintf(fndecl, "#include \"lua/lauxlib.h\"\n\n"
+  sprintf(fndecl, "//#include \"lua/lauxlib.h\"\n\n"
     "static void luafn_%s(lua_State* L) {\n"
     "  const unsigned char B1[]={", flname);
   fwrite(fndecl, strlen(fndecl), 1, fw);
@@ -776,8 +811,8 @@ void enc_lua(int argc, char *argv[])
   /*lua_call keep result and set global, or 1->0 then not set*/
   sprintf(fndecl, "\n  };\n\n  if (luaL_loadbuffer"
     "(L,(const char*)B1,sizeof(B1),\"buf_chunk_%s\")==0)\n"
-    "    lua_call(L, 0, 1);\n"
-    "  lua_setglobal(L, \"%s\");\n"
+    "    lua_call(L, 0, 0);\n"
+    "  //lua_setglobal(L, \"%s\");\n"
     "}\n", flname, flname);
   fwrite(fndecl, strlen(fndecl), 1, fw);
   fclose(fr);
@@ -826,6 +861,89 @@ int main(int argc, char** argv){
   }
   return 0;
 }
+@
+
+
+1.22
+log
+@fix: pb lua seperate lsdir and lsfile
+@
+text
+@d647 3
+a649 2
+    puts("single: fmt; var_dump; string.split; os.popen; dt.datediff/lsdir/lsfile\n"
+    "module: enc.md5/sha1/b64enc/b64dec; json.encode/decode; utf8.len/char/codes");
+@
+
+
+1.21
+log
+@fix: lua static
+@
+text
+@d30 1
+a30 1
+  puts("personal busybox ver231230\nascii\n"
+d647 1
+a647 1
+    puts("single: fmt/var_dump/string.split/os.popen/dt.datediff\n"
+@
+
+
+1.20
+log
+@feat: lua fennel
+@
+text
+@d30 1
+a30 1
+  puts("personal busybox ver231228\nascii\n"
+d184 1
+a184 1
+    if (0 == i%10){
+d579 1
+a579 1
+void* linit(){
+d604 1
+a604 1
+int ldofile(void* L, char *fname, int narg){
+d626 1
+a626 1
+void lclose(void* L){
+d661 1
+a661 1
+      } else {puts("need a file like *.yue/*.fnl");}
+d702 1
+a702 1
+  sprintf(fndecl, "#include \"lua/lauxlib.h\"\n\n"
+d723 2
+a724 2
+    "    lua_call(L, 0, 1);\n"
+    "  lua_setglobal(L, \"%s\");\n"
+@
+
+
+1.19
+log
+@feat: more lua debug info
+@
+text
+@d30 1
+a30 1
+  puts("personal busybox ver231225\nascii\n"
+d530 1
+d538 1
+a538 1
+    if (i==stk_size){idx_mean = "\t<- top";} else if (1==i){idx_mean = "\tbottom";}
+d542 11
+a552 1
+    else if (val_t==LUA_TTABLE) {printf(" arrlen %d", lua_objlen(L, i));}
+d610 1
+a610 1
+    lua_pop(L, 2);
+d658 4
+a661 1
+      luafn_modidx(L);
 @
 
 
