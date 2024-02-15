@@ -1,9 +1,14 @@
-head	1.46;
+head	1.47;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.47
+date	2024.02.15.15.32.30;	author shuw;	state Exp;
+branches;
+next	1.46;
 
 1.46
 date	2023.10.06.12.44.45;	author u0_a111;	state Exp;
@@ -258,9 +263,9 @@ desc
 @@
 
 
-1.46
+1.47
 log
-@fix: move startup to pyde
+@feat: all use shuw db
 @
 text
 @<html>
@@ -309,6 +314,7 @@ text
 	<select id="eTag" class="pure-u-1-5">
 		<option value="mm">MEMO</option>
 		<option value="ur">UR-ht://ip/bin</option>
+		<option value="tk">TWINK</option>
 		<option value="t0">TM12</option>
 		<option value="t1">TM18</option>
 		<option value="t2">TM24</option>
@@ -319,10 +325,9 @@ text
 </div>
 
 <select id="eDb" class="pure-u-1-4">
-	<option value="shuw-tmrec">Digest</option>
+	<option value="shuw-tmrec">Diary</option>
 	<option value="shuw-blog">Blog</option>
-	<option value="shiro-tmrec">Diary</option>
-	<option value="shiro-blog">Property</option>
+	<option value="shuw-memo">Digest</option>
 </select>
 Day<select id="eDay" class="pure-u-1-6">
 	<option value="0">0</option>
@@ -382,6 +387,22 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.46
+log
+@fix: move startup to pyde
+@
+text
+@d47 1
+d58 1
+a58 1
+	<option value="shuw-tmrec">Digest</option>
+d60 1
+a60 2
+	<option value="shiro-tmrec">Diary</option>
+	<option value="shiro-blog">Property</option>
 @
 
 

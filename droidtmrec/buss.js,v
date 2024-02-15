@@ -1,9 +1,14 @@
-head	1.20;
+head	1.21;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.21
+date	2024.02.15.15.32.30;	author shuw;	state Exp;
+branches;
+next	1.20;
 
 1.20
 date	2023.10.06.12.44.45;	author u0_a111;	state Exp;
@@ -130,9 +135,9 @@ desc
 @@
 
 
-1.20
+1.21
 log
-@fix: move startup to pyde
+@feat: all use shuw db
 @
 text
 @/// Global variable declare
@@ -320,6 +325,7 @@ function setDB(mode) {
   var txt = getElemValue("eNow");
   if (mode == "a") {
     var n = new Date()
+    tag = "tk" // a only for twink
     txt = `${n.getMonth()+1}.${n.getDate()} ${n.getHours()}:${n.getMinutes()} ` + txt + "\n--\n" + app.LoadText( tag, "" )
   }
   app.SaveText( tag, txt );
@@ -444,6 +450,15 @@ function onMenu( ) {
 function start_show(){
   httpPost("/pyde.cgi/art/startup", '', HandleDone );
 }
+@
+
+
+1.20
+log
+@fix: move startup to pyde
+@
+text
+@d186 1
 @
 
 
