@@ -1,9 +1,14 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2024.03.13.16.10.18;	author shuw;	state Exp;
+branches;
+next	1.14;
 
 1.14
 date	2023.10.06.05.20.17;	author u0_a111;	state Exp;
@@ -88,9 +93,9 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@feat: restore up picture
+@feat: use pb as backend
 @
 text
 @// return string type day like '180205'
@@ -150,6 +155,7 @@ function _httpDispatch(mth){
       } else if (typeof(param) == "object" ) {
         var convstr = '';
         for (var key in param){
+          if (0==param[key].length) {alert(`param "${key}" is empty, need at least one char`)}
           if (convstr=='') {convstr = key+'='+(param[key]) }
           else {convstr = convstr + '|'+key+ '='+(param[key])}
         }
@@ -176,6 +182,15 @@ function showHint(str, showLong){
     setTimeout('setDivShow("eHint", "")', 3000);
   }
 }
+@
+
+
+1.14
+log
+@feat: restore up picture
+@
+text
+@d58 1
 @
 
 

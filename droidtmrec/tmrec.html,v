@@ -1,9 +1,14 @@
-head	1.47;
+head	1.48;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.48
+date	2024.03.13.16.10.18;	author shuw;	state Exp;
+branches;
+next	1.47;
 
 1.47
 date	2024.02.15.15.32.30;	author shuw;	state Exp;
@@ -263,9 +268,9 @@ desc
 @@
 
 
-1.47
+1.48
 log
-@feat: all use shuw db
+@feat: use pb as backend
 @
 text
 @<html>
@@ -301,14 +306,16 @@ text
 	<select id="eMenu" onchange="onMenu()" class="pure-u-1-5">
 	  <option value="MENU">MENU</option>
 	  <option value="PASTE">PASTE</option>
-	  <option value="QUERYKEY">QUERYKEY #tag</option>
+	  <option value="QUERYKEY">QUERYKEY</option>
 	  <option value="VIEW">VIEW</option>
 	  <option value="CLEAR">CLEAR</option>
-	  <option value="DELETE">DELETE</option>
+	  <option value="DML">DML</option>
+	  <option value="HELPPB">HELPPB</option>
 	</select>
 	<input type="button" value="RDTHIS" class="pure-u-1-4" onclick="onEdit()"/>
 	<input type="button" value="UPLOAD" class="pure-u-1-4" onclick="onUpload()"/>
 	<input type="button" value="SYNC" class="pure-u-1-5" onclick="onSync()"/>
+    <input type="text" id="eOp">
 	<hr />
 	<input type="button" value="GETLOCAL" class="pure-u-1-4" onclick="getDB()"/>
 	<select id="eTag" class="pure-u-1-5">
@@ -387,6 +394,21 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.47
+log
+@feat: all use shuw db
+@
+text
+@d34 1
+a34 1
+	  <option value="QUERYKEY">QUERYKEY #tag</option>
+d37 2
+a38 1
+	  <option value="DELETE">DELETE</option>
+d43 1
 @
 
 

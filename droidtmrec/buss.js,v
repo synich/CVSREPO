@@ -1,9 +1,14 @@
-head	1.21;
+head	1.22;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.22
+date	2024.03.13.16.10.17;	author shuw;	state Exp;
+branches;
+next	1.21;
 
 1.21
 date	2024.02.15.15.32.30;	author shuw;	state Exp;
@@ -135,9 +140,9 @@ desc
 @@
 
 
-1.21
+1.22
 log
-@feat: all use shuw db
+@feat: use pb as backend
 @
 text
 @/// Global variable declare
@@ -364,24 +369,28 @@ function onRecent() {
   }
 }
 
-function removeDay(){
-  var day = g_date==0 ? getElemValue("eNow") : g_date;
-  if ( !checkDate(day) ) {
-    showHint('Your input day is illegal!');
-    return;
-  }
-  var fdb = sepraDB();
-  var iswant = confirm(`Do you really want to delete ${fdb[0]}-${fdb[1]} ${day}`);
-  if (iswant) {
-    httpGet(`/pyde.cgi/art/removeDay?db=${fdb[0]}&tbl=${fdb[1]}&dt=${day}`,
-      HandleShowLong);
-  }
+function dbOper(){
+  var op = dropnl_encb64(getElemValue("eOp"));
+  var txt = getElemValue("eNow");
+  if (0==txt.length) {txt=" "}
+  txt = dropnl_encb64(txt);
+  var param = {cmd:op, txt:txt}
+  httpPost("/pyde.cgi/art/pbdbop", param, HandleStdout);
 }
 
 /// find keyword (deprecate page)
 function queryBlogTmKwd(page) {
-  var kwd = getElemValue("eNow");
-  httpGet("/pyde.cgi/art/any_kwd?kwd="+dropnl_encb64(kwd), HandleStdout);
+  var kwd = getElemValue("eOp");
+  //httpGet("/pyde.cgi/art/any_kwd?kwd="+dropnl_encb64(kwd), HandleStdout);
+  httpGet("/pyde.cgi/art/pbdbkwd?cmd="+dropnl_encb64(kwd), HandleStdout);
+}
+
+function dbophelp() {
+  alert(`#12[b/t]  -- precise get
+*a b -c  -- like search
+a b -c   -- fts search
+!   -- ramble
+ins/up/del [rowid][b/t]`)
 }
 
 function clearContent() {
@@ -436,13 +445,15 @@ function onMenu( ) {
     txt.value += cp;
   } else if (item=="QUERYKEY") {
     queryBlogTmKwd(0);
+  } else if (item=="DML") {
+    dbOper();
   } else if(item=="CLEAR"){
     clearContent();
   } else if (item=="VIEW") {
     $("#eP2").show();
     $("#eP1").hide();
-  } else if (item=="DELETE") {
-    removeDay();
+  } else if(item=="HELPPB"){
+    dbophelp();
   }
   m.value = "MENU";
 }
@@ -450,6 +461,37 @@ function onMenu( ) {
 function start_show(){
   httpPost("/pyde.cgi/art/startup", '', HandleDone );
 }
+@
+
+
+1.21
+log
+@feat: all use shuw db
+@
+text
+@d225 7
+a231 12
+function removeDay(){
+  var day = g_date==0 ? getElemValue("eNow") : g_date;
+  if ( !checkDate(day) ) {
+    showHint('Your input day is illegal!');
+    return;
+  }
+  var fdb = sepraDB();
+  var iswant = confirm(`Do you really want to delete ${fdb[0]}-${fdb[1]} ${day}`);
+  if (iswant) {
+    httpGet(`/pyde.cgi/art/removeDay?db=${fdb[0]}&tbl=${fdb[1]}&dt=${day}`,
+      HandleShowLong);
+  }
+d236 11
+a246 2
+  var kwd = getElemValue("eNow");
+  httpGet("/pyde.cgi/art/any_kwd?kwd="+dropnl_encb64(kwd), HandleStdout);
+d301 2
+d308 2
+a309 2
+  } else if (item=="DELETE") {
+    removeDay();
 @
 
 
