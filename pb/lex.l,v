@@ -1,17 +1,12 @@
-head	1.2;
+head	1.1;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
 
-1.2
-date	2024.02.18.13.37.33;	author shuw;	state Exp;
-branches;
-next	1.1;
-
 1.1
-date	2024.01.21.15.00.58;	author shuw;	state Exp;
+date	2024.03.13.16.18.00;	author shuw;	state Exp;
 branches;
 next	;
 
@@ -20,9 +15,9 @@ desc
 @@
 
 
-1.2
+1.1
 log
-@fix: add lex
+@due to linefeed error again
 @
 text
 @%option nounistd
@@ -119,102 +114,3 @@ void transpiler_lua(const char* fname, char* out_name) {
   yylex_destroy(scanner);
 }
 @
-
-
-1.1
-log
-@feat: py like lua
-@
-text
-@d1 93
-a93 88
-%option nounistd
-%option reentrant
-%option noyywrap
-
-%{
-#include <stdio.h>
-#include <string.h>
-
-enum INDENT_HINT{
-  IH_IF=1, IH_FOR, IH_NONE
-};
-
-typedef struct LexExtra
-{
-  FILE *fout;
-  char indent_hint; // : translate to what. 1-if 2-for/while 3-function
-}LexExtra;
-
-#define DEBUG1
-#ifdef DEBUG
-  #define TRANS(t) puts(t)
-#else
-  #define TRANS(t) LexExtra* e=(LexExtra*)yyget_extra(yyscanner);fwrite(t, 1, strlen(t), e->fout)
-#endif
-#define EXATR(v) LexExtra* v=(LexExtra*)yyget_extra(yyscanner)
-%}
-
-VARNAME [_a-zA-Z][_a-zA-Z0-9]*
-SPACE   ^[ \t]+
-STRICT --[ \t]*use[ ]strict
-NEWINDENT :$
-
-%%
-
-fn { TRANS("function"); }
-let { TRANS("local"); }
-fi { TRANS("end"); }
-\<> { TRANS("~="); }
-!= { TRANS("~="); }
-def { EXATR(v); v->indent_hint=IH_NONE; TRANS("local function"); }
-if { EXATR(v); v->indent_hint=IH_IF; TRANS("if"); }
-elif { EXATR(v); v->indent_hint=IH_IF; TRANS("elseif"); }
-else { EXATR(v); v->indent_hint=IH_NONE; TRANS("else"); }
-for { EXATR(v); v->indent_hint=IH_FOR; TRANS("for"); }
-while { EXATR(v); v->indent_hint=IH_FOR; TRANS("while"); }
-import { TRANS("require"); }
-{NEWINDENT} {EXATR(v);
-    if (IH_IF==v->indent_hint){TRANS(" then");}
-    else if(IH_FOR==v->indent_hint){TRANS(" do");} }
-{STRICT} { TRANS("setmetatable(_G,{__newindex=function(_, k, v)local b=k:find('g_')if b~=1 then error('Error: global ['..k..'], only prefix [g_] allow')else rawset(_G,k,v)end end})"); }
-{VARNAME} { TRANS(yyget_text(yyscanner)); }
-. { TRANS(yyget_text(yyscanner)); }
-\n { TRANS("\n"); }
-
-%%
-
-/*conver fname to canonical and return */
-void transpiler_lua(const char* fname, char* out_name) {
-  void* scanner; /* yyscan_t */
-  YY_BUFFER_STATE lexBuf;
-  struct LexExtra extra;
-  FILE *fin, *fout;
-  char *d_pos;
-  fin = fopen(fname, "r");
-  strcpy(out_name, fname);
-  d_pos = strrchr(out_name, 0x2f); // try both / or \\ sep
-  if (NULL==d_pos){d_pos=strrchr(out_name, 0x5c);}
-  if (NULL==d_pos) {
-    sprintf(out_name, "_trans_by_pb.lua");
-  } else {
-    *d_pos=0;
-    strcat(out_name, "/_trans_by_pb.lua");
-  }
-
-  fout = fopen(out_name, "w");
-  extra.fout = fout;
-
-  /*Init scanner and lex */
-  yylex_init( &scanner );
-  //lexBuf = yy_scan_string(src, scanner);
-  //yy_switch_to_buffer(lexBuf, scanner);
-  yyset_in(fin ,scanner );
-  yyset_extra(&extra, scanner);
-  yylex(scanner);
-  fclose(fin);
-  fclose(fout);
-  yylex_destroy(scanner);
-}
-@
-
