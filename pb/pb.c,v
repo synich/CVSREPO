@@ -1,9 +1,14 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.2
+date	2024.03.15.15.15.10;	author shuw;	state Exp;
+branches;
+next	1.1;
 
 1.1
 date	2024.03.13.16.18.00;	author shuw;	state Exp;
@@ -15,9 +20,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@due to linefeed error again
+@feat: use lua -p to conv
 @
 text
 @#include <stdio.h>
@@ -55,7 +60,7 @@ text
 #endif
 
 void usage(){
-  puts("personal busybox ver240218\nascii\n"
+  puts("personal busybox ver240315\nascii\n"
   "dyn2str file -- convert script into C string file\n"
   "hsc helper show cvs\n  mf(list modified file)|ml(number modified line)|rv(repo version)\n"
   "snip|comp [keyword]\n"
@@ -64,7 +69,7 @@ void usage(){
   "xlispindent file|stdin\n"
 #ifdef SUPPORT_LUA
   "el file [luac path] -- convert lua to c code\n"
-  "lua file [argv] or -e expr or -h show extention"
+  "lua [-p] file [argv] or -e expr or -h show extention"
 #else
   "lisp file"
 #endif
@@ -629,14 +634,19 @@ static void* linit(){
   return L;
 }
 
-static int ldofile(void* L, char *fname, int narg){
-  int status = 0, base;
-#ifdef SUPPORT_LUA
+static void _conv2lua(char *fname){
   char trans_name[96];
   char cmd[128];
   transpiler_lua(fname, trans_name);
   sprintf(cmd, "mv %s %s", trans_name, fname);
   _cal_ext_fb2bb(cmd);
+}
+
+// bconv: 1-pylike conv lua 0-no conv
+static int ldofile(void* L, char *fname, int narg, int bconv){
+  int status = 0, base;
+#ifdef SUPPORT_LUA
+  if (1==bconv){ _conv2lua(fname);}
   status = luaL_loadfile(L, fname);
   if (0!=status) {
     printf("pb load %s fail[%d]: %s\n", fname, status, lua_tostring(L, -1));
@@ -669,7 +679,7 @@ void run_lua(int argc, char** argv){
     char fname[MAXLINE];
     get_exe_path(fname);
     strcat(fname, "init.lua");
-    ldofile(L, fname, 0);
+    ldofile(L, fname, 0, 0);
   } else if (0==strcmp(argv[2], "-e")) {
     char exprbuff[MAXLINE] = {0};
     int val_t, ret;
@@ -687,14 +697,15 @@ void run_lua(int argc, char** argv){
     "string.split; os.popen; dt.datediff/lsdir/lsfile; sqlite3\n"
     "enc.md5/sha1/b64enc/b64dec; json.encode/decode; utf8.len/char/codes");
   } else {
-    int i;
+    int i=2, j=0, fpos=2, bconv=0;
     lua_newtable(L);
-    for (i=2; i < argc; i++) {
+    if (0==strcmp(argv[2], "-p")) {i=3;fpos=3;bconv=1;}
+    for (; i < argc; i++) {
       lua_pushstring(L, argv[i]);
-      lua_rawseti(L, -2, i-2);
+      lua_rawseti(L, -2, j++);
     }
     lua_setglobal(L, "arg");
-    ldofile(L, argv[2], 0);
+    ldofile(L, argv[fpos], 0, bconv);
   }
   lclose(L);
 #else
@@ -805,3 +816,39 @@ int main(int argc, char** argv){
   return 0;
 }
 @
+
+
+1.1
+log
+@due to linefeed error again
+@
+text
+@d36 1
+a36 1
+  puts("personal busybox ver240218\nascii\n"
+d45 1
+a45 1
+  "lua file [argv] or -e expr or -h show extention"
+d610 1
+a610 3
+static int ldofile(void* L, char *fname, int narg){
+  int status = 0, base;
+#ifdef SUPPORT_LUA
+d616 7
+d655 1
+a655 1
+    ldofile(L, fname, 0);
+d673 1
+a673 1
+    int i;
+d675 2
+a676 1
+    for (i=2; i < argc; i++) {
+d678 1
+a678 1
+      lua_rawseti(L, -2, i-2);
+d681 1
+a681 1
+    ldofile(L, argv[2], 0);
+@
+
