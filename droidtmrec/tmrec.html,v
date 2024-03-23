@@ -1,9 +1,19 @@
-head	1.48;
+head	1.50;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.50
+date	2024.03.23.15.52.28;	author shuw;	state Exp;
+branches;
+next	1.49;
+
+1.49
+date	2024.03.16.15.13.42;	author shuw;	state Exp;
+branches;
+next	1.48;
 
 1.48
 date	2024.03.13.16.10.18;	author shuw;	state Exp;
@@ -268,9 +278,9 @@ desc
 @@
 
 
-1.48
+1.50
 log
-@feat: use pb as backend
+@feat: handle pb output both textarea and md
 @
 text
 @<html>
@@ -310,13 +320,13 @@ text
 	  <option value="VIEW">VIEW</option>
 	  <option value="CLEAR">CLEAR</option>
 	  <option value="DML">DML</option>
-	  <option value="HELPPB">HELPPB</option>
 	</select>
 	<input type="button" value="RDTHIS" class="pure-u-1-4" onclick="onEdit()"/>
 	<input type="button" value="UPLOAD" class="pure-u-1-4" onclick="onUpload()"/>
 	<input type="button" value="SYNC" class="pure-u-1-5" onclick="onSync()"/>
-    <input type="text" id="eOp">
-	<hr />
+<hr />
+    <input type="text" id="eOp" class="pure-u-4-5">
+<hr />
 	<input type="button" value="GETLOCAL" class="pure-u-1-4" onclick="getDB()"/>
 	<select id="eTag" class="pure-u-1-5">
 		<option value="mm">MEMO</option>
@@ -331,12 +341,11 @@ text
 	<hr />
 </div>
 
-<select id="eDb" class="pure-u-1-4">
+<select id="eDb" class="pure-u-1-6">
 	<option value="shuw-tmrec">Diary</option>
 	<option value="shuw-blog">Blog</option>
-	<option value="shuw-memo">Digest</option>
 </select>
-Day<select id="eDay" class="pure-u-1-6">
+<select id="eDay" class="pure-u-1-8">
 	<option value="0">0</option>
 	<option value="1">1</option>
 	<option value="2">2</option>
@@ -351,7 +360,7 @@ Day<select id="eDay" class="pure-u-1-6">
 	<option value="11">11</option>
 	<option value="12">12</option>
 </select>
-<select id="eBtg" class="pure-u-1-4">
+<select id="eBtg" class="pure-u-1-6">
 	<option value="unknown">unknown</option>
 	<option value="lang">lang</option>
 	<option value="web">web</option>
@@ -367,13 +376,14 @@ Day<select id="eDay" class="pure-u-1-6">
 	<option value="security">security</option>
 	<option value="finance">finance</option>
 </select>
-<hr />
-<input type="button" value="ANKI" class="pure-u-1-4" onclick="ankiView()"/>
-<input type="button" value="REC_RND" class="pure-u-1-4" onclick="onRecent()"/>
+<input type="button" value="ANKI" class="pure-u-1-5" onclick="ankiView()"/>
+<input type="button" value="REC_RND" class="pure-u-1-5" onclick="onRecent()"/>
 <span id="gdate"></span>
 <hr />
 
-<div>"##c[1-9]" tmrec tag: 1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
+<div>"##c[1-9]" tmrec tag: 1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作<br />
+#12[b/t] precise get, *a -c  like search, a b -c fts search, ! ramble,ins/up/del [rowid][b/t]
+</div>
 <div id="eHint"></div>
 <div id="eAnkiAct" style="display: none;background: #fc9;" class="card">
   <div id="eAnkiMem"></div>act
@@ -394,6 +404,47 @@ Day<select id="eDay" class="pure-u-1-6">
 <div id="eBlst"></div>
 </body>
 </html>
+@
+
+
+1.49
+log
+@fix: compac layout
+@
+text
+@d42 3
+a44 2
+    <input type="text" id="eOp">
+	<hr />
+@
+
+
+1.48
+log
+@feat: use pb as backend
+@
+text
+@a37 1
+	  <option value="HELPPB">HELPPB</option>
+d58 1
+a58 1
+<select id="eDb" class="pure-u-1-4">
+a60 1
+	<option value="shuw-memo">Digest</option>
+d62 1
+a62 1
+Day<select id="eDay" class="pure-u-1-6">
+d77 1
+a77 1
+<select id="eBtg" class="pure-u-1-4">
+d93 2
+a94 3
+<hr />
+<input type="button" value="ANKI" class="pure-u-1-4" onclick="ankiView()"/>
+<input type="button" value="REC_RND" class="pure-u-1-4" onclick="onRecent()"/>
+d98 3
+a100 1
+<div>"##c[1-9]" tmrec tag: 1:电算,2:历史,3:理工,4:文部,5:杂学,7:家庭,8:工作</div>
 @
 
 
