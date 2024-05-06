@@ -1,0 +1,29 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2024.05.02.06.23.36;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@fix: cata translate and up year
+@
+text
+@{"edit":true,
+ "tagtr":{
+  "os":"操作系统","net":"网络原理","data":"数据库技术","security":"加密与安全",
+  "protocol":"通信协议","web":"Web开发","design":"软件设计",
+  "lang":"编程语言","tool":"软件工具使用","think":"所思所想","book":"读书笔记"
+ }
+}@

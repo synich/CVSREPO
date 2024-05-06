@@ -1,9 +1,19 @@
-head	1.3;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2024.05.03.13.26.33;	author shuw;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2024.05.02.07.48.07;	author shuw;	state Exp;
+branches;
+next	1.3;
 
 1.3
 date	2023.11.26.15.33.19;	author shuw;	state Exp;
@@ -25,9 +35,9 @@ desc
 @@
 
 
-1.3
+1.5
 log
-@fix: use os.scandir instead of os.walk
+@feat: generate date and logo
 @
 text
 @#!/usr/bin/env python3
@@ -97,14 +107,14 @@ def up_for_tm(lastday: float):
         mtime = os.path.getmtime(pth)
         if (now-mtime) < lastday*86400:
             fout = config["to"]+nam[:pos]+".mds"
-            print(nam, "to", fout)
+            print(f"{nam}({pth}) to {fout}")
             with open(fout, "w", encoding="utf-8") as f:
                 f.write(md2json(pth))
     def scan_f_in_dir(d):
         for f in os.scandir(d):
             if f.is_file():
-                pos = f.name.find(".md")
-                if -1 != pos:
+                if f.name.endswith(".md"):
+                    pos = f.name.find(".md")
                     _conv_in_day(f.name, pos, f.path, lastday)
             else:
                 scan_f_in_dir(f.path)
@@ -115,13 +125,42 @@ if __name__ == '__main__':
     import sys
     if sys.argv[2] == "default":
         config = {
-            "from":["D:/code/essay/pub/"],
+            "from":["D:/code/static-essay/tid/"],
             "to":"./mds/"}
     else:
         config = {
             "from":["D:/code/essay/priv/"],
             "to":"./mdp/"}
     up_for_tm(float(sys.argv[1]))
+@
+
+
+1.4
+log
+@fix: work on source and target same dir
+@
+text
+@d86 1
+a86 1
+            "from":["D:/code/static-essay/"],
+@
+
+
+1.3
+log
+@fix: use os.scandir instead of os.walk
+@
+text
+@d68 1
+a68 1
+            print(nam, "to", fout)
+d74 2
+a75 2
+                pos = f.name.find(".md")
+                if -1 != pos:
+d86 1
+a86 1
+            "from":["D:/code/essay/pub/"],
 @
 
 

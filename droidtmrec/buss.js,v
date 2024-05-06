@@ -1,9 +1,14 @@
-head	1.24;
+head	1.25;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.25
+date	2024.05.06.15.25.19;	author shuw;	state Exp;
+branches;
+next	1.24;
 
 1.24
 date	2024.03.23.15.52.28;	author shuw;	state Exp;
@@ -150,9 +155,9 @@ desc
 @@
 
 
-1.24
+1.25
 log
-@feat: handle pb output both textarea and md
+@fix: pb memo ins/up/del
 @
 text
 @/// Global variable declare
@@ -329,7 +334,7 @@ function onUpload(){
 function onSync(){
   var txt = getElemValue("eNow"); txt = txt?txt:"nil" // TODO must less or eq 3
   var pct = `txt=${Base64.encode(txt)}`;
-  httpPost("/pyde.cgi/art/blappd", pct, txt!="nil"?HandleHint:HandleDone );
+  httpPost("/pyde.cgi/art/blappd", pct, txt!="nil"?HandleHint:HandleTextAreaAndMD );
 }
 
 /// local db
@@ -386,12 +391,9 @@ function onRecent() {
 }
 
 function dbOper(){
-  var op = dropnl_encb64(getElemValue("eOp"));
-  var txt = getElemValue("eNow");
-  if (0==txt.length) {txt=" "}
-  txt = dropnl_encb64(txt);
-  var param = {cmd:op, txt:txt}
-  httpPost("/pyde.cgi/art/pbdbop", param, HandleStdout);
+  var op = dropnl_encb64(getElemValue("eOp")+","+getElemValue("eNow"));
+  var p = `op=${op}`;
+  httpPost("/pyde.cgi/art/pbdbop", p, HandleDone);
 }
 
 /// find keyword (deprecate page)
@@ -477,6 +479,25 @@ function onMenu( ) {
 function start_show(){
   httpPost("/pyde.cgi/art/startup", '', HandleDone );
 }
+@
+
+
+1.24
+log
+@feat: handle pb output both textarea and md
+@
+text
+@d175 1
+a175 1
+  httpPost("/pyde.cgi/art/blappd", pct, txt!="nil"?HandleHint:HandleDone );
+d232 3
+a234 6
+  var op = dropnl_encb64(getElemValue("eOp"));
+  var txt = getElemValue("eNow");
+  if (0==txt.length) {txt=" "}
+  txt = dropnl_encb64(txt);
+  var param = {cmd:op, txt:txt}
+  httpPost("/pyde.cgi/art/pbdbop", param, HandleStdout);
 @
 
 

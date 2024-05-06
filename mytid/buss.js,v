@@ -1,9 +1,19 @@
-head	1.29;
+head	1.31;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.31
+date	2024.05.03.13.26.33;	author shuw;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2024.05.02.06.23.36;	author shuw;	state Exp;
+branches;
+next	1.29;
 
 1.29
 date	2023.12.08.16.01.57;	author shuw;	state Exp;
@@ -155,9 +165,9 @@ desc
 @@
 
 
-1.29
+1.31
 log
-@fix: move inline style to outside
+@feat: generate date and logo
 @
 text
 @function _uniid(base){return `u${base}${Math.round(Math.random()*65536)}`}
@@ -343,8 +353,31 @@ top.$tm.ev_boot=function(){
     }
   }
   document.getElementById("eTopTag").innerHTML=createAllTopH()
-  document.getElementById("eFter").innerHTML=`共${jctx.length}篇笔记<br />© 2014 - 2023`
+  var dt = new Date();
+  document.getElementById("eFter").innerHTML=`Generated at ${dt.getFullYear()}/${dt.getMonth()}/${dt.getDate()}, 共${jctx.length}篇笔记<br />© 2014 - ${dt.getFullYear()} 由mytid强力驱动`
 }
+@
+
+
+1.30
+log
+@fix: cata translate and up year
+@
+text
+@d184 2
+a185 1
+  document.getElementById("eFter").innerHTML=`共${jctx.length}篇笔记<br />© 2014 - 2024`
+@
+
+
+1.29
+log
+@fix: move inline style to outside
+@
+text
+@d184 1
+a184 1
+  document.getElementById("eFter").innerHTML=`共${jctx.length}篇笔记<br />© 2014 - 2023`
 @
 
 

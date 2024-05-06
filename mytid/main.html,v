@@ -1,9 +1,14 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2024.05.02.06.23.36;	author shuw;	state Exp;
+branches;
+next	1.12;
 
 1.12
 date	2023.12.08.16.01.57;	author shuw;	state Exp;
@@ -70,9 +75,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@fix: move inline style to outside
+@fix: cata translate and up year
 @
 text
 @<!DOCTYPE html>
@@ -104,7 +109,7 @@ div.card h1{font-size:1.8em;color:#026;background-color:#f0f0f0;}
 .art_pad{padding: 2px 12px;}
 .kwd_pad{padding: 0px 12px;}
 div.edit_zone{border: 4px solid blue;}
-div.auto_high{position: relative;line-height: 20px;}
+div.auto_high{position: relative;}
 span.auto_high{display: block;white-space: pre-wrap;word-wrap: break-word;visibility: hidden;}
 textarea.auto_high{position: absolute;top: 0;height: 100%;line-height: 20px;padding:0px 4px;box-sizing: border-box;}
 div.sd_by_sd{flex:1;}
@@ -141,6 +146,17 @@ function load_jctx(){
 
 <footer id="eFter" class="footer"></footer>
 </body></html>
+@
+
+
+1.12
+log
+@fix: move inline style to outside
+@
+text
+@d30 1
+a30 1
+div.auto_high{position: relative;line-height: 20px;}
 @
 
 
