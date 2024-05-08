@@ -1,0 +1,156 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2024.05.08.15.13.09;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@init
+@
+text
+@--define global
+local c_cmd_name = "D:/soft/wabin/bin/pb lua dbop.lua "
+local g_edit_tool = "D:/soft/npp/notepad++ "
+--useful var
+local conf
+pcall(function() conf = require("config") end)
+if conf then
+  c_cmd_name = conf.cmd_name
+  g_edit_tool = conf.edit_tool
+end
+local wx = require("wx")
+local iconv = require("iconv")
+local to_gb = iconv.new("GBK", "UTF-8" ) -- utf->gb
+local to_utf = iconv.new("UTF-8", "GBK") -- gb->utf
+local dbop = require("dbop")
+local c_hint_name = dbop.hint_name
+local c_full_name = dbop.full_name
+
+
+local function wall_toutf(fname, txt) -- write text to file
+  local fout = io.open(fname, "w"); fout:write(to_utf:iconv(txt)); fout:close()
+end
+local function fall_togb(fname)
+  local fd=io.open(fname, "r");local txt=fd:read("*a");fd:close()
+  return to_gb:iconv(txt)
+end
+
+--GUI wrap
+local function gui_query(txt, elRowId, elTextArea)
+  -- input/output must GB2312, and internal use UTF-8
+  txt = to_utf:iconv(txt) -- gb->utf
+  local cmd, lst, rc = txt:sub(1,1), nil, 0
+  if "!" == cmd then -- random view
+    os.execute(c_cmd_name.."ramble")
+    elRowId:SetText(fall_togb(c_hint_name))
+  elseif "#" == cmd then -- edit specify id
+    rc = os.execute(c_cmd_name..'rowid "'..txt:sub(2)..'"')
+    if 0==rc then
+      elRowId:SetText(fall_togb(c_hint_name))
+      os.execute(g_edit_tool..c_full_name)
+    else print(txt, "not exist") end
+  elseif "*" == cmd then
+    os.execute(c_cmd_name..'like "'..txt:sub(2)..'"')
+    elRowId:SetText(fall_togb(c_hint_name))
+  else -- search keyword
+    os.execute(c_cmd_name..'match "'..txt..'"')
+    elRowId:SetText(fall_togb(c_hint_name))
+  end
+end
+
+local function gui_modify(botTxt)
+  local act, rowid, tbl = botTxt:match("(%a+)%s*(%d*)%s*(%a*)") -- "^=%(%d+%)[^\n]*"
+  local dml = act:sub(1,1)
+  if tbl == "" or tbl:sub(1,1) == "m" then -- memo
+    os.execute(c_cmd_name.."mod_m "..dml.." "..rowid)
+    print(fall_togb(c_hint_name))
+  else --blog or tmrec
+    os.execute(c_cmd_name.."mod_bt "..tbl.." "..dml.." "..rowid)
+    print(fall_togb(c_hint_name))
+  end
+end
+
+-- GUI
+local drawWindow = function()
+  local width = 1050
+  -- Create the main frame window
+  local frame = wx.wxFrame(wx.NULL, wx.wxID_ANY, "Work Memo 240219", wx.wxDefaultPosition, wx.wxSize(width, 600), wx.wxDEFAULT_FRAME_STYLE)
+  local bgColor = wx.wxColour(224, 224, 224) -- RGB
+  frame:SetBackgroundColour(bgColor)
+  -- Create the top/bottom input text area
+  local font = wx.wxFont(14, wx.wxFONTFAMILY_DEFAULT, wx.wxFONTSTYLE_NORMAL, wx.wxFONTWEIGHT_NORMAL, false, "Microsoft YaHei") --, wx.wxFONTENCODING_UTF8
+  local topTextArea = wx.wxTextCtrl(frame, wx.wxID_ANY, "", wx.wxDefaultPosition, wx.wxSize(width-55, 30), wx.wxTE_RICH2)
+  local helpBtn = wx.wxButton(frame, wx.wxID_ANY, "Help", wx.wxPoint(width-55, 0), wx.wxSize(40, 30))
+  local elRowId = wxstc.wxStyledTextCtrl(frame, wx.wxID_ANY, wx.wxPoint(0, 35), wx.wxSize(width-15, 480), wx.wxTE_MULTILINE + wx.wxTE_RICH2)
+  -- wx.wxStaticText(frame, wx.wxID_ANY, "", wx.wxPoint(0, 35), wx.wxSize(width, 280), wx.wxTE_READONLY)
+  local elHint = wx.wxStaticText(frame, wx.wxID_ANY, "", wx.wxPoint(0, 520), wx.wxSize(50, 30))
+  local bottomTextArea = wx.wxTextCtrl(frame, wx.wxID_ANY, "", wx.wxPoint(70, 520), wx.wxSize(width-90, 30), wx.wxTE_RICH2)
+  
+  topTextArea:SetFont(font)
+  elRowId:StyleSetFont(wxstc.wxSTC_STYLE_DEFAULT, font)
+  elRowId:SetWrapMode(wxstc.wxSTC_WRAP_WORD)
+  elHint:SetLabel(" ins/up/del\n 12 [b/t]")
+  bottomTextArea:SetFont(font)
+
+  -- Define the event handler for callback
+  local function OnTopAreaKeyDown(event)
+    local keyCode = event:GetKeyCode()
+    local controlDown = event:ControlDown()
+    if keyCode == wx.WXK_RETURN or keyCode == wx.WXK_NUMPAD_ENTER then
+      local kwd = topTextArea:GetValue()
+      gui_query(kwd, elRowId, bottomTextArea)
+    elseif controlDown and keyCode == ('A'):byte() then
+      topTextArea:SetSelection(0, -1)  -- Select all
+    else
+      event:Skip()
+    end
+  end
+  local function OnHelpBtnDown(event)
+    print([[Search syntax:
+    #12[b/t] find rowid 12 in memo(default)/blog/tmrec
+    a b -c match a* AND b* NOT c*
+    *a b -c like %a% AND %b% AND NOT %c%
+    ! random view]])
+  end
+  local function OnBottomTextAreaKeyDown(event)
+    local keyCode = event:GetKeyCode()
+    local controlDown = event:ControlDown()
+    if keyCode == wx.WXK_RETURN or keyCode == wx.WXK_NUMPAD_ENTER then
+      gui_modify(bottomTextArea:GetValue())
+    elseif controlDown and keyCode == ('A'):byte() then
+      bottomTextArea:SetSelection(0, -1)  -- Select all
+    else
+      event:Skip()
+    end
+  end
+
+  -- bind function and widget
+  topTextArea:Connect(wx.wxEVT_KEY_DOWN, OnTopAreaKeyDown)
+  helpBtn:Connect(wx.wxID_ANY, wx.wxEVT_COMMAND_BUTTON_CLICKED, OnHelpBtnDown)
+  bottomTextArea:Connect(wx.wxEVT_KEY_DOWN, OnBottomTextAreaKeyDown)
+
+  -- Set the main frame window as the top-level window and show it
+  frame:Show(true)
+end
+
+
+local function main()
+  drawWindow()
+-- Call wx.wxGetApp():MainLoop() last to start the wxWidgets event loop,
+  return wx.wxGetApp():MainLoop()
+end
+
+main()
+@

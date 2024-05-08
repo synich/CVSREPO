@@ -1,0 +1,25 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@:: @;
+
+
+1.1
+date	2024.05.08.15.13.10;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@init
+@
+text
+@@@echo off
+set PATH=D:\soft\lua5.1\clibs\;%PATH%
+lua gui.lua@

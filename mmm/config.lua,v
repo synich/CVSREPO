@@ -1,0 +1,26 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2024.05.08.15.13.09;	author shuw;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@init
+@
+text
+@cmd_name = "D:/soft/wabin/bin/pb lua dbop.lua "
+edit_tool = "D:/soft/npp/notepad++ "
+return {cmd_name=cmd_name, edit_tool=edit_tool, db_name=db_name}
+@
