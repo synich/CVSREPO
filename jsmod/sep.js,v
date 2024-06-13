@@ -1,9 +1,14 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2024.06.13.15.59.30;	author shuw;	state Exp;
+branches;
+next	1.3;
 
 1.3
 date	2023.04.29.05.25.26;	author u0_a111;	state Exp;
@@ -28,15 +33,15 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@feat: add get into sep.js
+@remove psquery dependency
 @
 text
-@/*230429;global 'W' as entry;dep on psquery*/
+@/*240613;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={})
-// wrap DOM elem easy access
+// wrap DOM elem get/set as func, ".o" is original DOM elem
 top.W.observe=function(elemId){
   var elem = document.getElementById(elemId);
   if (elem === null) {alert(elemId+' not exist');return}
@@ -49,6 +54,55 @@ top.W.observe=function(elemId){
   ret.o = elem;
   return ret
 }
+// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
+top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
+  function encodeParams(params) {
+    return Object.keys(params)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+      .join("&");
+  }
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);
+
+  method = method.toUpperCase();
+  if (data) { data = encodeParams(data); }
+  if (method === "GET") {
+    url += "?" + data; data = null;
+  }
+  if (method === "POST") {
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  }
+
+  var timer = setTimeout(function() {
+    xhr.abort();
+    cb_func({ error: "Request timed out" }, 408); // 408: Request Timeout
+  }, timeout);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) { // Request is complete
+      clearTimeout(timer); // Clear the timeout
+      cb_func(xhr.responseText, xhr.status);
+    }
+  };
+  if (data) { xhr.send(data); }
+  else      { xhr.send();  }
+}
+})(this);
+@
+
+
+1.3
+log
+@feat: add get into sep.js
+@
+text
+@d1 1
+a1 1
+/*230429;global 'W' as entry;dep on psquery*/
+d4 1
+a4 1
+// wrap DOM elem easy access
+d17 31
+a47 7
 // data: json; fn(resp:str=http_body, status:str='success', xhr:object)
 top.W.post=function(url, data, fn){if (!typeof $)return;
   var dstr='';for(k in data){if(dstr==''){dstr=`${k}=${encodeURIComponent(data[k])}`}else{dstr=dstr+`&${k}=${encodeURIComponent(data[k])}`}}
@@ -56,8 +110,6 @@ top.W.post=function(url, data, fn){if (!typeof $)return;
 }
 top.W.get=function(url, fn){if (!typeof $)return;
   $.ajax({url:url, success: fn})
-}
-})(this);
 @
 
 

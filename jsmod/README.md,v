@@ -1,9 +1,14 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2024.06.13.15.59.30;	author shuw;	state Exp;
+branches;
+next	1.1;
 
 1.1
 date	2023.04.29.05.32.05;	author u0_a111;	state Exp;
@@ -16,21 +21,36 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@fix: README for jsmod
+@remove psquery dependency
 @
 text
 @# Introduce
+
 this repo has 2 function
 
-1. personal js lib use on web develop
+1. personal js lib(dep.js) use on web develop
 2. patch to js engine(mujs/duktape) and lib
 
 ## usage
 
 1. use `make sep` to generate dep.js, this has some utility include DOM and AJAX op.
-AJAX depend on psquery.js
 2. use `make release` or `make debug` to build mujs/duktape
 
 @
+
+
+1.1
+log
+@fix: README for jsmod
+@
+text
+@d2 1
+d5 1
+a5 1
+1. personal js lib use on web develop
+a10 1
+AJAX depend on psquery.js
+@
+

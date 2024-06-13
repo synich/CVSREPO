@@ -1,9 +1,14 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2024.06.13.15.59.29;	author shuw;	state Exp;
+branches;
+next	1.2;
 
 1.2
 date	2023.04.29.05.25.26;	author u0_a111;	state Exp;
@@ -21,9 +26,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@feat: add get into sep.js
+@remove psquery dependency
 @
 text
 @CC	= gcc
@@ -67,8 +72,19 @@ debug:	$(DUKTAPE_SOURCES)
 	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
 
 sep:
-	@@cat sep.js psquery.js > dep.js
+	@@cat sep.js > dep.js
 
+@
+
+
+1.2
+log
+@feat: add get into sep.js
+@
+text
+@d42 1
+a42 1
+	@@cat sep.js psquery.js > dep.js
 @
 
 
