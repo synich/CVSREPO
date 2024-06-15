@@ -1,9 +1,14 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2024.06.15.14.17.43;	author shuw;	state Exp;
+branches;
+next	1.5;
 
 1.5
 date	2024.06.13.16.22.44;	author shuw;	state Exp;
@@ -38,18 +43,18 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@fix: some small tune on ajax
+@fix: GET url forgot to set
 @
 text
-@/*240614;global 'W' as entry*/
+@/*240615;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={})
 // wrap DOM elem get/set as func, ".o" is original DOM elem
 top.W.observe=function(elemId){
   var elem = document.getElementById(elemId);
-  if (elem === null) {alert(elemId+' not exist');return}
+  if (elem === null) {alert(`id[${elemId}] not exist`);return}
   var st = new Set(["INPUT","TEXTAREA","SELECT"]);
   var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
   var ret = function(val){
@@ -67,15 +72,12 @@ top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
       .join("&");
   }
   method = method.toUpperCase();
-  var xhr = new XMLHttpRequest();
-  xhr.open(method, url, true); // async true
-
   if (data) { data = encodeParams(data); }
   if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
-  if (method === "POST") {
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  }
 
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true); // async true
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   var timer = setTimeout(function() {
     xhr.abort();
     cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
@@ -90,6 +92,29 @@ top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
   else      { xhr.send();  }
 }
 })(this);
+@
+
+
+1.5
+log
+@fix: some small tune on ajax
+@
+text
+@d1 1
+a1 1
+/*240614;global 'W' as entry*/
+d7 1
+a7 1
+  if (elem === null) {alert(elemId+' not exist');return}
+a24 3
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true); // async true
+
+a26 3
+  if (method === "POST") {
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  }
+d28 3
 @
 
 
