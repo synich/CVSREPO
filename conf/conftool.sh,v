@@ -1,9 +1,14 @@
-head	1.15;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2024.08.26.14.40.18;	author shuw;	state Exp;
+branches;
+next	1.15;
 
 1.15
 date	2023.01.28.13.06.01;	author u0_a111;	state Exp;
@@ -99,20 +104,22 @@ desc
 @@
 
 
-1.15
+1.16
 log
-@fix: update ar place
+@fix: use sdf as default ar
 @
 text
 @#!/bin/sh
 
 FAVORITE_DIRNAME=shuw
-AR_URL=http://www.158370.xyz/ar/
-CONFVER=V20230121
+AR_URL=http://synich.sdf.org/ar/
+DFT_PACK_NAME=envconf.tar.gz
+CONFVER=V20240826
 
 if [ $# -eq 0 ]; then
-    echo "$0 [-u url] setup|update|evolve|clean|plugvim [package]"
-    echo $CONFVER.$FAVORITE_DIRNAME@@$AR_URL
+    echo "$0 [-u url] setup|update|evolve|clean|plugvim [pack_name]"
+    echo "if leave 'pack_name' empty, download from ${AR_URL}${DFT_PACK_NAME}"
+    echo $CONFVER.$FAVORITE_DIRNAME
     exit 1
 fi
 
@@ -144,7 +151,7 @@ downloadfile() {
 
 # if no package, download. nevertheless change confile name
 preparefile() {
-    confile=envconf.tar.gz
+    confile=$DFT_PACK_NAME
     if [ -z "$1" ]; then
       downloadfile $confile .${FAVORITE_DIRNAME}/$confile
     else
@@ -250,6 +257,25 @@ main() {
 
 main $@@
 
+@
+
+
+1.15
+log
+@fix: update ar place
+@
+text
+@d4 3
+a6 2
+AR_URL=http://www.158370.xyz/ar/
+CONFVER=V20230121
+d9 3
+a11 2
+    echo "$0 [-u url] setup|update|evolve|clean|plugvim [package]"
+    echo $CONFVER.$FAVORITE_DIRNAME@@$AR_URL
+d43 1
+a43 1
+    confile=envconf.tar.gz
 @
 
 
