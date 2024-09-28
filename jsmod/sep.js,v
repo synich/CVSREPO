@@ -1,9 +1,14 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2024.09.28.15.35.15;	author shuw;	state Exp;
+branches;
+next	1.6;
 
 1.6
 date	2024.06.15.14.17.43;	author shuw;	state Exp;
@@ -43,16 +48,16 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@fix: GET url forgot to set
+@feat: hxdom in jsmod
 @
 text
-@/*240615;global 'W' as entry*/
+@/*240928;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={})
 // wrap DOM elem get/set as func, ".o" is original DOM elem
-top.W.observe=function(elemId){
+function observe(elemId){
   var elem = document.getElementById(elemId);
   if (elem === null) {alert(`id[${elemId}] not exist`);return}
   var st = new Set(["INPUT","TEXTAREA","SELECT"]);
@@ -65,7 +70,7 @@ top.W.observe=function(elemId){
   return ret
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
-top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
+function ajax(method, url, data, cb_func, timeout = 10000) {
   function encodeParams(params) {
     return Object.keys(params)
       .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
@@ -84,14 +89,47 @@ top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
     }, timeout);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) { // Request is complete
-      clearTimeout(timer); // Clear timer
+      clearTimeout(timer);
       cb_func(xhr.responseText, xhr.status);
     }
   };
   if (data) { xhr.send(data); }
   else      { xhr.send();  }
 }
+// take from htmx
+top.W.hxdom=function(method, url, data, target, opt={}, timeout=10000) {
+  function _subdom(resp, code){
+	if (code >=300 || code <200) {alert(resp)}
+	var eid = target[0]==='#' ? target.slice(1) : target;
+	var elem = document.getElementById(eid);
+	observe(eid)(resp);
+  }
+  ajax(method, url, data, _subdom, timeout);
+}
+top.W.observe=observe;
+top.W.ajax=ajax;
 })(this);
+@
+
+
+1.6
+log
+@fix: GET url forgot to set
+@
+text
+@d1 1
+a1 1
+/*240615;global 'W' as entry*/
+d5 1
+a5 1
+top.W.observe=function(elemId){
+d18 1
+a18 1
+top.W.ajax=function(method, url, data, cb_func, timeout = 10000) {
+d37 1
+a37 1
+      clearTimeout(timer); // Clear timer
+d44 12
 @
 
 
