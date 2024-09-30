@@ -1,9 +1,14 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2024.09.30.13.49.49;	author shuw;	state Exp;
+branches;
+next	1.7;
 
 1.7
 date	2024.09.28.15.35.15;	author shuw;	state Exp;
@@ -48,12 +53,12 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@feat: hxdom in jsmod
+@feat: hxdom support swap
 @
 text
-@/*240928;global 'W' as entry*/
+@/*240930;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={})
 // wrap DOM elem get/set as func, ".o" is original DOM elem
@@ -97,18 +102,43 @@ function ajax(method, url, data, cb_func, timeout = 10000) {
   else      { xhr.send();  }
 }
 // take from htmx
-top.W.hxdom=function(method, url, data, target, opt={}, timeout=10000) {
+top.W.hxdom=function(method, url, id_elem, target, opt={}, timeout=10000) {
   function _subdom(resp, code){
 	if (code >=300 || code <200) {alert(resp)}
 	var eid = target[0]==='#' ? target.slice(1) : target;
 	var elem = document.getElementById(eid);
-	observe(eid)(resp);
+	var swap = opt["swap"];
+	if (swap){  let ori = observe(eid)();//before | after | delete
+	  if ("b"==swap[0]){observe(eid)(resp+ori)}
+	  else if("a"==swap[0]){observe(eid)(ori+resp)}
+	  else {observe(eid)("")}
+	}else {observe(eid)(resp)}
   }
+  var a_in=id_elem.replace(/\s+/g, "").split(","); var data={};
+  for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name"); if(n){data[n]=e()} }
   ajax(method, url, data, _subdom, timeout);
 }
 top.W.observe=observe;
 top.W.ajax=ajax;
 })(this);
+@
+
+
+1.7
+log
+@feat: hxdom in jsmod
+@
+text
+@d1 1
+a1 1
+/*240928;global 'W' as entry*/
+d45 1
+a45 1
+top.W.hxdom=function(method, url, data, target, opt={}, timeout=10000) {
+d50 6
+a55 1
+	observe(eid)(resp);
+d57 2
 @
 
 
