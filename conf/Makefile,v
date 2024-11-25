@@ -1,9 +1,15 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.11;
+commitid	100674497FA1FE36118;
 
 1.11
 date	2023.02.05.06.48.38;	author u0_a111;	state Exp;
@@ -73,15 +79,27 @@ desc
 @@
 
 
+1.12
+log
+@fix: move most useful setting to init.vim
+@
+text
+@all:
+	@@tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+	@@echo "envconf.tar.gz ready in current dir"
+
+@
+
+
 1.11
 log
 @js into snip
 @
 text
-@all:
+@d2 2
+a3 2
 	tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
 	mv envconf.tar.gz ~/pblog/ar/
-
 @
 
 

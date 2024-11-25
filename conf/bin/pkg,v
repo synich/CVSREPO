@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.14;
+commitid	100674497FA1FE36118;
 
 1.14
 date	2023.05.28.07.01.14;	author u0_a111;	state Exp;
@@ -94,9 +100,9 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@fix: pkg-py upgrade
+@fix: move most useful setting to init.vim
 @
 text
 @#!/bin/bash
@@ -110,11 +116,11 @@ text
 #   search <query>
 #   show/info <packages>
 #   uninstall/rm/del <packages>
-#   update /*just renew metadata*/
-#   upgrade /*make soft newer*/
+#   update         /*just renew metadata*/
+#   upgrade        /*make soft newer*/
 #   belong <file>
-#   dep <package>
-#   rdp <package>
+#   dep <package>  /*only debian|alpine|pip*/
+#   rdp <package>  /*only debian|alpine|pip*/
 
 set -e -u
 
@@ -287,6 +293,22 @@ main(){
 
 main $@@
 
+@
+
+
+1.14
+log
+@fix: pkg-py upgrade
+@
+text
+@d12 2
+a13 2
+#   update /*just renew metadata*/
+#   upgrade /*make soft newer*/
+d15 2
+a16 2
+#   dep <package>
+#   rdp <package>
 @
 
 

@@ -1,9 +1,15 @@
-head	1.27;
+head	1.28;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.28
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.27;
+commitid	100674497FA1FE36118;
 
 1.27
 date	2022.07.28.16.46.34;	author android;	state Exp;
@@ -172,9 +178,9 @@ desc
 @@
 
 
-1.27
+1.28
 log
-@show snip lib in faker preview window
+@fix: move most useful setting to init.vim
 @
 text
 @" Modeline and Notes {
@@ -231,7 +237,6 @@ text
 " Key (re)Mappings {
 
     " Handy {
-    inoremap jj <Esc>
   if v:version < 800
     inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
     inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
@@ -245,50 +250,19 @@ text
     inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
     inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
-    " Wrapped lines goes down/up to next row, rather than next line in file.
-    nnoremap j gj
-    nnoremap k gk
-    " nnoremap <CR> :
-    nnoremap H ^
-    nnoremap L $
-    nnoremap Y y$
-    " Easier horizontal scrolling
-    map zl zL
-    map zh zH
-    " Allow using the repeat operator with a visual selection (!)
-    " http://stackoverflow.com/a/8064607/127816
-    vnoremap . :normal .<CR>
     " }
 
     " Adjust viewports to the same size
     map      <leader>= <C-w>=
     nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
-    nnoremap <leader>b 5b
-    vnoremap <leader>b 5b
     map      <Leader>cc <Plug>NERDCommenterInvert
     nmap     <Leader>ce <Plug>NERDCommenterToEOL
-    nnoremap <leader>cp :lcd  %:p:h<cr>
     nnoremap <leader>cs :call rv#showsnipcode()<cr>
     nnoremap <leader>ct :call rv#gototopdir()<CR>
     nnoremap <leader>dm :call rv#showMaps()<CR>
-    nnoremap <leader>e 5e
-    vnoremap <leader>e 5e
     " helpers to edit mode, http://vimcasts.org/e/14
     cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
     "map      <leader>ew :e %%
-    " Code folding options
-    nmap     <leader>f0 :set foldlevel=0<CR>
-    nmap     <leader>f1 :set foldlevel=1<CR>
-    nmap     <leader>f2 :set foldlevel=2<CR>
-    nmap     <leader>f3 :set foldlevel=3<CR>
-    nmap     <leader>f4 :set foldlevel=4<CR>
-    nmap     <leader>f5 :set foldlevel=5<CR>
-    nmap     <leader>f6 :set foldlevel=6<CR>
-    nmap     <leader>f7 :set foldlevel=7<CR>
-    nmap     <leader>f8 :set foldlevel=8<CR>
-    nmap     <leader>f9 :set foldlevel=9<CR>
-    nnoremap <leader>fb <C-b>
-    nnoremap <leader>ff <C-f>
     " Display all lines with keyword under cursor,ask which one to jump to
     nmap     <leader>fh [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
     nnoremap <leader>gf :call rv#openfileinwin1()<CR>
@@ -316,10 +290,6 @@ text
     nmap     <leader>wb <Plug>(easymotion-b)
     nmap     <leader>wf <Plug>(wildfire-quick-select)
     nmap     <leader>ww <Plug>(easymotion-w)
-    " Compatible with Emacs window action
-    nnoremap <leader>xo <C-W>w
-    nnoremap <leader>x1 <C-W>o
-    nnoremap <leader>xc <C-W>c
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
 
@@ -328,20 +298,8 @@ text
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <C-g> <esc>:call rv#inssnipcode()<CR>
-    nnoremap <C-u> 6k
-    nnoremap <C-d> 6j
 
     " Write easy {
-
-    " Insert mode using Emacs keybinding
-    inoremap <C-p> <Up>
-    inoremap <C-n> <Down>
-    inoremap <C-b> <Left>
-    inoremap <C-f> <Right>
-    inoremap <C-a> <Home>
-    inoremap <C-e> <End>
-    inoremap <C-d> <Del>
-    inoremap <C-h> <BS>
 
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     command! -nargs=* Chrun call rv#changerunscript(<q-args>)
@@ -415,11 +373,77 @@ text
     cmap w!! w !sudo tee % >/dev/null
 
     " }
-
 " }
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.27
+log
+@show snip lib in faker preview window
+@
+text
+@a54 1
+    inoremap jj <Esc>
+a67 13
+    " Wrapped lines goes down/up to next row, rather than next line in file.
+    nnoremap j gj
+    nnoremap k gk
+    " nnoremap <CR> :
+    nnoremap H ^
+    nnoremap L $
+    nnoremap Y y$
+    " Easier horizontal scrolling
+    map zl zL
+    map zh zH
+    " Allow using the repeat operator with a visual selection (!)
+    " http://stackoverflow.com/a/8064607/127816
+    vnoremap . :normal .<CR>
+a72 2
+    nnoremap <leader>b 5b
+    vnoremap <leader>b 5b
+a74 1
+    nnoremap <leader>cp :lcd  %:p:h<cr>
+a77 2
+    nnoremap <leader>e 5e
+    vnoremap <leader>e 5e
+a80 13
+    " Code folding options
+    nmap     <leader>f0 :set foldlevel=0<CR>
+    nmap     <leader>f1 :set foldlevel=1<CR>
+    nmap     <leader>f2 :set foldlevel=2<CR>
+    nmap     <leader>f3 :set foldlevel=3<CR>
+    nmap     <leader>f4 :set foldlevel=4<CR>
+    nmap     <leader>f5 :set foldlevel=5<CR>
+    nmap     <leader>f6 :set foldlevel=6<CR>
+    nmap     <leader>f7 :set foldlevel=7<CR>
+    nmap     <leader>f8 :set foldlevel=8<CR>
+    nmap     <leader>f9 :set foldlevel=9<CR>
+    nnoremap <leader>fb <C-b>
+    nnoremap <leader>ff <C-f>
+a107 4
+    " Compatible with Emacs window action
+    nnoremap <leader>xo <C-W>w
+    nnoremap <leader>x1 <C-W>o
+    nnoremap <leader>xc <C-W>c
+a115 2
+    nnoremap <C-u> 6k
+    nnoremap <C-d> 6j
+a118 10
+    " Insert mode using Emacs keybinding
+    inoremap <C-p> <Up>
+    inoremap <C-n> <Down>
+    inoremap <C-b> <Left>
+    inoremap <C-f> <Right>
+    inoremap <C-a> <Home>
+    inoremap <C-e> <End>
+    inoremap <C-d> <Del>
+    inoremap <C-h> <BS>
+
+a190 1
+
 @
 
 

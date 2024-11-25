@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.4;
+commitid	100674497FA1FE36118;
 
 1.4
 date	2021.09.12.09.19.39;	author android;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@adjust window scroll
+@fix: move most useful setting to init.vim
 @
 text
 @" Modeline and Notes {
@@ -45,9 +51,6 @@ text
 
 " General {
 
-    set mouse=                      " Disable mouse usage
-    set autoread                    " Automatically read a file when detect modified
-    set autowrite                   " Automatically write a file when leaving a modified buffer
     set shortmess+=filmnrxoOtTc     " Abbrev. of messages (avoids 'hit enter')
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
     set virtualedit=onemore         " Allow for cursor beyond last character
@@ -64,10 +67,6 @@ text
       set completeopt+=noselect
     endif
     set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
-    set nobackup                    " Backups are nice ...
-    set noswapfile                  " Not save .swp in disk
-    set encoding=utf-8
-    scriptencoding utf-8
     if has('persistent_undo')
         set noundofile              " So is persistent undo ...
         set undolevels=1000         " Maximum number of changes that can be undone
@@ -103,29 +102,10 @@ text
         set ruler                   " Show the ruler
         set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
         set showcmd                 " Show partial commands in status line and
-                                    " Selected characters/lines in visual mode
-    endif
-
-    if has('statusline')
-        set laststatus=2
-
-        " Broken down into easily includeable segments
-        set statusline=%<%f\                     " Filename
-        set statusline+=%w%h%m%r                 " Options
-        set statusline+=\ [%{&ff}/%Y]            " Filetype
-        set statusline+=\ [%{getcwd()}]          " Current dir
-        set statusline+=%=%-8.(%l,%c%V%)\ %p%%,%L " Right aligned file nav info
     endif
 
     set backspace=indent,eol,start  " Backspace for dummies
     set linespace=0                 " No extra spaces between rows
-    set number
-    set relativenumber              " Line numbers on
-    set showmatch                   " Show matching brackets/parenthesis
-    set incsearch                   " Find as you type search
-    set hlsearch                    " Highlight search terms
-    set winminheight=1              " Windows can be 0 line high
-    set ignorecase                  " Case insensitive search
     set smartcase                   " Case sensitive when uc present
     set wildmenu                    " Show list instead of just completing
     set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
@@ -135,13 +115,6 @@ text
     set foldenable                  " Auto fold code
     set list
     set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
-    " Allow to trigger background
-    set background=dark             " Assume a dark background
-
-    " if !has('gui')
-        "set term=$TERM          " Make arrow and other keys work
-    " endif
-
 " }
 
 " GUI Settings {
@@ -159,12 +132,59 @@ text
         if &term == 'xterm' || &term == 'screen'
             set t_Co=256   " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
         endif
-        color ron
         "set term=builtin_ansi  " Make arrow and other keys work
     endif
 
 " }
 
+@
+
+
+1.4
+log
+@adjust window scroll
+@
+text
+@a6 3
+    set mouse=                      " Disable mouse usage
+    set autoread                    " Automatically read a file when detect modified
+    set autowrite                   " Automatically write a file when leaving a modified buffer
+a22 4
+    set nobackup                    " Backups are nice ...
+    set noswapfile                  " Not save .swp in disk
+    set encoding=utf-8
+    scriptencoding utf-8
+a57 12
+                                    " Selected characters/lines in visual mode
+    endif
+
+    if has('statusline')
+        set laststatus=2
+
+        " Broken down into easily includeable segments
+        set statusline=%<%f\                     " Filename
+        set statusline+=%w%h%m%r                 " Options
+        set statusline+=\ [%{&ff}/%Y]            " Filetype
+        set statusline+=\ [%{getcwd()}]          " Current dir
+        set statusline+=%=%-8.(%l,%c%V%)\ %p%%,%L " Right aligned file nav info
+a61 7
+    set number
+    set relativenumber              " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set winminheight=1              " Windows can be 0 line high
+    set ignorecase                  " Case insensitive search
+a70 7
+    " Allow to trigger background
+    set background=dark             " Assume a dark background
+
+    " if !has('gui')
+        "set term=$TERM          " Make arrow and other keys work
+    " endif
+
+a87 1
+        color ron
 @
 
 

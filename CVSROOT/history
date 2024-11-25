@@ -508,3 +508,10 @@ M66f82233|shuw|D:\code\*0|jsmod|1.7|sep.js
 M66faac7d|shuw|D:\code\*0|jsmod|1.8|sep.js
 M67151bfa|shuw|D:\code\pb|pb|1.2|extlua.c
 M67151bfa|shuw|D:\code\pb|pb|1.3|pb.c
+O67448c42|u0_a157|~/src/*0|conf||conf
+M674497fa|u0_a157|~/src/*0|conf|1.12|Makefile
+M674497fa|u0_a157|~/src/*0|conf|1.17|conftool.sh
+M674497fa|u0_a157|~/src/*0|conf|1.13|init.vim.tpl
+M674497fa|u0_a157|~/src/conf|conf/bin|1.15|pkg
+M674497fa|u0_a157|~/src/conf|conf/vimrc/plugin|1.28|kbd.vim
+M674497fa|u0_a157|~/src/conf|conf/vimrc/plugin|1.5|style.vim

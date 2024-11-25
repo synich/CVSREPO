@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.12;
+commitid	100674497FA1FE36118;
 
 1.12
 date	2022.03.22.14.05.44;	author android;	state Exp;
@@ -82,9 +88,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@move plgrc.vim into plugin, not manual load it
+@fix: move most useful setting to init.vim
 @
 text
 @" Modeline and Notes {
@@ -101,23 +107,17 @@ text
 
 " Environment {
     " Identify platform {
-        silent function! OSX()
-            return has('macunix')
-        endfunction
-        silent function! LINUX()
-            return has('unix') && !has('macunix') && !has('win32unix')
-        endfunction
         silent function! WINDOWS()
             return  (has('win32') || has('win64'))
         endfunction
     " }
 
-    " Basics {
-        if !WINDOWS()
+    " GlobalVar {
+        if WINDOWS()
+            let g:mvcf_path='E:/.FAVORITE_DIRNAME/vimrc/'
+        else
             set shell=bash
             let g:mvcf_path='~/.FAVORITE_DIRNAME/vimrc/'
-        else
-            let g:mvcf_path='E:/.FAVORITE_DIRNAME/vimrc/'
         endif
         let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
         let g:mvcf_bundle_groups=['go', ]
@@ -133,11 +133,92 @@ text
     " }
 " }
 
-" Leader Define {
+" Leader and Shortcut {
     " The default leader is '\', but many people prefer ',' or ' ' as it's in a
     " standard location. To override this behavior and set it back to '\' :
     map <Space> <Leader>
     let maplocalleader = ','
+
+    " Shortcut work in original VIM
+    inoremap jj <Esc>
+    nnoremap <leader>b 5b
+    vnoremap <leader>b 5b
+    nnoremap <leader>e 5e
+    vnoremap <leader>e 5e
+    nnoremap <leader>fb <C-b>
+    nnoremap <leader>ff <C-f>
+    nnoremap <C-u> 6k
+    nnoremap <C-d> 6j
+    nnoremap <leader>cp :lcd  %:p:h<cr>
+    " Code folding options
+    nmap     <leader>f0 :set foldlevel=0<CR>
+    nmap     <leader>f1 :set foldlevel=1<CR>
+    nmap     <leader>f2 :set foldlevel=2<CR>
+    nmap     <leader>f3 :set foldlevel=3<CR>
+    nmap     <leader>f4 :set foldlevel=4<CR>
+    nmap     <leader>f5 :set foldlevel=5<CR>
+    nmap     <leader>f6 :set foldlevel=6<CR>
+    nmap     <leader>f7 :set foldlevel=7<CR>
+    nmap     <leader>f8 :set foldlevel=8<CR>
+    nmap     <leader>f9 :set foldlevel=9<CR>
+    " Compatible with Emacs window action
+    nnoremap <leader>xo <C-W>w
+    nnoremap <leader>x1 <C-W>o
+    nnoremap <leader>xc <C-W>c
+    " Insert mode using Emacs keybinding
+    inoremap <C-p> <Up>
+    inoremap <C-n> <Down>
+    inoremap <C-b> <Left>
+    inoremap <C-f> <Right>
+    inoremap <C-a> <Home>
+    inoremap <C-e> <End>
+    inoremap <C-d> <Del>
+    inoremap <C-h> <BS>
+    " Wrapped lines goes down/up to next row, rather than next line in file.
+    nnoremap j gj
+    nnoremap k gk
+    " nnoremap <CR> :
+    nnoremap H ^
+    nnoremap L $
+    nnoremap Y y$
+    " Easier horizontal scrolling
+    map zl zL
+    map zh zH
+    " Allow using the repeat operator with a visual selection (!)
+    " http://stackoverflow.com/a/8064607/127816
+    vnoremap . :normal .<CR>
+
+" }
+
+" Basic Setting {
+    set mouse=                      " Disable mouse usage
+    set autoread                    " Automatically read a file when detect modified
+    set autowrite                   " Automatically write a file when leaving a modified buffer
+    set nobackup                    " Backups are nice ...
+    set noswapfile                  " Not save .swp in disk
+    set encoding=utf-8
+    scriptencoding utf-8
+    " Beauty
+    color ron
+    if has('statusline')
+        set laststatus=2
+        " Broken down into easily includeable segments
+        set statusline=%<%f\                     " Filename
+        set statusline+=%w%h%m%r                 " Options
+        set statusline+=\ [%{&ff}/%Y]            " Filetype
+        set statusline+=\ [%{getcwd()}]          " Current dir
+        set statusline+=%=%-8.(%l,%c%V%)\ %p%%,%L " Right aligned file nav info
+    endif
+
+    set number
+    set relativenumber              " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set winminheight=1              " Windows can be 0 line high
+    set ignorecase                  " Case insensitive search
+    " Allow to trigger background
+    set background=dark             " Assume a dark background
 " }
 
 " Load all rc config {
@@ -145,6 +226,32 @@ text
     syntax on                   " Syntax highlighting
 " }
 
+@
+
+
+1.12
+log
+@move plgrc.vim into plugin, not manual load it
+@
+text
+@a14 6
+        silent function! OSX()
+            return has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+d20 4
+a23 2
+    " Basics {
+        if !WINDOWS()
+a25 2
+        else
+            let g:mvcf_path='E:/.FAVORITE_DIRNAME/vimrc/'
+d41 1
+a41 1
+" Leader Define {
+d46 81
 @
 
 

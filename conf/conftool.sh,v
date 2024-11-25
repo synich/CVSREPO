@@ -1,9 +1,15 @@
-head	1.16;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
+branches;
+next	1.16;
+commitid	100674497FA1FE36118;
 
 1.16
 date	2024.08.26.14.40.18;	author shuw;	state Exp;
@@ -104,9 +110,9 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@fix: use sdf as default ar
+@fix: move most useful setting to init.vim
 @
 text
 @#!/bin/sh
@@ -114,7 +120,7 @@ text
 FAVORITE_DIRNAME=shuw
 AR_URL=http://synich.sdf.org/ar/
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20240826
+CONFVER=V20241125
 
 if [ $# -eq 0 ]; then
     echo "$0 [-u url] setup|update|evolve|clean|plugvim [pack_name]"
@@ -257,6 +263,17 @@ main() {
 
 main $@@
 
+@
+
+
+1.16
+log
+@fix: use sdf as default ar
+@
+text
+@d6 1
+a6 1
+CONFVER=V20240826
 @
 
 
