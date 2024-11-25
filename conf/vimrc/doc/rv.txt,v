@@ -1,9 +1,14 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2024.11.25.15.32.28;	author shuw;	state Exp;
+branches;
+next	1.4;
 
 1.4
 date	2022.06.06.13.41.12;	author android;	state Exp;
@@ -34,20 +39,27 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@change scm engine to fennel and add Chrun doc
+@doc: vim rv shortcut
 @
 text
-@*rv.txt*	For Vim version 8.2.  Last change: 2022 May 03
+@*rv.txt*	For Vim version 8.0  Last change: 2024 Nov 25
 
-		  VIM REFERENCE MANUAL    by SHU Wang
-
+		  RV Plugin REFERENCE      by SHU Wang
 
 								*rv*
 This file illustrate rv plugin usage Vim/NeoVim.
 
-o cp+textobj
+- Shortcut Key
+  leader is <space> and subleader is comma<,>
+
+  - <leader>xc  close window
+
+- :ShowEx
+  use in command and will get output in new buffer
+
+- cp+textobj
   run selection part in repl, for example hit "cpaf" will execute
 s-exp "(display 123)"
 
@@ -61,14 +73,34 @@ s-exp "(display 123)"
   - <LocalLeader>W/<LocalLeader>w wrap the current ELEMENT with ( and ).
   - <LocalLeader>e[ or {/<LocalLeader>e] or } wrap the current ELEMENT with [ and ] or { and }.
 
-o :ShowEx
-  use in command and will get output in new buffer
-
-o :Chrun
+- :Chrun
   change run script program
 
 vim:tw=78:ts=8:noet:ft=help:norl:
 
+@
+
+
+1.4
+log
+@change scm engine to fennel and add Chrun doc
+@
+text
+@d1 1
+a1 3
+*rv.txt*	For Vim version 8.2.  Last change: 2022 May 03
+
+		  VIM REFERENCE MANUAL    by SHU Wang
+d3 1
+d8 9
+a16 1
+o cp+textobj
+d30 1
+a30 4
+o :ShowEx
+  use in command and will get output in new buffer
+
+o :Chrun
 @
 
 
