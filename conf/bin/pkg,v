@@ -1,9 +1,15 @@
-head	1.15;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2024.12.02.14.52.07;	author u0_a157;	state Exp;
+branches;
+next	1.15;
+commitid	100674DC9974226079F;
 
 1.15
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -100,14 +106,14 @@ desc
 @@
 
 
-1.15
+1.16
 log
-@fix: move most useful setting to init.vim
+@feat: pkg add npm
 @
 text
 @#!/bin/bash
 # A wrap tool for Debian/Arch/CentOS/Alpine/Void or Python package manager in same way
-# Usage: pkg [-py] command [arguments]
+# Usage: pkg [-py|js] command [arguments]
 # Commands:
 #   files <packages>
 #   add/install <packages>
@@ -277,6 +283,26 @@ case "$CMD" in
 esac
 }
 
+pkgjs(){
+  if [ $# = 0 ]; then
+    echo "~/.npmrc"
+    show_help
+  fi
+
+  CMD=$1
+  shift 1
+case "$CMD" in
+  he*) show_help;;
+  add|ins*) npm install $@@;;
+  li*|ha*) npm ls;;
+  se*) npm search "$@@";;
+  sh*|inf*) npm show "$@@";;
+  un*|rm|del*) npm uninstall "$@@";;
+  up*) npm update;;
+  *) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
+esac
+}
+
 main(){
   if [ $# = 0 ]; then
     show_help
@@ -293,6 +319,18 @@ main(){
 
 main $@@
 
+@
+
+
+1.15
+log
+@fix: move most useful setting to init.vim
+@
+text
+@d3 1
+a3 1
+# Usage: pkg [-py] command [arguments]
+d173 20
 @
 
 
