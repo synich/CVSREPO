@@ -1,9 +1,14 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2024.12.02.16.20.15;	author shuw;	state Exp;
+branches;
+next	1.10;
 
 1.10
 date	2024.12.02.15.04.32;	author u0_a157;	state Exp;
@@ -64,12 +69,272 @@ desc
 @@
 
 
+1.11
+log
+@feat: observe accept # in sep.js
+@
+text
+@/*241202;global 'W' as entry*/
+!(function(top){
+top.W||(top.W={});"use strict"
+// mimic Vue2
+class Watcher{
+	constructor(vm,expr,cb){
+		this.vm = vm; this.expr = expr; this.cb = cb; this.value = this.get()
+	}
+// @@ multiplexing compile.js => getVal() and external exposure.
+	getVal(vm,expr){
+		expr = expr.split('.')
+		return expr.reduce((prev, next) => {
+			return prev[next]
+		},vm.$data)
+	}
+	get(){
+		Dep.target = this
+		let value = this.getVal(this.vm, this.expr)
+		Dep.target = null
+		return value
+	}
+	update(){
+		let newValue = this.getVal(this.vm, this.expr)
+		this.cb(newValue)
+	}
+}
+// @@ Data hijacking, It is mainly responsible for data response of data objects.
+class Observer{
+	constructor(data){
+		this.observe(data)
+	}
+	observe(data){
+		if(!data || typeof data !== 'object'){return;}
+		Object.keys(data).forEach(key => {
+			this.defineReactive(data, key, data[key])
+			this.observe(data[key])
+		})
+	}
+	defineReactive(obj, key, value){
+		let that = this
+		let dep = new Dep()
+		Object.defineProperty(obj, key, {
+			enumerable: true,
+			configurable: true,
+				get(){
+					Dep.target && dep.addSub(Dep.target)
+					return value
+				},
+				set(newValue){
+					if(newValue != value){
+					that.observe(newValue)
+					value = newValue
+					dep.notify()
+				}
+			}
+		})
+	}
+}
+// @@ Trigger monitor (publish subscription)
+class Dep{
+	constructor(){
+		this.subs = []
+	}
+	addSub(watcher){
+		this.subs.push(watcher)
+	}
+	notify(){
+		this.subs.forEach(watcher => watcher.update())
+	}
+}
+// @@ Template compilation, Move page elements into memory for work
+class Compile {
+	constructor(el, vm){
+		this.el = (typeof el=="string" ? document.querySelector(el) : el)
+		this.vm = vm
+		if(this.el){
+			let fragment = this.node2fragment(this.el)
+			this.compile(fragment)
+			this.el.appendChild(fragment)
+		}
+	}
+// @@ Assist compile to complete the work (weight: core)
+// These functions complete the work of moving into memory, compiling elements, compiling text and so on.
+	compileElement(node){
+		let attrs = node.attributes
+		Array.from(attrs).forEach(attr => {
+		let attrName = attr.name
+			if(this.isDirective(attrName)){
+				let expr = attr.value
+				let [,type] = attrName.split('-')
+				CompileUtil[type](node, this.vm, expr)
+			}
+		})
+	}
+	compileText(node){
+		let expr = node.textContent
+		let reg = /\{\{([^}]+)\}\}/g
+		if(reg.test(expr)){
+			CompileUtil['text'](node, this.vm, expr)
+		}
+	}
+	node2fragment(el){
+		let fragment = document.createDocumentFragment()
+		let firstChild
+		while(firstChild = el.firstChild){
+			fragment.appendChild(firstChild)
+		}
+		return fragment
+	}
+	compile(fragment){
+		let childNodes = fragment.childNodes
+		Array.from(childNodes).forEach(node => {
+			if(1 == node.nodeType){ // 1 is Element
+				this.compileElement(node)
+				this.compile(node)
+			}else{
+				this.compileText(node)
+			}
+		})
+	}
+	isDirective(name){
+		return name.includes('v-model')
+	}
+}
+CompileUtil = {
+	getVal(vm, expr){
+		expr = expr.split('.')
+		return expr.reduce((prev, next) => {
+			return prev[next]
+		},vm.$data)
+	},
+	getTextVal(vm, expr, node){
+		return expr.replace(/\{\{([^}]+)\}\}/g, (_, mat1, ofs) => {
+			let val = this.getVal(vm, mat1)
+			let vfn = node.parentNode.getAttribute("v-fn")
+			// function over v-model, only run first time
+			if (vfn){if(0==ofs) return vm.$fn[vfn](val, vm.$data);else return ''}
+			else return val
+		})
+	},
+	text(node, vm, expr){
+		let updateFn = (node, value)=>{node.textContent = value}
+		let value = this.getTextVal(vm, expr, node)
+		expr.replace(/\{\{([^}]+)\}\}/g, (_, mat1) => {
+			new Watcher(vm, mat1, (newValue) => {
+				updateFn(node, this.getTextVal(vm, expr, node))
+			})
+		})
+		updateFn(node, value)
+	},
+	setVal(vm, expr, value){
+		expr = expr.split('.')
+		return expr.reduce((prev, next, currentIndex) => {
+			if(currentIndex === expr.length -1){
+				return prev[next] = value
+			}
+			return prev[next]
+		},vm.$data)
+	},
+	model(node, vm, expr){
+		let updateFn = (node, value)=>{node.value = value}
+		new Watcher(vm, expr, (newValue) => {
+			updateFn(node, this.getVal(vm,expr))
+		})
+		node.addEventListener('input', (e) => {
+			let newValue = e.target.value
+			this.setVal(vm, expr, newValue)
+		})
+		updateFn(node, this.getVal(vm,expr))
+	}
+}
+class miniVM{
+	constructor(options){
+		this.$el = options.el; this.$data = options.data
+		this.$fn = options.fn // my extension for custom logic
+		if(this.$el){// only the template exist and compile it
+			new Observer(this.$data)
+			new Compile(this.$el, this)
+		}
+	}
+}
+// wrap DOM elem get/set as func, ".o" is original DOM elem
+function observe(elemId){
+  var eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
+  var elem = document.getElementById(eid);
+  if (elem === null) {alert(`id[${elemId}] not exist`);return}
+  var st = new Set(["INPUT","TEXTAREA","SELECT"]);
+  var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
+  var ret = function(val){
+    if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
+    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
+  }
+  ret.o = elem;
+  return ret
+}
+// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
+function ajax(method, url, data, cb_func, timeout = 10000) {
+  function encodeParams(params) {
+    return Object.keys(params)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+      .join("&");
+  }
+  method = method.toUpperCase();
+  if (data) { data = encodeParams(data); }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true); // async true
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  var timer = setTimeout(function() {
+    xhr.abort();
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
+    }, timeout);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) { // Request is complete
+      clearTimeout(timer);
+      cb_func(xhr.responseText, xhr.status);
+    }
+  };
+  if (data) { xhr.send(data); }
+  else      { xhr.send();  }
+}
+function awax(method, url, data, timeout = 10000) {
+  return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
+    if (st>=300 || st<200){reject(resp)}
+    else{resolve(resp)} }, timeout)}
+)}
+// take from htmx
+function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
+  function _subdom(resp, code){
+	if (code >=300 || code <200) {alert(resp)}
+	var swap = opt["swap"];
+	if (swap){  let ori = observe(target)();//before | after | delete
+	  if ("b"==swap[0]){observe(target)(resp+ori)}
+	  else if("a"==swap[0]){observe(target)(ori+resp)}
+	  else {observe(target)("")}
+	}else {observe(target)(resp)}
+  }  var data={};
+  if (id_elem) {
+    var a_in=id_elem.replace(/\s+/g, "").split(",");
+    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name"); if(n){data[n]=e()} }
+  } ajax(method, url, data, _subdom, timeout);
+}
+// export function
+top.W.vue=miniVM;
+top.W.observe=observe;
+top.W.ajax=ajax;
+top.W.awax=awax;
+top.W.hxdom=hxdom
+})(this);
+@
+
+
 1.10
 log
 @feat: awax in sep.js
 @
 text
-@/*241202;global 'W' as entry*/
+@d1 250
+a250 250
+/*241202;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={});"use strict"
 // mimic Vue2
@@ -320,6 +585,7 @@ top.W.awax=awax;
 top.W.hxdom=hxdom
 })(this);
 @
+
 
 
 1.9
