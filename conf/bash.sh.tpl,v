@@ -1,9 +1,15 @@
-head	1.53;
+head	1.54;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.54
+date	2024.12.08.15.32.58;	author u0_a157;	state Exp;
+branches;
+next	1.53;
+commitid	1006755BC2A570391AE;
 
 1.53
 date	2023.01.14.13.42.42;	author u0_a111;	state Exp;
@@ -319,9 +325,9 @@ desc
 @@
 
 
-1.53
+1.54
 log
-@drop awk -e, can work on mawk
+@fix: remove ver from PS1
 @
 text
 @# avoid init interative
@@ -431,7 +437,7 @@ set_ps1(){
   if [ function = "$(type -t deactivate)" ]; then
     CFVENV=VENV
   fi
-  PS1="${CFVENV}${CYAN}\u@@${RED}${CONFIP4}${CONFHOSTNAME}${YELLOW}1$1${BLUE}\W${PURPLE}${GITST}${NC}\$ "
+  PS1="${CFVENV}${CYAN}\u@@${RED}${CONFIP4}${CONFHOSTNAME}${YELLOW}$1${BLUE}\W${PURPLE}${GITST}${NC}\$ "
   if [ -x "$(command -v lua)" ]; then
     _zlua --add "$(command pwd 2>/dev/null)"
   fi
@@ -584,6 +590,17 @@ psp() {
   fi
 }
 
+@
+
+
+1.53
+log
+@drop awk -e, can work on mawk
+@
+text
+@d108 1
+a108 1
+  PS1="${CFVENV}${CYAN}\u@@${RED}${CONFIP4}${CONFHOSTNAME}${YELLOW}1$1${BLUE}\W${PURPLE}${GITST}${NC}\$ "
 @
 
 
