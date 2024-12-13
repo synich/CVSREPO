@@ -1,9 +1,14 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2024.12.13.16.33.39;	author shuw;	state Exp;
+branches;
+next	1.11;
 
 1.11
 date	2024.12.02.16.20.15;	author shuw;	state Exp;
@@ -69,12 +74,12 @@ desc
 @@
 
 
-1.11
+1.12
 log
-@feat: observe accept # in sep.js
+@ready rewrite mel.css
 @
 text
-@/*241202;global 'W' as entry*/
+@/*241210;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={});"use strict"
 // mimic Vue2
@@ -314,7 +319,7 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   }  var data={};
   if (id_elem) {
     var a_in=id_elem.replace(/\s+/g, "").split(",");
-    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name"); if(n){data[n]=e()} }
+    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
   } ajax(method, url, data, _subdom, timeout);
 }
 // export function
@@ -324,6 +329,20 @@ top.W.ajax=ajax;
 top.W.awax=awax;
 top.W.hxdom=hxdom
 })(this);
+@
+
+
+1.11
+log
+@feat: observe accept # in sep.js
+@
+text
+@d1 1
+a1 1
+/*241202;global 'W' as entry*/
+d241 1
+a241 1
+    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name"); if(n){data[n]=e()} }
 @
 
 
