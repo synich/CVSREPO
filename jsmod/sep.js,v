@@ -1,9 +1,14 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2024.12.16.15.30.48;	author shuw;	state Exp;
+branches;
+next	1.12;
 
 1.12
 date	2024.12.13.16.33.39;	author shuw;	state Exp;
@@ -74,14 +79,118 @@ desc
 @@
 
 
+1.13
+log
+@feat: remove vue, add scan
+@
+text
+@/*241216;global 'W' as entry*/
+!(function(top){
+top.W||(top.W={});"use strict"
+// scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
+function observe(elemId){
+  if (typeof elemId == "string"){
+    let eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
+    var elem = document.getElementById(eid);
+    if (elem === null) {alert(`id[${elemId}] not exist`);return}
+  } else {var elem = elemId}
+  var st = new Set(["INPUT","TEXTAREA","SELECT"]);
+  var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
+  var ret = function(val){
+    if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
+    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
+  }
+  ret.o = elem; ret.tog = (n)=>{elem.classList.toggle(n)}
+  ret.disp = (s)=>{elem.style.display=s}; ret.vis = (b)=>{elem.style.visibility = b?"visible":"hidden"}
+  return ret
+}
+function _attr_bind(node, vm){
+  Array.from(node.childNodes).forEach(_n => {
+    if (1==_n.nodeType){ _a = _n.getAttribute("db")
+      if (_a) { _a.split(',').forEach(function(_db){
+        let _b = _db.split(':')
+        if ("el"==_b[0]) {vm[_b[1]]=observe(_n)}
+        else if ("fn"==_b[0]) { let ev = _n.nodeName=="SELECT"?'change':'input'
+          _n.addEventListener(ev,
+            (e)=>{vm[_b[1]](e.target.value, vm)})
+        }
+      })
+    }
+    if (_n.childNodes) {_attr_bind(_n, vm)}
+    }
+  })
+}
+function scan(elemId){
+  var eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
+  var vm = window[eid] = {}
+  _attr_bind(document.getElementById(eid), vm)
+}
+// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
+function ajax(method, url, data, cb_func, timeout = 10000) {
+  function encodeParams(params) {
+    return Object.keys(params)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+      .join("&");
+  }
+  method = method.toUpperCase();
+  if (data) { data = encodeParams(data); }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true); // async true
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  var timer = setTimeout(function() {
+    xhr.abort();
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
+    }, timeout);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) { // Request is complete
+      clearTimeout(timer);
+      cb_func(xhr.responseText, xhr.status);
+    }
+  };
+  if (data) { xhr.send(data); }
+  else      { xhr.send();  }
+}
+function awax(method, url, data, timeout = 10000) {
+  return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
+    if (st>=300 || st<200){reject(resp)}
+    else{resolve(resp)} }, timeout)}
+)}
+// take from htmx
+function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
+  function _subdom(resp, code){
+	if (code >=300 || code <200) {alert(resp)}
+	var swap = opt["swap"];
+	if (swap){  let ori = observe(target)();//before | after | delete
+	  if ("b"==swap[0]){observe(target)(resp+ori)}
+	  else if("a"==swap[0]){observe(target)(ori+resp)}
+	  else {observe(target)("")}
+	}else {observe(target)(resp)}
+  }  var data={};
+  if (id_elem) {
+    var a_in=id_elem.replace(/\s+/g, "").split(",");
+    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+  } ajax(method, url, data, _subdom, timeout);
+}
+// export function
+top.W.observe=observe; top.W.scan=scan
+top.W.ajax=ajax; top.W.awax=awax
+top.W.hxdom=hxdom
+})(this);
+@
+
+
 1.12
 log
 @ready rewrite mel.css
 @
 text
-@/*241210;global 'W' as entry*/
-!(function(top){
-top.W||(top.W={});"use strict"
+@d1 1
+a1 1
+/*241210;global 'W' as entry*/
+d4 1
+a4 179
 // mimic Vue2
 class Watcher{
 	constructor(vm,expr,cb){
@@ -261,74 +370,21 @@ class miniVM{
 	}
 }
 // wrap DOM elem get/set as func, ".o" is original DOM elem
-function observe(elemId){
+d6 5
+a10 3
   var eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
   var elem = document.getElementById(eid);
   if (elem === null) {alert(`id[${elemId}] not exist`);return}
-  var st = new Set(["INPUT","TEXTAREA","SELECT"]);
-  var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
-  var ret = function(val){
-    if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
-    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
-  }
+d17 2
+a18 1
   ret.o = elem;
-  return ret
-}
-// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
-function ajax(method, url, data, cb_func, timeout = 10000) {
-  function encodeParams(params) {
-    return Object.keys(params)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-      .join("&");
-  }
-  method = method.toUpperCase();
-  if (data) { data = encodeParams(data); }
-  if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
-
-  var xhr = new XMLHttpRequest();
-  xhr.open(method, url, true); // async true
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  var timer = setTimeout(function() {
-    xhr.abort();
-    cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
-    }, timeout);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) { // Request is complete
-      clearTimeout(timer);
-      cb_func(xhr.responseText, xhr.status);
-    }
-  };
-  if (data) { xhr.send(data); }
-  else      { xhr.send();  }
-}
-function awax(method, url, data, timeout = 10000) {
-  return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
-    if (st>=300 || st<200){reject(resp)}
-    else{resolve(resp)} }, timeout)}
-)}
-// take from htmx
-function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
-  function _subdom(resp, code){
-	if (code >=300 || code <200) {alert(resp)}
-	var swap = opt["swap"];
-	if (swap){  let ori = observe(target)();//before | after | delete
-	  if ("b"==swap[0]){observe(target)(resp+ori)}
-	  else if("a"==swap[0]){observe(target)(ori+resp)}
-	  else {observe(target)("")}
-	}else {observe(target)(resp)}
-  }  var data={};
-  if (id_elem) {
-    var a_in=id_elem.replace(/\s+/g, "").split(",");
-    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
-  } ajax(method, url, data, _subdom, timeout);
-}
-// export function
+d21 21
+d91 2
+a92 4
 top.W.vue=miniVM;
 top.W.observe=observe;
 top.W.ajax=ajax;
 top.W.awax=awax;
-top.W.hxdom=hxdom
-})(this);
 @
 
 

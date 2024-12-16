@@ -1,9 +1,14 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2024.12.16.15.31.19;	author shuw;	state Exp;
+branches;
+next	1.2;
 
 1.2
 date	2024.12.13.16.33.39;	author shuw;	state Exp;
@@ -20,37 +25,109 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@ready rewrite mel.css
+@feat: use from classic set
 @
 text
-@body{color:#111;background-color:#f4f4f4;}
+@:root{--mel-max-width:80rem;}
+/*----normal----*/
+body{color:#111;background-color:#f2f2f2;}
 header{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
 h1{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
 h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
-h3{color:#409eff;}p{font-family:Montserrat, sans-serif;font-size:1.2em;}
+h3{color:#409eff;}
+p{font-family:sans-serif;font-size:1.2em;}
 em{color:#00f;font-style:normal;}strong{color:#f00;font-style:normal;}
 pre{white-space:pre-wrap;font-size:1.1em;}
 code{background-color:#f1f1f1;font-size:1.1em;color:#d73737;}
 pre code{display: block;border: 1px solid #cccccc;}
-blockquote{border-left:5px solid #bbb;padding-left:0.5em;}
+blockquote{border-left:4px solid #bbb;padding-left:0.5em;}
 ul li{list-style:circle;}ol li{list-style:hiragana;}
 table{border-collapse:collapse;border:1px solid;}th{border:1px solid;}td{border:1px solid;}
-textarea{width:100%;height:30vh;font-size:1.1em}
-article{background-color:#ececec;max-width:80rem;margin:0 auto;padding:0 1rem;}
-nav {background: #202020;max-width:80rem;padding:0 32px;margin:0 auto;display: flex;}
+article{background-color:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
 nav h1 {flex: 3;}
 nav label {color: #fff;padding-top: 0.5em;}
 img {max-width: 100%;}
+button,input[type='button'],input[type='submit'] {
+  color: #fff;  background-color: #9b4dca;
+  border: 0.1rem solid #9b4dca;  border-radius: .4rem;
+  cursor: pointer;  white-space: nowrap;
+  display: inline-block;  padding: 0 0.5rem;
+  font-size: 1.1rem;  font-weight: 700;
+  height: 2rem;  letter-spacing: .1rem;
+  text-align: center;  text-transform: uppercase;
+}
+button:focus,button:hover,
+input[type='button']:focus,input[type='button']:hover,
+input[type='submit']:focus,input[type='submit']:hover {
+  background-color: #606c76;  border-color: #606c76;
+  color: #fff;  outline: 0;
+}
+input[type='date'],input[type='datetime'],input[type='datetime-local'],
+input[type='week'],input[type='month'],
+input[type='email'],input[type='number'],
+input[type='password'],input[type='text'],
+input[type='color'],input:not([type]),
+textarea,select {
+  background-color: transparent;
+  border: 0.1rem solid #d1d1d1;
+  border-radius: .4rem;
+  box-shadow: none;
+  height: 1.2rem;
+  padding: .6rem 1.0rem .7rem;
+  margin-bottom: 1.0rem;
+  /*width: 100%;*/
+}
+textarea{width:100%;height:30vh;font-size:1.1em}
 /*----class----*/
-.card{opacity: 0.87;position: relative;max-width:80rem;padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
+.col {margin-left: 2%;}
+.c1  { width: 6.5%; }
+.c2  { width: 15%; }
+.c3  { width: 22%; }
+.c4  { width: 30.67%; }
+.c5  { width: 39.33%; }
+.c6  { width: 49%;    }
+.c7  { width: 56.67%; }
+.c8  { width: 65.33%; }
+.c9  { width: 74.0%;  }
+.c10 { width: 82.67%; }
+.c11 { width: 91.33%; }
+.c12 { width: 100%; margin-left: 0; }
+.card{opacity: 0.87;position: relative;max-width:var(--mel-max-width);padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
 .footer{margin: 0 auto;text-align: center}
 /*----flex----*/
 /*----media more large more bottom----*/
 @@media screen and (min-width: 400px)  {  }
 @@media screen and (min-width: 800px)  {  }
 @@media screen and (min-width: 1200px) {  }
+@
+
+
+1.2
+log
+@ready rewrite mel.css
+@
+text
+@d1 3
+a3 1
+body{color:#111;background-color:#f4f4f4;}
+d7 2
+a8 1
+h3{color:#409eff;}p{font-family:Montserrat, sans-serif;font-size:1.2em;}
+d13 1
+a13 1
+blockquote{border-left:5px solid #bbb;padding-left:0.5em;}
+d16 2
+a17 3
+textarea{width:100%;height:30vh;font-size:1.1em}
+article{background-color:#ececec;max-width:80rem;margin:0 auto;padding:0 1rem;}
+nav {background: #202020;max-width:80rem;padding:0 32px;margin:0 auto;display: flex;}
+d21 31
+d53 14
+a66 1
+.card{opacity: 0.87;position: relative;max-width:80rem;padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
 @
 
 
