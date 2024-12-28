@@ -1,9 +1,19 @@
-head	1.13;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2024.12.28.07.06.08;	author shuw;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2024.12.22.15.26.54;	author shuw;	state Exp;
+branches;
+next	1.13;
 
 1.13
 date	2024.12.16.15.30.48;	author shuw;	state Exp;
@@ -79,12 +89,12 @@ desc
 @@
 
 
-1.13
+1.15
 log
-@feat: remove vue, add scan
+@fix: hxdom just swap one elem
 @
 text
-@/*241216;global 'W' as entry*/
+@/*241226;global 'W' as entry*/
 !(function(top){
 top.W||(top.W={});"use strict"
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
@@ -111,8 +121,9 @@ function _attr_bind(node, vm){
         let _b = _db.split(':')
         if ("el"==_b[0]) {vm[_b[1]]=observe(_n)}
         else if ("fn"==_b[0]) { let ev = _n.nodeName=="SELECT"?'change':'input'
-          _n.addEventListener(ev,
-            (e)=>{vm[_b[1]](e.target.value, vm)})
+          let tmout;function _smooth(e) {clearTimeout(tmout)
+            tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+          _n.addEventListener(ev, _smooth)
         }
       })
     }
@@ -126,7 +137,7 @@ function scan(elemId){
   _attr_bind(document.getElementById(eid), vm)
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
-function ajax(method, url, data, cb_func, timeout = 10000) {
+function ajax(method, url, data, cb_func, timeout=10000) {
   function encodeParams(params) {
     return Object.keys(params)
       .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
@@ -152,19 +163,21 @@ function ajax(method, url, data, cb_func, timeout = 10000) {
   if (data) { xhr.send(data); }
   else      { xhr.send();  }
 }
-function awax(method, url, data, timeout = 10000) {
+// raise exp when isrej true
+function awax(method, url, data, timeout=10000, isrej=false) {
   return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
-    if (st>=300 || st<200){reject(resp)}
-    else{resolve(resp)} }, timeout)}
+    let ok= (st>=200 && st<300)? true: false
+    if(ok){resolve(resp)}else{if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)} }}, timeout)}
 )}
 // take from htmx
+function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.firstChild}
 function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   function _subdom(resp, code){
 	if (code >=300 || code <200) {alert(resp)}
 	var swap = opt["swap"];
-	if (swap){  let ori = observe(target)();//before | after | delete
-	  if ("b"==swap[0]){observe(target)(resp+ori)}
-	  else if("a"==swap[0]){observe(target)(ori+resp)}
+	if (swap){  let ori = observe(target).o;//before | after | delete
+	  if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
+	  else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
 	  else {observe(target)("")}
 	}else {observe(target)(resp)}
   }  var data={};
@@ -178,6 +191,48 @@ top.W.observe=observe; top.W.scan=scan
 top.W.ajax=ajax; top.W.awax=awax
 top.W.hxdom=hxdom
 })(this);
+@
+
+
+1.14
+log
+@feat: delay on scan and isrej on awax
+@
+text
+@d1 1
+a1 1
+/*241220;global 'W' as entry*/
+d77 1
+d82 3
+a84 3
+	if (swap){  let ori = observe(target)();//before | after | delete
+	  if ("b"==swap[0]){observe(target)(resp+ori)}
+	  else if("a"==swap[0]){observe(target)(ori+resp)}
+@
+
+
+1.13
+log
+@feat: remove vue, add scan
+@
+text
+@d1 1
+a1 1
+/*241216;global 'W' as entry*/
+d28 3
+a30 2
+          _n.addEventListener(ev,
+            (e)=>{vm[_b[1]](e.target.value, vm)})
+d44 1
+a44 1
+function ajax(method, url, data, cb_func, timeout = 10000) {
+d70 2
+a71 1
+function awax(method, url, data, timeout = 10000) {
+d73 2
+a74 2
+    if (st>=300 || st<200){reject(resp)}
+    else{resolve(resp)} }, timeout)}
 @
 
 
