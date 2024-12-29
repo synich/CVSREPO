@@ -1,9 +1,14 @@
-head	1.15;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2024.12.29.14.56.56;	author shuw;	state Exp;
+branches;
+next	1.15;
 
 1.15
 date	2024.12.28.07.06.08;	author shuw;	state Exp;
@@ -89,21 +94,25 @@ desc
 @@
 
 
-1.15
+1.16
 log
-@fix: hxdom just swap one elem
+@BREAK CHANGE: use W.jq and .ko instead of .observe and .scan
 @
 text
-@/*241226;global 'W' as entry*/
-!(function(top){
-top.W||(top.W={});"use strict"
+@/*241228;choose entry with SEP*/
+!(function(top){const SEP="W"
+"use strict";top[SEP]||(top[SEP]={})
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
-function observe(elemId){
+function _get_el(elemId){
+  var elem = elemId
   if (typeof elemId == "string"){
     let eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
-    var elem = document.getElementById(eid);
-    if (elem === null) {alert(`id[${elemId}] not exist`);return}
-  } else {var elem = elemId}
+    elem = document.getElementById(eid);
+    if (elem === null) {alert(`id[${elemId}] not exist`)}
+  } return elem
+}
+function jq(elemId){
+  var elem = _get_el(elemId)
   var st = new Set(["INPUT","TEXTAREA","SELECT"]);
   var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
   var ret = function(val){
@@ -119,7 +128,7 @@ function _attr_bind(node, vm){
     if (1==_n.nodeType){ _a = _n.getAttribute("db")
       if (_a) { _a.split(',').forEach(function(_db){
         let _b = _db.split(':')
-        if ("el"==_b[0]) {vm[_b[1]]=observe(_n)}
+        if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
         else if ("fn"==_b[0]) { let ev = _n.nodeName=="SELECT"?'change':'input'
           let tmout;function _smooth(e) {clearTimeout(tmout)
             tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
@@ -130,11 +139,10 @@ function _attr_bind(node, vm){
     if (_n.childNodes) {_attr_bind(_n, vm)}
     }
   })
-}
-function scan(elemId){
-  var eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
-  var vm = window[eid] = {}
-  _attr_bind(document.getElementById(eid), vm)
+} // take knockout
+function ko(elemId){
+  var elem=_get_el(elemId)
+  var vm = {}; _attr_bind(elem, vm); return vm
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
 function ajax(method, url, data, cb_func, timeout=10000) {
@@ -175,22 +183,68 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   function _subdom(resp, code){
 	if (code >=300 || code <200) {alert(resp)}
 	var swap = opt["swap"];
-	if (swap){  let ori = observe(target).o;//before | after | delete
+	if (swap){  let ori = jq(target).o;//before | after | delete
 	  if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
 	  else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
-	  else {observe(target)("")}
-	}else {observe(target)(resp)}
+	  else {jq(target)("")}
+	}else {jq(target)(resp)}
   }  var data={};
   if (id_elem) {
     var a_in=id_elem.replace(/\s+/g, "").split(",");
-    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+    for (let k of a_in){let e = jq(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
   } ajax(method, url, data, _subdom, timeout);
 }
 // export function
+top[SEP].jq=jq; top[SEP].ko=ko
+top[SEP].ajax=ajax; top[SEP].awax=awax
+top[SEP].hxdom=hxdom
+})(this);
+@
+
+
+1.15
+log
+@fix: hxdom just swap one elem
+@
+text
+@d1 3
+a3 3
+/*241226;global 'W' as entry*/
+!(function(top){
+top.W||(top.W={});"use strict"
+d5 2
+a6 1
+function observe(elemId){
+d9 6
+a14 3
+    var elem = document.getElementById(eid);
+    if (elem === null) {alert(`id[${elemId}] not exist`);return}
+  } else {var elem = elemId}
+d30 1
+a30 1
+        if ("el"==_b[0]) {vm[_b[1]]=observe(_n)}
+d41 4
+a44 5
+}
+function scan(elemId){
+  var eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
+  var vm = window[eid] = {}
+  _attr_bind(document.getElementById(eid), vm)
+d85 1
+a85 1
+	if (swap){  let ori = observe(target).o;//before | after | delete
+d88 2
+a89 2
+	  else {observe(target)("")}
+	}else {observe(target)(resp)}
+d93 1
+a93 1
+    for (let k of a_in){let e = observe(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+d97 3
+a99 3
 top.W.observe=observe; top.W.scan=scan
 top.W.ajax=ajax; top.W.awax=awax
 top.W.hxdom=hxdom
-})(this);
 @
 
 
