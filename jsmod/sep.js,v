@@ -1,9 +1,15 @@
-head	1.16;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2024.12.31.02.37.49;	author u0_a157;	state Exp;
+branches;
+next	1.16;
+commitid	100677358FD291AD36E;
 
 1.16
 date	2024.12.29.14.56.56;	author shuw;	state Exp;
@@ -94,14 +100,14 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@BREAK CHANGE: use W.jq and .ko instead of .observe and .scan
+@feat: hxdom can pass object param
 @
 text
-@/*241228;choose entry with SEP*/
+@/*241229;choose entry with SEP*/
 !(function(top){const SEP="W"
-"use strict";top[SEP]||(top[SEP]={})
+"use strict";var _G;top[SEP]||(_G=top[SEP]={})
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
 function _get_el(elemId){
   var elem = elemId
@@ -119,7 +125,7 @@ function jq(elemId){
     if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
     else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
   }
-  ret.o = elem; ret.tog = (n)=>{elem.classList.toggle(n)}
+  ret.o = elem; ret.on = (ev, fn)=>{elem.addEventListener(ev, fn)}; ret.tog = (n)=>{elem.classList.toggle(n)}
   ret.disp = (s)=>{elem.style.display=s}; ret.vis = (b)=>{elem.style.visibility = b?"visible":"hidden"}
   return ret
 }
@@ -190,15 +196,41 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
 	}else {jq(target)(resp)}
   }  var data={};
   if (id_elem) {
-    var a_in=id_elem.replace(/\s+/g, "").split(",");
-    for (let k of a_in){let e = jq(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+    if (typeof id_elem =="string") {
+      var a_in=id_elem.replace(/\s+/g, "").split(",");
+      for (let k of a_in){let e = jq(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+    } else {data=id_elem}
   } ajax(method, url, data, _subdom, timeout);
 }
 // export function
+_G.jq=jq; _G.ko=ko; _G.ajax=ajax; _G.awax=awax; _G.hxdom=hxdom
+})(this);
+@
+
+
+1.16
+log
+@BREAK CHANGE: use W.jq and .ko instead of .observe and .scan
+@
+text
+@d1 1
+a1 1
+/*241228;choose entry with SEP*/
+d3 1
+a3 1
+"use strict";top[SEP]||(top[SEP]={})
+d21 1
+a21 1
+  ret.o = elem; ret.tog = (n)=>{elem.classList.toggle(n)}
+d92 4
+a95 2
+    var a_in=id_elem.replace(/\s+/g, "").split(",");
+    for (let k of a_in){let e = jq(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
+d99 1
+a99 3
 top[SEP].jq=jq; top[SEP].ko=ko
 top[SEP].ajax=ajax; top[SEP].awax=awax
 top[SEP].hxdom=hxdom
-})(this);
 @
 
 
