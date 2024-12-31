@@ -1,9 +1,15 @@
-head	1.17;
+head	1.18;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.18
+date	2024.12.31.15.05.35;	author synich;	state Exp;
+branches;
+next	1.17;
+commitid	PndAknkfwWGijFDF;
 
 1.17
 date	2024.12.31.02.37.49;	author u0_a157;	state Exp;
@@ -100,44 +106,51 @@ desc
 @@
 
 
-1.17
+1.18
 log
-@feat: hxdom can pass object param
+@fix: ready for minify
 @
 text
-@/*241229;choose entry with SEP*/
-!(function(top){const SEP="W"
-"use strict";var _G;top[SEP]||(_G=top[SEP]={})
+@/*241231;choose entry with SEP*/
+!(function(top){"use strict";
+const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
 function _get_el(elemId){
-  var elem = elemId
+  var el = elemId;
   if (typeof elemId == "string"){
     let eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
-    elem = document.getElementById(eid);
-    if (elem === null) {alert(`id[${elemId}] not exist`)}
-  } return elem
+    el = document.getElementById(eid);
+    if (el === null) {alert(`id[${elemId}] not exist`)}
+  }
+  return el
 }
 function jq(elemId){
-  var elem = _get_el(elemId)
+  var el = _get_el(elemId);
   var st = new Set(["INPUT","TEXTAREA","SELECT"]);
-  var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
+  var ndCh = st.has(el.nodeName)?'v':'i';//value or innerHTML
   var ret = function(val){
-    if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
-    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
-  }
-  ret.o = elem; ret.on = (ev, fn)=>{elem.addEventListener(ev, fn)}; ret.tog = (n)=>{elem.classList.toggle(n)}
-  ret.disp = (s)=>{elem.style.display=s}; ret.vis = (b)=>{elem.style.visibility = b?"visible":"hidden"}
+    if (val===undefined){return ndCh=='v'?el.value:el.innerHTML}
+    else {ndCh=='v'?el.value=val:el.innerHTML=val; return ret}
+  };
+  ret.o = el;
+  ret.on = (ev, fn)=>{el.addEventListener(ev, fn)};
+  ret.tog = (n)=>{el.classList.toggle(n)};
+  ret.disp = (s)=>{el.style.display=s};
+  ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
   return ret
 }
 function _attr_bind(node, vm){
   Array.from(node.childNodes).forEach(_n => {
-    if (1==_n.nodeType){ _a = _n.getAttribute("db")
+    if (1==_n.nodeType){ _a = _n.getAttribute("db");
       if (_a) { _a.split(',').forEach(function(_db){
-        let _b = _db.split(':')
+        let _b = _db.split(':');
         if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
-        else if ("fn"==_b[0]) { let ev = _n.nodeName=="SELECT"?'change':'input'
-          let tmout;function _smooth(e) {clearTimeout(tmout)
-            tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+        else if ("fn"==_b[0]) {
+            let ev = _n.nodeName=="SELECT"?'change':'input';
+            let tmout;
+            function _smooth(e) {
+              clearTimeout(tmout);
+              tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
           _n.addEventListener(ev, _smooth)
         }
       })
@@ -147,46 +160,155 @@ function _attr_bind(node, vm){
   })
 } // take knockout
 function ko(elemId){
-  var elem=_get_el(elemId)
-  var vm = {}; _attr_bind(elem, vm); return vm
+  var elem=_get_el(elemId);
+  var vm = {};
+  _attr_bind(elem, vm);
+  return vm
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
 function ajax(method, url, data, cb_func, timeout=10000) {
   function encodeParams(params) {
     return Object.keys(params)
       .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-      .join("&");
+      .join("&")
   }
   method = method.toUpperCase();
-  if (data) { data = encodeParams(data); }
-  if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
+  if (data) { data = encodeParams(data) }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null }
 
   var xhr = new XMLHttpRequest();
-  xhr.open(method, url, true); // async true
+  xhr.open(method, url, true);// async true
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   var timer = setTimeout(function() {
     xhr.abort();
-    cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408)// 408: Timeout
     }, timeout);
   xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) { // Request is complete
+    if (xhr.readyState === 4) {// Request is complete
       clearTimeout(timer);
-      cb_func(xhr.responseText, xhr.status);
+      cb_func(xhr.responseText, xhr.status)
     }
   };
-  if (data) { xhr.send(data); }
-  else      { xhr.send();  }
+  if (data) { xhr.send(data) }
+  else      { xhr.send()  }
 }
 // raise exp when isrej true
 function awax(method, url, data, timeout=10000, isrej=false) {
   return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
-    let ok= (st>=200 && st<300)? true: false
-    if(ok){resolve(resp)}else{if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)} }}, timeout)}
+    let ok= (st>=200 && st<300)? true: false;
+    if(ok){resolve(resp)}
+    else{
+      if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)}
+    }
+  }, timeout)}
 )}
 // take from htmx
 function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.firstChild}
 function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   function _subdom(resp, code){
+    if (code >=300 || code <200) {alert(resp)}
+    var swap = opt["swap"];
+    if (swap){
+      let ori = jq(target).o;//before | after | delete
+      if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
+      else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
+      else {jq(target)("")}
+    }else {jq(target)(resp)}
+  }
+  var data={};
+  if (id_elem) {
+    if (typeof id_elem =="string") {
+      var a_in=id_elem.replace(/\s+/g, "").split(",");
+      for (let k of a_in){
+        let e = jq(k), n=e.o.getAttribute("name");
+        n=n?n:k;
+        data[n]=e()
+      }
+    } else {data=id_elem}
+  }
+  ajax(method, url, data, _subdom, timeout)
+}
+// export function
+_G.jq=jq; _G.ko=ko; _G.ajax=ajax; _G.awax=awax; _G.hxdom=hxdom
+})(this)
+@
+
+
+1.17
+log
+@feat: hxdom can pass object param
+@
+text
+@d1 3
+a3 3
+/*241229;choose entry with SEP*/
+!(function(top){const SEP="W"
+"use strict";var _G;top[SEP]||(_G=top[SEP]={})
+d6 1
+a6 1
+  var elem = elemId
+d9 4
+a12 3
+    elem = document.getElementById(eid);
+    if (elem === null) {alert(`id[${elemId}] not exist`)}
+  } return elem
+d15 1
+a15 1
+  var elem = _get_el(elemId)
+d17 1
+a17 1
+  var ndCh = st.has(elem.nodeName)?'v':'i';//value or innerHTML
+d19 8
+a26 5
+    if (val===undefined){return ndCh=='v'?elem.value:elem.innerHTML}
+    else {ndCh=='v'?elem.value=val:elem.innerHTML=val; return ret}
+  }
+  ret.o = elem; ret.on = (ev, fn)=>{elem.addEventListener(ev, fn)}; ret.tog = (n)=>{elem.classList.toggle(n)}
+  ret.disp = (s)=>{elem.style.display=s}; ret.vis = (b)=>{elem.style.visibility = b?"visible":"hidden"}
+d31 1
+a31 1
+    if (1==_n.nodeType){ _a = _n.getAttribute("db")
+d33 1
+a33 1
+        let _b = _db.split(':')
+d35 6
+a40 3
+        else if ("fn"==_b[0]) { let ev = _n.nodeName=="SELECT"?'change':'input'
+          let tmout;function _smooth(e) {clearTimeout(tmout)
+            tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+d50 4
+a53 2
+  var elem=_get_el(elemId)
+  var vm = {}; _attr_bind(elem, vm); return vm
+d60 1
+a60 1
+      .join("&");
+d63 2
+a64 2
+  if (data) { data = encodeParams(data); }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null; }
+d67 1
+a67 1
+  xhr.open(method, url, true); // async true
+d71 1
+a71 1
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408); // 408: Request Timeout
+d74 1
+a74 1
+    if (xhr.readyState === 4) { // Request is complete
+d76 1
+a76 1
+      cb_func(xhr.responseText, xhr.status);
+d79 2
+a80 2
+  if (data) { xhr.send(data); }
+  else      { xhr.send();  }
+d85 6
+a90 2
+    let ok= (st>=200 && st<300)? true: false
+    if(ok){resolve(resp)}else{if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)} }}, timeout)}
+d96 10
+a105 8
 	if (code >=300 || code <200) {alert(resp)}
 	var swap = opt["swap"];
 	if (swap){  let ori = jq(target).o;//before | after | delete
@@ -195,15 +317,14 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
 	  else {jq(target)("")}
 	}else {jq(target)(resp)}
   }  var data={};
-  if (id_elem) {
-    if (typeof id_elem =="string") {
-      var a_in=id_elem.replace(/\s+/g, "").split(",");
+d109 5
+a113 1
       for (let k of a_in){let e = jq(k);let n=e.o.getAttribute("name");n=n?n:k; data[n]=e()}
-    } else {data=id_elem}
+d115 2
+a116 1
   } ajax(method, url, data, _subdom, timeout);
-}
-// export function
-_G.jq=jq; _G.ko=ko; _G.ajax=ajax; _G.awax=awax; _G.hxdom=hxdom
+d120 1
+a120 1
 })(this);
 @
 
