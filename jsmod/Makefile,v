@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.01.01.15.49.31;	author u0_a157;	state Exp;
+branches;
+next	1.3;
+commitid	1006775640B739819FF;
 
 1.3
 date	2024.06.13.15.59.29;	author shuw;	state Exp;
@@ -26,12 +32,65 @@ desc
 @@
 
 
+1.4
+log
+@feat: minijs appear
+@
+text
+@CC	= gcc
+CCOPTS	= -O2 -pedantic -std=c99 -Wall -fstrict-aliasing -fomit-frame-pointer
+CCOPTS += -I.   # duktape.h and duk_config.h must be in include path
+CCLIBS	= -lm
+
+DUKTAPE_SOURCES = extra.c
+CMDLINE_SOURCES =
+
+# Enable print() and alert() for command line using an optional extra module.
+CCOPTS += -DDUK_CMDLINE_PRINTALERT_SUPPORT -I../extras/print-alert
+CMDLINE_SOURCES += extras/print-alert/duk_print_alert.c
+
+# Enable console object (console.log() etc) for command line.
+CCOPTS += -DDUK_CMDLINE_CONSOLE_SUPPORT -I../extras/console
+CMDLINE_SOURCES += extras/console/duk_console.c
+
+# Enable Duktape.Logger for command line.
+CCOPTS += -DDUK_CMDLINE_LOGGING_SUPPORT -I../extras/logging
+CMDLINE_SOURCES += extras/logging/duk_logging.c
+
+# Enable Duktape 1.x module loading for command line.
+CCOPTS += -DDUK_CMDLINE_MODULE_SUPPORT -I../extras/module-duktape
+CMDLINE_SOURCES += extras/module-duktape/duk_module_duktape.c
+
+# If you want linenoise, you can enable these.  At the moment linenoise
+# will cause some harmless compilation warnings.
+#CCOPTS += -DDUK_CMDLINE_FANCY -I./linenoise
+#CMDLINE_SOURCES += linenoise/linenoise.c
+#duk:	linenoise
+
+# Use the tools/configure.py utility to modify Duktape default configuration:
+# http://duktape.org/guide.html#compiling
+# http://wiki.duktape.org/Configuring.html
+
+release:	$(DUKTAPE_SOURCES)
+	$(CC) -c -o duktape.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
+
+debug:	$(DUKTAPE_SOURCES)
+	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
+
+sep:
+	@@lua minijs.lua
+
+@
+
+
 1.3
 log
 @remove psquery dependency
 @
 text
-@CC	= gcc
+@d1 43
+a43 43
+CC	= gcc
 CCOPTS	= -O2 -pedantic -std=c99 -Wall -fstrict-aliasing -fomit-frame-pointer
 CCOPTS += -I.   # duktape.h and duk_config.h must be in include path
 CCLIBS	= -lm

@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2025.01.01.15.49.31;	author u0_a157;	state Exp;
+branches;
+next	1.18;
+commitid	1006775640B739819FF;
 
 1.18
 date	2024.12.31.15.05.35;	author synich;	state Exp;
@@ -106,9 +112,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@fix: ready for minify
+@feat: minijs appear
 @
 text
 @/*241231;choose entry with SEP*/
@@ -167,9 +173,9 @@ function ko(elemId){
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
 function ajax(method, url, data, cb_func, timeout=10000) {
-  function encodeParams(params) {
-    return Object.keys(params)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+  function encodeParams(p) {
+    return Object.keys(p)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(p[key]))
       .join("&")
   }
   method = method.toUpperCase();
@@ -229,8 +235,28 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   ajax(method, url, data, _subdom, timeout)
 }
 // export function
-_G.jq=jq; _G.ko=ko; _G.ajax=ajax; _G.awax=awax; _G.hxdom=hxdom
+_G.jq=jq;
+_G.ko=ko;
+_G.ajax=ajax;
+_G.awax=awax;
+_G.hxdom=hxdom
 })(this)
+@
+
+
+1.18
+log
+@fix: ready for minify
+@
+text
+@d57 3
+a59 3
+  function encodeParams(params) {
+    return Object.keys(params)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+d119 5
+a123 1
+_G.jq=jq; _G.ko=ko; _G.ajax=ajax; _G.awax=awax; _G.hxdom=hxdom
 @
 
 

@@ -1,0 +1,38 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.01.01.15.49.31;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	1006775640B739819FF;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: minijs appear
+@
+text
+@function minijs(fname)
+  local fin = io.open(fname, "r")
+  local oname = fname:gsub(".js$", ".min.js")
+  local fout = io.open(oname, "w")
+  for li in fin:lines() do
+    li = li:gsub("//.*", "")
+    li = li:gsub("^ +", "")
+    fout:write(li)
+  end
+  fin:close()
+  fout:close()
+end
+
+minijs("sep.js")
+@
