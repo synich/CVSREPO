@@ -1,9 +1,14 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.01.10.15.59.42;	author shuw;	state Exp;
+branches;
+next	1.1;
 
 1.1
 date	2025.01.01.15.49.31;	author u0_a157;	state Exp;
@@ -16,12 +21,36 @@ desc
 @@
 
 
+1.2
+log
+@fix: minijs can deal tab
+@
+text
+@function minijs(fname)
+  local fin = io.open(fname, "r")
+  local oname = fname:gsub(".js$", ".min.js")
+  local fout = io.open(oname, "w")
+  for li in fin:lines() do
+    li = li:gsub("//.*", "")
+    li = li:gsub("^[ \t]+", "")
+    fout:write(li)
+  end
+  fin:close()
+  fout:close()
+end
+
+minijs("sep.js")
+@
+
+
 1.1
 log
 @feat: minijs appear
 @
 text
-@function minijs(fname)
+@d1 14
+a14 14
+function minijs(fname)
   local fin = io.open(fname, "r")
   local oname = fname:gsub(".js$", ".min.js")
   local fout = io.open(oname, "w")
@@ -36,3 +65,4 @@ end
 
 minijs("sep.js")
 @
+
