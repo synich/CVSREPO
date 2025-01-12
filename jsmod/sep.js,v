@@ -1,9 +1,14 @@
-head	1.21;
+head	1.22;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.22
+date	2025.01.12.16.02.05;	author shuw;	state Exp;
+branches;
+next	1.21;
 
 1.21
 date	2025.01.10.15.59.42;	author shuw;	state Exp;
@@ -123,12 +128,12 @@ desc
 @@
 
 
-1.21
+1.22
 log
-@fix: minijs can deal tab
+@feat: postj in ajax will send json body
 @
 text
-@/*250108;choose entry with SEP*/
+@/*250112;choose entry with SEP*/
 !(function(top){"use strict";
 const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
@@ -190,13 +195,18 @@ function ajax(method, url, data, cb_func, timeout=10000) {
     let _c= (key)=>`${encodeURIComponent(key)}=${encodeURIComponent(p[key])}`;
     return Object.keys(p).map(_c).join("&")
   }
+  let use_json=0;
   method = method.toUpperCase();
-  if (data) { data = encodeParams(data) }
+  if (method=="POSTJ"){method="POST";use_json=1}
+  if (data) {
+    if (use_json===0) { data = encodeParams(data)}
+    else {data = JSON.stringify(data)}
+  }
   if (method === "GET" && data) { url=`${url}?${data}`; data = null }
 
   var xhr = new XMLHttpRequest();
   xhr.open(method, url, true);// async true
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("Content-Type", use_json===0?"application/x-www-form-urlencoded":"application/json");
   var timer = setTimeout(function() {
     xhr.abort();
     cb_func(`ERROR: Request timeout ${timeout}ms`, 408)// 408: Timeout
@@ -253,6 +263,24 @@ _G.ajax=ajax;
 _G.awax=awax;
 _G.hxdom=hxdom
 })(this)
+@
+
+
+1.21
+log
+@fix: minijs can deal tab
+@
+text
+@d1 1
+a1 1
+/*250108;choose entry with SEP*/
+d63 1
+d65 5
+a69 1
+  if (data) { data = encodeParams(data) }
+d74 1
+a74 1
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 @
 
 
