@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.02.03.15.31.41;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	10067A0E15D1CE081D8;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: init util.lua
+@
+text
+@-- replace {} with value, eg.fmt('a{}b{}c', 1, 2)->a1b2c
+function fmt(s, ...)
+  local args = {...}
+  local res = s:gsub("{}", function() return table.remove(args, 1) or "" end)
+  return res
+end
+
+@
