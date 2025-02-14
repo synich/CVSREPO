@@ -1,9 +1,21 @@
-head	1.22;
+head	1.24;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.24
+date	2025.02.14.15.25.28;	author u0_a157;	state Exp;
+branches;
+next	1.23;
+commitid	10067AF60687DFBCEE3;
+
+1.23
+date	2025.02.14.15.20.59;	author u0_a157;	state Exp;
+branches;
+next	1.22;
+commitid	10067AF5F5B6681CAFF;
 
 1.22
 date	2025.01.12.16.02.05;	author shuw;	state Exp;
@@ -128,12 +140,15 @@ desc
 @@
 
 
-1.22
+1.24
 log
-@feat: postj in ajax will send json body
+@fix: remove log
 @
 text
-@/*250112;choose entry with SEP*/
+@/*250214;choose entry with SEP*/
+// Util: jq, ajax, awax, hxdom
+// DOM&UI: ko, render(ko.$pen)
+// ko: receive top elem id, return vm with all elems(include top itself) who has db attr
 !(function(top){"use strict";
 const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
@@ -161,32 +176,78 @@ function jq(elemId){
   ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
   return ret
 }
-function _attr_bind(node, vm){
-  Array.from(node.childNodes).forEach(_n => {
-    if (1==_n.nodeType){
-      let _a = _n.getAttribute("db");
-      if (_a) {
-        _a.split(',').forEach(function(_db){
-        let _b = _db.split(':');
-        if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
-        else if ("fn"==_b[0]) {
-            let ev = _n.nodeName=="SELECT"?'change':'input';
-            let tmout;
-            function _smooth(e) {
-              clearTimeout(tmout);
-              tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
-          _n.addEventListener(ev, _smooth)
-        }
-      })
+// take React
+function isPlainObject(target){ return Object.prototype.toString.call(target) === '[object Object]' }
+function createElement(tag, props, ...children){
+  return {
+    tag, props,
+    children: children.reduce((array, child) =>  {
+      if (Array.isArray(child)) {
+        array = array.concat(child)
+      } else {
+        array.push(isPlainObject(child) ? child: new String(child))
+      }
+      return array
+    }, [])
+  }
+}
+function createDOM(vdom){
+  let dom = null;
+  if (isPlainObject(vdom)) {
+    let {tag, props = {}, children = []} = vdom;
+    if (typeof tag ==="function") {
+		let v = tag(props); //必须传入props
+		tag = v.tag; props = v.props; children = v.children;
     }
-    if (_n.childNodes) {_attr_bind(_n, vm)}
+    dom = document.createElement(tag);
+    Object.keys(props || []).forEach(key => { dom[key] = props[key] });//不能绑on事件，className特例
+    (children || []).forEach(child => {
+      dom.appendChild(createDOM(child))
+    })
+  } else {
+    dom = document.createTextNode(vdom)
+  }
+  return dom
+}
+function render(vdom, p){
+  let dom = createDOM(vdom);
+  if (p.firstChild) {
+    p.replaceChild(dom, p.firstChild)
+  } else {
+    p.appendChild(dom)
+  }
+}
+// take knockout
+function _do_attr(_n, vm){
+  let _a = _n.getAttribute("db");
+  if (_a) {
+    _a.split(',').forEach(function(_db){
+    let _b = _db.split(':');
+    if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
+    else if ("fn"==_b[0]) {
+      let ev = _n.nodeName=="SELECT"?'change':'input';
+      let tmout;
+      function _smooth(e) {
+        clearTimeout(tmout);
+        tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+    _n.addEventListener(ev, _smooth)
     }
   })
-} // take knockout
-function ko(elemId){
-  var elem=_get_el(elemId);
+}}
+function _attr_bind(node, vm){
+  Array.from(node.childNodes).forEach(_n=>{
+    if (1==_n.nodeType){
+      _do_attr(_n, vm);
+      if (_n.childNodes) {_attr_bind(_n, vm)}
+    }
+  })
+}
+function ko(topElmId){
+  var node=_get_el(topElmId);
   var vm = {};
-  _attr_bind(elem, vm);
+  _do_attr(node, vm);
+  _attr_bind(node, vm);
+  vm.$pen=function(vdom, id){render(vdom, vm[id].o)};
   return vm
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
@@ -261,8 +322,63 @@ _G.jq=jq;
 _G.ko=ko;
 _G.ajax=ajax;
 _G.awax=awax;
-_G.hxdom=hxdom
+_G.hxdom=hxdom;
+top.React={createElement:createElement, render:render}
 })(this)
+@
+
+
+1.23
+log
+@feat: add React and combine with ko
+@
+text
+@a65 1
+  console.log("render",vdom,p);
+@
+
+
+1.22
+log
+@feat: postj in ajax will send json body
+@
+text
+@d1 4
+a4 1
+/*250112;choose entry with SEP*/
+d32 59
+d92 1
+a92 1
+  Array.from(node.childNodes).forEach(_n => {
+d94 2
+a95 16
+      let _a = _n.getAttribute("db");
+      if (_a) {
+        _a.split(',').forEach(function(_db){
+        let _b = _db.split(':');
+        if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
+        else if ("fn"==_b[0]) {
+            let ev = _n.nodeName=="SELECT"?'change':'input';
+            let tmout;
+            function _smooth(e) {
+              clearTimeout(tmout);
+              tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+          _n.addEventListener(ev, _smooth)
+        }
+      })
+    }
+    if (_n.childNodes) {_attr_bind(_n, vm)}
+d98 3
+a100 3
+} // take knockout
+function ko(elemId){
+  var elem=_get_el(elemId);
+d102 3
+a104 1
+  _attr_bind(elem, vm);
+d179 2
+a180 1
+_G.hxdom=hxdom
 @
 
 
