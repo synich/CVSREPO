@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
+branches;
+next	1.4;
+commitid	10067B8A3693AAB588C;
 
 1.4
 date	2025.01.01.15.49.31;	author u0_a157;	state Exp;
@@ -32,9 +38,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@feat: minijs appear
+@feat: unit test with sep.js
 @
 text
 @CC	= gcc
@@ -78,8 +84,19 @@ debug:	$(DUKTAPE_SOURCES)
 	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
 
 sep:
-	@@lua minijs.lua
+	@@lua minijs.lua sep.js
 
+@
+
+
+1.4
+log
+@feat: minijs appear
+@
+text
+@d42 1
+a42 1
+	@@lua minijs.lua
 @
 
 

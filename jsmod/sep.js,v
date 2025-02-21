@@ -1,9 +1,15 @@
-head	1.24;
+head	1.25;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.25
+date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
+branches;
+next	1.24;
+commitid	10067B8A3693AAB588C;
 
 1.24
 date	2025.02.14.15.25.28;	author u0_a157;	state Exp;
@@ -140,12 +146,12 @@ desc
 @@
 
 
-1.24
+1.25
 log
-@fix: remove log
+@feat: unit test with sep.js
 @
 text
-@/*250214;choose entry with SEP*/
+@/*250219;choose entry with SEP*/
 // Util: jq, ajax, awax, hxdom
 // DOM&UI: ko, render(ko.$pen)
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -170,7 +176,7 @@ function jq(elemId){
     else {ndCh=='v'?el.value=val:el.innerHTML=val; return ret}
   };
   ret.o = el;
-  ret.on = (ev, fn)=>{el.addEventListener(ev, fn)};
+  ret.on = (ev, fn, p)=>{el.addEventListener(ev, p?fn.bind(null, p) :fn)};
   ret.tog = (n)=>{el.classList.toggle(n)};
   ret.disp = (s)=>{el.style.display=s};
   ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
@@ -191,7 +197,7 @@ function createElement(tag, props, ...children){
     }, [])
   }
 }
-function createDOM(vdom){
+function vdom2dom(vdom){
   let dom = null;
   if (isPlainObject(vdom)) {
     let {tag, props = {}, children = []} = vdom;
@@ -202,7 +208,7 @@ function createDOM(vdom){
     dom = document.createElement(tag);
     Object.keys(props || []).forEach(key => { dom[key] = props[key] });//不能绑on事件，className特例
     (children || []).forEach(child => {
-      dom.appendChild(createDOM(child))
+      dom.appendChild(vdom2dom(child))
     })
   } else {
     dom = document.createTextNode(vdom)
@@ -210,7 +216,7 @@ function createDOM(vdom){
   return dom
 }
 function render(vdom, p){
-  let dom = createDOM(vdom);
+  let dom = vdom2dom(vdom);
   if (p.firstChild) {
     p.replaceChild(dom, p.firstChild)
   } else {
@@ -325,6 +331,29 @@ _G.awax=awax;
 _G.hxdom=hxdom;
 top.React={createElement:createElement, render:render}
 })(this)
+@
+
+
+1.24
+log
+@fix: remove log
+@
+text
+@d1 1
+a1 1
+/*250214;choose entry with SEP*/
+d26 1
+a26 1
+  ret.on = (ev, fn)=>{el.addEventListener(ev, fn)};
+d47 1
+a47 1
+function createDOM(vdom){
+d58 1
+a58 1
+      dom.appendChild(createDOM(child))
+d66 1
+a66 1
+  let dom = createDOM(vdom);
 @
 
 

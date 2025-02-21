@@ -1,0 +1,46 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	10067B8A3693AAB588C;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: unit test with sep.js
+@
+text
+@<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnitTest4sep</title>
+    <link rel="stylesheet" href="mel.css">
+    <script src="sep.min.js"></script>
+</head>
+<body>
+    <div id="e1">content <p db="el:p"></p> </div>
+<button onclick="ko()">ko</button><hr>
+<button onclick="ajax()">ajax</button><hr>
+<button onclick="hxdom()">hxdom</button><hr>
+<button onclick="doall()">doall</button>
+<script>
+  function ko(){var e = W.ko("e1");e["p"](123);e["p"].on("click",(p,e)=>{alert(p)}, 123)}
+  function ajax(){W.ajax("POST", "/minijs.lua", {a:1,b:2}, (r,s)=>{alert(r,s)})}
+  function hxdom(){W.hxdom("GET", "/minijs.lua", {a:1,b:2}, "e1", {swap:"a"})}
+  function doall(){ko();ajax();hxdom()}
+</script>
+</body>
+</html>@
