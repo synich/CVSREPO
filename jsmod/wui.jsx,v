@@ -1,0 +1,31 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.02.23.15.38.01;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	10067BB40D916B6FBD5;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: init wui.jsx
+@
+text
+@/*250223*/
+export function w_list(lst){return (
+<ul>
+    {lst.map((item)=>(<li>{item}</li>))}
+</ul>
+)}
+
+@

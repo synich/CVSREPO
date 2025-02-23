@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.02.23.15.38.01;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	10067BB40D916B6FBD5;
 
 1.1
 date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: unit test with sep.js
+@feat: init wui.jsx
 @
 text
 @<!DOCTYPE html>
@@ -29,9 +35,11 @@ text
     <title>UnitTest4sep</title>
     <link rel="stylesheet" href="mel.css">
     <script src="sep.min.js"></script>
+    <script src="wui.jsx" type="module"></script>
 </head>
 <body>
     <div id="e1">content <p db="el:p"></p> </div>
+    <div id="e2" db="el:e2"></div>
 <button onclick="ko()">ko</button><hr>
 <button onclick="ajax()">ajax</button><hr>
 <button onclick="hxdom()">hxdom</button><hr>
@@ -42,5 +50,27 @@ text
   function hxdom(){W.hxdom("GET", "/minijs.lua", {a:1,b:2}, "e1", {swap:"a"})}
   function doall(){ko();ajax();hxdom()}
 </script>
+<script type="module">
+import {w_list} from '/wui.jsx'
+var e = w_list([1,2,3])
+var p = W.ko("e2")
+p.$pen(e, "e2")
+</script>
 </body>
+</html>
+
+@
+
+
+1.1
+log
+@feat: unit test with sep.js
+@
+text
+@d9 1
+d13 1
+d24 6
+d31 2
+a32 1
 </html>@
+
