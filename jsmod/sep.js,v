@@ -1,9 +1,15 @@
-head	1.25;
+head	1.26;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.26
+date	2025.02.27.14.06.40;	author u0_a157;	state Exp;
+branches;
+next	1.25;
+commitid	10067C071707EA0481B;
 
 1.25
 date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
@@ -146,12 +152,12 @@ desc
 @@
 
 
-1.25
+1.26
 log
-@feat: unit test with sep.js
+@feat: jsx support db attr and  added in ko
 @
 text
-@/*250219;choose entry with SEP*/
+@/*250227;SEP as entry*/
 // Util: jq, ajax, awax, hxdom
 // DOM&UI: ko, render(ko.$pen)
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -206,7 +212,7 @@ function vdom2dom(vdom){
 		tag = v.tag; props = v.props; children = v.children;
     }
     dom = document.createElement(tag);
-    Object.keys(props || []).forEach(key => { dom[key] = props[key] });//不能绑on事件，className特例
+    Object.keys(props || []).forEach(key=>{ dom.setAttribute(key, props[key]) } );//不能绑on事件，className特例
     (children || []).forEach(child => {
       dom.appendChild(vdom2dom(child))
     })
@@ -231,11 +237,13 @@ function _do_attr(_n, vm){
     let _b = _db.split(':');
     if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
     else if ("fn"==_b[0]) {
-      let ev = _n.nodeName=="SELECT"?'change':'input';
+      let ev='click',dly=1;
+      if (_n.nodeName=="INPUT"){ev='input';dly=200}
+      else if(_n.nodeName=="SELECT"){ev='change'}
       let tmout;
       function _smooth(e) {
         clearTimeout(tmout);
-        tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+        tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, dly, e)}
     _n.addEventListener(ev, _smooth)
     }
   })
@@ -248,12 +256,11 @@ function _attr_bind(node, vm){
     }
   })
 }
-function ko(topElmId){
-  var node=_get_el(topElmId);
-  var vm = {};
-  _do_attr(node, vm);
-  _attr_bind(node, vm);
-  vm.$pen=function(vdom, id){render(vdom, vm[id].o)};
+function ko(tEId){
+  var node=_get_el(tEId),vm={};
+  _do_attr(node, vm);_attr_bind(node, vm);
+  vm.$root=jq(node);
+  vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this)};
   return vm
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
@@ -329,8 +336,39 @@ _G.ko=ko;
 _G.ajax=ajax;
 _G.awax=awax;
 _G.hxdom=hxdom;
-top.React={createElement:createElement, render:render}
+top.React={createElement:createElement}
 })(this)
+@
+
+
+1.25
+log
+@feat: unit test with sep.js
+@
+text
+@d1 1
+a1 1
+/*250219;choose entry with SEP*/
+d56 1
+a56 1
+    Object.keys(props || []).forEach(key => { dom[key] = props[key] });//不能绑on事件，className特例
+d81 3
+a83 1
+      let ev = _n.nodeName=="SELECT"?'change':'input';
+d87 1
+a87 1
+        tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, 250, e)}
+d100 5
+a104 6
+function ko(topElmId){
+  var node=_get_el(topElmId);
+  var vm = {};
+  _do_attr(node, vm);
+  _attr_bind(node, vm);
+  vm.$pen=function(vdom, id){render(vdom, vm[id].o)};
+d180 1
+a180 1
+top.React={createElement:createElement, render:render}
 @
 
 

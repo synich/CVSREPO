@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.02.27.14.06.40;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	10067C071707EA0481B;
 
 1.1
 date	2025.02.23.15.38.01;	author u0_a157;	state Exp;
@@ -16,16 +22,35 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: init wui.jsx
+@feat: jsx support db attr and  added in ko
 @
 text
-@/*250223*/
+@/*250227*/
 export function w_list(lst){return (
 <ul>
     {lst.map((item)=>(<li>{item}</li>))}
 </ul>
 )}
 
+export function w_aht(){return (
+    <div style="position: relative; min-height: 5vh;">
+      <p db="el:p" style="visibility: hidden"></p>
+      <textarea db="el:t,fn:sync" style="position: absolute;top: 0;height: 100%"></textarea>
+    </div>
+)}
 @
+
+
+1.1
+log
+@feat: init wui.jsx
+@
+text
+@d1 1
+a1 1
+/*250223*/
+d8 6
+@
+
