@@ -1,9 +1,15 @@
-head	1.26;
+head	1.27;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.27
+date	2025.02.28.14.35.27;	author u0_a157;	state Exp;
+branches;
+next	1.26;
+commitid	10067C1C9AF669BC111;
 
 1.26
 date	2025.02.27.14.06.40;	author u0_a157;	state Exp;
@@ -152,9 +158,9 @@ desc
 @@
 
 
-1.26
+1.27
 log
-@feat: jsx support db attr and  added in ko
+@fix: INPUT and TEXTAREA both input ev
 @
 text
 @/*250227;SEP as entry*/
@@ -237,9 +243,9 @@ function _do_attr(_n, vm){
     let _b = _db.split(':');
     if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
     else if ("fn"==_b[0]) {
-      let ev='click',dly=1;
-      if (_n.nodeName=="INPUT"){ev='input';dly=200}
-      else if(_n.nodeName=="SELECT"){ev='change'}
+      let ev='input',dly=250;
+      if(_n.nodeName=="SELECT"){ev='change';dly=1}
+      else if(_n.nodeName=="BUTTON"){ev='click';dly=1}
       let tmout;
       function _smooth(e) {
         clearTimeout(tmout);
@@ -260,7 +266,7 @@ function ko(tEId){
   var node=_get_el(tEId),vm={};
   _do_attr(node, vm);_attr_bind(node, vm);
   vm.$root=jq(node);
-  vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this)};
+  vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this);return this};
   return vm
 }
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
@@ -338,6 +344,22 @@ _G.awax=awax;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.26
+log
+@feat: jsx support db attr and  added in ko
+@
+text
+@d81 3
+a83 3
+      let ev='click',dly=1;
+      if (_n.nodeName=="INPUT"){ev='input';dly=200}
+      else if(_n.nodeName=="SELECT"){ev='change'}
+d104 1
+a104 1
+  vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this)};
 @
 
 
