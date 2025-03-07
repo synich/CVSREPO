@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.03.07.16.39.25;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	10067CB213D3D9F20DB;
 
 1.1
 date	2020.05.22.15.36.09;	author android;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@INSERT: miss 2 time, no history remain
+@doc: vimrc in conf
 @
 text
 @About id_rsa & id_rsa.pub
@@ -38,4 +44,18 @@ source ~/.shuw/init.vim
 
 if use windows, make g:mvcf_path point to mvcf/ dir
 
+vim的配置有两部分，init.vim单文件包含基本可用功能
+vimrc/plugin放的是自己写的脚本
+加载自动补全是C-k，函数MvcfComplete
+
 @
+
+
+1.1
+log
+@INSERT: miss 2 time, no history remain
+@
+text
+@d18 4
+@
+

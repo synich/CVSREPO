@@ -1,9 +1,15 @@
-head	1.27;
+head	1.28;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.28
+date	2025.03.02.15.23.16;	author u0_a157;	state Exp;
+branches;
+next	1.27;
+commitid	10067C477E47E1621C4;
 
 1.27
 date	2025.02.28.14.35.27;	author u0_a157;	state Exp;
@@ -158,12 +164,12 @@ desc
 @@
 
 
-1.27
+1.28
 log
-@fix: INPUT and TEXTAREA both input ev
+@fix: trigger event when set input
 @
 text
-@/*250227;SEP as entry*/
+@/*250302;SEP entry*/
 // Util: jq, ajax, awax, hxdom
 // DOM&UI: ko, render(ko.$pen)
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -175,7 +181,7 @@ function _get_el(elemId){
   if (typeof elemId == "string"){
     let eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
     el = document.getElementById(eid);
-    if (el === null) {alert(`id[${elemId}] not exist`)}
+    if (el===null) {alert(`id[${elemId}] not exist`)}
   }
   return el
 }
@@ -185,7 +191,8 @@ function jq(elemId){
   var ndCh = st.has(el.nodeName)?'v':'i';//value or innerHTML
   var ret = function(val){
     if (val===undefined){return ndCh=='v'?el.value:el.innerHTML}
-    else {ndCh=='v'?el.value=val:el.innerHTML=val; return ret}
+    else {if(ndCh=='v'){el.value=val;let ev=el.nodeName=="SELECT"?"change":"input";el.dispatchEvent(new Event(ev,{bubbles: true}))}
+          else{el.innerHTML=val}; return ret}
   };
   ret.o = el;
   ret.on = (ev, fn, p)=>{el.addEventListener(ev, p?fn.bind(null, p) :fn)};
@@ -263,7 +270,7 @@ function _attr_bind(node, vm){
   })
 }
 function ko(tEId){
-  var node=_get_el(tEId),vm={};
+  let node=_get_el(tEId),vm={};
   _do_attr(node, vm);_attr_bind(node, vm);
   vm.$root=jq(node);
   vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this);return this};
@@ -284,10 +291,10 @@ function ajax(method, url, data, cb_func, timeout=10000) {
   }
   if (method === "GET" && data) { url=`${url}?${data}`; data = null }
 
-  var xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
   xhr.open(method, url, true);// async true
   xhr.setRequestHeader("Content-Type", use_json===0?"application/x-www-form-urlencoded":"application/json");
-  var timer = setTimeout(function() {
+  let timer = setTimeout(function() {
     xhr.abort();
     cb_func(`ERROR: Request timeout ${timeout}ms`, 408)// 408: Timeout
     }, timeout);
@@ -315,7 +322,7 @@ function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.fir
 function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
   function _subdom(resp, code){
     if (code >=300 || code <200) {alert(resp)}
-    var swap = opt["swap"];
+    let swap = opt["swap"];
     if (swap){
       let ori = jq(target).o;//before | after | delete
       if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
@@ -323,10 +330,10 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
       else {jq(target)("")}
     }else {jq(target)(resp)}
   }
-  var data={};
+  let data={};
   if (id_elem) {
     if (typeof id_elem =="string") {
-      var a_in=id_elem.replace(/\s+/g, "").split(",");
+      let a_in=id_elem.replace(/\s+/g, "").split(",");
       for (let k of a_in){
         let e = jq(k), n=e.o.getAttribute("name");
         n=n?n:k;
@@ -344,6 +351,41 @@ _G.awax=awax;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.27
+log
+@fix: INPUT and TEXTAREA both input ev
+@
+text
+@d1 1
+a1 1
+/*250227;SEP as entry*/
+d13 1
+a13 1
+    if (el === null) {alert(`id[${elemId}] not exist`)}
+d23 2
+a24 1
+    else {ndCh=='v'?el.value=val:el.innerHTML=val; return ret}
+d102 1
+a102 1
+  var node=_get_el(tEId),vm={};
+d123 1
+a123 1
+  var xhr = new XMLHttpRequest();
+d126 1
+a126 1
+  var timer = setTimeout(function() {
+d154 1
+a154 1
+    var swap = opt["swap"];
+d162 1
+a162 1
+  var data={};
+d165 1
+a165 1
+      var a_in=id_elem.replace(/\s+/g, "").split(",");
 @
 
 
