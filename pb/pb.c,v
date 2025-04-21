@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.4
+date	2025.04.21.16.16.58;	author u0_a157;	state Exp;
+branches;
+next	1.3;
+commitid	10068066F7A1740680F;
 
 1.3
 date	2024.10.20.15.04.26;	author shuw;	state Exp;
@@ -25,14 +31,16 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@feat: pb with 32 or 64 bit
+@fix: pb not must rely walib
 @
 text
 @#include <stdio.h>
 #include <string.h>
+#ifdef USE_WALIB
 #include "walib.h"
+#endif
 #define MAXLINE 256
 
 #ifdef _WIN32
@@ -51,21 +59,18 @@ text
   #include "lauxlib.h"
   #include "lualib.h"
   int luaopen_utf8(lua_State *L);
-  int luaopen_enc(lua_State *L);
   int luaopen_dt(lua_State *L);
 #include "lupt/pb_lua.c"
 #include "lex.yy.c"
 #ifdef USE_VENDOR
   int luaopen_lsqlite3(lua_State *L);
+  int luaopen_enc(lua_State *L);
   int luaopen_lpeg (lua_State *L);
 #endif
-#else
-  #include "dep/bignum.c"
-  #include "dep/miniscm.c"
 #endif
 
 void usage(){
-  printf("personal busybox %dbit ver241020\nascii\n"
+  printf("personal busybox %dbit ver250420\nascii\n"
   "dyn2str file -- convert script into C string file\n"
   "hsc helper show cvs\n  mf(list modified file)|ml(number modified line)|rv(repo version)\n"
   "snip|comp [keyword]\n"
@@ -74,11 +79,9 @@ void usage(){
   "xlispindent file|stdin\n"
 #ifdef SUPPORT_LUA
   "el file [luac path] -- convert lua to c code\n"
-  "lua [-p] file [argv] or -e expr or -h show extention"
-#else
-  "lisp file"
+  "lua [-p] file [argv] or -e expr or -h show extention\n"
 #endif
-  , 8*sizeof(void*));
+  , (int)(8*sizeof(void*)) );
   exit(0);
 }
 
@@ -301,7 +304,9 @@ void todo(int argc, char** argv){
     int i, mon, day, hr, min;
     char dosth[MAXLINE] = {0};
     char dt[MAXLINE] = {0};
+    #ifdef USE_WALIB
     wa_calendar(NULL, &mon, &day, &hr, &min, NULL, 0);
+    #endif
     sprintf(dt, "%02d-%02d %02d:%02d", mon, day, hr, min);
     for (i=0; i<argc; i++){
       strcat(dosth, argv[i]);
@@ -623,10 +628,10 @@ static void* linit(){
     lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
     luaL_openlibs(L);  /* open libraries */
     luaopen_utf8(L);
-    luaopen_enc(L);
     luaopen_dt (L);
 #ifdef USE_VENDOR
     luaopen_lsqlite3(L);
+    luaopen_enc(L);
     //luaopen_lpeg(L);
 #endif
     lua_gc(L, LUA_GCRESTART, 0);
@@ -820,6 +825,39 @@ int main(int argc, char** argv){
   }
   return 0;
 }
+@
+
+
+1.3
+log
+@feat: pb with 32 or 64 bit
+@
+text
+@d3 1
+d5 1
+a23 1
+  int luaopen_enc(lua_State *L);
+d29 1
+a31 3
+#else
+  #include "dep/bignum.c"
+  #include "dep/miniscm.c"
+d35 1
+a35 1
+  printf("personal busybox %dbit ver241020\nascii\n"
+d44 1
+a44 3
+  "lua [-p] file [argv] or -e expr or -h show extention"
+#else
+  "lisp file"
+d46 1
+a46 1
+  , 8*sizeof(void*));
+d269 1
+d271 1
+a592 1
+    luaopen_enc(L);
+d596 1
 @
 
 

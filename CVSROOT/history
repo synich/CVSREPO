@@ -123,3 +123,7 @@ M67c1c9af|u0_a157|~/src/*0|jsmod|1.27|sep.js
 M67c477e4|u0_a157|~/src/*0|jsmod|1.28|sep.js
 M67cb213d|u0_a157|~/src/*0|conf|1.2|README
 M67cb213d|u0_a157|~/src/conf|conf/vimrc/doc|1.6|rv.txt
+O68066507|u0_a157|~/src/pb|pb||pb
+A68066f7a|u0_a157|~/src/pb|pb|1.1|Makefile
+M68066f7a|u0_a157|~/src/pb|pb|1.3|extlua.c
+M68066f7a|u0_a157|~/src/pb|pb|1.4|pb.c

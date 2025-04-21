@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.04.21.16.16.58;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	10068066F7A1740680F;
+
+
+desc
+@@
+
+
+1.1
+log
+@fix: pb not must rely walib
+@
+text
+@LUA_HEAD = -I./lua-5.1.5/src
+LUA_LIB = -L./lua-5.1.5/src -llua
+
+all:
+	flex lex.l
+	gcc ${LUA_HEAD} -c extlua.c
+	gcc ${LUA_HEAD} -c pb.c
+	gcc -o pb pb.o extlua.o ${LUA_LIB} -lm
+@
