@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.05.08.15.25.10;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	100681CCCD65EE3F639;
 
 1.1
 date	2024.05.08.15.13.09;	author shuw;	state Exp;
@@ -15,9 +21,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@init
+@feat: memo with tag
 @
 text
 @--define global
@@ -92,6 +98,14 @@ local function fetchall(db, sql) -- always return table
   local lst = {}
   for a in db:rows(sql) do table.insert(lst, a) end
   return lst
+end
+
+local function tag2json(str)
+  local matches = {}
+  for mat in string.gmatch(str, "#[^ \n#'\"/?!]+") do
+    table.insert(matches, '"'..mat:sub(2)..'"')
+  end
+  return "[" .. table.concat(matches, ", ") .. "]"
 end
 
 --universal fts
@@ -177,11 +191,12 @@ local function fts_modify(db, tbl, dml, rowid, txt, attr)
   if not rowid then rowid = "" end
   if not attr then attr = "" end
   local act, ret
-  if "m"==tbl:sub(1,1) then
-    local sql = [[update memo set content=']]..txt.."',date="..curday().." where rowid="..rowid
+  if "m"==tbl:sub(1,1) then --memo
+    local tag = tag2json(txt)
+    local sql = [[update memo set content=']]..txt.."', tag='"..tag.."', date="..curday().." where rowid="..rowid
     act = "update "..tbl..rowid
     if "i"==dml then
-      sql = [[insert into memo values( ']]..txt.."',"..curday()..")"
+      sql = [[insert into memo values( ']]..txt.."', '"..tag.."',"..curday()..")"
       act = "insert "..tbl.." len(bytes): "..#txt
     elseif "d"==dml then
       sql = [[delete from memo where rowid=]]..rowid
@@ -214,7 +229,7 @@ local function _rc(fname)
 end
 
 local function init(db)
-  db:exec[[CREATE VIRTUAL TABLE memo USING fts5(content, date UNINDEXED, tokenize = 'porter ascii');]]
+  db:exec[[CREATE VIRTUAL TABLE memo USING fts5(content, tag, date UNINDEXED, tokenize = 'porter ascii');]]
   -- just vacuum is not work.  1. alter table memo rename to memo1; 2. create 3. insert into memo select * from memo1; 4. drop table memo1; 5. vacuum
 end
 
@@ -308,3 +323,23 @@ else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
 @
+
+
+1.1
+log
+@init
+@
+text
+@d75 8
+d166 3
+a168 2
+  if "m"==tbl:sub(1,1) then
+    local sql = [[update memo set content=']]..txt.."',date="..curday().." where rowid="..rowid
+d171 1
+a171 1
+      sql = [[insert into memo values( ']]..txt.."',"..curday()..")"
+d204 1
+a204 1
+  db:exec[[CREATE VIRTUAL TABLE memo USING fts5(content, date UNINDEXED, tokenize = 'porter ascii');]]
+@
+
