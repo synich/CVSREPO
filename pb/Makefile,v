@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.05.11.07.21.27;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	10068204FF72638643F;
 
 1.1
 date	2025.04.21.16.16.58;	author u0_a157;	state Exp;
@@ -16,17 +22,68 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@fix: pb not must rely walib
+@restore Makefile and pb.lua
 @
 text
-@LUA_HEAD = -I./lua-5.1.5/src
+@CFLAGS = -I./inc/lua51 -I./inc/ -c
+LUA_HEAD = -I./lua-5.1.5/src
 LUA_LIB = -L./lua-5.1.5/src -llua
+
+ifeq ($(VENDOR), 1)
+  EXTCFL = -DUSE_VENDOR
+  EXTLIB = sqlite3.o lsqlite3.o
+else
+  EXTCFL =
+  EXTLIB =
+endif
+ifeq ($(findstring MSYS,$(shell uname -s)), MSYS)
+  RES = ico.res
+else
+  RES =
+endif
+
 
 all:
 	flex lex.l
 	gcc ${LUA_HEAD} -c extlua.c
 	gcc ${LUA_HEAD} -c pb.c
 	gcc -o pb pb.o extlua.o ${LUA_LIB} -lm
+
+pb: pb.c extlua.o
+	@@echo build pb with VENDOR=$(VENDOR) and FLAGS=$(EXTCFL)
+	@@echo export/set VENDOR=1/0 or -DMINIPB. then make again
+	@@gcc $(CFLAGS) $(EXTCFL) pb.c
+	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua51 -lwa
+	@@strip pb
+
+extlua.o: extlua.c
+	@@gcc $(CFLAGS) extlua.c
+
+ico.res: ico.rc
+	@@windres -i ico.rc -o ico.res -O coff
+
+tr: lex.l tran.c
+	@@D:\soft\gcc47\bin\flex.exe lex.l
+	@@gcc tran.c
+	@@a.exe a.lua
+
+sqlite3:
+	@@gcc -c -DSQLITE_ENABLE_FTS5 sqlite3.c
+
+iconv:
+	@@gcc -shared -L./lib  -o iconv.dll luaiconv.o libiconv2.dll -llua51
 @
+
+
+1.1
+log
+@fix: pb not must rely walib
+@
+text
+@d1 1
+d5 14
+d24 24
+@
+
