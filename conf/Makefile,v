@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2025.05.11.08.06.24;	author u0_a157;	state Exp;
+branches;
+next	1.12;
+commitid	10068205A8031F0C4D0;
 
 1.12
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -79,15 +85,26 @@ desc
 @@
 
 
+1.13
+log
+@optimise for conf Makefile
+@
+text
+@all:
+	@@tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+	@@echo "pack envconf.tar.gz done in current dir"
+
+@
+
+
 1.12
 log
 @fix: move most useful setting to init.vim
 @
 text
-@all:
-	@@tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+@d3 1
+a3 1
 	@@echo "envconf.tar.gz ready in current dir"
-
 @
 
 

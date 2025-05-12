@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2025.05.11.07.50.48;	author u0_a157;	state Exp;
+branches;
+next	1.2;
+commitid	100682056D82E819F96;
 
 1.2
 date	2022.05.04.13.25.15;	author android;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@s-exp doc and combine load opt function
+@restore vim-easycomplete, chop fugitive from ld_plg
 @
 text
 @" Modeline and Notes {
@@ -60,13 +66,6 @@ function! MvcfHardlyuse()
         \ "html,xml" : ["at"],
         \ }
 
-  " Only use input on Windows
-  if WINDOWS()
-    let g:ZFVimIM_keymap = 0
-    packadd ZFVimIM
-    packadd ZFVimIM_wubi_base
-  endif
-
   packadd tagbar
   set tags=./tags;/,~/.vimtags
 
@@ -77,6 +76,38 @@ function! MvcfHardlyuse()
   endif
 
   packadd vim-visual-multi
+  packadd nerdcommenter
+  let g:NERDCreateDefaultMappings = 0
+
+  let g:rainbow_active = 1
+  packadd rainbow
+  let g:rainbow_conf = {
+    \	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+    \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+    \	'operators': '_,_',
+    \	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+    \	'separately': {
+    \		'*': {},
+    \		'tex': {
+    \			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+    \		},
+    \		'lisp': {
+    \			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+    \		},
+    \		'vim': {
+    \			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+    \		},
+    \		'html': {
+    \			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+    \		},
+    \		'css': 0,
+    \	}
+\
+  RainbowToggleOn
+
+  let g:apc_enable_ft = {'*':1}
+  packadd vim-auto-popmenu
+  ApcEnable
 endfunction
 
 " simple complete and lisp pack
@@ -85,7 +116,55 @@ function! MvcfComplete()
     echo "alreay loaded"
     return ""
   else
+    let s:mvcf_complete = 1
+    packadd vim-easycomplete
     packadd vim-sexp
+    return ""
+  endif
+endfunction
+" }
+
+if filereadable(expand(mvcf_path.'ext.vim.local'))
+  execute 'source '.mvcf_path.'ext.vim.local'
+endif
+
+
+    " TextObj Sentence & Quote {
+        if count(mvcf_bundle_groups, 'textobj')
+            augroup textobj_sentence
+              autocmd!
+              autocmd FileType markdown call textobj#sentence#init()
+              autocmd FileType textile call textobj#sentence#init()
+              autocmd FileType text call textobj#sentence#init()
+            augroup END
+            augroup textobj_quote
+                autocmd!
+                autocmd FileType markdown call textobj#quote#init()
+                autocmd FileType textile call textobj#quote#init()
+                autocmd FileType text call textobj#quote#init({'educate': 0})
+            augroup END
+        endif
+    " }
+
+@
+
+
+1.2
+log
+@s-exp doc and combine load opt function
+@
+text
+@a33 7
+  " Only use input on Windows
+  if WINDOWS()
+    let g:ZFVimIM_keymap = 0
+    packadd ZFVimIM
+    packadd ZFVimIM_wubi_base
+  endif
+
+d44 32
+d84 2
+a86 32
     let g:rainbow_active = 1
     packadd rainbow
     let g:rainbow_conf = {
@@ -118,33 +197,7 @@ function! MvcfComplete()
     packadd vim-auto-popmenu
     ApcEnable
     let s:mvcf_complete = 1
-    return ""
-  endif
-endfunction
-" }
-
-if filereadable(expand(mvcf_path.'ext.vim.local'))
-  execute 'source '.mvcf_path.'ext.vim.local'
-endif
-
-
-    " TextObj Sentence & Quote {
-        if count(mvcf_bundle_groups, 'textobj')
-            augroup textobj_sentence
-              autocmd!
-              autocmd FileType markdown call textobj#sentence#init()
-              autocmd FileType textile call textobj#sentence#init()
-              autocmd FileType text call textobj#sentence#init()
-            augroup END
-            augroup textobj_quote
-                autocmd!
-                autocmd FileType markdown call textobj#quote#init()
-                autocmd FileType textile call textobj#quote#init()
-                autocmd FileType text call textobj#quote#init({'educate': 0})
-            augroup END
-        endif
-    " }
-
+a113 17
     " Fugitive {
         if isdirectory(expand(mvcf_path_bundle."vim-fugitive/"))
             nnoremap <silent> <leader>gs :Gstatus<CR>

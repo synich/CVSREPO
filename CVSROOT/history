@@ -131,3 +131,5 @@ O681b6d8c|u0_a157|~/src/*0|mmm||mmm
 M681cccd6|u0_a157|~/src/*0|mmm|1.2|dbop.lua
 M68204ff7|u0_a157|~/src/pb|pb|1.2|Makefile
 A68204ff7|u0_a157|~/src/pb|pb|1.1|pb.lua
+M682056d8|u0_a157|~/src/conf|conf/vimrc/plugin|1.3|ld_plg.vim
+M68205a80|u0_a157|~/src/*0|conf|1.13|Makefile
