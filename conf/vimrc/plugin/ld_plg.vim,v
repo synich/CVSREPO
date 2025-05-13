@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.05.13.14.32.06;	author u0_a157;	state Exp;
+branches;
+next	1.3;
+commitid	100682357E66027E988;
 
 1.3
 date	2025.05.11.07.50.48;	author u0_a157;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@restore vim-easycomplete, chop fugitive from ld_plg
+@feat: let apc default
 @
 text
 @" Modeline and Notes {
@@ -104,10 +110,6 @@ function! MvcfHardlyuse()
     \	}
 \
   RainbowToggleOn
-
-  let g:apc_enable_ft = {'*':1}
-  packadd vim-auto-popmenu
-  ApcEnable
 endfunction
 
 " simple complete and lisp pack
@@ -146,6 +148,19 @@ endif
         endif
     " }
 
+@
+
+
+1.3
+log
+@restore vim-easycomplete, chop fugitive from ld_plg
+@
+text
+@a71 4
+
+  let g:apc_enable_ft = {'*':1}
+  packadd vim-auto-popmenu
+  ApcEnable
 @
 
 
