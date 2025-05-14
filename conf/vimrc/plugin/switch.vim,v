@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.05.14.14.45.44;	author u0_a157;	state Exp;
+branches;
+next	1.3;
+commitid	1006824AC98696D65AF;
 
 1.3
 date	2021.07.04.13.49.44;	author android;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@use <Leader>t? replace original go-filetype-cmd
+@fix: chop vim plugin param
 @
 text
 @" Modeline and Notes {
@@ -61,13 +67,70 @@ text
     autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
     " }
 
+    " AutoCloseTag {
+        " Make it so AutoCloseTag works for xml and xhtml files as well
+        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+    " }
+
+" bufferline {
+set showtabline=0
+let g:bufferline_rotate=1
+let g:bufferline_separator=''
+" }
+
+" EasyMotion {
+" Disable default mappings
+let g:EasyMotion_do_mapping = 0
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
+" }
+
+" TextObj Sentence & Quote {
+    if count(mvcf_bundle_groups, 'textobj')
+        augroup textobj_sentence
+          autocmd!
+          autocmd FileType markdown call textobj#sentence#init()
+          autocmd FileType textile call textobj#sentence#init()
+          autocmd FileType text call textobj#sentence#init()
+        augroup END
+        augroup textobj_quote
+            autocmd!
+            autocmd FileType markdown call textobj#quote#init()
+            autocmd FileType textile call textobj#quote#init()
+            autocmd FileType text call textobj#quote#init({'educate': 0})
+        augroup END
+    endif
+" }
+
+    " Misc {
+        if isdirectory(expand(mvcf_path_bundle."nerdtree"))
+            let g:NERDShutUp=1
+        endif
+        if isdirectory(expand(mvcf_path_bundle."matchit.zip"))
+            let b:match_ignorecase = 1
+        endif
+    " }
+" }
+@
+
+
+1.3
+log
+@use <Leader>t? replace original go-filetype-cmd
+@
+text
+@d29 3
+a31 5
     " PIV {
         if isdirectory(expand(mvcf_path_bundle."PIV"))
             let g:DisableAutoPHPFolding = 0
             let g:PIVAutoClose = 0
         endif
-    " }
-
+d34 5
+a38 10
     " PyMode {
         " Disable if python support not present
         if !has('python') && !has('python3')
@@ -78,7 +141,8 @@ text
             let g:pymode_rope = 0
         endif
     " }
-
+d40 5
+a44 21
     " GoLang {
         if count(mvcf_bundle_groups, 'go')
             let g:go_highlight_functions = 1
@@ -100,7 +164,8 @@ text
             "au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
         endif
         " }
-
+d46 3
+a48 7
     " UndoTree {
         if isdirectory(expand(mvcf_path_bundle."undotree/"))
             nnoremap <Leader>u :UndotreeToggle<CR>
@@ -108,22 +173,14 @@ text
             let g:undotree_SetFocusWhenToggle=1
         endif
     " }
-
+d50 16
+a65 4
     " AutoCloseTag {
         " Make it so AutoCloseTag works for xml and xhtml files as well
         au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
     " }
+a74 1
 
-    " Misc {
-        if isdirectory(expand(mvcf_path_bundle."nerdtree"))
-            let g:NERDShutUp=1
-        endif
-        if isdirectory(expand(mvcf_path_bundle."matchit.zip"))
-            let b:match_ignorecase = 1
-        endif
-    " }
-
-" }
 @
 
 
