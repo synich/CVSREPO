@@ -142,3 +142,6 @@ A68246d4e|u0_a157|~/src/pb|pb/lupt|1.1|pb.lua
 R6824ac98|u0_a157|~/src/conf|conf/vimrc/plugin|1.2|apc.vim
 M6824ac98|u0_a157|~/src/conf|conf/vimrc/plugin|1.5|ld_plg.vim
 M6824ac98|u0_a157|~/src/conf|conf/vimrc/plugin|1.4|switch.vim
+M6824b7b7|u0_a157|~/src/conf/vimrc|conf/vimrc/autoload|1.29|rv.vim
+M6824b7b7|u0_a157|~/src/conf/vimrc|conf/vimrc/doc|1.7|rv.txt
+M6824b7b7|u0_a157|~/src/conf/vimrc|conf/vimrc/plugin|1.29|kbd.vim

@@ -1,9 +1,15 @@
-head	1.28;
+head	1.29;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.29
+date	2025.05.14.15.33.11;	author u0_a157;	state Exp;
+branches;
+next	1.28;
+commitid	1006824B7B76DCB3E43;
 
 1.28
 date	2022.07.28.16.46.34;	author android;	state Exp;
@@ -178,9 +184,9 @@ desc
 @@
 
 
-1.28
+1.29
 log
-@show snip lib in faker preview window
+@doc: vim rv.txt
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -195,9 +201,10 @@ function! s:runcmd(cmd, ...)
   if has('nvim') || v:version < 800
       execute 'Shell '.a:cmd
   else
-      execute 'AsyncRun '.a:cmd
+      execute 'Shell '.a:cmd
       if a:0==0 && !MvcfCheckQuickfix()
-          execute 'copen'
+          "execute 'copen'
+          echo 1
       endif
   endif
 endfunction
@@ -347,7 +354,7 @@ function! rv#enhancegrep(useinput)
   elseif executable('ack')
       call <SID>runcmd('ack "'.l:word.'"')
   else
-      call <SID>runcmd('grep -i -R "'.l:word.'" *')
+      call <SID>runcmd('grep -in -R "'.l:word.'" *')
   endif
 endfunction
 
@@ -553,6 +560,23 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.28
+log
+@show snip lib in faker preview window
+@
+text
+@d13 1
+a13 1
+      execute 'AsyncRun '.a:cmd
+d15 2
+a16 1
+          execute 'copen'
+d166 1
+a166 1
+      call <SID>runcmd('grep -i -R "'.l:word.'" *')
 @
 
 

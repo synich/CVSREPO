@@ -1,9 +1,15 @@
-head	1.28;
+head	1.29;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.29
+date	2025.05.14.15.33.11;	author u0_a157;	state Exp;
+branches;
+next	1.28;
+commitid	1006824B7B76DCB3E43;
 
 1.28
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -178,9 +184,9 @@ desc
 @@
 
 
-1.28
+1.29
 log
-@fix: move most useful setting to init.vim
+@doc: vim rv.txt
 @
 text
 @" Modeline and Notes {
@@ -255,8 +261,6 @@ text
     " Adjust viewports to the same size
     map      <leader>= <C-w>=
     nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
-    map      <Leader>cc <Plug>NERDCommenterInvert
-    nmap     <Leader>ce <Plug>NERDCommenterToEOL
     nnoremap <leader>cs :call rv#showsnipcode()<cr>
     nnoremap <leader>ct :call rv#gototopdir()<CR>
     nnoremap <leader>dm :call rv#showMaps()<CR>
@@ -288,12 +292,10 @@ text
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
     " Jump to anywhere you want with minimal keystrokes
     nmap     <leader>wb <Plug>(easymotion-b)
-    nmap     <leader>wf <Plug>(wildfire-quick-select)
     nmap     <leader>ww <Plug>(easymotion-w)
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
 
-    inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
     inoremap <expr><silent> <C-k> MvcfComplete()
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
@@ -377,6 +379,21 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.28
+log
+@fix: move most useful setting to init.vim
+@
+text
+@a72 2
+    map      <Leader>cc <Plug>NERDCommenterInvert
+    nmap     <Leader>ce <Plug>NERDCommenterToEOL
+a103 1
+    nmap     <leader>wf <Plug>(wildfire-quick-select)
+a107 1
+    inoremap <expr><silent> <F5> ZFVimIME_keymap_toggle_i()
 @
 
 

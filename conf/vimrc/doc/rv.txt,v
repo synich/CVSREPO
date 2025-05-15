@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.05.14.15.33.11;	author u0_a157;	state Exp;
+branches;
+next	1.6;
+commitid	1006824B7B76DCB3E43;
 
 1.6
 date	2025.03.07.16.39.25;	author u0_a157;	state Exp;
@@ -45,12 +51,12 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@doc: vimrc in conf
+@doc: vim rv.txt
 @
 text
-@*rv.txt*	For Vim version 8.0  Last change: 2024 Nov 25
+@*rv.txt*	For Vim version 8.0  Last change: 2025 May 14
 
 		  RV Plugin REFERENCE      by SHU Wang
 
@@ -60,11 +66,19 @@ This file illustrate rv plugin usage Vim/NeoVim.
 - Shortcut Key
   leader is <space> and subleader is comma<,>
 
-  - <leader>xc  close window
+- <leader>xc  close window
+- <leader>xb  change color style
 
-- Auto Complete
+- <leader>rf   run current file no param
+- <leader>rp   run current file with param
 
-  :call MvcfComplete or Ctrl+k
+- <leader>rg   search current keyword
+- <leader>gp   input keyword to search
+
+- <leader>ra   replace all
+- <leader>rc   replace confirm
+
+- :call MvcfComplete or Ctrl+k Trigger More Auto Complete
 
 - :ShowEx
   use in command and will get output in new buffer
@@ -88,6 +102,26 @@ s-exp "(display 123)"
 
 vim:tw=78:ts=8:noet:ft=help:norl:
 
+@
+
+
+1.6
+log
+@doc: vimrc in conf
+@
+text
+@d1 1
+a1 1
+*rv.txt*	For Vim version 8.0  Last change: 2024 Nov 25
+d11 2
+a12 1
+  - <leader>xc  close window
+d14 2
+a15 1
+- Auto Complete
+d17 7
+a23 1
+  :call MvcfComplete or Ctrl+k
 @
 
 
