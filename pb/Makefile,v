@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.05.16.15.58.35;	author u0_a157;	state Exp;
+branches;
+next	1.3;
+commitid	100682760AB2C4A34B3;
 
 1.3
 date	2025.05.14.10.15.42;	author u0_a157;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@fix: move pb.lua to lupt
+@feat: add fennel and rm todo from pb
 @
 text
 @# dependency and usage
@@ -58,17 +64,12 @@ else
 endif
 
 
-all:
-	flex lex.l
-	gcc ${LUA_HEAD} -c extlua.c
-	gcc ${LUA_HEAD} -c pb.c
-	gcc -o pb pb.o extlua.o ${LUA_LIB} -lm
-
 pb: pb.c extlua.o
 	@@echo build pb with VENDOR=$(VENDOR) and FLAGS=$(EXTCFL)
-	@@echo export/set VENDOR=1/0 or -DMINIPB. then make again
+	@@echo export/set VENDOR=1/0  then make again
 	@@gcc $(CFLAGS) $(EXTCFL) pb.c
-	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua51 -lwa
+	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua -lm
+	# -lwa
 	@@strip pb
 
 extlua.o: extlua.c
@@ -87,6 +88,27 @@ sqlite3:
 
 iconv:
 	@@gcc -shared -L./lib  -o iconv.dll luaiconv.o libiconv2.dll -llua51
+@
+
+
+1.3
+log
+@fix: move pb.lua to lupt
+@
+text
+@a25 6
+all:
+	flex lex.l
+	gcc ${LUA_HEAD} -c extlua.c
+	gcc ${LUA_HEAD} -c pb.c
+	gcc -o pb pb.o extlua.o ${LUA_LIB} -lm
+
+d28 1
+a28 1
+	@@echo export/set VENDOR=1/0 or -DMINIPB. then make again
+d30 2
+a31 1
+	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua51 -lwa
 @
 
 

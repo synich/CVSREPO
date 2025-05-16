@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.5
+date	2025.05.16.15.58.35;	author u0_a157;	state Exp;
+branches;
+next	1.4;
+commitid	100682760AB2C4A34B3;
 
 1.4
 date	2025.04.21.16.16.58;	author u0_a157;	state Exp;
@@ -31,9 +37,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix: pb not must rely walib
+@feat: add fennel and rm todo from pb
 @
 text
 @#include <stdio.h>
@@ -61,6 +67,7 @@ text
   int luaopen_utf8(lua_State *L);
   int luaopen_dt(lua_State *L);
 #include "lupt/pb_lua.c"
+#include "lupt/fennel.c"
 #include "lex.yy.c"
 #ifdef USE_VENDOR
   int luaopen_lsqlite3(lua_State *L);
@@ -70,16 +77,16 @@ text
 #endif
 
 void usage(){
-  printf("personal busybox %dbit ver250420\nascii\n"
+  printf("personal busybox %dbit ver250515\nascii\n"
   "dyn2str file -- convert script into C string file\n"
   "hsc helper show cvs\n  mf(list modified file)|ml(number modified line)|rv(repo version)\n"
   "snip|comp [keyword]\n"
-  "todo sth|[d line]\n"
   "wph(WaProjectHelper)\n  wph c c -- create c project scafold\n  wph l p -- generate lua plugin by c\n"
   "xlispindent file|stdin\n"
 #ifdef SUPPORT_LUA
   "el file [luac path] -- convert lua to c code\n"
-  "lua [-p] file [argv] or -e expr or -h show extention\n"
+  "lua51 [-p] file [argv] or -e expr or -h show extention\n"
+  "lisp file\n"
 #endif
   , (int)(8*sizeof(void*)) );
   exit(0);
@@ -276,7 +283,7 @@ void dyn2str(int argc, char *argv[])
 }
 
 
-/******** todo ********/
+/******** util_bb ********/
 static void _cal_ext_fb2bb(char* cmd){
   int has_bb, ret;
 #ifdef _WIN32
@@ -289,32 +296,7 @@ static void _cal_ext_fb2bb(char* cmd){
     sprintf(bbcmd, "busybox %s", cmd);
     ret = system(bbcmd);
   } else {ret = system(cmd);}
-  if (0!=ret){puts("no busybox or native util found, todo fail");}
-}
-
-void todo(int argc, char** argv){
-  char fname[MAXLINE], cmd[MAXLINE];
-  get_exe_path(fname);
-  strcat(fname, "_pb_todo");
-  if (0 == argc) {
-    snprintf(cmd, MAXLINE, "cat -n %s", fname);
-  } else if ( (2==argc)&&('d'==argv[0][0])&&(0==argv[0][1]) ) {
-    sprintf(cmd, "sed -e \"%sd\" %s -i", argv[1], fname);
-  } else {
-    int i, mon, day, hr, min;
-    char dosth[MAXLINE] = {0};
-    char dt[MAXLINE] = {0};
-    #ifdef USE_WALIB
-    wa_calendar(NULL, &mon, &day, &hr, &min, NULL, 0);
-    #endif
-    sprintf(dt, "%02d-%02d %02d:%02d", mon, day, hr, min);
-    for (i=0; i<argc; i++){
-      strcat(dosth, argv[i]);
-      strcat(dosth, " ");
-    }
-    sprintf(cmd, "echo %s %s >>%s", dt, dosth, fname);
-  }
-  _cal_ext_fb2bb(cmd);
+  if (0!=ret){puts("no busybox or native util found, cmd fail");}
 }
 
 
@@ -385,22 +367,22 @@ static void createCPro(){
   _cal_ext_fb2bb("mkdir res");
   mf = fopen("Makefile", "w");
   if (mf){
-    fwrite(s_Makefile_str, strlen(s_Makefile_str), 1, mf);
+    fwrite(s_Makefile_str, sizeof(s_Makefile_str)-1, 1, mf);
     fclose(mf);
   }
   mf = fopen("src/main.c", "w");
   if (mf){
-    fwrite(s_main_c_str, strlen(s_main_c_str), 1, mf);
+    fwrite(s_main_c_str, sizeof(s_main_c_str)-1, 1, mf);
     fclose(mf);
   }
   mf = fopen("test/utest.c", "w");
   if (mf){
-    fwrite(s_utest_c_str, strlen(s_utest_c_str), 1, mf);
+    fwrite(s_utest_c_str, sizeof(s_utest_c_str)-1, 1, mf);
     fclose(mf);
   }
   mf = fopen("res/ico.rc", "w");
   if (mf) {
-    fwrite(s_ico_rc_str, strlen(s_ico_rc_str), 1, mf);
+    fwrite(s_ico_rc_str, sizeof(s_ico_rc_str)-1, 1, mf);
     fclose(mf);
   }
 }
@@ -452,7 +434,7 @@ static const unsigned char s_nlsys_c_str[]={
 static void generateLuaRel(){
   FILE *mf = fopen("lua_nlsys.c", "w");
   if (mf){
-    fwrite(s_nlsys_c_str, strlen(s_nlsys_c_str), 1, mf);
+    fwrite(s_nlsys_c_str, sizeof(s_nlsys_c_str)-1, 1, mf);
     fclose(mf);
   }
 }
@@ -578,7 +560,7 @@ static void _debug_lua(lua_State *L, char* hint_mess){
     printf("  %d or %d: %s", i, ri, lua_typename(L, val_t));
     if (val_t==LUA_TSTRING) {printf(" %s", lua_tostring(L, i));}
     else if (val_t==LUA_TNUMBER) {printf(" %.2f", lua_tonumber(L, i));}
-    else if (val_t==LUA_TTABLE) {int j=1;printf(" arrlen %d, key:", lua_objlen(L, i));
+    else if (val_t==LUA_TTABLE) {int j=1;printf(" arrlen %d, key:", (int)lua_objlen(L, i));
       lua_pushnil(L);
       for(;j<=5;j++){if (0==lua_next(L,i)){break;} else {
         val_t = lua_type(L, -2);
@@ -709,17 +691,20 @@ void run_lua(int argc, char** argv){
   } else {
     int i=2, j=0, fpos=2, bconv=0;
     lua_newtable(L);
+    if ('i'==argv[1][1]) {j=1;} // fennel self on arg[0]
     if (0==strcmp(argv[2], "-p")) {i=3;fpos=3;bconv=1;}
     for (; i < argc; i++) {
       lua_pushstring(L, argv[i]);
       lua_rawseti(L, -2, j++);
     }
     lua_setglobal(L, "arg");
-    ldofile(L, argv[fpos], 0, bconv);
+    if ('i'==argv[1][1]){
+      luafn_fennel(L);
+    } else {
+      ldofile(L, argv[fpos], 0, bconv);
+    }
   }
   lclose(L);
-#else
-  miniscm(argc-1, argv+1);
 #endif
 }
 
@@ -809,9 +794,6 @@ int main(int argc, char** argv){
       case 's':
         snip(argc-2, argv+2, 0, 0);
         break;
-      case 't':
-        todo(argc-2, argv+2);
-        break;
       case 'w':
         wph(argc-1, argv+1);
         break;
@@ -825,6 +807,85 @@ int main(int argc, char** argv){
   }
   return 0;
 }
+
+@
+
+
+1.4
+log
+@fix: pb not must rely walib
+@
+text
+@d26 1
+d36 1
+a36 1
+  printf("personal busybox %dbit ver250420\nascii\n"
+a39 1
+  "todo sth|[d line]\n"
+d44 2
+a45 1
+  "lua [-p] file [argv] or -e expr or -h show extention\n"
+d242 1
+a242 1
+/******** todo ********/
+d255 1
+a255 26
+  if (0!=ret){puts("no busybox or native util found, todo fail");}
+}
+
+void todo(int argc, char** argv){
+  char fname[MAXLINE], cmd[MAXLINE];
+  get_exe_path(fname);
+  strcat(fname, "_pb_todo");
+  if (0 == argc) {
+    snprintf(cmd, MAXLINE, "cat -n %s", fname);
+  } else if ( (2==argc)&&('d'==argv[0][0])&&(0==argv[0][1]) ) {
+    sprintf(cmd, "sed -e \"%sd\" %s -i", argv[1], fname);
+  } else {
+    int i, mon, day, hr, min;
+    char dosth[MAXLINE] = {0};
+    char dt[MAXLINE] = {0};
+    #ifdef USE_WALIB
+    wa_calendar(NULL, &mon, &day, &hr, &min, NULL, 0);
+    #endif
+    sprintf(dt, "%02d-%02d %02d:%02d", mon, day, hr, min);
+    for (i=0; i<argc; i++){
+      strcat(dosth, argv[i]);
+      strcat(dosth, " ");
+    }
+    sprintf(cmd, "echo %s %s >>%s", dt, dosth, fname);
+  }
+  _cal_ext_fb2bb(cmd);
+d326 1
+a326 1
+    fwrite(s_Makefile_str, strlen(s_Makefile_str), 1, mf);
+d331 1
+a331 1
+    fwrite(s_main_c_str, strlen(s_main_c_str), 1, mf);
+d336 1
+a336 1
+    fwrite(s_utest_c_str, strlen(s_utest_c_str), 1, mf);
+d341 1
+a341 1
+    fwrite(s_ico_rc_str, strlen(s_ico_rc_str), 1, mf);
+d393 1
+a393 1
+    fwrite(s_nlsys_c_str, strlen(s_nlsys_c_str), 1, mf);
+d519 1
+a519 1
+    else if (val_t==LUA_TTABLE) {int j=1;printf(" arrlen %d, key:", lua_objlen(L, i));
+d650 1
+d657 5
+a661 1
+    ldofile(L, argv[fpos], 0, bconv);
+a663 2
+#else
+  miniscm(argc-1, argv+1);
+a752 3
+      case 't':
+        todo(argc-2, argv+2);
+        break;
+d766 1
 @
 
 
