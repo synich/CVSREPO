@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2025.05.16.16.05.55;	author u0_a157;	state Exp;
+branches;
+next	1.5;
+commitid	100682762632F9A356E;
 
 1.5
 date	2025.05.14.14.45.44;	author u0_a157;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@fix: chop vim plugin param
+@fix: restore bracket comp
 @
 text
 @" Modeline and Notes {
@@ -109,8 +115,9 @@ function! MvcfComplete()
     return ""
   else
     let s:mvcf_complete = 1
-    packadd vim-easycomplete
     packadd vim-sexp
+    ApcDisable
+    packadd vim-easycomplete
     return ""
   endif
 endfunction
@@ -302,6 +309,17 @@ augroup END
 
 ApcEnable
 
+@
+
+
+1.5
+log
+@fix: chop vim plugin param
+@
+text
+@d65 2
+a67 1
+    packadd vim-sexp
 @
 
 

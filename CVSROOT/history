@@ -147,3 +147,5 @@ M6824b7b7|u0_a157|~/src/conf/vimrc|conf/vimrc/doc|1.7|rv.txt
 M6824b7b7|u0_a157|~/src/conf/vimrc|conf/vimrc/plugin|1.29|kbd.vim
 M682760ab|u0_a157|~/src/pb|pb|1.4|Makefile
 M682760ab|u0_a157|~/src/pb|pb|1.5|pb.c
+M68276263|u0_a157|~/src/*0|conf/vimrc/plugin|1.30|kbd.vim
+M68276263|u0_a157|~/src/*0|conf/vimrc/plugin|1.6|ld_plg.vim

@@ -1,9 +1,15 @@
-head	1.29;
+head	1.30;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.30
+date	2025.05.16.16.05.55;	author u0_a157;	state Exp;
+branches;
+next	1.29;
+commitid	100682762632F9A356E;
 
 1.29
 date	2025.05.14.15.33.11;	author u0_a157;	state Exp;
@@ -184,9 +190,9 @@ desc
 @@
 
 
-1.29
+1.30
 log
-@doc: vim rv.txt
+@fix: restore bracket comp
 @
 text
 @" Modeline and Notes {
@@ -319,7 +325,11 @@ text
     endif
 
     " Auto complete for bracket and quote
-    "inoremap ' ''<Left>
+    inoremap ' ''<Left>
+    inoremap " ""<Left>
+    inoremap ( ()<Left>
+    inoremap [ []<Left>
+    inoremap { {}<Left>
     " }
 
     " Dont know {
@@ -379,6 +389,17 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.29
+log
+@doc: vim rv.txt
+@
+text
+@d131 5
+a135 1
+    "inoremap ' ''<Left>
 @
 
 
