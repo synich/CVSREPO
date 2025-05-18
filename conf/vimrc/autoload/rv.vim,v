@@ -1,9 +1,15 @@
-head	1.29;
+head	1.30;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.30
+date	2025.05.18.16.09.19;	author u0_a157;	state Exp;
+branches;
+next	1.29;
+commitid	100682A062F1372839F;
 
 1.29
 date	2025.05.14.15.33.11;	author u0_a157;	state Exp;
@@ -184,9 +190,9 @@ desc
 @@
 
 
-1.29
+1.30
 log
-@doc: vim rv.txt
+@doc: vim rv
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -198,14 +204,9 @@ let s:hint_height = 5
 
 " default show quickfix window. silent run if has more argument
 function! s:runcmd(cmd, ...)
-  if has('nvim') || v:version < 800
-      execute 'Shell '.a:cmd
-  else
-      execute 'Shell '.a:cmd
-      if a:0==0 && !MvcfCheckQuickfix()
-          "execute 'copen'
-          echo 1
-      endif
+  execute 'Shell '.a:cmd
+  if a:0==0 && !MvcfCheckQuickfix()
+      "execute 'copen'
   endif
 endfunction
 
@@ -560,6 +561,24 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.29
+log
+@doc: vim rv.txt
+@
+text
+@d10 3
+a12 8
+  if has('nvim') || v:version < 800
+      execute 'Shell '.a:cmd
+  else
+      execute 'Shell '.a:cmd
+      if a:0==0 && !MvcfCheckQuickfix()
+          "execute 'copen'
+          echo 1
+      endif
 @
 
 
