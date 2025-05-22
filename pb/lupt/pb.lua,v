@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.05.22.15.12.56;	author u0_a157;	state Exp;
+branches;
+next	1.1;
+commitid	100682F3EF8623835F9;
 
 1.1
 date	2025.05.14.10.15.42;	author u0_a157;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@fix: move pb.lua to lupt
+@feat: make pb lua more like js
 @
 text
 @function fmt(body, ...)
@@ -36,6 +42,14 @@ function var_dump(t)
   else print(t) end
 end
 
+table.join = table.concat
+string.replace = string.gsub
+
+function table.shift(t) if #t==0 then return nil end return table.remove(t, 1) end
+function table.unshift(t, ...) local v = {...} for i = #v, 1, -1 do table.insert(t, 1, v[i]) end return #t end
+function table.pop(t) if #t==0 then return nil end return table.remove(t) end
+function table.push(t, ...) local v={...} for _, n in ipairs(v) do table.insert(t, n) end return #t end
+
 function string.split(s, delim)
   local t = {}
   local p_start, p_next = 1, 1
@@ -51,6 +65,12 @@ function string.split(s, delim)
     table.insert(t, s_sec)
   until not p_next
   return t
+end
+
+function string.indexOf(str, srch, pos)
+  pos = pos or 1
+  local startIdx = string.find(str, srch, pos, true)
+  return startIdx and startIdx or -1
 end
 
 function os.popen(cmd)
@@ -71,9 +91,9 @@ function ts(v)
     local a={year=2000+tonumber(v:sub(1,2)), month=tonumber(v:sub(3,4)), day=tonumber(v:sub(5,6))}
     ret = os.time(a)
   elseif #v==10 then
-    ret = os.date("%Y%m%d", tonumber(v))
+    ret = os.date("%Y%m%d %H%M%S", tonumber(v))
   elseif #v==13 then
-    ret = os.date("%Y%m%d", tonumber(v)/1000)
+    ret = os.date("%Y%m%d %H%M%S", tonumber(v)/1000)
   end
   return ret
 end
@@ -511,3 +531,20 @@ function json.decode(str)
 end
 
 @
+
+
+1.1
+log
+@fix: move pb.lua to lupt
+@
+text
+@d16 8
+d41 6
+d65 1
+a65 1
+    ret = os.date("%Y%m%d", tonumber(v))
+d67 1
+a67 1
+    ret = os.date("%Y%m%d", tonumber(v)/1000)
+@
+
