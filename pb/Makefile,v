@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2025.05.23.16.00.02;	author u0_a157;	state Exp;
+branches;
+next	1.4;
+commitid	10068309B8278CEA01A;
 
 1.4
 date	2025.05.16.15.58.35;	author u0_a157;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@feat: add fennel and rm todo from pb
+@fix: USE_WALIB more precise
 @
 text
 @# dependency and usage
@@ -46,7 +52,7 @@ text
 # * lupt/pb - lua src extension
 # * lupt/fennel - fennel
 
-CFLAGS = -I./inc/lua51 -I./inc/ -c
+CFLAGS = -I./inc/lua51 -I./inc/ -c -DUSE_WALIB
 LUA_HEAD = -I./lua-5.1.5/src
 LUA_LIB = -L./lua-5.1.5/src -llua
 
@@ -68,8 +74,7 @@ pb: pb.c extlua.o
 	@@echo build pb with VENDOR=$(VENDOR) and FLAGS=$(EXTCFL)
 	@@echo export/set VENDOR=1/0  then make again
 	@@gcc $(CFLAGS) $(EXTCFL) pb.c
-	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua -lm
-	# -lwa
+	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua -lwa -lm
 	@@strip pb
 
 extlua.o: extlua.c
@@ -88,6 +93,21 @@ sqlite3:
 
 iconv:
 	@@gcc -shared -L./lib  -o iconv.dll luaiconv.o libiconv2.dll -llua51
+@
+
+
+1.4
+log
+@feat: add fennel and rm todo from pb
+@
+text
+@d8 1
+a8 1
+CFLAGS = -I./inc/lua51 -I./inc/ -c
+d30 1
+a30 2
+	@@gcc -o pb extlua.o pb.o $(RES) $(EXTLIB) -L./lib/ -llua -lm
+	# -lwa
 @
 
 
