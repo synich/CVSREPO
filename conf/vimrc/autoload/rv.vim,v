@@ -1,9 +1,15 @@
-head	1.30;
+head	1.31;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.31
+date	2025.06.09.15.04.56;	author u0_a157;	state Exp;
+branches;
+next	1.30;
+commitid	1006846F8181E6AC30A;
 
 1.30
 date	2025.05.18.16.09.19;	author u0_a157;	state Exp;
@@ -190,9 +196,9 @@ desc
 @@
 
 
-1.30
+1.31
 log
-@doc: vim rv
+@feat: rv selectParens
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -545,6 +551,51 @@ function! rv#openfileinwin1()
   execute 'e./'.pth
 endfunction
 
+" Simple bracket pair match
+function! s:findopenbracket()
+  let cnt = 0
+  let [line, col] = [line('.'), col('.')]
+
+  while 1
+    let char = getline(line)[col - 1]
+    if char == ')' || char == ']' || char == '}'
+      let cnt += 1
+    elseif char == '(' || char == '[' || char == '{'
+      let cnt -= 1
+    endif
+
+    " return when find lonely open bracket
+    if cnt < 0
+      call cursor(line, col)
+      return [0, line, col, 0]
+    endif
+
+    " 移动到前一个字符
+    if col > 1
+      let col -= 1
+    else
+      if line == 1
+        echoerr 'Not found open bracket'
+      endif
+      let line -= 1
+      let col = strlen(getline(line))
+    endif
+  endwhile
+endfunction
+
+function! rv#selectParens() abort
+    let save_pos = getpos('.')
+    "if search('(', 'bW') == 0 echo "No opening paren found"
+    let start_pos = <SID>findopenbracket()
+    normal! %
+    let end_pos = getpos('.')
+
+    call setpos('.', save_pos)
+    call setpos("'<", start_pos)
+    call setpos("'>", end_pos)
+    normal! gv
+endfunction
+
 " When not know what happen under vim, use this
 function! rv#debug(...)
   let tname = ['int', 'str', 'fn', 'list', 'dict', 'bool', 'none', 'job', 'ch', 'blob']
@@ -561,6 +612,15 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.30
+log
+@doc: vim rv
+@
+text
+@d351 45
 @
 
 

@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.06.09.15.04.56;	author u0_a157;	state Exp;
+branches;
+next	1.6;
+commitid	1006846F8181E6AC30A;
 
 1.6
 date	2022.08.13.14.21.30;	author android;	state Exp;
@@ -46,9 +52,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@goto choose ssh or dbclient
+@feat: rv selectParens
 @
 text
 @#!/bin/bash
@@ -128,7 +134,7 @@ getportip(){
     if [ -z "$gtmpf" ]; then
         cnt=0
     else
-        cnt=`echo "$gtmpf" |wc -l|cut -d ' ' -f 1`
+        cnt=`echo "$gtmpf" |wc -l`
     fi
 
     if [ $cnt -eq 1 ]; then
@@ -162,6 +168,17 @@ main() {
 
 main $@@
 
+@
+
+
+1.6
+log
+@goto choose ssh or dbclient
+@
+text
+@d78 1
+a78 1
+        cnt=`echo "$gtmpf" |wc -l|cut -d ' ' -f 1`
 @
 
 

@@ -156,3 +156,6 @@ M682f3ef8|u0_a157|~/src/pb|pb|1.6|pb.c
 M682f3ef8|u0_a157|~/src/pb|pb/lupt|1.2|pb.lua
 M68309b82|u0_a157|~/src/pb|pb|1.5|Makefile
 M68309b82|u0_a157|~/src/pb|pb|1.7|pb.c
+M6846f818|u0_a157|~/src/conf|conf/bin|1.7|goto
+M6846f818|u0_a157|~/src/conf|conf/vimrc/autoload|1.31|rv.vim
+M6846f818|u0_a157|~/src/conf|conf/vimrc/plugin|1.31|kbd.vim
