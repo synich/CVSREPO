@@ -159,3 +159,5 @@ M68309b82|u0_a157|~/src/pb|pb|1.7|pb.c
 M6846f818|u0_a157|~/src/conf|conf/bin|1.7|goto
 M6846f818|u0_a157|~/src/conf|conf/vimrc/autoload|1.31|rv.vim
 M6846f818|u0_a157|~/src/conf|conf/vimrc/plugin|1.31|kbd.vim
+R68566c7f|u0_a157|~/src/*0|conf/bin|1.4|_snip_txt
+M68566c7f|u0_a157|~/src/*0|conf/bin|1.46|snip

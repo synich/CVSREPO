@@ -1,9 +1,15 @@
-head	1.45;
+head	1.46;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.46
+date	2025.06.21.08.25.35;	author u0_a157;	state Exp;
+branches;
+next	1.45;
+commitid	10068566C7F5CD29DC6;
 
 1.45
 date	2023.06.06.09.33.54;	author u0_a111;	state Exp;
@@ -279,33 +285,32 @@ desc
 @@
 
 
-1.45
+1.46
 log
-@fix: refactor snip, separate txt and program
+@fix: snip reuse pb_d file
 @
 text
-@usage(){
-  echo $0 [!^] type1 type2
+@PPR=$(dirname $(readlink -f $0))/pb_d/_pb_
+
+usage(){
+  echo $0 [!] type1 type2 :reuse pb_d snip/comp file
   echo snip list:
-  grep "^# snip_" $PPR | grep -o '[a-z]*$'
-  echo !comp list:
-  grep "^# comp_" $PPR | grep -o '[a-z]*$'
-  echo ^tpl list:
-  grep "^# tpl_" $PPR | grep -o '[a-z]*$'
+  grep "^# snip_" ${PPR}snip | grep -o '[a-z]*$'
+  echo comp[!] list:
+  grep "^# comp_" ${PPR}comp | grep -o '[a-z]*$'
 }
 
 # syntax like "#[#] xxx_type1[ type2]"
+# $1-snip/comp $2-main kwd $3-opt kwd
 choose_p(){
   begin_line="# $1_$2"
   if [ $# -eq 3 ]; then
-    begin_line="$begin_line $3"
+    begin_line="${begin_line}.* $3"
   fi
-  sed -ne "/$begin_line\$/,/^@@@@/p" $PPR | head -n -1 | tail -n +2
+  sed -ne "/$begin_line\$/,/^@@@@/p" ${PPR}$1 | head -n -1 | tail -n +2
 }
 
-
 main(){
-  PPR=$(dirname $(readlink -f $0))/_snip_txt
   if [ $# -eq 0 ]; then
     usage
     return
@@ -313,9 +318,6 @@ main(){
   if [ "$1" = "!" ]; then
     shift
     choose_p comp $@@
-  elif [ "$1" = "^" ]; then
-    shift
-    choose_p tpl $@@
   else
     choose_p snip $@@
   fi
@@ -323,6 +325,40 @@ main(){
 
 main $@@
 
+@
+
+
+1.45
+log
+@fix: refactor snip, separate txt and program
+@
+text
+@d1 2
+d4 1
+a4 1
+  echo $0 [!^] type1 type2
+d6 3
+a8 5
+  grep "^# snip_" $PPR | grep -o '[a-z]*$'
+  echo !comp list:
+  grep "^# comp_" $PPR | grep -o '[a-z]*$'
+  echo ^tpl list:
+  grep "^# tpl_" $PPR | grep -o '[a-z]*$'
+d12 1
+d16 1
+a16 1
+    begin_line="$begin_line $3"
+d18 1
+a18 1
+  sed -ne "/$begin_line\$/,/^@@@@/p" $PPR | head -n -1 | tail -n +2
+a20 1
+
+a21 1
+  PPR=$(dirname $(readlink -f $0))/_snip_txt
+a28 3
+  elif [ "$1" = "^" ]; then
+    shift
+    choose_p tpl $@@
 @
 
 
