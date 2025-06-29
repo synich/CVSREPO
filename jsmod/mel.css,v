@@ -1,9 +1,27 @@
-head	1.4;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.06.29.15.18.04;	author u0_a157;	state Exp;
+branches;
+next	1.6;
+commitid	1006861592C31125505;
+
+1.6
+date	2025.06.25.15.48.32;	author u0_a157;	state Exp;
+branches;
+next	1.5;
+commitid	100685C1A507D42F843;
+
+1.5
+date	2025.06.23.16.20.02;	author u0_a157;	state Exp;
+branches;
+next	1.4;
+commitid	10068597EB275D67C46;
 
 1.4
 date	2025.06.23.05.16.39;	author u0_a157;	state Exp;
@@ -31,12 +49,12 @@ desc
 @@
 
 
-1.4
+1.7
 log
-@fix: box-sizing to border, col ok
+@fix: shrink margin-left but stay c12 theroy
 @
 text
-@/*ver250623*/
+@/*ver250625*/
 :root{--mel-max-width:80rem;}
 /*---base elem---*/
 html{box-sizing:border-box;}
@@ -63,9 +81,9 @@ button,input[type='button'],input[type='submit'] {
   color: #fff;  background-color: #9b4dca;
   border: 0.1rem solid #9b4dca;  border-radius: .4rem;
   cursor: pointer;  white-space: nowrap;
-  display: inline-block;  padding: 0 0.5rem;
+  display: inline-block;  padding: 0 0.4rem;
   font-size: 1.1rem;  font-weight: 700;
-  height: 2rem;  letter-spacing: .1rem;
+  height: 1.8rem;  letter-spacing: .1rem;
   text-align: center;  text-transform: uppercase;
 }
 button:focus,button:hover,
@@ -87,11 +105,102 @@ textarea,select {
   height: 1.8rem;
   padding: .4rem 0.8rem;
   margin-bottom: 1.0rem;
-  /*width: 100%;*/
 }
-textarea{width:100%;height:30vh;font-size:1.1em}
+textarea{width:100%;min-height:6rem;font-size:1.1em}
 /*----class----*/
+.col {margin-left: 0.2%;}
+.c1  {width: 7.3%; }
+.c2  {width: 15.6%;}
+.c3  {width: 23.5%;}
+.c4  {width: 32%;}
+.c5  {width: 40.5%;}
+.c6  {width: 49%;}
+.c7  {width: 57.3%;}
+.c8  {width: 65.5%;}
+.c9  {width: 74%;}
+.c10 {width: 82.2%;}
+.c11 {width: 90.5%;}
+.c12 {width: 100%; margin-left: 0;}
+.r2  {height: 2rem;}
+.r3  {height: 3rem;}
+.inblk {display:inline-block;}
+.hide {visibility:hidden;}
+.card{opacity: 0.87;position: relative;max-width:var(--mel-max-width);padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
+.footer{margin: 0 auto;text-align: center}
+/*----flex----*/
+/*----media more large more bottom----*/
+@@media screen and (min-width: 400px)  {  }
+@@media screen and (min-width: 800px)  {  }
+@@media screen and (min-width: 1200px) {  }
+@
+
+
+1.6
+log
+@feat: style add to mel
+@
+text
+@d55 4
+a58 4
 .col {margin-left: 1%;}
+.c1  {width: 7%; }
+.c2  {width: 15%;}
+.c3  {width: 23%;}
+d60 7
+a66 7
+.c5  {width: 40%;}
+.c6  {width: 48%;}
+.c7  {width: 56%;}
+.c8  {width: 64%;}
+.c9  {width: 72%;}
+.c10 {width: 81%;}
+.c11 {width: 89%;}
+@
+
+
+1.5
+log
+@fix: col adopt mobile
+@
+text
+@d1 1
+a1 1
+/*ver250623*/
+d53 1
+a53 1
+textarea{width:100%;height:30vh;font-size:1.1em}
+d56 16
+a71 12
+.c1  { width: 7%; }
+.c2  { width: 15%;}
+.c3  { width: 23%;}
+.c4  { width: 32%;}
+.c5  { width: 40%;}
+.c6  { width: 48%;}
+.c7  { width: 56%;}
+.c8  { width: 64%;}
+.c9  { width: 72%;}
+.c10 { width: 81%;}
+.c11 { width: 89%;}
+.c12 { width: 100%; margin-left: 0; }
+@
+
+
+1.4
+log
+@fix: box-sizing to border, col ok
+@
+text
+@d28 1
+a28 1
+  display: inline-block;  padding: 0 0.5rem;
+d30 1
+a30 1
+  height: 2rem;  letter-spacing: .1rem;
+a51 1
+  /*width: 100%;*/
+d56 11
+a66 11
 .c1  { width: 7.3%; }
 .c2  { width: 15.6%;}
 .c3  { width: 24%; }
@@ -103,14 +212,6 @@ textarea{width:100%;height:30vh;font-size:1.1em}
 .c9  { width: 74%;  }
 .c10 { width: 82.3%;}
 .c11 { width: 90.6%;}
-.c12 { width: 100%; margin-left: 0; }
-.card{opacity: 0.87;position: relative;max-width:var(--mel-max-width);padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
-.footer{margin: 0 auto;text-align: center}
-/*----flex----*/
-/*----media more large more bottom----*/
-@@media screen and (min-width: 400px)  {  }
-@@media screen and (min-width: 800px)  {  }
-@@media screen and (min-width: 1200px) {  }
 @
 
 
