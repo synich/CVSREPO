@@ -1,0 +1,206 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2025.07.08.11.22.51;	author u0_a157;	state Exp;
+branches;
+next	;
+commitid	100686CFF8B7715059B;
+
+
+desc
+@@
+
+
+1.1
+log
+@fix: mv sep.js to mel.js
+@
+text
+@/*250302;SEP entry*/
+// Util: jq, ajax, awax, hxdom
+// DOM&UI: ko, render(ko.$pen)
+// ko: receive top elem id, return vm with all elems(include top itself) who has db attr
+!(function(top){"use strict";
+const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
+// scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
+function _get_el(elemId){
+  var el = elemId;
+  if (typeof elemId == "string"){
+    let eid = elemId[0]==='#' ? elemId.slice(1) : elemId;
+    el = document.getElementById(eid);
+    if (el===null) {alert(`id[${elemId}] not exist`)}
+  }
+  return el
+}
+function jq(elemId){
+  var el = _get_el(elemId);
+  var st = new Set(["INPUT","TEXTAREA","SELECT"]);
+  var ndCh = st.has(el.nodeName)?'v':'i';//value or innerHTML
+  var ret = function(val){
+    if (val===undefined){return ndCh=='v'?el.value:el.innerHTML}
+    else {if(ndCh=='v'){el.value=val;let ev=el.nodeName=="SELECT"?"change":"input";el.dispatchEvent(new Event(ev,{bubbles: true}))}
+          else{el.innerHTML=val}; return ret}
+  };
+  ret.o = el;
+  ret.on = (ev, fn, p)=>{el.addEventListener(ev, p?fn.bind(null, p) :fn)};
+  ret.tog = (n)=>{el.classList.toggle(n)};
+  ret.disp = (s)=>{el.style.display=s};
+  ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
+  return ret
+}
+// take React
+function isPlainObject(target){ return Object.prototype.toString.call(target) === '[object Object]' }
+function createElement(tag, props, ...children){
+  return {
+    tag, props,
+    children: children.reduce((array, child) =>  {
+      if (Array.isArray(child)) {
+        array = array.concat(child)
+      } else {
+        array.push(isPlainObject(child) ? child: new String(child))
+      }
+      return array
+    }, [])
+  }
+}
+function vdom2dom(vdom){
+  let dom = null;
+  if (isPlainObject(vdom)) {
+    let {tag, props = {}, children = []} = vdom;
+    if (typeof tag ==="function") {
+		let v = tag(props); //必须传入props
+		tag = v.tag; props = v.props; children = v.children;
+    }
+    dom = document.createElement(tag);
+    Object.keys(props || []).forEach(key=>{ dom.setAttribute(key, props[key]) } );//不能绑on事件，className特例
+    (children || []).forEach(child => {
+      dom.appendChild(vdom2dom(child))
+    })
+  } else {
+    dom = document.createTextNode(vdom)
+  }
+  return dom
+}
+function render(vdom, p){
+  let dom = vdom2dom(vdom);
+  if (p.firstChild) {
+    p.replaceChild(dom, p.firstChild)
+  } else {
+    p.appendChild(dom)
+  }
+}
+// take knockout
+function _do_attr(_n, vm){
+  let _a = _n.getAttribute("db");
+  if (_a) {
+    _a.split(',').forEach(function(_db){
+    let _b = _db.split(':');
+    if ("el"==_b[0]) {vm[_b[1]]=jq(_n)}
+    else if ("fn"==_b[0]) {
+      let ev='input',dly=250;
+      if(_n.nodeName=="SELECT"){ev='change';dly=1}
+      else if(_n.nodeName=="BUTTON"){ev='click';dly=1}
+      let tmout;
+      function _smooth(e) {
+        clearTimeout(tmout);
+        tmout=setTimeout((e)=>{vm[_b[1]](e.target.value, vm)}, dly, e)}
+    _n.addEventListener(ev, _smooth)
+    }
+  })
+}}
+function _attr_bind(node, vm){
+  Array.from(node.childNodes).forEach(_n=>{
+    if (1==_n.nodeType){
+      _do_attr(_n, vm);
+      if (_n.childNodes) {_attr_bind(_n, vm)}
+    }
+  })
+}
+function ko(tEId){
+  let node=_get_el(tEId),vm={};
+  _do_attr(node, vm);_attr_bind(node, vm);
+  vm.$root=jq(node);
+  vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this);return this};
+  return vm
+}
+// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
+function ajax(method, url, data, cb_func, timeout=10000) {
+  function encodeParams(p) {
+    let _c= (key)=>`${encodeURIComponent(key)}=${encodeURIComponent(p[key])}`;
+    return Object.keys(p).map(_c).join("&")
+  }
+  let use_json=0;
+  method = method.toUpperCase();
+  if (method=="POSTJ"){method="POST";use_json=1}
+  if (data) {
+    if (use_json===0) { data = encodeParams(data)}
+    else {data = JSON.stringify(data)}
+  }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null }
+
+  let xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);// async true
+  xhr.setRequestHeader("Content-Type", use_json===0?"application/x-www-form-urlencoded":"application/json");
+  let timer = setTimeout(function() {
+    xhr.abort();
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408)// 408: Timeout
+    }, timeout);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {// Request is complete
+      clearTimeout(timer);
+      cb_func(xhr.responseText, xhr.status)
+    }
+  };
+  if (data) { xhr.send(data) }
+  else      { xhr.send()  }
+}
+// raise exp when isrej true
+function awax(method, url, data, timeout=10000, isrej=false) {
+  return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
+    let ok= (st>=200 && st<300)? true: false;
+    if(ok){resolve(resp)}
+    else{
+      if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)}
+    }
+  }, timeout)}
+)}
+// take from htmx
+function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.firstChild}
+function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
+  function _subdom(resp, code){
+    if (code >=300 || code <200) {alert(resp)}
+    let swap = opt["swap"];
+    if (swap){
+      let ori = jq(target).o;//before | after | delete
+      if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
+      else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
+      else {jq(target)("")}
+    }else {jq(target)(resp)}
+  }
+  let data={};
+  if (id_elem) {
+    if (typeof id_elem =="string") {
+      let a_in=id_elem.replace(/\s+/g, "").split(",");
+      for (let k of a_in){
+        let e = jq(k), n=e.o.getAttribute("name");
+        n=n?n:k;
+        data[n]=e()
+      }
+    } else {data=id_elem}
+  }
+  ajax(method, url, data, _subdom, timeout)
+}
+// export function
+_G.jq=jq;
+_G.ko=ko;
+_G.ajax=ajax;
+_G.awax=awax;
+_G.hxdom=hxdom;
+top.React={createElement:createElement}
+})(this)
+@
