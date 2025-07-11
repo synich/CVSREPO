@@ -168,3 +168,5 @@ M685c1a50|u0_a157|~/src/*0|jsmod|1.6|mel.css
 M6861592c|u0_a157|~/src/*0|jsmod|1.7|mel.css
 A686cff8b|u0_a157|~/src/*0|jsmod|1.1|mel.js
 R686cff8b|u0_a157|~/src/*0|jsmod|1.29|sep.js
+M68712bda|u0_a157|~/src/conf|conf/vimrc/autoload|1.32|rv.vim
+M68712bda|u0_a157|~/src/conf|conf/vimrc/plugin|1.7|ld_plg.vim

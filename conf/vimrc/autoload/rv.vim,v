@@ -1,9 +1,15 @@
-head	1.31;
+head	1.32;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.32
+date	2025.07.11.15.20.58;	author u0_a157;	state Exp;
+branches;
+next	1.31;
+commitid	10068712BDA4ED50F15;
 
 1.31
 date	2025.06.09.15.04.56;	author u0_a157;	state Exp;
@@ -196,13 +202,13 @@ desc
 @@
 
 
-1.31
+1.32
 log
-@feat: rv selectParens
+@fix: remove vim-sexp because I rewrite a simple version
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
-let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'fennel', 'javascript':'qjs'}
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'pb lu', 'scheme':'pb li', 'javascript':'qjs'}
 let s:term_height = 10
 let s:hint_height = 5
 
@@ -612,6 +618,17 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.31
+log
+@feat: rv selectParens
+@
+text
+@d2 1
+a2 1
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'fennel', 'javascript':'qjs'}
 @
 
 

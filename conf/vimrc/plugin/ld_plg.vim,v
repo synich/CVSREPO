@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.07.11.15.20.58;	author u0_a157;	state Exp;
+branches;
+next	1.6;
+commitid	10068712BDA4ED50F15;
 
 1.6
 date	2025.05.16.16.05.55;	author u0_a157;	state Exp;
@@ -46,9 +52,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@fix: restore bracket comp
+@fix: remove vim-sexp because I rewrite a simple version
 @
 text
 @" Modeline and Notes {
@@ -115,7 +121,6 @@ function! MvcfComplete()
     return ""
   else
     let s:mvcf_complete = 1
-    packadd vim-sexp
     ApcDisable
     packadd vim-easycomplete
     return ""
@@ -309,6 +314,16 @@ augroup END
 
 ApcEnable
 
+@
+
+
+1.6
+log
+@fix: restore bracket comp
+@
+text
+@a64 1
+    packadd vim-sexp
 @
 
 
