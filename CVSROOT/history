@@ -170,3 +170,5 @@ A686cff8b|u0_a157|~/src/*0|jsmod|1.1|mel.js
 R686cff8b|u0_a157|~/src/*0|jsmod|1.29|sep.js
 M68712bda|u0_a157|~/src/conf|conf/vimrc/autoload|1.32|rv.vim
 M68712bda|u0_a157|~/src/conf|conf/vimrc/plugin|1.7|ld_plg.vim
+M68713926|u0_a157|~/src/conf/vimrc|conf/vimrc/autoload|1.33|rv.vim
+M68713926|u0_a157|~/src/conf/vimrc|conf/vimrc/plugin|1.32|kbd.vim

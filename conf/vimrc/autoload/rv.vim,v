@@ -1,9 +1,15 @@
-head	1.32;
+head	1.33;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.33
+date	2025.07.11.16.17.42;	author u0_a157;	state Exp;
+branches;
+next	1.32;
+commitid	1006871392657713F9E;
 
 1.32
 date	2025.07.11.15.20.58;	author u0_a157;	state Exp;
@@ -202,9 +208,9 @@ desc
 @@
 
 
-1.32
+1.33
 log
-@fix: remove vim-sexp because I rewrite a simple version
+@feat: simple emmet
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -602,6 +608,21 @@ function! rv#selectParens() abort
     normal! gv
 endfunction
 
+function! rv#expandTag()
+  let word = expand('<cword>')
+  let void_elem = ['br', 'hr', 'img', 'input']
+  if index(void_elem, word) >= 0
+    let html = "<" . word . ">"
+  else
+    let html = "<" . word . "></" . word . ">"
+  endif
+  execute "normal! ciw" . html . "\<Esc>"
+  if index(void_elem, word) < 0
+    normal! F<
+    startinsert
+  endif
+endfunction
+
 " When not know what happen under vim, use this
 function! rv#debug(...)
   let tname = ['int', 'str', 'fn', 'list', 'dict', 'bool', 'none', 'job', 'ch', 'blob']
@@ -618,6 +639,15 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.32
+log
+@fix: remove vim-sexp because I rewrite a simple version
+@
+text
+@d396 15
 @
 
 

@@ -1,9 +1,15 @@
-head	1.31;
+head	1.32;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.32
+date	2025.07.11.16.17.42;	author u0_a157;	state Exp;
+branches;
+next	1.31;
+commitid	1006871392657713F9E;
 
 1.31
 date	2025.06.09.15.04.56;	author u0_a157;	state Exp;
@@ -196,9 +202,9 @@ desc
 @@
 
 
-1.31
+1.32
 log
-@feat: rv selectParens
+@feat: simple emmet
 @
 text
 @" Modeline and Notes {
@@ -339,6 +345,12 @@ text
     inoremap { {}<Left>
     " }
 
+    augroup html_special
+      autocmd!
+      autocmd FileType html,xml inoremap <buffer> < <><Left>
+      autocmd FileType html,xml nnoremap <C-e> :call rv#expandTag()<CR>
+    augroup END
+
     " Dont know {
     " End/Start of line motion keys act relative to row/wrap width in the
     " presence of `:set wrap`, and relative to line for `:set nowrap`.
@@ -396,6 +408,15 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.31
+log
+@feat: rv selectParens
+@
+text
+@d139 6
 @
 
 
