@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2025.07.24.12.40.48;	author u0_a157;	state Exp;
+branches;
+next	1.7;
+commitid	100688229D0692367F8;
 
 1.7
 date	2025.06.29.15.18.04;	author u0_a157;	state Exp;
@@ -49,12 +55,12 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@fix: shrink margin-left but stay c12 theroy
+@feat: bg series
 @
 text
-@/*ver250625*/
+@/*ver250724*/
 :root{--mel-max-width:80rem;}
 /*---base elem---*/
 html{box-sizing:border-box;}
@@ -98,13 +104,13 @@ input[type='email'],input[type='number'],
 input[type='password'],input[type='text'],
 input[type='color'],input:not([type]),
 textarea,select {
-  background-color: transparent;
-  border: 0.1rem solid #d1d1d1;
-  border-radius: .4rem;
-  box-shadow: none;
-  height: 1.8rem;
-  padding: .4rem 0.8rem;
-  margin-bottom: 1.0rem;
+ background-color: transparent;
+ border: 0.1rem solid #d1d1d1;
+ border-radius: .4rem;
+ box-shadow: none;
+ height: 1.8rem;
+ padding: .4rem 0.8rem;
+ margin-bottom: 1.0rem;
 }
 textarea{width:100%;min-height:6rem;font-size:1.1em}
 /*----class----*/
@@ -125,10 +131,49 @@ textarea{width:100%;min-height:6rem;font-size:1.1em}
 .r3  {height: 3rem;}
 .inblk {display:inline-block;}
 .hide {visibility:hidden;}
+.midm {margin: 0 auto;}
+.midt {text-align: center}
+.bgr{background-color:#FEE2E2;}
+.bgy{background-color:#FEF9C3;}
+.bgb{background-color:#DBEAFE;}
+.bgg{background-color:#DCFCE7;}
+.bgw{background-color:#F4F0E9;}
+.card{opacity: 0.87;border-radius: 8px;
+box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
+/*----flex----*/
+.flexc {display:flex;flex-direction:column;
+ gap:1rem;padding:0.5rem;}
+/*----media more large more bottom----*/
+@@media screen and (min-width: 400px)  { }
+@@media screen and (min-width: 800px)  { }
+@@media screen and (min-width: 1200px) { }
+@
+
+
+1.7
+log
+@fix: shrink margin-left but stay c12 theroy
+@
+text
+@d1 1
+a1 1
+/*ver250625*/
+d45 7
+a51 7
+  background-color: transparent;
+  border: 0.1rem solid #d1d1d1;
+  border-radius: .4rem;
+  box-shadow: none;
+  height: 1.8rem;
+  padding: .4rem 0.8rem;
+  margin-bottom: 1.0rem;
+d72 9
+a80 2
 .card{opacity: 0.87;position: relative;max-width:var(--mel-max-width);padding: 8px 32px;margin:0 auto 8px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);border-radius: 8px;background: white;}
 .footer{margin: 0 auto;text-align: center}
-/*----flex----*/
-/*----media more large more bottom----*/
+d82 2
+d85 3
+a87 3
 @@media screen and (min-width: 400px)  {  }
 @@media screen and (min-width: 800px)  {  }
 @@media screen and (min-width: 1200px) {  }
