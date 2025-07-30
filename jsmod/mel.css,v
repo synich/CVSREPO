@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2025.07.30.10.52.15;	author u0_a157;	state Exp;
+branches;
+next	1.8;
+commitid	1006889F95F2DC996B1;
 
 1.8
 date	2025.07.24.12.40.48;	author u0_a157;	state Exp;
@@ -55,9 +61,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@feat: bg series
+@fix:short bgx
 @
 text
 @/*ver250724*/
@@ -133,11 +139,11 @@ textarea{width:100%;min-height:6rem;font-size:1.1em}
 .hide {visibility:hidden;}
 .midm {margin: 0 auto;}
 .midt {text-align: center}
-.bgr{background-color:#FEE2E2;}
-.bgy{background-color:#FEF9C3;}
-.bgb{background-color:#DBEAFE;}
-.bgg{background-color:#DCFCE7;}
-.bgw{background-color:#F4F0E9;}
+.bgr{background:#FEE2E2;}
+.bgy{background:#FEF9C3;}
+.bgb{background:#DBEAFE;}
+.bgg{background:#DCFCE7;}
+.bgw{background:#F4F0E9;}
 .card{opacity: 0.87;border-radius: 8px;
 box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 /*----flex----*/
@@ -147,6 +153,21 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 @@media screen and (min-width: 400px)  { }
 @@media screen and (min-width: 800px)  { }
 @@media screen and (min-width: 1200px) { }
+@
+
+
+1.8
+log
+@feat: bg series
+@
+text
+@d74 5
+a78 5
+.bgr{background-color:#FEE2E2;}
+.bgy{background-color:#FEF9C3;}
+.bgb{background-color:#DBEAFE;}
+.bgg{background-color:#DCFCE7;}
+.bgw{background-color:#F4F0E9;}
 @
 
 
