@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2025.08.04.03.47.34;	author u0_a157;	state Exp;
+branches;
+next	1.9;
+commitid	10068902D56416B1B86;
 
 1.9
 date	2025.07.30.10.52.15;	author u0_a157;	state Exp;
@@ -61,21 +67,27 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@fix:short bgx
+@fix: let elem more grouply
 @
 text
-@/*ver250724*/
+@/*ver250804*/
 :root{--mel-max-width:80rem;}
 /*---base elem---*/
 html{box-sizing:border-box;}
 *,*::before,*::after{box-sizing:inherit;}
-body{color:#111;background-color:#f2f2f2;}
-header{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
-h1{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
+
+body{color:#111;background:#f2f2f2;}
+article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+header{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
+nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
+
+h1{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
 h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
 h3{color:#409eff;}
+h4{color:#40aaff;}
+
 p{font-family:sans-serif;font-size:1.2em;}
 em{color:#00f;font-style:normal;}strong{color:#f00;font-style:normal;}
 pre{white-space:pre-wrap;font-size:1.1em;}
@@ -84,11 +96,8 @@ pre code{display: block;border: 1px solid #cccccc;}
 blockquote{border-left:4px solid #bbb;padding-left:0.5em;}
 ul li{list-style:circle;}ol li{list-style:hiragana;}
 table{border-collapse:collapse;border:1px solid;width:100%}th{border:1px solid;}td{border:1px solid;}
-article{background-color:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
-nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
-nav h1 {flex: 3;}
-nav label {color: #fff;padding-top: 0.5em;}
 img {max-width: 100%;}
+
 button,input[type='button'],input[type='submit'] {
   color: #fff;  background-color: #9b4dca;
   border: 0.1rem solid #9b4dca;  border-radius: .4rem;
@@ -115,8 +124,8 @@ textarea,select {
  border-radius: .4rem;
  box-shadow: none;
  height: 1.8rem;
- padding: .4rem 0.8rem;
- margin-bottom: 1.0rem;
+ padding: .2rem 0.8rem;
+ margin-bottom: 0.5rem;
 }
 textarea{width:100%;min-height:6rem;font-size:1.1em}
 /*----class----*/
@@ -153,6 +162,33 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 @@media screen and (min-width: 400px)  { }
 @@media screen and (min-width: 800px)  { }
 @@media screen and (min-width: 1200px) { }
+@
+
+
+1.9
+log
+@fix:short bgx
+@
+text
+@d1 1
+a1 1
+/*ver250724*/
+d6 7
+a12 3
+body{color:#111;background-color:#f2f2f2;}
+header{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
+h1{font-size:2em;background-color:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
+d15 2
+a24 4
+article{background-color:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
+nav h1 {flex: 3;}
+nav label {color: #fff;padding-top: 0.5em;}
+d26 1
+d53 2
+a54 2
+ padding: .4rem 0.8rem;
+ margin-bottom: 1.0rem;
 @
 
 
