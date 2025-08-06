@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2025.08.06.15.44.45;	author u0_a157;	state Exp;
+branches;
+next	1.10;
+commitid	1006893786D6E0C024D;
 
 1.10
 date	2025.08.04.03.47.34;	author u0_a157;	state Exp;
@@ -67,9 +73,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fix: let elem more grouply
+@fix: main and footer
 @
 text
 @/*ver250804*/
@@ -79,11 +85,13 @@ html{box-sizing:border-box;}
 *,*::before,*::after{box-sizing:inherit;}
 
 body{color:#111;background:#f2f2f2;}
-article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
 header{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
 nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
+main{}
+article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+footer{}
 
-h1{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
+h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.5em;}
 h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
 h3{color:#409eff;}
 h4{color:#40aaff;}
@@ -162,6 +170,20 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 @@media screen and (min-width: 400px)  { }
 @@media screen and (min-width: 800px)  { }
 @@media screen and (min-width: 1200px) { }
+@
+
+
+1.10
+log
+@fix: let elem more grouply
+@
+text
+@a7 1
+article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+d10 3
+d14 1
+a14 1
+h1{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;}
 @
 
 
