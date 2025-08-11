@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2025.08.11.12.25.15;	author synich;	state Exp;
+branches;
+next	1.1;
+commitid	ebjh4GZEVcISfj6G;
 
 1.1
 date	2025.07.08.11.22.51;	author u0_a157;	state Exp;
@@ -16,12 +22,12 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@fix: mv sep.js to mel.js
+@feat: atob and btoa support non-latin1
 @
 text
-@/*250302;SEP entry*/
+@/*250810;SEP entry*/
 // Util: jq, ajax, awax, hxdom
 // DOM&UI: ko, render(ko.$pen)
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -53,6 +59,9 @@ function jq(elemId){
   ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
   return ret
 }
+// b64
+function _btoa(t){return btoa(String.fromCharCode(...new TextEncoder().encode(t)))}
+function _atob(t){return new TextDecoder().decode(Uint8Array.from(atob(t),(c)=>c.charCodeAt(0)))}
 // take React
 function isPlainObject(target){ return Object.prototype.toString.call(target) === '[object Object]' }
 function createElement(tag, props, ...children){
@@ -197,6 +206,8 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
 }
 // export function
 _G.jq=jq;
+_G.btoa=_btoa;
+_G.atob=_atob;
 _G.ko=ko;
 _G.ajax=ajax;
 _G.awax=awax;
@@ -204,3 +215,17 @@ _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
 @
+
+
+1.1
+log
+@fix: mv sep.js to mel.js
+@
+text
+@d1 1
+a1 1
+/*250302;SEP entry*/
+d33 3
+d180 2
+@
+
