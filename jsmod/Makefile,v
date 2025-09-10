@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2025.09.10.14.18.34;	author u0_a108;	state Exp;
+branches;
+next	1.5;
+commitid	10068C188BA67E4F04C;
 
 1.5
 date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
@@ -38,9 +44,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@feat: unit test with sep.js
+@fix: new name for mel.js
 @
 text
 @CC	= gcc
@@ -83,9 +89,21 @@ release:	$(DUKTAPE_SOURCES)
 debug:	$(DUKTAPE_SOURCES)
 	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
 
+mel:
+	@@lua minijs.lua mel.js
+
+@
+
+
+1.5
+log
+@feat: unit test with sep.js
+@
+text
+@d41 2
+a42 2
 sep:
 	@@lua minijs.lua sep.js
-
 @
 
 
