@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2025.09.22.12.51.23;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	10068D1464B608EDEFD;
 
 1.4
 date	2025.09.22.09.44.09;	author u0_a108;	state Exp;
@@ -33,45 +39,42 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@feat: mini css
+@fix: rewrite minify
 @
 text
-@function minijs(fname)
-  local fin = io.open(fname, "r")
-  local oname = fname:gsub(".js$", ".min.js")
-  local fout = io.open(oname, "w")
-  for li in fin:lines() do
-    li = li:gsub("//.*", "")
+@local function _js(fout, li)
+  li = li:gsub("//.*", "")
+  li = li:gsub("^[ \t]+", "")
+  fout:write(li)
+end
+
+local function _css(fout, li)
+  if li:find("/%*%-") or 0==li:len() then
+  else
     li = li:gsub("^[ \t]+", "")
     fout:write(li)
   end
-  fin:close()
-  fout:close()
 end
 
-function minicss(fname)
+local function minify(fname, post, fn)
   local fin = io.open(fname, "r")
-  local oname = fname:gsub(".css$", ".min.css")
+  local oname = fname:gsub(post.."$", ".min"..post)
   local fout = io.open(oname, "w")
   for li in fin:lines() do
-    if li:find("/%*%-") or 0==li:len() then
-    else
-      li = li:gsub("^[ \t]+", "")
-      fout:write(li)
-    end
+    fn(fout, li)
   end
   fin:close()
   fout:close()
 end
 
-function main()
+local function main()
   if arg then
     if arg[1]:find("%.js") then
-      minijs(arg[1])
+      minify(arg[1], ".js", _js)
     else
-      minicss(arg[1])
+      minify(arg[1], ".css", _css)
     end
   else
     local t = formdata(); pprint(t)
@@ -79,6 +82,47 @@ function main()
 end
 
 main()
+@
+
+
+1.4
+log
+@feat: mini css
+@
+text
+@d1 9
+a9 6
+function minijs(fname)
+  local fin = io.open(fname, "r")
+  local oname = fname:gsub(".js$", ".min.js")
+  local fout = io.open(oname, "w")
+  for li in fin:lines() do
+    li = li:gsub("//.*", "")
+a12 2
+  fin:close()
+  fout:close()
+d15 1
+a15 1
+function minicss(fname)
+d17 1
+a17 1
+  local oname = fname:gsub(".css$", ".min.css")
+d20 1
+a20 5
+    if li:find("/%*%-") or 0==li:len() then
+    else
+      li = li:gsub("^[ \t]+", "")
+      fout:write(li)
+    end
+d26 1
+a26 1
+function main()
+d29 1
+a29 1
+      minijs(arg[1])
+d31 1
+a31 1
+      minicss(arg[1])
 @
 
 
