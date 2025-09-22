@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.09.22.09.44.09;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	10068D11A695B08A657;
 
 1.6
 date	2025.09.10.14.18.34;	author u0_a108;	state Exp;
@@ -44,9 +50,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@fix: new name for mel.js
+@feat: mini css
 @
 text
 @CC	= gcc
@@ -91,7 +97,17 @@ debug:	$(DUKTAPE_SOURCES)
 
 mel:
 	@@lua minijs.lua mel.js
+	@@lua minijs.lua mel.css
 
+@
+
+
+1.6
+log
+@fix: new name for mel.js
+@
+text
+@d43 1
 @
 
 

@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.09.22.09.44.09;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	10068D11A695B08A657;
 
 1.3
 date	2025.02.21.16.01.45;	author u0_a157;	state Exp;
@@ -27,9 +33,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@feat: unit test with sep.js
+@feat: mini css
 @
 text
 @function minijs(fname)
@@ -45,15 +51,46 @@ text
   fout:close()
 end
 
+function minicss(fname)
+  local fin = io.open(fname, "r")
+  local oname = fname:gsub(".css$", ".min.css")
+  local fout = io.open(oname, "w")
+  for li in fin:lines() do
+    if li:find("/%*%-") or 0==li:len() then
+    else
+      li = li:gsub("^[ \t]+", "")
+      fout:write(li)
+    end
+  end
+  fin:close()
+  fout:close()
+end
+
 function main()
   if arg then
-    minijs(arg[1])
+    if arg[1]:find("%.js") then
+      minijs(arg[1])
+    else
+      minicss(arg[1])
+    end
   else
     local t = formdata(); pprint(t)
   end
 end
 
 main()
+@
+
+
+1.3
+log
+@feat: unit test with sep.js
+@
+text
+@d14 15
+d31 5
+a35 1
+    minijs(arg[1])
 @
 
 
