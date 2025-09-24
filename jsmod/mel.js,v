@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2025.09.24.04.34.12;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	10068D374C4243EC882;
 
 1.3
 date	2025.09.23.12.03.54;	author u0_a108;	state Exp;
@@ -28,17 +34,81 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@feat:localStorage add into mel.js
+@feat: lodash chain to mel.js
 @
 text
 @/*250925;SEP entry*/
-// Util: jq, ajax, awax, hxdom
-// DOM&UI: ko, render(ko.$pen)
+// Util: b64, lodash, ajax, awax
+// DOM&UI: jq, ko, render(ko.$pen), hxdom
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
 !(function(top){"use strict";
 const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
+// util b64/lodash/etc
+function _btoa(t){return btoa(String.fromCharCode(...new TextEncoder().encode(t)))}
+function _atob(t){return new TextDecoder().decode(Uint8Array.from(atob(t),(c)=>c.charCodeAt(0)))}
+const lodash={
+  chain(v){
+    const q=[];
+    const w={
+      map(f){q.push(a=>a.map(f));return w},
+      filter(f){q.push(a=>a.filter(f));return w},
+      sort(it){q.push(a=>[...a].sort((x,y)=>
+      (it?x[it]:x)>(it?y[it]:y)?1:-1));return w},
+      uniq(){q.push(a=>a.filter((x,i)=>!i || x!=a[i-1]));return w},
+      take(n){q.push(a=>a.slice(0,n));return w},
+      value(){return q.reduce((x,f)=>f(x), v)}
+    };
+    return w
+  }
+};
+// simple storage
+const ss={
+  set(k,v) {if(typeof v=='string'){localStorage.setItem(k,v)} else{localStorage.setItem(k,JSON.stringify(v))}},
+  get(k) {var v=localStorage.get(k);if(v[0]=='{'||v[0]=='[')v=JSON.parse(v);return v}
+};
+// ajax  data:json object, cb_func(resp:str, status:200,403,etc)
+function ajax(method, url, data, cb_func, timeout=10000) {
+  function encodeParams(p) {
+    let _c= (key)=>`${encodeURIComponent(key)}=${encodeURIComponent(p[key])}`;
+    return Object.keys(p).map(_c).join("&")
+  }
+  let use_json=0;
+  method = method.toUpperCase();
+  if (method=="POSTJ"){method="POST";use_json=1}
+  if (data) {
+    if (use_json===0) { data = encodeParams(data)}
+    else {data = JSON.stringify(data)}
+  }
+  if (method === "GET" && data) { url=`${url}?${data}`; data = null }
+
+  let xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);// async true
+  xhr.setRequestHeader("Content-Type", use_json===0?"application/x-www-form-urlencoded":"application/json");
+  let timer = setTimeout(function() {
+    xhr.abort();
+    cb_func(`ERROR: Request timeout ${timeout}ms`, 408)// 408: Timeout
+    }, timeout);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {// Request is complete
+      clearTimeout(timer);
+      cb_func(xhr.responseText, xhr.status)
+    }
+  };
+  if (data) { xhr.send(data) }
+  else      { xhr.send()  }
+}
+// raise exp when isrej true
+function awax(method, url, data, timeout=10000, isrej=false) {
+  return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
+    let ok= (st>=200 && st<300)? true: false;
+    if(ok){resolve(resp)}
+    else{
+      if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)}
+    }
+  }, timeout)}
+)}
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
 function _get_el(elemId){
   var el = elemId;
@@ -64,13 +134,6 @@ function jq(elemId){
   ret.disp = (s)=>{el.style.display=s};
   ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
   return ret
-}
-// b64
-function _btoa(t){return btoa(String.fromCharCode(...new TextEncoder().encode(t)))}
-function _atob(t){return new TextDecoder().decode(Uint8Array.from(atob(t),(c)=>c.charCodeAt(0)))}
-var ss={
-  set:function(k,v){if(typeof v=='string')localStorage.setItem(k,v)else localStorage.setItem(k,JSON.stringify(v))},
-  get:function(k){var v=localStorage.get(k);if(v[0]=='{'||v[0]=='[')v=JSON.parse(v);return v}
 }
 // take React
 function isPlainObject(target){ return Object.prototype.toString.call(target) === '[object Object]' }
@@ -147,6 +210,66 @@ function ko(tEId){
   vm.$pen=function(vdom, id){let n=id?vm[id].o:this.$root.o;render(vdom, n);_attr_bind(n, this);return this};
   return vm
 }
+// take from htmx
+function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.firstChild}
+function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
+  function _subdom(resp, code){
+    if (code >=300 || code <200) {alert(resp)}
+    let swap = opt["swap"];
+    if (swap){
+      let ori = jq(target).o;//before | after | delete
+      if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
+      else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
+      else {jq(target)("")}
+    }else {jq(target)(resp)}
+  }
+  let data={};
+  if (id_elem) {
+    if (typeof id_elem =="string") {
+      let a_in=id_elem.replace(/\s+/g, "").split(",");
+      for (let k of a_in){
+        let e = jq(k), n=e.o.getAttribute("name");
+        n=n?n:k;
+        data[n]=e()
+      }
+    } else {data=id_elem}
+  }
+  ajax(method, url, data, _subdom, timeout)
+}
+// export function
+_G.btoa=_btoa;
+_G.atob=_atob;
+_G.lo=lodash;
+_G.ss=ss;
+_G.ajax=ajax;
+_G.awax=awax;
+_G.jq=jq;
+_G.ko=ko;
+_G.hxdom=hxdom;
+top.React={createElement:createElement}
+})(this)
+@
+
+
+1.3
+log
+@feat:localStorage add into mel.js
+@
+text
+@d2 2
+a3 2
+// Util: jq, ajax, awax, hxdom
+// DOM&UI: ko, render(ko.$pen)
+d7 64
+a96 7
+// b64
+function _btoa(t){return btoa(String.fromCharCode(...new TextEncoder().encode(t)))}
+function _atob(t){return new TextDecoder().decode(Uint8Array.from(atob(t),(c)=>c.charCodeAt(0)))}
+var ss={
+  set:function(k,v){if(typeof v=='string')localStorage.setItem(k,v)else localStorage.setItem(k,JSON.stringify(v))},
+  get:function(k){var v=localStorage.get(k);if(v[0]=='{'||v[0]=='[')v=JSON.parse(v);return v}
+}
+a171 41
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
 function ajax(method, url, data, cb_func, timeout=10000) {
   function encodeParams(p) {
@@ -188,43 +311,12 @@ function awax(method, url, data, timeout=10000, isrej=false) {
     }
   }, timeout)}
 )}
-// take from htmx
-function _s2el(s){let t=document.createElement("div");t.innerHTML=s;return t.firstChild}
-function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
-  function _subdom(resp, code){
-    if (code >=300 || code <200) {alert(resp)}
-    let swap = opt["swap"];
-    if (swap){
-      let ori = jq(target).o;//before | after | delete
-      if ("b"==swap[0]){ori.insertBefore(_s2el(resp), ori.firstChild)}
-      else if("a"==swap[0]){ori.appendChild(_s2el(resp))}
-      else {jq(target)("")}
-    }else {jq(target)(resp)}
-  }
-  let data={};
-  if (id_elem) {
-    if (typeof id_elem =="string") {
-      let a_in=id_elem.replace(/\s+/g, "").split(",");
-      for (let k of a_in){
-        let e = jq(k), n=e.o.getAttribute("name");
-        n=n?n:k;
-        data[n]=e()
-      }
-    } else {data=id_elem}
-  }
-  ajax(method, url, data, _subdom, timeout)
-}
-// export function
+a198 1
 _G.jq=jq;
-_G.btoa=_btoa;
-_G.atob=_atob;
-_G.ss=ss;
+d201 1
+a202 1
 _G.ko=ko;
-_G.ajax=ajax;
-_G.awax=awax;
-_G.hxdom=hxdom;
-top.React={createElement:createElement}
-})(this)
+d205 2
 @
 
 
