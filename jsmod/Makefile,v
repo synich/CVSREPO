@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2025.09.24.13.57.25;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	10068D3F8C531787E76;
 
 1.7
 date	2025.09.22.09.44.09;	author u0_a108;	state Exp;
@@ -50,9 +56,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@feat: mini css
+@fix: ss getItem
 @
 text
 @CC	= gcc
@@ -89,12 +95,26 @@ CMDLINE_SOURCES += extras/module-duktape/duk_module_duktape.c
 # http://duktape.org/guide.html#compiling
 # http://wiki.duktape.org/Configuring.html
 
+mel:
+	@@lua minijs.lua mel.js
+	@@lua minijs.lua mel.css
+
 release:	$(DUKTAPE_SOURCES)
 	$(CC) -c -o duktape.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
 
 debug:	$(DUKTAPE_SOURCES)
 	$(CC) -c -g -o duktaped.o $(DEFINES) $(CCOPTS) $(DUKTAPE_SOURCES) $(CCLIBS)
 
+@
+
+
+1.7
+log
+@feat: mini css
+@
+text
+@d35 4
+a44 4
 mel:
 	@@lua minijs.lua mel.js
 	@@lua minijs.lua mel.css

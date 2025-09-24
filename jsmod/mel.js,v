@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2025.09.24.13.57.25;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	10068D3F8C531787E76;
 
 1.4
 date	2025.09.24.04.34.12;	author u0_a108;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@feat: lodash chain to mel.js
+@fix: ss getItem
 @
 text
 @/*250925;SEP entry*/
@@ -66,7 +72,7 @@ const lodash={
 // simple storage
 const ss={
   set(k,v) {if(typeof v=='string'){localStorage.setItem(k,v)} else{localStorage.setItem(k,JSON.stringify(v))}},
-  get(k) {var v=localStorage.get(k);if(v[0]=='{'||v[0]=='[')v=JSON.parse(v);return v}
+  get(k) {let v=localStorage.getItem(k);if(v&&(v[0]=='{'||v[0]=='['))v=JSON.parse(v);return v}
 };
 // ajax  data:json object, cb_func(resp:str, status:200,403,etc)
 function ajax(method, url, data, cb_func, timeout=10000) {
@@ -248,6 +254,17 @@ _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.4
+log
+@feat: lodash chain to mel.js
+@
+text
+@d28 1
+a28 1
+  get(k) {var v=localStorage.get(k);if(v[0]=='{'||v[0]=='[')v=JSON.parse(v);return v}
 @
 
 
