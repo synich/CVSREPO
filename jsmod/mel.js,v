@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2025.10.10.15.49.57;	author u0_a108;	state Exp;
+branches;
+next	1.5;
+commitid	10068E92B251E5C6763;
 
 1.5
 date	2025.09.24.13.57.25;	author u0_a108;	state Exp;
@@ -40,12 +46,12 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@fix: ss getItem
+@fix: chain instead of lodash
 @
 text
-@/*250925;SEP entry*/
+@/*251009;SEP entry*/
 // Util: b64, lodash, ajax, awax
 // DOM&UI: jq, ko, render(ko.$pen), hxdom
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -54,21 +60,19 @@ const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
 // util b64/lodash/etc
 function _btoa(t){return btoa(String.fromCharCode(...new TextEncoder().encode(t)))}
 function _atob(t){return new TextDecoder().decode(Uint8Array.from(atob(t),(c)=>c.charCodeAt(0)))}
-const lodash={
-  chain(v){
-    const q=[];
-    const w={
-      map(f){q.push(a=>a.map(f));return w},
-      filter(f){q.push(a=>a.filter(f));return w},
-      sort(it){q.push(a=>[...a].sort((x,y)=>
-      (it?x[it]:x)>(it?y[it]:y)?1:-1));return w},
-      uniq(){q.push(a=>a.filter((x,i)=>!i || x!=a[i-1]));return w},
-      take(n){q.push(a=>a.slice(0,n));return w},
-      value(){return q.reduce((x,f)=>f(x), v)}
-    };
-    return w
-  }
-};
+function chain(v){
+  const q=[];
+  const w={
+    map(f){q.push(a=>a.map(f));return w},
+    filter(f){q.push(a=>a.filter(f));return w},
+    sort(it){q.push(a=>[...a].sort((x,y)=>
+    (it?x[it]:x)>(it?y[it]:y)?1:-1));return w},
+    uniq(){q.push(a=>a.filter((x,i)=>!i || x!=a[i-1]));return w},
+    take(n){q.push(a=>a.slice(0,n));return w},
+    value(){return q.reduce((x,f)=>f(x), v)}
+  };
+  return w
+}
 // simple storage
 const ss={
   set(k,v) {if(typeof v=='string'){localStorage.setItem(k,v)} else{localStorage.setItem(k,JSON.stringify(v))}},
@@ -245,7 +249,7 @@ function hxdom(method, url, id_elem, target, opt={}, timeout=10000) {
 // export function
 _G.btoa=_btoa;
 _G.atob=_atob;
-_G.lo=lodash;
+_G.chain=chain;
 _G.ss=ss;
 _G.ajax=ajax;
 _G.awax=awax;
@@ -254,6 +258,37 @@ _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.5
+log
+@fix: ss getItem
+@
+text
+@d1 1
+a1 1
+/*250925;SEP entry*/
+d10 13
+a22 15
+const lodash={
+  chain(v){
+    const q=[];
+    const w={
+      map(f){q.push(a=>a.map(f));return w},
+      filter(f){q.push(a=>a.filter(f));return w},
+      sort(it){q.push(a=>[...a].sort((x,y)=>
+      (it?x[it]:x)>(it?y[it]:y)?1:-1));return w},
+      uniq(){q.push(a=>a.filter((x,i)=>!i || x!=a[i-1]));return w},
+      take(n){q.push(a=>a.slice(0,n));return w},
+      value(){return q.reduce((x,f)=>f(x), v)}
+    };
+    return w
+  }
+};
+d199 1
+a199 1
+_G.lo=lodash;
 @
 
 
