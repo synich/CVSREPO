@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2025.10.11.04.00.38;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	10068E9D6665E54D872;
 
 1.6
 date	2025.10.10.15.49.57;	author u0_a108;	state Exp;
@@ -46,14 +52,14 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@fix: chain instead of lodash
+@doc: ko.$pen use vdom
 @
 text
-@/*251009;SEP entry*/
+@/*251011;SEP entry*/
 // Util: b64, lodash, ajax, awax
-// DOM&UI: jq, ko, render(ko.$pen), hxdom
+// DOM&UI: jq, ko/ko_obj.$pen(vdom,[id]), hxdom
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
 !(function(top){"use strict";
 const SEP="W";var _G;top[SEP]||(_G=top[SEP]={});
@@ -258,6 +264,20 @@ _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.6
+log
+@fix: chain instead of lodash
+@
+text
+@d1 1
+a1 1
+/*251009;SEP entry*/
+d3 1
+a3 1
+// DOM&UI: jq, ko, render(ko.$pen), hxdom
 @
 
 
