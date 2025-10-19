@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2025.10.19.16.33.34;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	10068F512DE71C0EBE3;
 
 1.7
 date	2025.10.11.04.00.38;	author u0_a108;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@doc: ko.$pen use vdom
+@fix: let awax always catch reject
 @
 text
 @/*251011;SEP entry*/
@@ -116,15 +122,19 @@ function ajax(method, url, data, cb_func, timeout=10000) {
   else      { xhr.send()  }
 }
 // raise exp when isrej true
-function awax(method, url, data, timeout=10000, isrej=false) {
+function _awax(method, url, data, timeout) {
   return new Promise( (resolve,reject)=>{ajax(method, url, data, (resp, st)=>{
     let ok= (st>=200 && st<300)? true: false;
     if(ok){resolve(resp)}
-    else{
-      if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)}
-    }
+    else{reject(`${st}:${resp}`)}
   }, timeout)}
 )}
+async function awax(method, url, data, timeout=10000) {
+  let r;
+  try {r=await _awax(method, url, data, timeout)}
+  catch(e) {r=`Exp: ${e}`}
+  return r
+}
 // scan DOM elem and return vm of it. get/set as func, ".o/tog/disp/vis" handy func
 function _get_el(elemId){
   var el = elemId;
@@ -264,6 +274,23 @@ _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.7
+log
+@doc: ko.$pen use vdom
+@
+text
+@d60 1
+a60 1
+function awax(method, url, data, timeout=10000, isrej=false) {
+d64 1
+a64 3
+    else{
+      if(isrej){reject(resp)} else{resolve(`E${st}: ${resp}`)}
+    }
+d67 6
 @
 
 

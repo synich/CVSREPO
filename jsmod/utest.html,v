@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2025.10.19.16.33.34;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	10068F512DE71C0EBE3;
 
 1.4
 date	2025.06.23.05.16.39;	author u0_a157;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix: box-sizing to border, col ok
+@fix: let awax always catch reject
 @
 text
 @<!DOCTYPE html>
@@ -44,9 +50,9 @@ text
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UnitTest4sep</title>
+    <title>UnitTest4mel</title>
     <link rel="stylesheet" href="mel.css">
-    <script src="sep.min.js"></script>
+    <script src="mel.js"></script>
     <script src="wui.jsx" type="module"></script>
 </head>
 <body>
@@ -78,6 +84,20 @@ aht.sync=(v,m)=>{m.p(v)};
 </body>
 </html>
 
+@
+
+
+1.4
+log
+@fix: box-sizing to border, col ok
+@
+text
+@d6 1
+a6 1
+    <title>UnitTest4sep</title>
+d8 1
+a8 1
+    <script src="sep.min.js"></script>
 @
 
 
