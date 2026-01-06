@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2026.01.06.12.47.55;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	100695D047B6F5E9C46;
 
 1.4
 date	2025.05.14.14.45.44;	author u0_a157;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix: chop vim plugin param
+@fix: drop nouse vim set
 @
 text
 @" Modeline and Notes {
@@ -53,7 +59,6 @@ text
         autocmd FileType python setlocal omnifunc=python3complete#Complete
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
         autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-        autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
         autocmd Filetype * if &omnifunc == "" |
             \setlocal omnifunc=syntaxcomplete#Complete |
             \endif
@@ -88,6 +93,18 @@ hi link EasyMotionTarget ErrorMsg
 hi link EasyMotionShade  Comment
 " }
 
+" }
+@
+
+
+1.4
+log
+@fix: chop vim plugin param
+@
+text
+@a14 1
+        autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+a48 25
 " TextObj Sentence & Quote {
     if count(mvcf_bundle_groups, 'textobj')
         augroup textobj_sentence
@@ -113,7 +130,6 @@ hi link EasyMotionShade  Comment
             let b:match_ignorecase = 1
         endif
     " }
-" }
 @
 
 
