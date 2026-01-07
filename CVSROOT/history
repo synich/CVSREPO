@@ -196,3 +196,5 @@ M68f512de|u0_a108|~/src/*0|jsmod|1.8|mel.js
 M68f512de|u0_a108|~/src/*0|jsmod|1.5|utest.html
 O695d0301|u0_a108|~/src/*0|conf||conf
 M695d047b|u0_a108|~/src/*0|conf/vimrc/plugin|1.5|switch.vim
+O695da663|u0_a270|~/src/*0|conf||conf
+M695da6bd|u0_a270|~/src/*0|conf/vimrc/autoload|1.34|rv.vim

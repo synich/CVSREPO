@@ -1,9 +1,15 @@
-head	1.33;
+head	1.34;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.34
+date	2026.01.07.00.20.13;	author u0_a270;	state Exp;
+branches;
+next	1.33;
+commitid	100695DA6BD69DC6EA8;
 
 1.33
 date	2025.07.11.16.17.42;	author u0_a157;	state Exp;
@@ -208,9 +214,9 @@ desc
 @@
 
 
-1.33
+1.34
 log
-@feat: simple emmet
+@fix: grep use qf
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -359,6 +365,12 @@ function! rv#runShellCommand(cmdline)
     1
 endfunction
 
+function! s:cqfrg(cw)
+  execute "silent! grep! ".shellescape(a:cw)." *"
+  cwindow
+  normal 
+endfunction
+
 function! rv#enhancegrep(useinput)
   let l:word = expand("<cword>")
   if type(a:useinput) == 1
@@ -367,13 +379,11 @@ function! rv#enhancegrep(useinput)
       let l:word = input("Keyword:")
   endif
   if executable('rg')
-      call <SID>runcmd('rg "'.l:word.'"')
-  elseif executable('ag')
-      call <SID>runcmd('ag "'.l:word.'"')
-  elseif executable('ack')
-      call <SID>runcmd('ack "'.l:word.'"')
+      set grepprg=rg\ --vimgrep\ --color=never
+      call s:cqfrg(l:word)
   else
-      call <SID>runcmd('grep -in -R "'.l:word.'" *')
+      set grepprg=grep\ -RIin\ --color=never
+      call s:cqfrg(l:word)
   endif
 endfunction
 
@@ -639,6 +649,25 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.33
+log
+@feat: simple emmet
+@
+text
+@d147 6
+d161 2
+a162 5
+      call <SID>runcmd('rg "'.l:word.'"')
+  elseif executable('ag')
+      call <SID>runcmd('ag "'.l:word.'"')
+  elseif executable('ack')
+      call <SID>runcmd('ack "'.l:word.'"')
+d164 2
+a165 1
+      call <SID>runcmd('grep -in -R "'.l:word.'" *')
 @
 
 
