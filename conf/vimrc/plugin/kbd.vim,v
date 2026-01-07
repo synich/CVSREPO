@@ -1,9 +1,15 @@
-head	1.32;
+head	1.33;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.33
+date	2026.01.07.04.13.18;	author u0_a108;	state Exp;
+branches;
+next	1.32;
+commitid	100695DDD5E0EB047F1;
 
 1.32
 date	2025.07.11.16.17.42;	author u0_a157;	state Exp;
@@ -202,9 +208,9 @@ desc
 @@
 
 
-1.32
+1.33
 log
-@feat: simple emmet
+@fix: CheckQuickfix rename s:
 @
 text
 @" Modeline and Notes {
@@ -226,36 +232,6 @@ text
     set pastetoggle=<F2>             " pastetoggle (sane indentation on pastes)
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
-" }
-
-" Functions {
-
-    " Initialize NERDTree as needed {
-    function! NERDTreeInitAsNeeded()
-        redir => bufoutput
-        buffers!
-        redir END
-        let idx = stridx(bufoutput, "NERD_tree")
-        if idx > -1
-            NERDTreeMirror
-            NERDTreeFind
-            wincmd l
-        endif
-    endfunction
-    " }
-
-    " Check QuickFix 1-open/0-close {
-    function! MvcfCheckQuickfix()
-      let l:hasqf = 0
-      for winnr in range(1, winnr('$'))
-        if getwinvar(winnr, '&syntax') == 'qf'
-            let l:hasqf = 1
-            break
-        endif
-      endfor
-      return l:hasqf
-    endfunction
-    " }
 " }
 
 " Key (re)Mappings {
@@ -408,6 +384,45 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.32
+log
+@feat: simple emmet
+@
+text
+@a21 30
+" Functions {
+
+    " Initialize NERDTree as needed {
+    function! NERDTreeInitAsNeeded()
+        redir => bufoutput
+        buffers!
+        redir END
+        let idx = stridx(bufoutput, "NERD_tree")
+        if idx > -1
+            NERDTreeMirror
+            NERDTreeFind
+            wincmd l
+        endif
+    endfunction
+    " }
+
+    " Check QuickFix 1-open/0-close {
+    function! MvcfCheckQuickfix()
+      let l:hasqf = 0
+      for winnr in range(1, winnr('$'))
+        if getwinvar(winnr, '&syntax') == 'qf'
+            let l:hasqf = 1
+            break
+        endif
+      endfor
+      return l:hasqf
+    endfunction
+    " }
+" }
+
 @
 
 

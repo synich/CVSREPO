@@ -1,9 +1,15 @@
-head	1.34;
+head	1.35;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.35
+date	2026.01.07.04.13.18;	author u0_a108;	state Exp;
+branches;
+next	1.34;
+commitid	100695DDD5E0EB047F1;
 
 1.34
 date	2026.01.07.00.20.13;	author u0_a270;	state Exp;
@@ -214,9 +220,9 @@ desc
 @@
 
 
-1.34
+1.35
 log
-@fix: grep use qf
+@fix: CheckQuickfix rename s:
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -225,11 +231,22 @@ let s:term_height = 10
 let s:hint_height = 5
 
 " ScriptRunTool {
+" Check QuickFix 1-open/0-close
+function! s:checkQuickfix()
+  let l:hasqf = 0
+  for winnr in range(1, winnr('$'))
+    if getwinvar(winnr, '&syntax') == 'qf'
+      let l:hasqf = 1
+      break
+    endif
+  endfor
+  return l:hasqf
+endfunction
 
 " default show quickfix window. silent run if has more argument
 function! s:runcmd(cmd, ...)
   execute 'Shell '.a:cmd
-  if a:0==0 && !MvcfCheckQuickfix()
+  if a:0==0 && !s:checkQuickfix()
       "execute 'copen'
   endif
 endfunction
@@ -441,7 +458,7 @@ endfunction
 
 " Toggle {
 function! rv#togglequickfix()
-  if MvcfCheckQuickfix()
+  if s:checkQuickfix()
       execute 'cclose'
   else
       execute 'copen'
@@ -649,6 +666,21 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.34
+log
+@fix: grep use qf
+@
+text
+@d7 11
+d22 1
+a22 1
+  if a:0==0 && !MvcfCheckQuickfix()
+d234 1
+a234 1
+  if MvcfCheckQuickfix()
 @
 
 
