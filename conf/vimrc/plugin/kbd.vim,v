@@ -1,9 +1,15 @@
-head	1.33;
+head	1.34;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.34
+date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
+branches;
+next	1.33;
+commitid	100695E7BC8212644DB;
 
 1.33
 date	2026.01.07.04.13.18;	author u0_a108;	state Exp;
@@ -208,9 +214,9 @@ desc
 @@
 
 
-1.33
+1.34
 log
-@fix: CheckQuickfix rename s:
+@feat: choose buffer friendly
 @
 text
 @" Modeline and Notes {
@@ -267,6 +273,7 @@ text
     nnoremap <leader>gh :call rv#showhint()<CR>
     nnoremap <leader>gp :call rv#enhancegrep(1)<CR>
     nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+    noremap  <leader>ls :call rv#bufferchoose()<CR>
     " Disable search highlight
     noremap  <leader>nh :nohl<CR>
     nnoremap <leader>nu :call rv#toggleNumber()<CR>
@@ -384,6 +391,15 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.33
+log
+@fix: CheckQuickfix rename s:
+@
+text
+@d55 1
 @
 
 

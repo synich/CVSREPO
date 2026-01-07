@@ -201,3 +201,7 @@ M695da6bd|u0_a270|~/src/*0|conf/vimrc/autoload|1.34|rv.vim
 U695da759|u0_a108|~/src/*0|conf/vimrc/autoload|1.34|rv.vim
 M695ddd5e|u0_a108|~/src/conf/vimrc|conf/vimrc/autoload|1.35|rv.vim
 M695ddd5f|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.33|kbd.vim
+M695e7bc8|u0_a108|~/src/conf/vimrc|conf/vimrc/autoload|1.36|rv.vim
+M695e7bc8|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.34|kbd.vim
+M695e7bc8|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.8|ld_plg.vim
+M695e7bc8|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.6|switch.vim

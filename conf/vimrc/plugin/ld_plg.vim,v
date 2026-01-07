@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	100695E7BC8212644DB;
 
 1.7
 date	2025.07.11.15.20.58;	author u0_a157;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@fix: remove vim-sexp because I rewrite a simple version
+@feat: choose buffer friendly
 @
 text
 @" Modeline and Notes {
@@ -114,7 +120,7 @@ function! MvcfHardlyuse()
   RainbowToggleOn
 endfunction
 
-" simple complete and lisp pack
+" simple complete
 function! MvcfComplete()
   if exists('s:mvcf_complete')
     echo "alreay loaded"
@@ -314,6 +320,17 @@ augroup END
 
 ApcEnable
 
+@
+
+
+1.7
+log
+@fix: remove vim-sexp because I rewrite a simple version
+@
+text
+@d58 1
+a58 1
+" simple complete and lisp pack
 @
 
 

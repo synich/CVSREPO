@@ -1,9 +1,15 @@
-head	1.35;
+head	1.36;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.36
+date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
+branches;
+next	1.35;
+commitid	100695E7BC8212644DB;
 
 1.35
 date	2026.01.07.04.13.18;	author u0_a108;	state Exp;
@@ -220,9 +226,9 @@ desc
 @@
 
 
-1.35
+1.36
 log
-@fix: CheckQuickfix rename s:
+@feat: choose buffer friendly
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -409,6 +415,24 @@ function! rv#txtReplace(flag)
   let pat = input("Patern:")
   let tar = input("Target:")
   execute "%s/".pat."/".tar."/".a:flag
+endfunction
+
+function! rv#bufferchoose()
+  ls
+  let l:bc = input("choose buffer:")
+  if l:bc =~# '^\d\+$'
+    execute 'buffer' l:bc
+  else
+    let l:pat = join(split(l:bc, '\zs'), '.*')
+    let l:bfl = getbufinfo({'buflisted':1})
+    for v in l:bfl
+      if match(bufname(v.bufnr), l:pat) >= 0
+        execute 'buffer' v.bufnr
+        return
+      endif
+    endfor
+    echo " Not found"
+  endif
 endfunction
 
 " execute command another window and cursor stay
@@ -666,6 +690,15 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.35
+log
+@fix: CheckQuickfix rename s:
+@
+text
+@d187 18
 @
 
 

@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
+branches;
+next	1.5;
+commitid	100695E7BC8212644DB;
 
 1.5
 date	2026.01.06.12.47.55;	author u0_a108;	state Exp;
@@ -40,9 +46,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@fix: drop nouse vim set
+@feat: choose buffer friendly
 @
 text
 @" Modeline and Notes {
@@ -77,10 +83,6 @@ text
         au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
     " }
 
-" bufferline {
-set showtabline=0
-let g:bufferline_rotate=1
-let g:bufferline_separator=''
 " }
 
 " EasyMotion {
@@ -88,12 +90,26 @@ let g:bufferline_separator=''
 let g:EasyMotion_do_mapping = 0
 " Turn on case-insensitive feature
 let g:EasyMotion_smartcase = 1
-
 hi link EasyMotionTarget ErrorMsg
 hi link EasyMotionShade  Comment
 " }
 
 " }
+@
+
+
+1.5
+log
+@fix: drop nouse vim set
+@
+text
+@a32 4
+" bufferline {
+set showtabline=0
+let g:bufferline_rotate=1
+let g:bufferline_separator=''
+a39 1
+
 @
 
 
