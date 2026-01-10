@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2026.01.10.14.22.34;	author u0_a108;	state Exp;
+branches;
+next	1.13;
+commitid	100696260AA5B5FD663;
 
 1.13
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -88,9 +94,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@fix: move most useful setting to init.vim
+@fix: combine rtp and packpath opt
 @
 text
 @" Modeline and Notes {
@@ -106,11 +112,9 @@ text
 " }
 
 " Environment {
-    " Identify platform {
-        silent function! WINDOWS()
-            return  (has('win32') || has('win64'))
-        endfunction
-    " }
+    silent function! WINDOWS()
+        return  (has('win32') || has('win64'))
+    endfunction
 
     " GlobalVar {
         if WINDOWS()
@@ -119,10 +123,11 @@ text
             set shell=bash
             let g:mvcf_path='~/.FAVORITE_DIRNAME/vimrc/'
         endif
-        let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
-        let g:mvcf_bundle_groups=['go', ]
         " add self script to rtp and 3rd to packpath
         execute 'set rtp+='.g:mvcf_path
+        if v:version >= 800
+          execute 'set packpath+='.g:mvcf_path
+        endif
     " }
 
     " Arrow Key Fix {
@@ -226,6 +231,25 @@ text
     syntax on                   " Syntax highlighting
 " }
 
+@
+
+
+1.13
+log
+@fix: move most useful setting to init.vim
+@
+text
+@d14 3
+a16 5
+    " Identify platform {
+        silent function! WINDOWS()
+            return  (has('win32') || has('win64'))
+        endfunction
+    " }
+a24 2
+        let g:mvcf_path_bundle=g:mvcf_path.'bundle/'
+        let g:mvcf_bundle_groups=['go', ]
+d27 3
 @
 
 

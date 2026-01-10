@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2026.01.10.14.22.34;	author u0_a108;	state Exp;
+branches;
+next	1.8;
+commitid	100696260AA5B5FD663;
 
 1.8
 date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
@@ -58,19 +64,14 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@feat: choose buffer friendly
+@fix: combine rtp and packpath opt
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
 " }
-
-" after setting, start pack
-if v:version >= 800
-    execute 'set packpath+='.g:mvcf_path
-endif
 
 " Load opt {
 function! MvcfHardlyuse()
@@ -319,6 +320,20 @@ augroup ApcInitGroup
 augroup END
 
 ApcEnable
+
+@
+
+
+1.8
+log
+@feat: choose buffer friendly
+@
+text
+@a4 5
+" after setting, start pack
+if v:version >= 800
+    execute 'set packpath+='.g:mvcf_path
+endif
 
 @
 
