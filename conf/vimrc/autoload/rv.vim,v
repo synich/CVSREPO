@@ -1,9 +1,15 @@
-head	1.36;
+head	1.37;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.37
+date	2026.01.10.15.12.15;	author u0_a108;	state Exp;
+branches;
+next	1.36;
+commitid	10069626C4F62A62920;
 
 1.36
 date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
@@ -226,9 +232,9 @@ desc
 @@
 
 
-1.36
+1.37
 log
-@feat: choose buffer friendly
+@fix: <leader>gp has default input
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -396,10 +402,10 @@ endfunction
 
 function! rv#enhancegrep(useinput)
   let l:word = expand("<cword>")
-  if type(a:useinput) == 1
+  if type(a:useinput) == 1 "str
       let l:word = a:useinput
   elseif a:useinput == 1
-      let l:word = input("Keyword:")
+      let l:word = input("Keyword: ", l:word)
   endif
   if executable('rg')
       set grepprg=rg\ --vimgrep\ --color=never
@@ -690,6 +696,20 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.36
+log
+@feat: choose buffer friendly
+@
+text
+@d166 1
+a166 1
+  if type(a:useinput) == 1
+d169 1
+a169 1
+      let l:word = input("Keyword:")
 @
 
 
