@@ -1,9 +1,15 @@
-head	1.35;
+head	1.36;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.36
+date	2026.01.11.14.49.28;	author u0_a108;	state Exp;
+branches;
+next	1.35;
+commitid	1006963B878301DA7B3;
 
 1.35
 date	2026.01.11.13.13.55;	author u0_a108;	state Exp;
@@ -220,9 +226,9 @@ desc
 @@
 
 
-1.35
+1.36
 log
-@fix: restart nvim and drop pastetoggle opt
+@fix: continue remove no use vim setting
 @
 text
 @" Modeline and Notes {
@@ -242,7 +248,6 @@ text
     set splitbelow                  " Puts new split windows to the bottom of the current
     "set matchpairs+=<:>             " Match, to be used with %
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
-
 " }
 
 " Key (re)Mappings {
@@ -260,12 +265,10 @@ text
     inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
     inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
     inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
     " }
 
     " Adjust viewports to the same size
     map      <leader>= <C-w>=
-    nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
     nnoremap <leader>cs :call rv#showsnipcode()<cr>
     nnoremap <leader>ct :call rv#gototopdir()<CR>
     nnoremap <leader>dm :call rv#showMaps()<CR>
@@ -301,7 +304,6 @@ text
     nmap     <leader>ww <Plug>(easymotion-w)
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
-
     inoremap <expr><silent> <C-k> MvcfComplete()
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
@@ -388,14 +390,31 @@ text
     vnoremap < <gv
     vnoremap > >gv
 
-    " For when you forget to sudo.. Really Write the file.
-    cmap w!! w !sudo tee % >/dev/null
-
     " }
 " }
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.35
+log
+@fix: restart nvim and drop pastetoggle opt
+@
+text
+@a17 1
+
+a34 1
+
+a38 1
+    nmap     <Leader>ac <Plug>ToggleAutoCloseMappings
+a73 1
+
+a159 3
+    " For when you forget to sudo.. Really Write the file.
+    cmap w!! w !sudo tee % >/dev/null
+
 @
 
 

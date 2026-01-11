@@ -210,3 +210,5 @@ M696260aa|u0_a108|~/src/conf|conf/vimrc/plugin|1.9|ld_plg.vim
 M69626c4f|u0_a108|~/src/conf|conf/vimrc/autoload|1.37|rv.vim
 M6963a213|u0_a108|~/src/conf|conf/nvim|1.3|init.lua
 M6963a213|u0_a108|~/src/conf|conf/vimrc/plugin|1.35|kbd.vim
+M6963b878|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.36|kbd.vim
+M6963b878|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.10|ld_plg.vim
