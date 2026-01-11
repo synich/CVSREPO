@@ -1,9 +1,15 @@
-head	1.17;
+head	1.18;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.18
+date	2026.01.11.15.24.11;	author u0_a108;	state Exp;
+branches;
+next	1.17;
+commitid	1006963C09B3605A9B6;
 
 1.17
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -110,9 +116,9 @@ desc
 @@
 
 
-1.17
+1.18
 log
-@fix: move most useful setting to init.vim
+@fix: conftool support vim/nvim when up
 @
 text
 @#!/bin/sh
@@ -120,7 +126,7 @@ text
 FAVORITE_DIRNAME=shuw
 AR_URL=http://synich.sdf.org/ar/
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20241125
+CONFVER=V20260111
 
 if [ $# -eq 0 ]; then
     echo "$0 [-u url] setup|update|evolve|clean|plugvim [pack_name]"
@@ -171,28 +177,26 @@ preparefile() {
     cd ..
 }
 
-# $1[M]: s-setup 1-update
+# $1[M]: s-setup u-update
 # $2[O]: package
 addconf() {
-  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
   preparefile $2
-  if [ -x "$(command -v git)" ]; then
-    if [ ! -f .gitconfig ]; then
-      mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
-    fi
-  fi
   chmod -R 755 .${FAVORITE_DIRNAME}/bin/
   # only setup need to append sth to rc file
   if [ $1 = "s" ]; then
     echo "source ~/.${FAVORITE_DIRNAME}/bash.sh" >> .bashrc
-    if [ -x "$(command -v vim)" ]; then
-      echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
-    fi
-    if [ -x "$(command -v nvim)" ]; then
-      mkdir -p .config/nvim
-      echo "dofile(vim.fn.expand('~')..'/.${FAVORITE_DIRNAME}/nvim/init.lua')" >> .config/nvim/init.lua
-    fi
     touch .${FAVORITE_DIRNAME}/bin/.gotohist
+  fi
+  if [ -x "$(command -v git)" ] && [ ! -f .gitconfig ]; then
+    mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
+  fi
+  if [ -x "$(command -v vim)" ] && [ ! -f "$HOME/.vimrc" ]; then
+    echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
+  fi
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
+  if [ -x "$(command -v nvim)" ] && [ ! -f "$HOME/.config/nvim/init.lua" ]; then
+    mkdir -p .config/nvim
+    echo "vim.cmd('source ~/.${FAVORITE_DIRNAME}/init.vim')" >> .config/nvim/init.lua
   fi
 }
 
@@ -220,18 +224,13 @@ plugvim() {
 }
 
 main() {
-  opts=`getopt -o u: -- "$@@"`
-  eval set -- "$opts"
-  while true; do
-    case "$1" in
-      -u) AR_URL=$2; shift 2;;
-      --) shift; break;;
-      *) break;;
-    esac
-  done
   if [ "$*" = "" ]; then
     echo "error: no command found"
     exit 1
+  fi
+  if [ "$1" = "-u" ]; then
+    AR_URL=$2
+    shift 2
   fi
   action=$1
   package=$2
@@ -263,6 +262,48 @@ main() {
 
 main $@@
 
+@
+
+
+1.17
+log
+@fix: move most useful setting to init.vim
+@
+text
+@d6 1
+a6 1
+CONFVER=V20241125
+d57 1
+a57 1
+# $1[M]: s-setup 1-update
+a59 1
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
+a60 5
+  if [ -x "$(command -v git)" ]; then
+    if [ ! -f .gitconfig ]; then
+      mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
+    fi
+  fi
+a64 7
+    if [ -x "$(command -v vim)" ]; then
+      echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
+    fi
+    if [ -x "$(command -v nvim)" ]; then
+      mkdir -p .config/nvim
+      echo "dofile(vim.fn.expand('~')..'/.${FAVORITE_DIRNAME}/nvim/init.lua')" >> .config/nvim/init.lua
+    fi
+d67 11
+a103 9
+  opts=`getopt -o u: -- "$@@"`
+  eval set -- "$opts"
+  while true; do
+    case "$1" in
+      -u) AR_URL=$2; shift 2;;
+      --) shift; break;;
+      *) break;;
+    esac
+  done
+d108 4
 @
 
 

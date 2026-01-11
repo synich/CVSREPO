@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2026.01.11.16.14.45;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	1006963CC753BB2440F;
 
 1.6
 date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
@@ -46,17 +52,35 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@feat: choose buffer friendly
+@fix: mv vim switch to ld_plg
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
 " }
 
-" PlugOption {
+hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
 
+" Automatically open and close the popup menu / preview window
+autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+@
+
+
+1.6
+log
+@feat: choose buffer friendly
+@
+text
+@d5 3
+a7 1
+" PlugOption {
+d9 2
+a10 12
     " OmniComplete {
     if has("autocmd") && exists("+omnifunc")
         autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -69,7 +93,7 @@ text
             \setlocal omnifunc=syntaxcomplete#Complete |
             \endif
     endif
-
+a11 25
     hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
     hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
     hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE

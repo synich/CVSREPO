@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2026.01.11.16.14.45;	author u0_a108;	state Exp;
+branches;
+next	1.10;
+commitid	1006963CC753BB2440F;
 
 1.10
 date	2026.01.11.14.49.28;	author u0_a108;	state Exp;
@@ -70,9 +76,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fix: continue remove no use vim setting
+@fix: mv vim switch to ld_plg
 @
 text
 @" Modeline and Notes {
@@ -91,6 +97,20 @@ function! MvcfHardlyuse()
   endif
 endfunction
 
+" OmniComplete {
+if has("autocmd") && exists("+omnifunc")
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=python3complete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+    autocmd Filetype * if &omnifunc == "" |
+        \setlocal omnifunc=syntaxcomplete#Complete |
+        \endif
+endif
+" }
+
 function! MvcfComplete()
   if exists('s:mvcf_complete')
     echo "alreay loaded"
@@ -107,6 +127,17 @@ endfunction
 if filereadable(expand(mvcf_path.'ext.vim.local'))
   execute 'source '.mvcf_path.'ext.vim.local'
 endif
+
+" EasyMotion {
+
+" Disable default mappings
+let g:EasyMotion_do_mapping = 0
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
+
+" }
 
 
 " Features:
@@ -290,6 +321,16 @@ augroup END
 
 ApcEnable
 
+@
+
+
+1.10
+log
+@fix: continue remove no use vim setting
+@
+text
+@d17 14
+d48 11
 @
 
 

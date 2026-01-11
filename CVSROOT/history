@@ -212,3 +212,6 @@ M6963a213|u0_a108|~/src/conf|conf/nvim|1.3|init.lua
 M6963a213|u0_a108|~/src/conf|conf/vimrc/plugin|1.35|kbd.vim
 M6963b878|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.36|kbd.vim
 M6963b878|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.10|ld_plg.vim
+M6963c09b|u0_a108|~/src/*0|conf|1.18|conftool.sh
+M6963cc75|u0_a108|~/src/conf|conf/vimrc/plugin|1.11|ld_plg.vim
+M6963cc75|u0_a108|~/src/conf|conf/vimrc/plugin|1.7|switch.vim
