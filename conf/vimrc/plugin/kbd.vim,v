@@ -1,9 +1,15 @@
-head	1.34;
+head	1.35;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.35
+date	2026.01.11.13.13.55;	author u0_a108;	state Exp;
+branches;
+next	1.34;
+commitid	1006963A2132BBEF4DC;
 
 1.34
 date	2026.01.07.15.29.12;	author u0_a108;	state Exp;
@@ -214,9 +220,9 @@ desc
 @@
 
 
-1.34
+1.35
 log
-@feat: choose buffer friendly
+@fix: restart nvim and drop pastetoggle opt
 @
 text
 @" Modeline and Notes {
@@ -235,7 +241,6 @@ text
     set splitright                  " Puts new vsplit windows to the right of the current
     set splitbelow                  " Puts new split windows to the bottom of the current
     "set matchpairs+=<:>             " Match, to be used with %
-    set pastetoggle=<F2>             " pastetoggle (sane indentation on pastes)
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
 " }
@@ -391,6 +396,16 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.34
+log
+@feat: choose buffer friendly
+@
+text
+@a16 1
+    set pastetoggle=<F2>             " pastetoggle (sane indentation on pastes)
 @
 
 
