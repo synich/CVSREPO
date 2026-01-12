@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2026.01.12.14.16.20;	author u0_a108;	state Exp;
+branches;
+next	1.18;
+commitid	100696502347EEDFBFF;
 
 1.18
 date	2026.01.11.15.24.11;	author u0_a108;	state Exp;
@@ -116,9 +122,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@fix: conftool support vim/nvim when up
+@fix: nvim point to lua
 @
 text
 @#!/bin/sh
@@ -126,7 +132,7 @@ text
 FAVORITE_DIRNAME=shuw
 AR_URL=http://synich.sdf.org/ar/
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20260111
+CONFVER=V20260112
 
 if [ $# -eq 0 ]; then
     echo "$0 [-u url] setup|update|evolve|clean|plugvim [pack_name]"
@@ -196,7 +202,7 @@ addconf() {
   mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
   if [ -x "$(command -v nvim)" ] && [ ! -f "$HOME/.config/nvim/init.lua" ]; then
     mkdir -p .config/nvim
-    echo "vim.cmd('source ~/.${FAVORITE_DIRNAME}/init.vim')" >> .config/nvim/init.lua
+    echo "dofile(vim.fn.expand('~/.${FAVORITE_DIRNAME}/nvim/init.lua'))" >> .config/nvim/init.lua
   fi
 }
 
@@ -262,6 +268,20 @@ main() {
 
 main $@@
 
+@
+
+
+1.18
+log
+@fix: conftool support vim/nvim when up
+@
+text
+@d6 1
+a6 1
+CONFVER=V20260111
+d76 1
+a76 1
+    echo "vim.cmd('source ~/.${FAVORITE_DIRNAME}/init.vim')" >> .config/nvim/init.lua
 @
 
 
