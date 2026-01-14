@@ -1,9 +1,15 @@
-head	1.36;
+head	1.37;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.37
+date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
+branches;
+next	1.36;
+commitid	1006967B0B32EF6E41E;
 
 1.36
 date	2026.01.11.14.49.28;	author u0_a108;	state Exp;
@@ -226,9 +232,9 @@ desc
 @@
 
 
-1.36
+1.37
 log
-@fix: continue remove no use vim setting
+@fix: remove MvcfComplete and more flexible load complete
 @
 text
 @" Modeline and Notes {
@@ -304,7 +310,6 @@ text
     nmap     <leader>ww <Plug>(easymotion-w)
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
-    inoremap <expr><silent> <C-k> MvcfComplete()
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <C-g> <esc>:call rv#inssnipcode()<CR>
@@ -395,6 +400,16 @@ text
 
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.36
+log
+@fix: continue remove no use vim setting
+@
+text
+@a73 1
+    inoremap <expr><silent> <C-k> MvcfComplete()
 @
 
 

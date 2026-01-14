@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
+branches;
+next	1.2;
+commitid	1006967B0B32EF6E41E;
 
 1.2
 date	2025.03.07.16.39.25;	author u0_a157;	state Exp;
@@ -22,9 +28,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@doc: vimrc in conf
+@fix: remove MvcfComplete and more flexible load complete
 @
 text
 @About id_rsa & id_rsa.pub
@@ -46,8 +52,17 @@ if use windows, make g:mvcf_path point to mvcf/ dir
 
 vim的配置有两部分，init.vim单文件包含基本可用功能
 vimrc/plugin放的是自己写的脚本
-加载自动补全是C-k，函数MvcfComplete
 
+@
+
+
+1.2
+log
+@doc: vimrc in conf
+@
+text
+@a19 1
+加载自动补全是C-k，函数MvcfComplete
 @
 
 

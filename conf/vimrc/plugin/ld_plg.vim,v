@@ -1,9 +1,15 @@
-head	1.11;
+head	1.12;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.12
+date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
+branches;
+next	1.11;
+commitid	1006967B0B32EF6E41E;
 
 1.11
 date	2026.01.11.16.14.45;	author u0_a108;	state Exp;
@@ -76,9 +82,9 @@ desc
 @@
 
 
-1.11
+1.12
 log
-@fix: mv vim switch to ld_plg
+@fix: remove MvcfComplete and more flexible load complete
 @
 text
 @" Modeline and Notes {
@@ -96,6 +102,7 @@ function! MvcfHardlyuse()
       let &tags = &tags . ',' . gitroot . '/.git/tags'
   endif
 endfunction
+" }
 
 " OmniComplete {
 if has("autocmd") && exists("+omnifunc")
@@ -109,19 +116,6 @@ if has("autocmd") && exists("+omnifunc")
         \setlocal omnifunc=syntaxcomplete#Complete |
         \endif
 endif
-" }
-
-function! MvcfComplete()
-  if exists('s:mvcf_complete')
-    echo "alreay loaded"
-    return ""
-  else
-    let s:mvcf_complete = 1
-    ApcDisable
-    packadd vim-easycomplete
-    return ""
-  endif
-endfunction
 " }
 
 if filereadable(expand(mvcf_path.'ext.vim.local'))
@@ -319,6 +313,34 @@ augroup ApcInitGroup
 	au TabEnter * call s:apc_check_init()
 augroup END
 
+if !isdirectory(expand(g:mvcf_path."pack/*/start/vim-easycomplete"))
+  echomsg "no easycomplete use ApcEnable" | ApcEnable
+endif
+@
+
+
+1.11
+log
+@fix: mv vim switch to ld_plg
+@
+text
+@d16 1
+a31 13
+function! MvcfComplete()
+  if exists('s:mvcf_complete')
+    echo "alreay loaded"
+    return ""
+  else
+    let s:mvcf_complete = 1
+    ApcDisable
+    packadd vim-easycomplete
+    return ""
+  endif
+endfunction
+" }
+
+d227 3
+a229 2
 ApcEnable
 
 @

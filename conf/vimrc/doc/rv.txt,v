@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
+branches;
+next	1.8;
+commitid	1006967B0B32EF6E41E;
 
 1.8
 date	2025.05.18.16.09.19;	author u0_a157;	state Exp;
@@ -57,9 +63,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@doc: vim rv
+@fix: remove MvcfComplete and more flexible load complete
 @
 text
 @*rv.txt*	For Vim version 8.0  Last change: 2025 May 14
@@ -84,8 +90,6 @@ This file illustrate rv plugin usage Vim/NeoVim.
 - <localleader>rf   run current file no param
 - <localleader>rp   run current file with param
 
-- :call MvcfComplete or Ctrl+k Trigger More Auto Complete
-
 - :ShowEx
   use in command and will get output in new buffer
 
@@ -107,6 +111,17 @@ s-exp "(display 123)"
   change run script program
 
 vim:tw=78:ts=8:noet:ft=help:norl:
+
+@
+
+
+1.8
+log
+@doc: vim rv
+@
+text
+@a22 2
+- :call MvcfComplete or Ctrl+k Trigger More Auto Complete
 
 @
 
