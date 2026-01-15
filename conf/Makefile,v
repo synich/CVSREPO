@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2026.01.15.14.49.09;	author u0_a108;	state Exp;
+branches;
+next	1.13;
+commitid	1006968FE657D5A2195;
 
 1.13
 date	2025.05.11.08.06.24;	author u0_a157;	state Exp;
@@ -85,15 +91,25 @@ desc
 @@
 
 
+1.14
+log
+@fix: continue move kbd to init
+@
+text
+@all:
+	@@rm -f envconf.tar.gz
+	@@tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
+	@@echo "pack envconf.tar.gz done in current dir"
+
+@
+
+
 1.13
 log
 @optimise for conf Makefile
 @
 text
-@all:
-	@@tar czf envconf.tar.gz --exclude=CVS* --exclude=bin/.goto* bash.sh.tpl init.vim.tpl .gitconfig vimrc/plugin/ vimrc/autoload/ vimrc/doc/ vimrc/dict/ bin/ share/ nvim/
-	@@echo "pack envconf.tar.gz done in current dir"
-
+@d2 1
 @
 
 

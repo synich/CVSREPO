@@ -1,9 +1,21 @@
-head	1.14;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2026.01.15.14.49.09;	author u0_a108;	state Exp;
+branches;
+next	1.15;
+commitid	1006968FE657D5A2195;
+
+1.15
+date	2026.01.15.14.32.22;	author u0_a108;	state Exp;
+branches;
+next	1.14;
+commitid	1006968FA767B283E8F;
 
 1.14
 date	2026.01.10.14.22.34;	author u0_a108;	state Exp;
@@ -94,9 +106,9 @@ desc
 @@
 
 
-1.14
+1.16
 log
-@fix: combine rtp and packpath opt
+@fix: continue move kbd to init
 @
 text
 @" Modeline and Notes {
@@ -155,6 +167,8 @@ text
     nnoremap <C-u> 6k
     nnoremap <C-d> 6j
     nnoremap <leader>cp :lcd  %:p:h<cr>
+    " Disable search highlight
+    noremap  <leader>nh :nohl<CR>
     " Code folding options
     nmap     <leader>f0 :set foldlevel=0<CR>
     nmap     <leader>f1 :set foldlevel=1<CR>
@@ -170,6 +184,11 @@ text
     nnoremap <leader>xo <C-W>w
     nnoremap <leader>x1 <C-W>o
     nnoremap <leader>xc <C-W>c
+    nnoremap <leader>wj <C-W>j
+    nnoremap <leader>wk <C-W>k
+    nnoremap <leader>wh <C-W>h
+    nnoremap <leader>wl <C-W>l
+    nnoremap <leader>w= <C-w>=
     " Insert mode using Emacs keybinding
     inoremap <C-p> <Up>
     inoremap <C-n> <Down>
@@ -179,6 +198,13 @@ text
     inoremap <C-e> <End>
     inoremap <C-d> <Del>
     inoremap <C-h> <BS>
+    " Auto complete for bracket and quote
+    inoremap ' ''<Left>
+    inoremap " ""<Left>
+    inoremap ( ()<Left>
+    inoremap [ []<Left>
+    inoremap { {}<Left>
+
     " Wrapped lines goes down/up to next row, rather than next line in file.
     nnoremap j gj
     nnoremap k gk
@@ -192,7 +218,21 @@ text
     " Allow using the repeat operator with a visual selection (!)
     " http://stackoverflow.com/a/8064607/127816
     vnoremap . :normal .<CR>
+    " Visual shifting (does not exit Visual mode)
+    vnoremap < <gv
+    vnoremap > >gv
 
+    " Change Working Directory to that of the current file
+    cmap cwd lcd %:p:h
+    cmap cd. lcd %:p:h
+    " in edit mode, input current path
+    cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
+    "map      <leader>ew :e %%
+    " Display all lines with keyword under cursor,ask which one to jump to
+    nmap     <leader>fh [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+    " Find merge conflict markers
+    "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+    nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
 " }
 
 " Basic Setting {
@@ -231,6 +271,29 @@ text
     syntax on                   " Syntax highlighting
 " }
 
+@
+
+
+1.15
+log
+@fix: move kbd mapping into init
+@
+text
+@d108 3
+d112 3
+d120 2
+@
+
+
+1.14
+log
+@fix: combine rtp and packpath opt
+@
+text
+@d57 2
+d74 5
+d88 7
+d109 6
 @
 
 

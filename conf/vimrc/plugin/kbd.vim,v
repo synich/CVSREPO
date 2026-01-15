@@ -1,9 +1,21 @@
-head	1.37;
+head	1.39;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.39
+date	2026.01.15.14.49.09;	author u0_a108;	state Exp;
+branches;
+next	1.38;
+commitid	1006968FE657D5A2195;
+
+1.38
+date	2026.01.15.14.32.22;	author u0_a108;	state Exp;
+branches;
+next	1.37;
+commitid	1006968FA767B283E8F;
 
 1.37
 date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
@@ -232,9 +244,9 @@ desc
 @@
 
 
-1.37
+1.39
 log
-@fix: remove MvcfComplete and more flexible load complete
+@fix: continue move kbd to init
 @
 text
 @" Modeline and Notes {
@@ -258,7 +270,6 @@ text
 
 " Key (re)Mappings {
 
-    " Handy {
   if v:version < 800
     inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
     inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
@@ -271,28 +282,16 @@ text
     inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
     inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
     inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-    " }
 
-    " Adjust viewports to the same size
-    map      <leader>= <C-w>=
     nnoremap <leader>cs :call rv#showsnipcode()<cr>
     nnoremap <leader>ct :call rv#gototopdir()<CR>
     nnoremap <leader>dm :call rv#showMaps()<CR>
-    " helpers to edit mode, http://vimcasts.org/e/14
-    cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
-    "map      <leader>ew :e %%
-    " Display all lines with keyword under cursor,ask which one to jump to
-    nmap     <leader>fh [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
     nnoremap <leader>gf :call rv#openfileinwin1()<CR>
     nnoremap <leader>gh :call rv#showhint()<CR>
     nnoremap <leader>gp :call rv#enhancegrep(1)<CR>
-    nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     noremap  <leader>ls :call rv#bufferchoose()<CR>
-    " Disable search highlight
-    noremap  <leader>nh :nohl<CR>
     nnoremap <leader>nu :call rv#toggleNumber()<CR>
     " easier formatting
-    nnoremap <silent> <leader>q gwip
     nnoremap <leader>qf :call rv#togglequickfix()<CR>
     nnoremap <localleader>rf :call rv#runcurrentscript(0)<CR>
     nnoremap <leader>ra :call rv#txtReplace('g')<CR>
@@ -303,11 +302,6 @@ text
     tnoremap <C-j><C-j>  <C-\><C-n>
   endif
     nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
-    nmap     <leader>s <Plug>(easymotion-overwin-f2)
-    nnoremap <silent> <leader>tt :TagbarToggle<CR>
-    " Jump to anywhere you want with minimal keystrokes
-    nmap     <leader>wb <Plug>(easymotion-b)
-    nmap     <leader>ww <Plug>(easymotion-w)
     " change backgroud and number style
     nnoremap <leader>xb  :call rv#toggleBG()<CR>
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
@@ -315,7 +309,11 @@ text
     inoremap <C-g> <esc>:call rv#inssnipcode()<CR>
     nnoremap <C-e> :call rv#selectParens()<CR>
 
-    " Write easy {
+    nmap     <leader>s <Plug>(easymotion-overwin-f2)
+    nnoremap <silent> <leader>tt :TagbarToggle<CR>
+    " Jump to anywhere you want with minimal keystrokes
+    nmap     <leader>wb <Plug>(easymotion-b)
+    nmap     <leader>ww <Plug>(easymotion-w)
 
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     command! -nargs=* Chrun call rv#changerunscript(<q-args>)
@@ -323,22 +321,6 @@ text
     command! -nargs=1 Rg call rv#enhancegrep(<q-args>)
     command! -complete=file -nargs=+ Shell call rv#runShellCommand(<q-args>)
     command! -nargs=+ -complete=command ShowEx call rv#showEx(<q-args>)
-
-    " Stupid shift key fixes
-    if has("user_commands")
-        command! -bang -nargs=* -complete=file W w<bang> <args>
-        command! -bang Wa wa<bang>
-        command! -bang WA wa<bang>
-        command! -bang Q q<bang>
-    endif
-
-    " Auto complete for bracket and quote
-    inoremap ' ''<Left>
-    inoremap " ""<Left>
-    inoremap ( ()<Left>
-    inoremap [ []<Left>
-    inoremap { {}<Left>
-    " }
 
     augroup html_special
       autocmd!
@@ -386,6 +368,31 @@ text
         vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
     endif
 
+    " }
+" }
+
+@
+
+
+1.38
+log
+@fix: move kbd mapping into init
+@
+text
+@a21 1
+    " Handy {
+a33 1
+    " }
+a73 8
+    " Stupid shift key fixes
+    if has("user_commands")
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+    endif
+
+a119 9
     " Shortcuts
     " Change Working Directory to that of the current file
     cmap cwd lcd %:p:h
@@ -395,11 +402,51 @@ text
     vnoremap < <gv
     vnoremap > >gv
 
-    " }
-" }
-
+a122 2
     " Find merge conflict markers
     "map      <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+@
+
+
+1.37
+log
+@fix: remove MvcfComplete and more flexible load complete
+@
+text
+@a36 2
+    " Adjust viewports to the same size
+    map      <leader>= <C-w>=
+a39 5
+    " helpers to edit mode, http://vimcasts.org/e/14
+    cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
+    "map      <leader>ew :e %%
+    " Display all lines with keyword under cursor,ask which one to jump to
+    nmap     <leader>fh [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+a42 1
+    nmap     <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+a43 2
+    " Disable search highlight
+    noremap  <leader>nh :nohl<CR>
+a45 1
+    nnoremap <silent> <leader>q gwip
+a55 5
+    nmap     <leader>s <Plug>(easymotion-overwin-f2)
+    nnoremap <silent> <leader>tt :TagbarToggle<CR>
+    " Jump to anywhere you want with minimal keystrokes
+    nmap     <leader>wb <Plug>(easymotion-b)
+    nmap     <leader>ww <Plug>(easymotion-w)
+d63 5
+a67 1
+    " Write easy {
+a83 8
+    " Auto complete for bracket and quote
+    inoremap ' ''<Left>
+    inoremap " ""<Left>
+    inoremap ( ()<Left>
+    inoremap [ []<Left>
+    inoremap { {}<Left>
+    " }
+
 @
 
 
