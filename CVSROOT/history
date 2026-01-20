@@ -226,3 +226,5 @@ M6968fe65|u0_a108|~/src/*0|conf|1.14|Makefile
 M6968fe65|u0_a108|~/src/*0|conf|1.16|init.vim.tpl
 M6968fe65|u0_a108|~/src/conf|conf/vimrc/plugin|1.39|kbd.vim
 M696bbbd5|u0_a108|~/src/*0|conf|1.17|init.vim.tpl
+M696f10ef|u0_a108|~/src/*0|conf/vimrc/plugin|1.13|ld_plg.vim
+M696f10ef|u0_a108|~/src/*0|conf/vimrc/plugin|1.8|switch.vim

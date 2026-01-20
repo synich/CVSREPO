@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2026.01.20.05.21.51;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	100696F10EF731A9DC9;
 
 1.7
 date	2026.01.11.16.14.45;	author u0_a108;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@fix: mv vim switch to ld_plg
+@fix: switch more as customize
 @
 text
 @" Modeline and Notes {
@@ -68,6 +74,19 @@ hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=da
 " Automatically open and close the popup menu / preview window
 autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
+if filereadable(expand(g:mvcf_path.'ext.vim.local'))
+  execute 'source '.g:mvcf_path.'ext.vim.local'
+endif
+
+@
+
+
+1.7
+log
+@fix: mv vim switch to ld_plg
+@
+text
+@d12 4
 @
 
 

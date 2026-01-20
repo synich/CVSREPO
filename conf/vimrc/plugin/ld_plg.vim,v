@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2026.01.20.05.21.51;	author u0_a108;	state Exp;
+branches;
+next	1.12;
+commitid	100696F10EF731A9DC9;
 
 1.12
 date	2026.01.14.15.05.23;	author u0_a108;	state Exp;
@@ -82,9 +88,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@fix: remove MvcfComplete and more flexible load complete
+@fix: switch more as customize
 @
 text
 @" Modeline and Notes {
@@ -117,10 +123,6 @@ if has("autocmd") && exists("+omnifunc")
         \endif
 endif
 " }
-
-if filereadable(expand(mvcf_path.'ext.vim.local'))
-  execute 'source '.mvcf_path.'ext.vim.local'
-endif
 
 " EasyMotion {
 
@@ -316,6 +318,19 @@ augroup END
 if !isdirectory(expand(g:mvcf_path."pack/*/start/vim-easycomplete"))
   echomsg "no easycomplete use ApcEnable" | ApcEnable
 endif
+@
+
+
+1.12
+log
+@fix: remove MvcfComplete and more flexible load complete
+@
+text
+@a31 4
+if filereadable(expand(mvcf_path.'ext.vim.local'))
+  execute 'source '.mvcf_path.'ext.vim.local'
+endif
+
 @
 
 
