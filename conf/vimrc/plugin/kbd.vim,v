@@ -1,9 +1,15 @@
-head	1.39;
+head	1.40;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.40
+date	2026.01.21.16.22.04;	author u0_a108;	state Exp;
+branches;
+next	1.39;
+commitid	1006970FD2C6B219F32;
 
 1.39
 date	2026.01.15.14.49.09;	author u0_a108;	state Exp;
@@ -244,9 +250,9 @@ desc
 @@
 
 
-1.39
+1.40
 log
-@fix: continue move kbd to init
+@feat: cmd Psave and Pload
 @
 text
 @" Modeline and Notes {
@@ -321,6 +327,8 @@ text
     command! -nargs=1 Rg call rv#enhancegrep(<q-args>)
     command! -complete=file -nargs=+ Shell call rv#runShellCommand(<q-args>)
     command! -nargs=+ -complete=command ShowEx call rv#showEx(<q-args>)
+    command! -nargs=1 Psave call rv#mksess(<q-args>)
+    command! -nargs=1 Pload call rv#ldsess(<q-args>)
 
     augroup html_special
       autocmd!
@@ -371,6 +379,15 @@ text
     " }
 " }
 
+@
+
+
+1.39
+log
+@fix: continue move kbd to init
+@
+text
+@d73 2
 @
 
 

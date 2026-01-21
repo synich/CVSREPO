@@ -1,9 +1,15 @@
-head	1.37;
+head	1.38;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.38
+date	2026.01.21.16.22.04;	author u0_a108;	state Exp;
+branches;
+next	1.37;
+commitid	1006970FD2C6B219F32;
 
 1.37
 date	2026.01.10.15.12.15;	author u0_a108;	state Exp;
@@ -232,9 +238,9 @@ desc
 @@
 
 
-1.37
+1.38
 log
-@fix: <leader>gp has default input
+@feat: cmd Psave and Pload
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -519,6 +525,14 @@ function! rv#toggleNumber()
 endfunction
 " }
 
+function rv#mksess(nam)
+  execute 'mksession! '.g:mvcf_path.a:nam.'_sess.vim'
+endfunction
+
+function rv#ldsess(nam)
+  execute 'source '.g:mvcf_path.a:nam.'_sess.vim'
+endfunction
+
 " Find top dir and refresh tags {
 function! rv#gototopdir()
    let i = 1
@@ -696,6 +710,15 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.37
+log
+@fix: <leader>gp has default input
+@
+text
+@d283 8
 @
 
 
