@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2026.01.21.04.18.15;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	100697053874283146F;
 
 1.3
 date	2026.01.11.13.13.55;	author u0_a108;	state Exp;
@@ -28,13 +34,34 @@ desc
 @@
 
 
+1.4
+log
+@feat: nvim load ext.lua.local
+@
+text
+@local function init()
+  local vim = vim
+  vim.cmd('source ~/.FAVORITE_DIRNAME/init.vim')
+  vim.cmd('set packpath+=~/.FAVORITE_DIRNAME/nvim/')
+  local ext =vim.fn.expand("~/.FAVORITE_DIRNAME/nvim/ext.lua.local")
+  if vim.loop.fs_stat(ext) then
+    dofile(ext)
+  end
+end
+
+init()
+
+@
+
+
 1.3
 log
 @fix: restart nvim and drop pastetoggle opt
 @
 text
-@vim.cmd('source ~/.FAVORITE_DIRNAME/init.vim')
-
+@d1 11
+a11 1
+vim.cmd('source ~/.FAVORITE_DIRNAME/init.vim')
 @
 
 
