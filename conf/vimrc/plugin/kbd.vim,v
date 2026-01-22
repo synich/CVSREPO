@@ -1,9 +1,15 @@
-head	1.40;
+head	1.41;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.41
+date	2026.01.22.16.55.17;	author u0_a108;	state Exp;
+branches;
+next	1.40;
+commitid	100697256753B2BF8F3;
 
 1.40
 date	2026.01.21.16.22.04;	author u0_a108;	state Exp;
@@ -250,9 +256,9 @@ desc
 @@
 
 
-1.40
+1.41
 log
-@feat: cmd Psave and Pload
+@feat: let selectParens as textobject
 @
 text
 @" Modeline and Notes {
@@ -313,7 +319,11 @@ text
     nnoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <F12> <esc>:call rv#refreshtags()<cr>
     inoremap <C-g> <esc>:call rv#inssnipcode()<CR>
-    nnoremap <C-e> :call rv#selectParens()<CR>
+    nnoremap <C-e> :call rv#selectParens('v', 'a')<CR>
+    onoremap <silent> ae :<C-U>call rv#selectParens(visualmode(), 'a')<CR>
+    xnoremap <silent> ae :<C-U>call rv#selectParens(visualmode(), 'a')<CR>
+    onoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
+    xnoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
 
     nmap     <leader>s <Plug>(easymotion-overwin-f2)
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
@@ -379,6 +389,17 @@ text
     " }
 " }
 
+@
+
+
+1.40
+log
+@feat: cmd Psave and Pload
+@
+text
+@d59 5
+a63 1
+    nnoremap <C-e> :call rv#selectParens()<CR>
 @
 
 

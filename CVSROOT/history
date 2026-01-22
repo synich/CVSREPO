@@ -231,3 +231,5 @@ M696f10ef|u0_a108|~/src/*0|conf/vimrc/plugin|1.8|switch.vim
 M69705387|u0_a108|~/src/conf|conf/nvim|1.4|init.lua
 M6970fd2c|u0_a108|~/src/conf|conf/vimrc/autoload|1.38|rv.vim
 M6970fd2c|u0_a108|~/src/conf|conf/vimrc/plugin|1.40|kbd.vim
+M69725675|u0_a108|~/src/conf|conf/vimrc/autoload|1.39|rv.vim
+M69725675|u0_a108|~/src/conf|conf/vimrc/plugin|1.41|kbd.vim

@@ -1,9 +1,15 @@
-head	1.38;
+head	1.39;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.39
+date	2026.01.22.16.55.17;	author u0_a108;	state Exp;
+branches;
+next	1.38;
+commitid	100697256753B2BF8F3;
 
 1.38
 date	2026.01.21.16.22.04;	author u0_a108;	state Exp;
@@ -238,9 +244,9 @@ desc
 @@
 
 
-1.38
+1.39
 log
-@feat: cmd Psave and Pload
+@feat: let selectParens as textobject
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -666,14 +672,19 @@ function! s:findopenbracket()
   endwhile
 endfunction
 
-function! rv#selectParens() abort
+function! rv#selectParens(vt, ai) abort
     let save_pos = getpos('.')
     "if search('(', 'bW') == 0 echo "No opening paren found"
-    let start_pos = <SID>findopenbracket()
+    let start_pos = s:findopenbracket()
     normal! %
     let end_pos = getpos('.')
 
     call setpos('.', save_pos)
+    normal! gv
+    if a:ai == 'i'
+      let start_pos[2] += 1
+      let end_pos[2] -= 1
+    endif
     call setpos("'<", start_pos)
     call setpos("'>", end_pos)
     normal! gv
@@ -710,6 +721,21 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.38
+log
+@feat: cmd Psave and Pload
+@
+text
+@d424 1
+a424 1
+function! rv#selectParens() abort
+d427 1
+a427 1
+    let start_pos = <SID>findopenbracket()
+d432 5
 @
 
 
