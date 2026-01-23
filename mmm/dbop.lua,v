@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2026.01.23.15.16.58;	author u0_a108;	state Exp;
+branches;
+next	1.2;
+commitid	100697390EA01A00E72;
 
 1.2
 date	2025.05.08.15.25.10;	author u0_a157;	state Exp;
@@ -21,9 +27,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@feat: memo with tag
+@feat: not convert when reference txt
 @
 text
 @--define global
@@ -35,7 +41,10 @@ setmetatable(_G,{__newindex=function(_, k, v)local b=k:find('g_')if b~=1 then er
 
 --helper tool
 -- add space between hanzi and [english or digit]
+-- not convert when first is >(reference syntax)
 local function hanzi_sep(s)
+  if ">"==s[1] then return s end
+
   s = s:gsub("，", ",")
   s = s:gsub("。", ".")
   s = s:gsub("？", "?")
@@ -322,6 +331,16 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.2
+log
+@feat: memo with tag
+@
+text
+@d10 1
+d12 2
 @
 
 

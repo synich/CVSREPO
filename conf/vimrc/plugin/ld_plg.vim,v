@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2026.01.23.15.33.42;	author u0_a108;	state Exp;
+branches;
+next	1.13;
+commitid	100697394D606C633EE;
 
 1.13
 date	2026.01.20.05.21.51;	author u0_a108;	state Exp;
@@ -88,9 +94,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@fix: switch more as customize
+@fix: let switch as 3rd plugin
 @
 text
 @" Modeline and Notes {
@@ -315,6 +321,15 @@ augroup ApcInitGroup
 	au TabEnter * call s:apc_check_init()
 augroup END
 
+@
+
+
+1.13
+log
+@fix: switch more as customize
+@
+text
+@a222 3
 if !isdirectory(expand(g:mvcf_path."pack/*/start/vim-easycomplete"))
   echomsg "no easycomplete use ApcEnable" | ApcEnable
 endif

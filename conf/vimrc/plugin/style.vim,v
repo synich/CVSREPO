@@ -1,9 +1,21 @@
-head	1.5;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2026.01.23.15.33.42;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	100697394D606C633EE;
+
+1.6
+date	2026.01.23.04.07.31;	author u0_a108;	state Exp;
+branches;
+next	1.5;
+commitid	1006972F403596ED870;
 
 1.5
 date	2024.11.25.15.30.02;	author u0_a157;	state Exp;
@@ -40,9 +52,9 @@ desc
 @@
 
 
-1.5
+1.7
 log
-@fix: move most useful setting to init.vim
+@fix: let switch as 3rd plugin
 @
 text
 @" Modeline and Notes {
@@ -82,9 +94,9 @@ text
     endif
 
     " Always switch to the current file directory
-    if 0
-        autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-    endif
+    "autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+    " Automatically open and close the popup menu / preview window
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
 " }
 
@@ -97,6 +109,10 @@ text
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
     "highlight clear CursorLineNr    " Remove highlight color from current line number
+    hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+    hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+    hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
 
     if has('cmdline_info')
         set ruler                   " Show the ruler
@@ -137,6 +153,28 @@ text
 
 " }
 
+@
+
+
+1.6
+log
+@fix: move hi to style
+@
+text
+@d38 3
+a40 3
+    if 0
+        autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+    endif
+@
+
+
+1.5
+log
+@fix: move most useful setting to init.vim
+@
+text
+@d53 4
 @
 
 
