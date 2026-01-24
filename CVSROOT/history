@@ -240,3 +240,5 @@ M697390ea|u0_a108|~/src/*0|mmm|1.3|dbop.lua
 M697394d6|u0_a108|~/src/conf|conf/vimrc/plugin|1.14|ld_plg.vim
 M697394d6|u0_a108|~/src/conf|conf/vimrc/plugin|1.7|style.vim
 M697394d6|u0_a108|~/src/conf|conf/vimrc/plugin|1.10|switch.vim
+M69744bac|u0_a108|~/src/conf|conf/vimrc/autoload|1.40|rv.vim
+M69744e44|u0_a108|~/src/*0|mmm|1.4|dbop.lua

@@ -1,9 +1,15 @@
-head	1.39;
+head	1.40;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.40
+date	2026.01.24.04.33.48;	author u0_a108;	state Exp;
+branches;
+next	1.39;
+commitid	10069744BAC2E43E00E;
 
 1.39
 date	2026.01.22.16.55.17;	author u0_a108;	state Exp;
@@ -244,9 +250,9 @@ desc
 @@
 
 
-1.39
+1.40
 log
-@feat: let selectParens as textobject
+@fix: avoid find bracket endless loop
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -641,11 +647,12 @@ function! rv#openfileinwin1()
 endfunction
 
 " Simple bracket pair match
-function! s:findopenbracket()
+function! s:findopenbracket(cur)
   let cnt = 0
   let [line, col] = [line('.'), col('.')]
 
-  while 1
+  let w_times = 0
+  while w_times < 1000
     let char = getline(line)[col - 1]
     if char == ')' || char == ']' || char == '}'
       let cnt += 1
@@ -669,13 +676,15 @@ function! s:findopenbracket()
       let line -= 1
       let col = strlen(getline(line))
     endif
+    let w_times += 1
   endwhile
+  return a:cur
 endfunction
 
 function! rv#selectParens(vt, ai) abort
     let save_pos = getpos('.')
     "if search('(', 'bW') == 0 echo "No opening paren found"
-    let start_pos = s:findopenbracket()
+    let start_pos = s:findopenbracket(save_pos)
     normal! %
     let end_pos = getpos('.')
 
@@ -721,6 +730,25 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.39
+log
+@feat: let selectParens as textobject
+@
+text
+@d393 1
+a393 1
+function! s:findopenbracket()
+d397 2
+a398 1
+  while 1
+d422 1
+d424 1
+d430 1
+a430 1
+    let start_pos = s:findopenbracket()
 @
 
 
