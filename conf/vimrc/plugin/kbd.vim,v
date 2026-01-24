@@ -1,9 +1,21 @@
-head	1.41;
+head	1.43;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.43
+date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
+branches;
+next	1.42;
+commitid	10069747D923B0DF4B6;
+
+1.42
+date	2026.01.24.06.48.44;	author u0_a108;	state Exp;
+branches;
+next	1.41;
+commitid	10069746B4C361D8EC0;
 
 1.41
 date	2026.01.22.16.55.17;	author u0_a108;	state Exp;
@@ -256,9 +268,9 @@ desc
 @@
 
 
-1.41
+1.43
 log
-@feat: let selectParens as textobject
+@feat: fake simplemove instead of easymotion
 @
 text
 @" Modeline and Notes {
@@ -302,6 +314,8 @@ text
     nnoremap <leader>gh :call rv#showhint()<CR>
     nnoremap <leader>gp :call rv#enhancegrep(1)<CR>
     noremap  <leader>ls :call rv#bufferchoose()<CR>
+    nnoremap <leader>mf :call rv#simplemove(1)<CR>
+    nnoremap <leader>mb :call rv#simplemove(-1)<CR>
     nnoremap <leader>nu :call rv#toggleNumber()<CR>
     " easier formatting
     nnoremap <leader>qf :call rv#togglequickfix()<CR>
@@ -325,11 +339,7 @@ text
     onoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
     xnoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
 
-    nmap     <leader>s <Plug>(easymotion-overwin-f2)
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
-    " Jump to anywhere you want with minimal keystrokes
-    nmap     <leader>wb <Plug>(easymotion-b)
-    nmap     <leader>ww <Plug>(easymotion-w)
 
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     command! -nargs=* Chrun call rv#changerunscript(<q-args>)
@@ -389,6 +399,29 @@ text
     " }
 " }
 
+@
+
+
+1.42
+log
+@fix: move easymotion to switch
+@
+text
+@d42 2
+@
+
+
+1.41
+log
+@feat: let selectParens as textobject
+@
+text
+@a64 1
+    nmap     <leader>s <Plug>(easymotion-overwin-f2)
+a65 3
+    " Jump to anywhere you want with minimal keystrokes
+    nmap     <leader>wb <Plug>(easymotion-b)
+    nmap     <leader>ww <Plug>(easymotion-w)
 @
 
 

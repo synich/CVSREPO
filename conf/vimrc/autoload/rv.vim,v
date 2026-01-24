@@ -1,9 +1,21 @@
-head	1.40;
+head	1.42;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.42
+date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
+branches;
+next	1.41;
+commitid	10069747D923B0DF4B6;
+
+1.41
+date	2026.01.24.06.48.44;	author u0_a108;	state Exp;
+branches;
+next	1.40;
+commitid	10069746B4C361D8EC0;
 
 1.40
 date	2026.01.24.04.33.48;	author u0_a108;	state Exp;
@@ -250,9 +262,9 @@ desc
 @@
 
 
-1.40
+1.42
 log
-@fix: avoid find bracket endless loop
+@feat: fake simplemove instead of easymotion
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -457,6 +469,21 @@ function! rv#bufferchoose()
     endfor
     echo " Not found"
   endif
+endfunction
+
+function rv#simplemove(fb)
+  let pos = input('jump: ')
+  let tow = matchlist(pos, '\v(\d+)([hl]?)$')
+  let cur = getpos('.')
+  let cur[1] += a:fb * str2nr(tow[1])
+  if tow[2] == 'h'
+    let cur[2] = 1
+  elseif tow[2] == 'l'
+    let cur[2] = len(getline(cur[1]))
+  else
+    let cur[2] = float2nr(len(getline(cur[1]))/2)
+  endif
+  call setpos('.', cur)
 endfunction
 
 " execute command another window and cursor stay
@@ -692,7 +719,13 @@ function! rv#selectParens(vt, ai) abort
     normal! gv
     if a:ai == 'i'
       let start_pos[2] += 1
-      let end_pos[2] -= 1
+      if end_pos[2] == 1
+        " move to preview line last col
+        let end_pos[1] -= 1
+        let end_pos[2] = len(getline(end_pos[1]))
+      else
+        let end_pos[2] -= 1
+      endif
     endif
     call setpos("'<", start_pos)
     call setpos("'>", end_pos)
@@ -730,6 +763,26 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.41
+log
+@fix: move easymotion to switch
+@
+text
+@d205 15
+@
+
+
+1.40
+log
+@fix: avoid find bracket endless loop
+@
+text
+@d438 7
+a444 1
+      let end_pos[2] -= 1
 @
 
 

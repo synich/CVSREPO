@@ -1,9 +1,21 @@
-head	1.14;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
+branches;
+next	1.15;
+commitid	10069747D923B0DF4B6;
+
+1.15
+date	2026.01.24.06.48.44;	author u0_a108;	state Exp;
+branches;
+next	1.14;
+commitid	10069746B4C361D8EC0;
 
 1.14
 date	2026.01.23.15.33.42;	author u0_a108;	state Exp;
@@ -94,9 +106,9 @@ desc
 @@
 
 
-1.14
+1.16
 log
-@fix: let switch as 3rd plugin
+@feat: fake simplemove instead of easymotion
 @
 text
 @" Modeline and Notes {
@@ -130,17 +142,6 @@ if has("autocmd") && exists("+omnifunc")
 endif
 " }
 
-" EasyMotion {
-
-" Disable default mappings
-let g:EasyMotion_do_mapping = 0
-" Turn on case-insensitive feature
-let g:EasyMotion_smartcase = 1
-hi link EasyMotionTarget ErrorMsg
-hi link EasyMotionShade  Comment
-
-" }
-
 
 " Features:
 " - auto popup complete window without select the first one
@@ -155,7 +156,7 @@ let g:apc_enable_ft  = get(g:, 'apc_enable_ft', {'*':1})  " or {'text':1, 'markd
 let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)   " remap tab
 let g:apc_min_length = get(g:, 'apc_min_length', 2)   " minimal length to open popup
 let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
-let g:apc_trigger = get(g:, 'apc_trigger', "\<c-n>")  " which key to trigger popmenu
+let g:apc_trigger = get(g:, 'apc_trigger', "\<c-j>")  " which key to trigger popmenu
 
 " get word before cursor
 function! s:get_context()
@@ -320,6 +321,37 @@ augroup ApcInitGroup
 	au BufEnter * call s:apc_check_init()
 	au TabEnter * call s:apc_check_init()
 augroup END
+
+@
+
+
+1.15
+log
+@fix: move easymotion to switch
+@
+text
+@d46 1
+a46 1
+let g:apc_trigger = get(g:, 'apc_trigger', "\<c-n>")  " which key to trigger popmenu
+@
+
+
+1.14
+log
+@fix: let switch as 3rd plugin
+@
+text
+@a31 11
+" EasyMotion {
+
+" Disable default mappings
+let g:EasyMotion_do_mapping = 0
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+hi link EasyMotionTarget ErrorMsg
+hi link EasyMotionShade  Comment
+
+" }
 
 @
 
