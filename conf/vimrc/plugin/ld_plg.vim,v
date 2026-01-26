@@ -1,9 +1,15 @@
-head	1.16;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.16;
+commitid	1006977697267F52933;
 
 1.16
 date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
@@ -106,9 +112,9 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@feat: fake simplemove instead of easymotion
+@feat: mb/mf and kk trigger terminal
 @
 text
 @" Modeline and Notes {
@@ -156,7 +162,7 @@ let g:apc_enable_ft  = get(g:, 'apc_enable_ft', {'*':1})  " or {'text':1, 'markd
 let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)   " remap tab
 let g:apc_min_length = get(g:, 'apc_min_length', 2)   " minimal length to open popup
 let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
-let g:apc_trigger = get(g:, 'apc_trigger', "\<c-j>")  " which key to trigger popmenu
+let g:apc_trigger = get(g:, 'apc_trigger', "\<c-n>")  " which key to trigger popmenu
 
 " get word before cursor
 function! s:get_context()
@@ -315,13 +321,32 @@ endfunc
 command! -nargs=0 ApcEnable call s:apc_enable()
 command! -nargs=0 ApcDisable call s:apc_disable()
 
-augroup ApcInitGroup
+function MvcfApc()
+  augroup ApcInitGroup
 	au!
 	au FileType * call s:apc_check_init()
 	au BufEnter * call s:apc_check_init()
 	au TabEnter * call s:apc_check_init()
-augroup END
+  augroup END
+endfunction
 
+@
+
+
+1.16
+log
+@feat: fake simplemove instead of easymotion
+@
+text
+@d46 1
+a46 1
+let g:apc_trigger = get(g:, 'apc_trigger', "\<c-j>")  " which key to trigger popmenu
+d205 2
+a206 1
+augroup ApcInitGroup
+d211 2
+a212 1
+augroup END
 @
 
 

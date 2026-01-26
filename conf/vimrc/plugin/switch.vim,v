@@ -1,9 +1,15 @@
-head	1.12;
+head	1.13;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.13
+date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.12;
+commitid	1006977697267F52933;
 
 1.12
 date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
@@ -82,9 +88,9 @@ desc
 @@
 
 
-1.12
+1.13
 log
-@feat: fake simplemove instead of easymotion
+@feat: mb/mf and kk trigger terminal
 @
 text
 @" Modeline and Notes {
@@ -96,14 +102,26 @@ function s:has_plug(nam)
   return isdirectory(expand(g:mvcf_path."pack/*/start/".a:nam)) + isdirectory(expand(g:mvcf_path."pack/*/opt/".a:nam))
 endfunction
 
-if s:has_plug('vim-easycomplete')
-  ApcDisable
+if !s:has_plug('vim-easycomplete')
+  call MvcfApc()
 endif
 
 if filereadable(expand(g:mvcf_path.'ext.vim.local'))
   execute 'source '.g:mvcf_path.'ext.vim.local'
 endif
 
+@
+
+
+1.12
+log
+@feat: fake simplemove instead of easymotion
+@
+text
+@d10 2
+a11 2
+if s:has_plug('vim-easycomplete')
+  ApcDisable
 @
 
 

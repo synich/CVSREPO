@@ -1,9 +1,15 @@
-head	1.43;
+head	1.44;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.44
+date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.43;
+commitid	1006977697267F52933;
 
 1.43
 date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
@@ -268,9 +274,9 @@ desc
 @@
 
 
-1.43
+1.44
 log
-@feat: fake simplemove instead of easymotion
+@feat: mb/mf and kk trigger terminal
 @
 text
 @" Modeline and Notes {
@@ -326,6 +332,8 @@ text
   if has('nvim') || v:version >= 801
     nnoremap <leader>rt  :call rv#replConnect("bash")<CR>
     tnoremap <C-j><C-j>  <C-\><C-n>
+    nnoremap <C-k><C-k> :call rv#term_reuse()<CR>
+    tnoremap <C-k><C-k>  <C-\><C-n><C-w>c
   endif
     nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
     " change backgroud and number style
@@ -338,6 +346,7 @@ text
     xnoremap <silent> ae :<C-U>call rv#selectParens(visualmode(), 'a')<CR>
     onoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
     xnoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
+
 
     nnoremap <silent> <leader>tt :TagbarToggle<CR>
 
@@ -399,6 +408,16 @@ text
     " }
 " }
 
+@
+
+
+1.43
+log
+@feat: fake simplemove instead of easymotion
+@
+text
+@d54 2
+d69 1
 @
 
 

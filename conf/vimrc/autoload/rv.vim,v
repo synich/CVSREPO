@@ -1,9 +1,15 @@
-head	1.42;
+head	1.43;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.43
+date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.42;
+commitid	1006977697267F52933;
 
 1.42
 date	2026.01.24.08.06.42;	author u0_a108;	state Exp;
@@ -262,9 +268,9 @@ desc
 @@
 
 
-1.42
+1.43
 log
-@feat: fake simplemove instead of easymotion
+@feat: mb/mf and kk trigger terminal
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -406,6 +412,30 @@ function! rv#runcurrentscript(hasarg)
   call <SID>runcmd(l:cmd.' % '.l:arg)
 endfunction
 
+let s:term_flag = 0
+function rv#term_reuse()
+  if s:term_flag == 0
+    if has('nvim')
+      split
+      terminal
+      startinsert
+    else
+      terminal
+    endif
+    let s:term_flag = bufnr()
+  else
+    let tm_h = winheight(winnr())/3
+    split
+    execute 'resize '.tm_h
+    execute 'b'.s:term_flag
+    if has('nvim')
+      startinsert
+    else
+      normal! i
+    endif
+  endif
+endfunction
+
 function! rv#runShellCommand(cmdline)
     silent execute "botright ".s:term_height."new"
 
@@ -472,7 +502,7 @@ function! rv#bufferchoose()
 endfunction
 
 function rv#simplemove(fb)
-  let pos = input('jump: ')
+  let pos = input('jump(hl): ')
   let tow = matchlist(pos, '\v(\d+)([hl]?)$')
   let cur = getpos('.')
   let cur[1] += a:fb * str2nr(tow[1])
@@ -763,6 +793,18 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.42
+log
+@feat: fake simplemove instead of easymotion
+@
+text
+@d140 24
+d230 1
+a230 1
+  let pos = input('jump: ')
 @
 
 
