@@ -1,9 +1,15 @@
-head	1.17;
+head	1.18;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.18
+date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.17;
+commitid	100698087D3172F144D;
 
 1.17
 date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
@@ -112,26 +118,13 @@ desc
 @@
 
 
-1.17
+1.18
 log
-@feat: mb/mf and kk trigger terminal
+@doc: new hotkey and cmd
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
-" }
-
-" Load opt {
-function! MvcfHardlyuse()
-  packadd tagbar
-  set tags=./tags;/,~/.vimtags
-
-  " Make tags placed in .git/tags file available in all levels of a repository
-  let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-  if gitroot != ''
-      let &tags = &tags . ',' . gitroot . '/.git/tags'
-  endif
-endfunction
 " }
 
 " OmniComplete {
@@ -329,6 +322,28 @@ function MvcfApc()
 	au TabEnter * call s:apc_check_init()
   augroup END
 endfunction
+
+@
+
+
+1.17
+log
+@feat: mb/mf and kk trigger terminal
+@
+text
+@a4 13
+" Load opt {
+function! MvcfHardlyuse()
+  packadd tagbar
+  set tags=./tags;/,~/.vimtags
+
+  " Make tags placed in .git/tags file available in all levels of a repository
+  let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+  if gitroot != ''
+      let &tags = &tags . ',' . gitroot . '/.git/tags'
+  endif
+endfunction
+" }
 
 @
 

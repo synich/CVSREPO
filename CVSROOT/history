@@ -254,3 +254,7 @@ M69776973|u0_a108|~/src/conf|conf/vimrc/autoload|1.43|rv.vim
 M69776973|u0_a108|~/src/conf|conf/vimrc/plugin|1.44|kbd.vim
 M69776973|u0_a108|~/src/conf|conf/vimrc/plugin|1.17|ld_plg.vim
 M69776973|u0_a108|~/src/conf|conf/vimrc/plugin|1.13|switch.vim
+M698087d3|u0_a108|~/src/conf/vimrc|conf/vimrc/doc|1.10|rv.txt
+M698087d3|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.45|kbd.vim
+M698087d3|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.18|ld_plg.vim
+M698087d3|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.14|switch.vim

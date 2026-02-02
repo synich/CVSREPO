@@ -1,9 +1,15 @@
-head	1.44;
+head	1.45;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.45
+date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
+branches;
+next	1.44;
+commitid	100698087D3172F144D;
 
 1.44
 date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
@@ -274,9 +280,9 @@ desc
 @@
 
 
-1.44
+1.45
 log
-@feat: mb/mf and kk trigger terminal
+@doc: new hotkey and cmd
 @
 text
 @" Modeline and Notes {
@@ -330,7 +336,6 @@ text
     nnoremap <leader>rc :call rv#txtReplace('c')<CR>
     nnoremap <leader>rg :call rv#enhancegrep(0)<CR>
   if has('nvim') || v:version >= 801
-    nnoremap <leader>rt  :call rv#replConnect("bash")<CR>
     tnoremap <C-j><C-j>  <C-\><C-n>
     nnoremap <C-k><C-k> :call rv#term_reuse()<CR>
     tnoremap <C-k><C-k>  <C-\><C-n><C-w>c
@@ -346,9 +351,6 @@ text
     xnoremap <silent> ae :<C-U>call rv#selectParens(visualmode(), 'a')<CR>
     onoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
     xnoremap <silent> ie :<C-U>call rv#selectParens(visualmode(), 'i')<CR>
-
-
-    nnoremap <silent> <leader>tt :TagbarToggle<CR>
 
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     command! -nargs=* Chrun call rv#changerunscript(<q-args>)
@@ -407,6 +409,20 @@ text
 
     " }
 " }
+
+@
+
+
+1.44
+log
+@feat: mb/mf and kk trigger terminal
+@
+text
+@a51 1
+    nnoremap <leader>rt  :call rv#replConnect("bash")<CR>
+a67 3
+
+    nnoremap <silent> <leader>tt :TagbarToggle<CR>
 
 @
 
