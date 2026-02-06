@@ -1,9 +1,15 @@
-head	1.5;
+head	1.6;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.6
+date	2026.02.06.12.16.24;	author u0_a108;	state Exp;
+branches;
+next	1.5;
+commitid	1006985DB98434A9A6D;
 
 1.5
 date	2026.02.04.12.05.37;	author u0_a108;	state Exp;
@@ -39,9 +45,9 @@ desc
 @@
 
 
-1.5
+1.6
 log
-@fix: stay original use sharp
+@feat: find rowid get extra like tag
 @
 text
 @--define global
@@ -127,6 +133,24 @@ local function tag2json(str)
     table.insert(matches, '"'..mat:sub(3)..'"')
   end
   return "[" .. table.concat(matches, ", ") .. "]"
+end
+
+local function find_simi_tag(db, t)
+  if t=='' then return '' end
+  local tbl = JSON.parse(t)
+  local rowid_set = {}
+  for i, v in ipairs(tbl) do
+    local cmd = "select rowid||':'||substr(content,1,45) from memo where tag match '\""..v:gsub("'", "''") .."*\"'"
+    local lst = fetchall(db, cmd)
+    for i, v in ipairs(lst) do
+      rowid_set[v[1]:gsub("\n+", "")]=1
+    end
+  end
+  local ret = ''
+  for k, v in pairs(rowid_set) do
+    ret = ret .. k .. "\n"
+  end
+  return ret
 end
 
 local function fts_exist_tag(db)
@@ -216,7 +240,7 @@ local function fts_rowid(db, rowid)
   elseif tbl:sub(1,1)=="t" then
     return fetchone(db, "select date, content, content from tmrec where date="..id)
   else
-    return fetchone(db, "select rowid, substr(content, 1, 40), content from memo where rowid="..id)
+    return fetchone(db, "select rowid, tag, content from memo where rowid="..id)
   end
 end
 
@@ -302,7 +326,8 @@ local function clientry(arg)
   if "rowid"==arg[1] then  -- rowid
     lst = fts_rowid(db, arg[2])
     if #lst >0 then
-      _wc(hint_name, lst[1]..": "..(lst[2]:gsub("\n+"," ")) ) -- TODO
+      local simi_id = find_simi_tag(db, lst[2])
+      _wc(hint_name, fmt("find rowid {}. similar:\n{}", lst[1], simi_id) )
       _wc(full_name, lst[3])
     else rc = 1
     end
@@ -360,6 +385,21 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.5
+log
+@fix: stay original use sharp
+@
+text
+@d86 18
+d191 1
+a191 1
+    return fetchone(db, "select rowid, substr(content, 1, 40), content from memo where rowid="..id)
+d277 2
+a278 1
+      _wc(hint_name, lst[1]..": "..(lst[2]:gsub("\n+"," ")) ) -- TODO
 @
 
 
