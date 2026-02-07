@@ -1,9 +1,15 @@
-head	1.19;
+head	1.20;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.20
+date	2026.02.07.10.19.35;	author u0_a108;	state Exp;
+branches;
+next	1.19;
+commitid	100698711B706EFAA94;
 
 1.19
 date	2026.01.12.14.16.20;	author u0_a108;	state Exp;
@@ -122,9 +128,9 @@ desc
 @@
 
 
-1.19
+1.20
 log
-@fix: nvim point to lua
+@fix: first mkdir when setup
 @
 text
 @#!/bin/sh
@@ -186,6 +192,7 @@ preparefile() {
 # $1[M]: s-setup u-update
 # $2[O]: package
 addconf() {
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
   preparefile $2
   chmod -R 755 .${FAVORITE_DIRNAME}/bin/
   # only setup need to append sth to rc file
@@ -199,7 +206,6 @@ addconf() {
   if [ -x "$(command -v vim)" ] && [ ! -f "$HOME/.vimrc" ]; then
     echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
   fi
-  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
   if [ -x "$(command -v nvim)" ] && [ ! -f "$HOME/.config/nvim/init.lua" ]; then
     mkdir -p .config/nvim
     echo "dofile(vim.fn.expand('~/.${FAVORITE_DIRNAME}/nvim/init.lua'))" >> .config/nvim/init.lua
@@ -268,6 +274,17 @@ main() {
 
 main $@@
 
+@
+
+
+1.19
+log
+@fix: nvim point to lua
+@
+text
+@d60 1
+a73 1
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
 @
 
 
