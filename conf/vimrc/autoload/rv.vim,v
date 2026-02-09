@@ -1,9 +1,15 @@
-head	1.43;
+head	1.44;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.44
+date	2026.02.09.12.12.11;	author u0_a108;	state Exp;
+branches;
+next	1.43;
+commitid	1006989CF1B264554B5;
 
 1.43
 date	2026.01.26.13.17.39;	author u0_a108;	state Exp;
@@ -268,9 +274,9 @@ desc
 @@
 
 
-1.43
+1.44
 log
-@feat: mb/mf and kk trigger terminal
+@fix: write before swithc to term
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -414,6 +420,9 @@ endfunction
 
 let s:term_flag = 0
 function rv#term_reuse()
+  if &modified
+    silent! write
+  endif
   if s:term_flag == 0
     if has('nvim')
       split
@@ -793,6 +802,15 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.43
+log
+@feat: mb/mf and kk trigger terminal
+@
+text
+@d142 3
 @
 
 
