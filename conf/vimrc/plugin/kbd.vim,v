@@ -1,9 +1,15 @@
-head	1.45;
+head	1.46;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.46
+date	2026.02.13.15.39.41;	author u0_a108;	state Exp;
+branches;
+next	1.45;
+commitid	100698F45BD5E30365B;
 
 1.45
 date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
@@ -280,9 +286,9 @@ desc
 @@
 
 
-1.45
+1.46
 log
-@doc: new hotkey and cmd
+@feat: npp_ai and NAI
 @
 text
 @" Modeline and Notes {
@@ -360,6 +366,7 @@ text
     command! -nargs=+ -complete=command ShowEx call rv#showEx(<q-args>)
     command! -nargs=1 Psave call rv#mksess(<q-args>)
     command! -nargs=1 Pload call rv#ldsess(<q-args>)
+    command! -range=% -nargs=* NAI call rv#npp_ai(<q-args>)
 
     augroup html_special
       autocmd!
@@ -410,6 +417,15 @@ text
     " }
 " }
 
+@
+
+
+1.45
+log
+@doc: new hotkey and cmd
+@
+text
+@d76 1
 @
 
 

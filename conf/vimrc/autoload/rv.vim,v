@@ -1,9 +1,15 @@
-head	1.44;
+head	1.45;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.45
+date	2026.02.13.15.39.41;	author u0_a108;	state Exp;
+branches;
+next	1.44;
+commitid	100698F45BD5E30365B;
 
 1.44
 date	2026.02.09.12.12.11;	author u0_a108;	state Exp;
@@ -274,9 +280,9 @@ desc
 @@
 
 
-1.44
+1.45
 log
-@fix: write before swithc to term
+@feat: npp_ai and NAI
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -683,7 +689,33 @@ function! rv#showEx(cmd)
   endif
 endfunction
 
-" Snip in normal and insert mode
+" ai and snip in normal and insert mode
+function! rv#npp_ai(sys) range
+    if !exists('a:firstline') || !exists('a:lastline')
+        echo "请先选择文本"
+        return
+    endif
+
+    " 获取选中的文本 如果没有选中文本，退出
+    let selected_text = join(getline(a:firstline, a:lastline), "\n")
+    if empty(selected_text)
+        echo "没有选中文本"
+        return
+    endif
+
+    " 对文本进行base16编码 调用外部命令，将编码后的文本作为参数
+    let b16txt = substitute(selected_text, '.', '\=printf("%02x", char2nr(submatch(0)))', 'g')
+    let command = 'python3 '.g:mvcf_path.'npp_ai.py ' . b16txt
+    if !empty(a:sys)
+      let command = command . ' "' . a:sys . '"'
+    endif
+    "echo command | return
+    let result = system(command)
+    " 移动到选中区域的最后一行 将结果追加到下一行
+    execute a:lastline
+    call append(line('.'), split(result, '\n'))
+endfunction
+
 function! rv#showsnipcode()
     let l:ft = &filetype
     let l:arg = input('SnipKey: ')
@@ -802,6 +834,17 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.44
+log
+@fix: write before swithc to term
+@
+text
+@d405 27
+a431 1
+" Snip in normal and insert mode
 @
 
 
