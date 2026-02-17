@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2026.02.17.16.04.48;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	1006994919F1DD59FEA;
 
 1.6
 date	2026.02.06.12.16.24;	author u0_a108;	state Exp;
@@ -45,9 +51,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@feat: find rowid get extra like tag
+@fix: like check table first
 @
 text
 @--define global
@@ -61,7 +67,7 @@ setmetatable(_G,{__newindex=function(_, k, v)local b=k:find('g_')if b~=1 then er
 -- add space between hanzi and [english or digit]
 -- not convert when first is >(reference syntax)
 local function hanzi_sep(s)
-  if "#"==s:sub(1,1) then return s end
+  if "#"==s:sub(1,1) or ">"==s:sub(1,1) then return s end
 
   s = s:gsub("，", ",")
   s = s:gsub("。", ". ")
@@ -193,6 +199,10 @@ local function fts_match(db, txt, limit)
 end
 
 local function fts_like(db, txt, limit)
+  local function _has_tbl(db, nam) -- bool
+    local r = fetchone(db, fmt("select name from sqlite_master where name='{}'", nam))
+    return #r>0 and true or false
+  end
   local function _cv_kwd2like(txt)
     txt = txt:gsub("^ +", "")
     txt = txt:gsub(" +$", "")
@@ -208,11 +218,19 @@ local function fts_like(db, txt, limit)
   end
   if not limit then limit = 10 end
   txt = _cv_kwd2like(txt)
-  local a = fetchall(db, "select date||'blog', substr(content,1,45) from blog where 1=1"..txt.." limit "..limit)
-  local b = fetchall(db, "select date||'tmrec', substr(content,1,45) from tmrec where 1=1"..txt.." limit "..limit)
-  local c = fetchall(db, "select rowid||'memo', substr(content,1,45) from memo where 1=1"..txt.." limit "..limit)
-  for i,v in ipairs(b) do table.insert(a, v) end
-  for i,v in ipairs(c) do table.insert(a, v) end
+  local a = {}
+  if _has_tbl(db, "blog") then
+    local c = fetchall(db, "select date||'-blog', substr(content,1,45) from blog where 1=1"..txt.." limit "..limit)
+    for i,v in ipairs(c) do table.insert(a, v) end
+  end
+  if _has_tbl(db, "tmrec") then
+    local c = fetchall(db, "select date||'-tmrec', substr(content,1,45) from tmrec where 1=1"..txt.." limit "..limit)
+    for i,v in ipairs(c) do table.insert(a, v) end
+  end
+  if _has_tbl(db, "memo") then
+    local c = fetchall(db, "select rowid||'-memo', substr(content,1,45) from memo where 1=1"..txt.." limit "..limit)
+    for i,v in ipairs(c) do table.insert(a, v) end
+  end
   return a
 end
 
@@ -385,6 +403,25 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.6
+log
+@feat: find rowid get extra like tag
+@
+text
+@d12 1
+a12 1
+  if "#"==s:sub(1,1) then return s end
+d144 4
+d163 13
+a175 5
+  local a = fetchall(db, "select date||'blog', substr(content,1,45) from blog where 1=1"..txt.." limit "..limit)
+  local b = fetchall(db, "select date||'tmrec', substr(content,1,45) from tmrec where 1=1"..txt.." limit "..limit)
+  local c = fetchall(db, "select rowid||'memo', substr(content,1,45) from memo where 1=1"..txt.." limit "..limit)
+  for i,v in ipairs(b) do table.insert(a, v) end
+  for i,v in ipairs(c) do table.insert(a, v) end
 @
 
 
