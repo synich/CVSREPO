@@ -1,9 +1,15 @@
-head	1.46;
+head	1.47;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.47
+date	2026.02.19.13.48.11;	author u0_a108;	state Exp;
+branches;
+next	1.46;
+commitid	1006997149A2F47096D;
 
 1.46
 date	2026.02.13.15.39.41;	author u0_a108;	state Exp;
@@ -286,9 +292,9 @@ desc
 @@
 
 
-1.46
+1.47
 log
-@feat: npp_ai and NAI
+@feat: paste in terminal
 @
 text
 @" Modeline and Notes {
@@ -345,6 +351,7 @@ text
     tnoremap <C-j><C-j>  <C-\><C-n>
     nnoremap <C-k><C-k> :call rv#term_reuse()<CR>
     tnoremap <C-k><C-k>  <C-\><C-n><C-w>c
+    tnoremap <C-v>       <C-w>""
   endif
     nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
     " change backgroud and number style
@@ -417,6 +424,15 @@ text
     " }
 " }
 
+@
+
+
+1.46
+log
+@feat: npp_ai and NAI
+@
+text
+@d55 1
 @
 
 
