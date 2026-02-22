@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2026.02.22.15.55.21;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	100699B26E91814DC5F;
 
 1.7
 date	2026.02.17.16.04.48;	author u0_a108;	state Exp;
@@ -51,9 +57,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@fix: like check table first
+@fix: hint on no result
 @
 text
 @--define global
@@ -69,7 +75,7 @@ setmetatable(_G,{__newindex=function(_, k, v)local b=k:find('g_')if b~=1 then er
 local function hanzi_sep(s)
   if "#"==s:sub(1,1) or ">"==s:sub(1,1) then return s end
 
-  s = s:gsub("，", ",")
+  s = s:gsub("，", ", ")
   s = s:gsub("。", ". ")
   s = s:gsub("？", "?")
   s = s:gsub("！", "!")
@@ -340,7 +346,7 @@ end
 
 local function clientry(arg)
   local db, rc = sqlite3.open(db_name), 0
-  local lst, short = nil, ""
+  local lst, short = nil, "no result for ask."
   if "rowid"==arg[1] then  -- rowid
     lst = fts_rowid(db, arg[2])
     if #lst >0 then
@@ -348,6 +354,8 @@ local function clientry(arg)
       _wc(hint_name, fmt("find rowid {}. similar:\n{}", lst[1], simi_id) )
       _wc(full_name, lst[3])
     else rc = 1
+      _wc(hint_name, fmt("no find rowid {}", arg[2]) )
+      _wc(full_name, fmt("no find rowid {}", arg[2]) )
     end
   elseif "like"==arg[1] then  -- like
     lst = fts_like(db, arg[2])
@@ -403,6 +411,21 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.7
+log
+@fix: like check table first
+@
+text
+@d14 1
+a14 1
+  s = s:gsub("，", ",")
+d285 1
+a285 1
+  local lst, short = nil, ""
+d293 2
 @
 
 

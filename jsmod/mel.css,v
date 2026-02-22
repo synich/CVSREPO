@@ -1,9 +1,15 @@
-head	1.13;
+head	1.14;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.14
+date	2026.02.21.14.28.47;	author u0_a108;	state Exp;
+branches;
+next	1.13;
+commitid	1006999C11F47811FDD;
 
 1.13
 date	2025.09.24.13.57.25;	author u0_a108;	state Exp;
@@ -85,9 +91,9 @@ desc
 @@
 
 
-1.13
+1.14
 log
-@fix: ss getItem
+@fix: footer center
 @
 text
 @/*ver250804*/
@@ -101,7 +107,7 @@ header{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em
 nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
 main{}
 article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
-footer{}
+footer{text-align: center;}
 
 h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.5em;}
 h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
@@ -182,6 +188,17 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 @@media screen and (min-width: 400px)  {}
 @@media screen and (min-width: 800px)  {body{padding:0 2rem;}}
 @@media screen and (min-width: 1200px) {body{padding:0 4rem;}}
+@
+
+
+1.13
+log
+@fix: ss getItem
+@
+text
+@d12 1
+a12 1
+footer{}
 @
 
 
