@@ -1,9 +1,15 @@
-head	1.8;
+head	1.9;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.9
+date	2026.02.23.15.11.39;	author u0_a108;	state Exp;
+branches;
+next	1.8;
+commitid	100699C6E2B5F056E6E;
 
 1.8
 date	2026.02.22.15.55.21;	author u0_a108;	state Exp;
@@ -57,9 +63,9 @@ desc
 @@
 
 
-1.8
+1.9
 log
-@fix: hint on no result
+@fix: hint when match/like no result
 @
 text
 @--define global
@@ -346,7 +352,7 @@ end
 
 local function clientry(arg)
   local db, rc = sqlite3.open(db_name), 0
-  local lst, short = nil, "no result for ask."
+  local lst, short = nil, ""
   if "rowid"==arg[1] then  -- rowid
     lst = fts_rowid(db, arg[2])
     if #lst >0 then
@@ -359,10 +365,12 @@ local function clientry(arg)
     end
   elseif "like"==arg[1] then  -- like
     lst = fts_like(db, arg[2])
-    for i,v in ipairs(lst) do
-      short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
-    end
-    _wc(hint_name, short:sub(1,-2))
+    if #lst >0 then
+      for i,v in ipairs(lst) do
+        short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
+      end
+      _wc(hint_name, short:sub(1,-2))
+    else _wc(hint_name, "NC for like "..arg[2]) end
   elseif "ramble"==arg[1] then  -- ramble
     math.randomseed(os.time())
     lst = fts_ramble(db)
@@ -372,10 +380,12 @@ local function clientry(arg)
     _wc(hint_name, short:sub(1,-2))
   elseif "match"==arg[1] then -- match
     lst = fts_match(db, arg[2])
-    for i,v in ipairs(lst) do
-      short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
-    end
-    _wc(hint_name, short:sub(1,-2))
+    if #lst >0 then
+      for i,v in ipairs(lst) do
+        short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
+      end
+      _wc(hint_name, short:sub(1,-2))
+    else _wc(hint_name, "NC for match "..arg[2]) end
   elseif "mod_m"==arg[1] then -- modify memo
     local can_hanzi = ""
     local dml = arg[2]:sub(1,1)
@@ -411,6 +421,29 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.8
+log
+@fix: hint on no result
+@
+text
+@d285 1
+a285 1
+  local lst, short = nil, "no result for ask."
+d298 6
+a303 4
+    for i,v in ipairs(lst) do
+      short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
+    end
+    _wc(hint_name, short:sub(1,-2))
+d313 6
+a318 4
+    for i,v in ipairs(lst) do
+      short = short..v[1]..": "..v[2]:gsub("\n+"," ").."\n"
+    end
+    _wc(hint_name, short:sub(1,-2))
 @
 
 
