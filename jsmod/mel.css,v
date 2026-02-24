@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2026.02.24.16.09.43;	author u0_a108;	state Exp;
+branches;
+next	1.14;
+commitid	100699DCD4732A69C57;
 
 1.14
 date	2026.02.21.14.28.47;	author u0_a108;	state Exp;
@@ -91,12 +97,12 @@ desc
 @@
 
 
-1.14
+1.15
 log
-@fix: footer center
+@fix: resp-btn
 @
 text
-@/*ver250804*/
+@/*ver260224*/
 :root{--mel-max-width:80rem;}
 /*---base elem---*/
 html{box-sizing:border-box;}
@@ -127,11 +133,12 @@ img {max-width: 100%;}
 button,input[type='button'],input[type='submit'] {
   color: #fff;  background-color: #9b4dca;
   border: 0.1rem solid #9b4dca;  border-radius: .4rem;
-  cursor: pointer;  white-space: nowrap;
+  cursor: pointer;
   display: inline-block;  padding: 0 0.4rem;
-  font-size: 1.1rem;  font-weight: 700;
+  font-size: 1rem;  font-weight: 700;
   height: 1.8rem;  letter-spacing: .1rem;
   text-align: center;  text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 button:focus,button:hover,
 input[type='button']:focus,input[type='button']:hover,
@@ -186,8 +193,30 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
  gap:1rem;padding:0.5rem;}
 /*----media more large more bottom----*/
 @@media screen and (min-width: 400px)  {}
-@@media screen and (min-width: 800px)  {body{padding:0 2rem;}}
+.resp-btn {width:25%;}
+@@media screen and (min-width: 800px)  {body{padding:0 2rem;} .resp-btn{width:15%;}}
 @@media screen and (min-width: 1200px) {body{padding:0 4rem;}}
+@
+
+
+1.14
+log
+@fix: footer center
+@
+text
+@d1 1
+a1 1
+/*ver250804*/
+d32 1
+a32 1
+  cursor: pointer;  white-space: nowrap;
+d34 1
+a34 1
+  font-size: 1.1rem;  font-weight: 700;
+d37 1
+d92 2
+a93 1
+@@media screen and (min-width: 800px)  {body{padding:0 2rem;}}
 @
 
 
