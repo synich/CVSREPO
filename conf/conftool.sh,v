@@ -1,9 +1,15 @@
-head	1.20;
+head	1.21;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.21
+date	2026.03.07.19.50.18;	author u0_a108;	state Exp;
+branches;
+next	1.20;
+commitid	10069AC817A3844C9D3;
 
 1.20
 date	2026.02.07.10.19.35;	author u0_a108;	state Exp;
@@ -128,17 +134,22 @@ desc
 @@
 
 
-1.20
+1.21
 log
-@fix: first mkdir when setup
+@feat: set mirror when setup
 @
 text
 @#!/bin/sh
 
 FAVORITE_DIRNAME=shuw
 AR_URL=http://synich.sdf.org/ar/
+NPM_MIRROR="https://registry.npmmirror.com/"
+CARGO_MIRROR="https://mirrors.tuna.tsinghua.edu.cn"
+PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+GO_MIRROR="https://goproxy.cn,direct"
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20260112
+CONFVER=V20260308
+
 
 if [ $# -eq 0 ]; then
     echo "$0 [-u url] setup|update|evolve|clean|plugvim [pack_name]"
@@ -189,16 +200,41 @@ preparefile() {
     cd ..
 }
 
+# set npm/py/go/rust mirror
+set_mirror(){
+  # npm
+  echo "registry=${NPM_MIRROR}" > ~/.npmrc
+  # pip
+  mkdir -p ~/.config/pip
+  cat > ~/.config/pip/pip.conf <<EOF
+[global]
+index-url = ${PIP_MIRROR}
+trusted-host = pypi.tuna.tsinghua.edu.cn
+EOF
+  # go
+  echo "export GOPROXY=${GO_MIRROR}" >> ~/.bashrc
+  # rust
+  mkdir -p ~/.cargo
+  cat > ~/.cargo/config.toml <<EOF
+[source.crates-io]
+replace-with = 'mirror'
+[source.mirror]
+registry = "sparse+${CARGO_MIRROR}/crates.io-index/"
+[registries.mirror]
+index = "sparse+${CARGO_MIRROR}/crates.io-index/"
+EOF
+}
+
 # $1[M]: s-setup u-update
 # $2[O]: package
 addconf() {
-  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
+  mkdir -p ~/.${FAVORITE_DIRNAME}/vimrc/pack
   preparefile $2
-  chmod -R 755 .${FAVORITE_DIRNAME}/bin/
+  chmod -R 755 ~/.${FAVORITE_DIRNAME}/bin/
   # only setup need to append sth to rc file
   if [ $1 = "s" ]; then
     echo "source ~/.${FAVORITE_DIRNAME}/bash.sh" >> .bashrc
-    touch .${FAVORITE_DIRNAME}/bin/.gotohist
+    touch ~/.${FAVORITE_DIRNAME}/bin/.gotohist
   fi
   if [ -x "$(command -v git)" ] && [ ! -f .gitconfig ]; then
     mv ~/.${FAVORITE_DIRNAME}/.gitconfig .
@@ -207,8 +243,8 @@ addconf() {
     echo "source ~/.${FAVORITE_DIRNAME}/init.vim" >> .vimrc
   fi
   if [ -x "$(command -v nvim)" ] && [ ! -f "$HOME/.config/nvim/init.lua" ]; then
-    mkdir -p .config/nvim
-    echo "dofile(vim.fn.expand('~/.${FAVORITE_DIRNAME}/nvim/init.lua'))" >> .config/nvim/init.lua
+    mkdir -p ~/.config/nvim
+    echo "dofile(vim.fn.expand('~/.${FAVORITE_DIRNAME}/nvim/init.lua'))" >> ~/.config/nvim/init.lua
   fi
 }
 
@@ -254,6 +290,7 @@ main() {
   case "$action" in
       s*)
           addconf s $package
+          set_mirror
           ;;
       u*)
           addconf u $package
@@ -274,6 +311,33 @@ main() {
 
 main $@@
 
+@
+
+
+1.20
+log
+@fix: first mkdir when setup
+@
+text
+@d5 4
+d10 2
+a11 1
+CONFVER=V20260112
+d62 25
+d90 1
+a90 1
+  mkdir -p .${FAVORITE_DIRNAME}/vimrc/pack
+d92 1
+a92 1
+  chmod -R 755 .${FAVORITE_DIRNAME}/bin/
+d96 1
+a96 1
+    touch .${FAVORITE_DIRNAME}/bin/.gotohist
+d105 2
+a106 2
+    mkdir -p .config/nvim
+    echo "dofile(vim.fn.expand('~/.${FAVORITE_DIRNAME}/nvim/init.lua'))" >> .config/nvim/init.lua
+d152 1
 @
 
 
