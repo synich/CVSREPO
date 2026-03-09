@@ -1,9 +1,15 @@
-head	1.21;
+head	1.22;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.22
+date	2026.03.09.10.07.08;	author u0_a108;	state Exp;
+branches;
+next	1.21;
+commitid	10069AE9BCC5FACEE48;
 
 1.21
 date	2026.03.07.19.50.18;	author u0_a108;	state Exp;
@@ -134,9 +140,9 @@ desc
 @@
 
 
-1.21
+1.22
 log
-@feat: set mirror when setup
+@fix: set_mirror robust
 @
 text
 @#!/bin/sh
@@ -144,7 +150,7 @@ text
 FAVORITE_DIRNAME=shuw
 AR_URL=http://synich.sdf.org/ar/
 NPM_MIRROR="https://registry.npmmirror.com/"
-CARGO_MIRROR="https://mirrors.tuna.tsinghua.edu.cn"
+CARGO_MIRROR="sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 GO_MIRROR="https://goproxy.cn,direct"
 DFT_PACK_NAME=envconf.tar.gz
@@ -206,22 +212,25 @@ set_mirror(){
   echo "registry=${NPM_MIRROR}" > ~/.npmrc
   # pip
   mkdir -p ~/.config/pip
+  local temp=${PIP_MIRROR*://}
+  local pip_host=${temp%%/*}
   cat > ~/.config/pip/pip.conf <<EOF
 [global]
 index-url = ${PIP_MIRROR}
-trusted-host = pypi.tuna.tsinghua.edu.cn
+trusted-host = ${pip_host}
 EOF
   # go
   echo "export GOPROXY=${GO_MIRROR}" >> ~/.bashrc
+  echo "export GOSUMDB=off" >> ~/.bashrc
   # rust
   mkdir -p ~/.cargo
   cat > ~/.cargo/config.toml <<EOF
 [source.crates-io]
 replace-with = 'mirror'
 [source.mirror]
-registry = "sparse+${CARGO_MIRROR}/crates.io-index/"
+registry = "${CARGO_MIRROR}"
 [registries.mirror]
-index = "sparse+${CARGO_MIRROR}/crates.io-index/"
+index = "${CARGO_MIRROR}"
 EOF
 }
 
@@ -311,6 +320,28 @@ main() {
 
 main $@@
 
+@
+
+
+1.21
+log
+@feat: set mirror when setup
+@
+text
+@d6 1
+a6 1
+CARGO_MIRROR="https://mirrors.tuna.tsinghua.edu.cn"
+d68 2
+d73 1
+a73 1
+trusted-host = pypi.tuna.tsinghua.edu.cn
+d77 1
+d84 1
+a84 1
+registry = "sparse+${CARGO_MIRROR}/crates.io-index/"
+d86 1
+a86 1
+index = "sparse+${CARGO_MIRROR}/crates.io-index/"
 @
 
 
