@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2026.03.11.05.21.07;	author u0_a108;	state Exp;
+branches;
+next	1.2;
+commitid	10069B0FBC313C57F69;
 
 1.2
 date	2024.06.13.15.59.30;	author shuw;	state Exp;
@@ -21,9 +27,9 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@remove psquery dependency
+@fix: some typo
 @
 text
 @# Introduce
@@ -35,9 +41,20 @@ this repo has 2 function
 
 ## usage
 
-1. use `make sep` to generate dep.js, this has some utility include DOM and AJAX op.
+1. use `make mel` to generate mel.min.js/mel.min.css
 2. use `make release` or `make debug` to build mujs/duktape
 
+@
+
+
+1.2
+log
+@remove psquery dependency
+@
+text
+@d10 1
+a10 1
+1. use `make sep` to generate dep.js, this has some utility include DOM and AJAX op.
 @
 
 
