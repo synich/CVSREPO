@@ -1,9 +1,15 @@
-head	1.22;
+head	1.23;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.23
+date	2026.03.17.04.05.22;	author u0_a108;	state Exp;
+branches;
+next	1.22;
+commitid	10069B8D3024499D184;
 
 1.22
 date	2026.03.09.10.07.08;	author u0_a108;	state Exp;
@@ -140,9 +146,9 @@ desc
 @@
 
 
-1.22
+1.23
 log
-@fix: set_mirror robust
+@fix: syntax err on pip subsitute
 @
 text
 @#!/bin/sh
@@ -154,7 +160,7 @@ CARGO_MIRROR="sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 GO_MIRROR="https://goproxy.cn,direct"
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20260308
+CONFVER=V20260316
 
 
 if [ $# -eq 0 ]; then
@@ -210,9 +216,10 @@ preparefile() {
 set_mirror(){
   # npm
   echo "registry=${NPM_MIRROR}" > ~/.npmrc
+  echo "prefix=~/.${FAVORITE_DIRNAME}" >> ~/.npmrc
   # pip
   mkdir -p ~/.config/pip
-  local temp=${PIP_MIRROR*://}
+  local temp=${PIP_MIRROR#*://}
   local pip_host=${temp%%/*}
   cat > ~/.config/pip/pip.conf <<EOF
 [global]
@@ -320,6 +327,21 @@ main() {
 
 main $@@
 
+@
+
+
+1.22
+log
+@fix: set_mirror robust
+@
+text
+@d10 1
+a10 1
+CONFVER=V20260308
+d66 1
+d69 1
+a69 1
+  local temp=${PIP_MIRROR*://}
 @
 
 
