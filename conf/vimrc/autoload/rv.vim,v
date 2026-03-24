@@ -1,9 +1,15 @@
-head	1.45;
+head	1.46;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.46
+date	2026.03.24.15.01.07;	author u0_a108;	state Exp;
+branches;
+next	1.45;
+commitid	10069C2A73311BB4925;
 
 1.45
 date	2026.02.13.15.39.41;	author u0_a108;	state Exp;
@@ -280,9 +286,9 @@ desc
 @@
 
 
-1.45
+1.46
 log
-@feat: npp_ai and NAI
+@feat: term_reuse vertical
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -425,7 +431,18 @@ function! rv#runcurrentscript(hasarg)
 endfunction
 
 let s:term_flag = 0
-function rv#term_reuse()
+function rv#term_reuse(...)
+  if a:0 == 0
+    if exists('w:term_reuse_type')
+      let l:split_type = w:term_reuse_type
+    else
+      let l:split_type = 'h'
+    endif
+  else
+    let l:split_type = 'v'
+    let w:term_reuse_type = 'v'
+  endif
+
   if &modified
     silent! write
   endif
@@ -439,9 +456,15 @@ function rv#term_reuse()
     endif
     let s:term_flag = bufnr()
   else
-    let tm_h = winheight(winnr())/3
-    split
-    execute 'resize '.tm_h
+    if l:split_type ==# 'v'
+      let tm_h = winwidth(winnr())/3
+      vsplit
+      execute 'vertical resize '.tm_h
+    else
+      let tm_h = winheight(winnr())/3
+      split
+      execute 'resize '.tm_h
+    endif
     execute 'b'.s:term_flag
     if has('nvim')
       startinsert
@@ -834,6 +857,22 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.45
+log
+@feat: npp_ai and NAI
+@
+text
+@d141 12
+a152 1
+function rv#term_reuse()
+d166 9
+a174 3
+    let tm_h = winheight(winnr())/3
+    split
+    execute 'resize '.tm_h
 @
 
 
