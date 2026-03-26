@@ -1,9 +1,15 @@
-head	1.47;
+head	1.48;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.48
+date	2026.03.26.10.21.37;	author u0_a108;	state Exp;
+branches;
+next	1.47;
+commitid	10069C508B13FCEA5CA;
 
 1.47
 date	2026.02.19.13.48.11;	author u0_a108;	state Exp;
@@ -292,9 +298,9 @@ desc
 @@
 
 
-1.47
+1.48
 log
-@feat: paste in terminal
+@feat: add TPT cmd to change term position
 @
 text
 @" Modeline and Notes {
@@ -351,6 +357,7 @@ text
     tnoremap <C-j><C-j>  <C-\><C-n>
     nnoremap <C-k><C-k> :call rv#term_reuse()<CR>
     tnoremap <C-k><C-k>  <C-\><C-n><C-w>c
+    command! -nargs=0 TPT call rv#term_pos_togg()
     tnoremap <C-v>       <C-w>""
   endif
     nnoremap <localleader>rp :call rv#runcurrentscript(1)<CR>
@@ -424,6 +431,15 @@ text
     " }
 " }
 
+@
+
+
+1.47
+log
+@feat: paste in terminal
+@
+text
+@d55 1
 @
 
 

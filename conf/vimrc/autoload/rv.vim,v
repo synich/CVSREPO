@@ -1,9 +1,15 @@
-head	1.46;
+head	1.47;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.47
+date	2026.03.26.10.21.37;	author u0_a108;	state Exp;
+branches;
+next	1.46;
+commitid	10069C508B13FCEA5CA;
 
 1.46
 date	2026.03.24.15.01.07;	author u0_a108;	state Exp;
@@ -286,9 +292,9 @@ desc
 @@
 
 
-1.46
+1.47
 log
-@feat: term_reuse vertical
+@feat: add TPT cmd to change term position
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
@@ -431,12 +437,20 @@ function! rv#runcurrentscript(hasarg)
 endfunction
 
 let s:term_flag = 0
+function rv#term_pos_togg()
+  if w:term_reuse_type ==# 'h'
+    let w:term_reuse_type = 'v'
+  else
+    let w:term_reuse_type = 'h'
+  endif
+endfunction
 function rv#term_reuse(...)
   if a:0 == 0
     if exists('w:term_reuse_type')
       let l:split_type = w:term_reuse_type
     else
       let l:split_type = 'h'
+      let w:term_reuse_type = 'h'
     endif
   else
     let l:split_type = 'v'
@@ -857,6 +871,16 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.46
+log
+@feat: term_reuse vertical
+@
+text
+@d141 7
+d154 1
 @
 
 
