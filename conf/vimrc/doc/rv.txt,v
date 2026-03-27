@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2026.03.27.12.07.24;	author u0_a108;	state Exp;
+branches;
+next	1.10;
+commitid	10069C672FC60ACBDB1;
 
 1.10
 date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
@@ -69,12 +75,12 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@doc: new hotkey and cmd
+@doc: TPT usage
 @
 text
-@*rv.txt*	For Vim version 8.0  Last change: 2026 Feb 1
+@*rv.txt*	For Vim version 8.0  Last change: 2026 Mar 27
 
 		  RV Plugin REFERENCE      by SHU Wang
 
@@ -99,6 +105,8 @@ This file illustrate rv plugin usage Vim/NeoVim.
 - <localleader>rf   run current file no param
 - <localleader>rp   run current file with param
 - <ctrl-k><ctrl-k>  open/close shell terminal
+- :TPT
+  toggle terminal pos hor or ver
 
 - :ShowEx
   use in command and will get output in new buffer
@@ -110,13 +118,29 @@ This file illustrate rv plugin usage Vim/NeoVim.
   run selection part in repl, for example hit "cpaf" will execute
 s-exp "(display 123)"
 
-  - ae/ie select bracket
+- ae/ie
+  select all kind bracket
 
 - :Chrun
   change run script program
 
 vim:tw=78:ts=8:noet:ft=help:norl:
 
+@
+
+
+1.10
+log
+@doc: new hotkey and cmd
+@
+text
+@d1 1
+a1 1
+*rv.txt*	For Vim version 8.0  Last change: 2026 Feb 1
+d26 2
+d39 2
+a40 1
+  - ae/ie select bracket
 @
 
 

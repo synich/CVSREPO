@@ -278,3 +278,4 @@ M69b8d302|u0_a108|~/src/*0|conf|1.23|conftool.sh
 M69c2a733|u0_a108|~/src/*0|conf/vimrc/autoload|1.46|rv.vim
 M69c508b1|u0_a108|~/src/conf/vimrc|conf/vimrc/autoload|1.47|rv.vim
 M69c508b1|u0_a108|~/src/conf/vimrc|conf/vimrc/plugin|1.48|kbd.vim
+M69c672fc|u0_a108|~/src/conf/vimrc|conf/vimrc/doc|1.11|rv.txt
