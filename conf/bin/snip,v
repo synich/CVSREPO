@@ -1,9 +1,15 @@
-head	1.46;
+head	1.47;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.47
+date	2026.04.18.16.50.19;	author u0_a108;	state Exp;
+branches;
+next	1.46;
+commitid	10069E3B64B35530351;
 
 1.46
 date	2025.06.21.08.25.35;	author u0_a157;	state Exp;
@@ -285,23 +291,21 @@ desc
 @@
 
 
-1.46
+1.47
 log
-@fix: snip reuse pb_d file
+@up: remove comp in snip
 @
 text
 @PPR=$(dirname $(readlink -f $0))/pb_d/_pb_
 
 usage(){
-  echo $0 [!] type1 type2 :reuse pb_d snip/comp file
+  echo $0 type1 type2 :reuse pb_d snip file
   echo snip list:
   grep "^# snip_" ${PPR}snip | grep -o '[a-z]*$'
-  echo comp[!] list:
-  grep "^# comp_" ${PPR}comp | grep -o '[a-z]*$'
 }
 
 # syntax like "#[#] xxx_type1[ type2]"
-# $1-snip/comp $2-main kwd $3-opt kwd
+# $1-snip  $2-main kwd  $3-opt kwd
 choose_p(){
   begin_line="# $1_$2"
   if [ $# -eq 3 ]; then
@@ -315,16 +319,36 @@ main(){
     usage
     return
   fi
+  choose_p snip $@@
+}
+
+main $@@
+
+@
+
+
+1.46
+log
+@fix: snip reuse pb_d file
+@
+text
+@d4 1
+a4 1
+  echo $0 [!] type1 type2 :reuse pb_d snip/comp file
+a6 2
+  echo comp[!] list:
+  grep "^# comp_" ${PPR}comp | grep -o '[a-z]*$'
+d10 1
+a10 1
+# $1-snip/comp $2-main kwd $3-opt kwd
+d24 1
+a24 6
   if [ "$1" = "!" ]; then
     shift
     choose_p comp $@@
   else
     choose_p snip $@@
   fi
-}
-
-main $@@
-
 @
 
 
