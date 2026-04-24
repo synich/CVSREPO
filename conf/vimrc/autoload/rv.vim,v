@@ -1,9 +1,15 @@
-head	1.47;
+head	1.48;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.48
+date	2026.04.24.17.01.12;	author u0_a108;	state Exp;
+branches;
+next	1.47;
+commitid	10069EBA1D81A8BE8BD;
 
 1.47
 date	2026.03.26.10.21.37;	author u0_a108;	state Exp;
@@ -292,13 +298,13 @@ desc
 @@
 
 
-1.47
+1.48
 log
-@feat: add TPT cmd to change term position
+@fix: vim term_start not find home
 @
 text
 @" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
-let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'pb lu', 'scheme':'pb li', 'javascript':'qjs'}
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'lua', 'scheme':'fnlscm', 'javascript':'qjs'}
 let s:term_height = 10
 let s:hint_height = 5
 
@@ -378,7 +384,7 @@ function! rv#replConnect(vm)
   endif
 
   if !exists('s:repl_term_id') || ''==bufname(s:repl_term_id)
-    let s:repl_term_id = s:newterm(l:scheme_executable)
+    let s:repl_term_id = s:newterm(expand(l:scheme_executable))
     silent execute "resize " . s:term_height
     normal! G
   else
@@ -871,6 +877,20 @@ function! rv#debug(...)
 endfunction
 " }
 
+@
+
+
+1.47
+log
+@feat: add TPT cmd to change term position
+@
+text
+@d2 1
+a2 1
+let s:syndic = {'python':'python3', 'sh':'bash', 'lua':'pb lu', 'scheme':'pb li', 'javascript':'qjs'}
+d82 1
+a82 1
+    let s:repl_term_id = s:newterm(l:scheme_executable)
 @
 
 
