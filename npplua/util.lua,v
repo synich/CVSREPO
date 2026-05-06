@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2026.05.06.11.17.03;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	10069FB232F28DAFEB8;
 
 1.1
 date	2025.02.03.15.31.41;	author u0_a157;	state Exp;
@@ -16,16 +22,54 @@ desc
 @@
 
 
+1.2
+log
+@feat: LispParen
+@
+text
+@-- editor:GetSelText() --ret2-> str len
+-- editor:ReplaceSel(txt)
+-- editor.Anchor      --ret1-> int
+-- editor.CurrentPos  --ret1-> int (start from 0, set it can sel)
+-- editor:SetSel(sp, ep)
+-- editor:AddText(txt)  --> append after cursor
+-- editor:CopyText(txt) --> Copy to clipboard
+-- npp.AddShortcut('name', 'Ctrl+R', fn)
+
+local function b16enc(s)
+  local r = s:gsub(".", function(char)
+    return string.format("%02x", string.byte(char))
+  end)
+  return r
+end
+
+local function cur_line_no_cr()
+  local a = editor:GetCurLine()
+  if a:sub(a:len(), a:len()) == "\n" then
+    return a:sub(1, a:len()-1)
+  else
+    return a
+  end
+end
+
+local M = {b16enc = b16enc, cur_line_no_cr = cur_line_no_cr}
+return M
+
+@
+
+
 1.1
 log
 @feat: init util.lua
 @
 text
-@-- replace {} with value, eg.fmt('a{}b{}c', 1, 2)->a1b2c
+@d1 23
+a23 5
+-- replace {} with value, eg.fmt('a{}b{}c', 1, 2)->a1b2c
 function fmt(s, ...)
   local args = {...}
   local res = s:gsub("{}", function() return table.remove(args, 1) or "" end)
   return res
-end
-
+d26 3
 @
+

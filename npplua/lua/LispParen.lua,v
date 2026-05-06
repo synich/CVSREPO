@@ -1,0 +1,69 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2026.05.06.11.17.04;	author u0_a108;	state Exp;
+branches;
+next	;
+commitid	10069FB232F28DAFEB8;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: LispParen
+@
+text
+@local function _range()
+  local pos = editor.CurrentPos
+  local ycnt, fcnt, hcnt = 0, 0, 0
+  while pos>=0 do
+    local ch = editor.CharAt[pos]
+    if ch==41 then ycnt=ycnt+1 end
+    if ch==93 then fcnt=fcnt+1 end
+    if ch==125 then hcnt=hcnt+1 end
+    -- lonely pair break
+    if ch==40 then ycnt=ycnt-1 if ycnt<0 then break end end
+    if ch==91 then fcnt=fcnt-1 if fcnt<0 then break end end
+    if ch==123 then hcnt=hcnt-1 if hcnt<0 then break end end
+    pos = pos -1
+  end
+  if pos <0 then print("Error no match brace") return end
+  local epos = editor:BraceMatch(pos, 0) +1
+  return pos, epos
+end
+
+local function selectBrace()
+  local pos, epos = _range()
+  editor:SetSel(pos, epos)
+end
+
+local function innerBrace()
+  local pos, epos = _range()
+  editor:SetSel(pos+1, epos-1)
+end
+
+local function deal_outer(txt)
+  editor:ReplaceSel(string.sub(txt, 2, -2))
+end
+
+local function sexp_op()
+  local txt, tlen = editor:GetSelText()
+  if tlen then
+    deal_outer(txt)
+  else
+    selectBrace()
+  end
+end
+
+npp.AddShortcut('SexpOp', 'Ctrl+E', sexp_op)
+npp.AddShortcut('InnerBrace', 'Ctrl+Alt+E', innerBrace)
+
+@
