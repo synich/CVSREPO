@@ -287,3 +287,4 @@ M69fb232f|u0_a108|~/src/*0|npplua|1.2|util.lua
 A69fb2330|u0_a108|~/src/npp*7|npplua/lua|1.1|LispParen.lua
 A69fc210e|u0_a108|~/src/*0|npplua/clua|1.1|diag.rc
 A69fc210e|u0_a108|~/src/*0|npplua/clua|1.1|mk.bat
+A69fcb9c1|u0_a108|~/src/*0|npplua/clua|1.1|diag.c

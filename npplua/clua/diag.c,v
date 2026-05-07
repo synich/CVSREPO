@@ -1,0 +1,159 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2026.05.07.16.11.45;	author u0_a108;	state Exp;
+branches;
+next	;
+commitid	10069FCB9C177054677;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: npplua diag.c
+@
+text
+@// win32_inputbox.c - 纯键盘输入框
+//   - 只创建一个对话框, 上面只有一个 EDIT 控件
+//   - 按回车结束输入(从编辑框取文本, 结束对话框)
+//   - 不需要按钮, 不特别处理 cancel, Esc 默认会关闭对话框
+//   - 只用 ANSI(ASCII), 不写任何 Unicode 代码
+
+#include <windows.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "lua.h"
+#include "lauxlib.h"
+
+/* 资源 ID, 要与 .rc 保持一致 */
+#define IDD_INPUTBOX 101
+#define IDC_INPUT    1001
+
+typedef struct {
+    const char *title;   /* 窗口标题(可选) */
+    const char *prompt;  /* 提示文本(这里简化:放在窗口标题里) */
+    char *buf;           /* 输入缓冲区 */
+    int   bufSize;       /* 缓冲区大小 */
+} InputBoxContext;
+
+static INT_PTR CALLBACK InputBoxDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    InputBoxContext *ctx;
+
+    switch (msg)
+    {
+    case WM_INITDIALOG:
+        ctx = (InputBoxContext *)lParam;
+        SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)ctx);
+
+        /* 用 title + prompt 组成窗口标题, 简单粗暴, 避免再加静态控件 */
+        {
+            char titleBuf[256];
+            lstrcpynA(titleBuf, ctx->title ? ctx->title : "Input", sizeof(titleBuf));
+            if (ctx->prompt && ctx->prompt[0] != '\0') {
+                lstrcatA(titleBuf, " - ");
+                lstrcatA(titleBuf, ctx->prompt);
+            }
+            SetWindowTextA(hDlg, titleBuf);
+        }
+
+        /* 设置默认内容 */
+        SetDlgItemTextA(hDlg, IDC_INPUT, ctx->buf);
+        SetFocus(GetDlgItem(hDlg, IDC_INPUT));
+        return FALSE; /* 焦点已手动设置 */
+
+    case WM_KEYDOWN:
+        if (wParam == VK_RETURN) {
+            /* 只在编辑框有焦点时处理回车 */
+            HWND hFocus = GetFocus();
+            if (hFocus == GetDlgItem(hDlg, IDC_INPUT)) {
+                ctx = (InputBoxContext *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
+                if (ctx && ctx->buf && ctx->bufSize > 0) {
+                    GetDlgItemTextA(hDlg, IDC_INPUT, ctx->buf, ctx->bufSize);
+                }
+                EndDialog(hDlg, IDOK);
+                return TRUE;
+            }
+        }
+        break;
+
+    case WM_COMMAND:
+        /* 这里不放按钮, 所以一般不会收到 IDOK/IDCANCEL
+           留着是为了兼容 Esc 等默认处理(系统会发 WM_COMMAND/IDCANCEL) */
+        switch (LOWORD(wParam)) {
+        case IDOK:
+            ctx = (InputBoxContext *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
+            if (ctx && ctx->buf && ctx->bufSize > 0) {
+                GetDlgItemTextA(hDlg, IDC_INPUT, ctx->buf, ctx->bufSize);
+            }
+            EndDialog(hDlg, IDOK);
+            return TRUE;
+        case IDCANCEL:
+            EndDialog(hDlg, IDCANCEL);
+            return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+}
+
+/* Lua: inputbox(prompt, title, defaultText) -> string 或 nil(对话框失败) */
+static int l_inputbox(lua_State *L)
+{
+    const char *prompt      = luaL_optstring(L, 1, "Prompt");
+    const char *title       = luaL_optstring(L, 2, "Title");
+    const char *defaultText = luaL_optstring(L, 3, "");
+
+    char buf[256] = {0};  /*TODO*/
+    strncpy(buf, defaultText, BUF_SIZE - 1);
+    buf[BUF_SIZE - 1] = '\0';
+
+    InputBoxContext ctx;
+    ctx.title   = title;
+    ctx.prompt  = prompt;
+    ctx.buf     = buf;
+    ctx.bufSize = BUF_SIZE;
+
+    HINSTANCE hInst = GetModuleHandleA(NULL);
+
+    INT_PTR ret = DialogBoxParamA(
+        hInst,
+        MAKEINTRESOURCEA(IDD_INPUTBOX),
+        NULL,
+        InputBoxDlgProc,
+        (LPARAM)&ctx
+    );
+
+    if (ret == IDOK) {
+        lua_pushstring(L, buf);
+    } else {
+        /* 失败或被 ESC / 关闭窗口中断, 这里简单返回 nil */
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+
+static const luaL_Reg win32_inputbox_funcs[] = {
+    { "input", l_inputbox },
+    { NULL, NULL }
+};
+
+__declspec(dllexport)
+int luaopen_win_diag(lua_State *L)
+{
+    luaL_newlib(L, win32_inputbox_funcs);
+    return 1;
+}
+
+@
