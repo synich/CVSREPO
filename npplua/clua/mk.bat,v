@@ -1,0 +1,38 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@:: @;
+
+
+1.1
+date	2026.05.07.05.20.14;	author u0_a108;	state Exp;
+branches;
+next	;
+commitid	10069FC210E59246F28;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: win_diag script
+@
+text
+@@@echo off
+setlocal
+set CFLAGS=-O2 -std=c99 -Ilua53
+
+call :diag %*
+exit /b 0
+
+:diag
+  call gcc -c %CFLAGS% diag.c
+  windres -i diag.rc -o diag.res -O coff
+  call gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
+  exit /b 0
+
+
+@

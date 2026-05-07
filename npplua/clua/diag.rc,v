@@ -1,0 +1,37 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+1.1
+date	2026.05.07.05.20.14;	author u0_a108;	state Exp;
+branches;
+next	;
+commitid	10069FC210E59246F28;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: win_diag script
+@
+text
+@#include <windows.h>
+
+#define IDD_INPUTBOX 101
+#define IDC_INPUT    1001
+
+IDD_INPUTBOX DIALOGEX 0,0,220,40
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Input"
+FONT 10, "MS Shell Dlg"
+BEGIN
+  EDITTEXT IDC_INPUT, 4, 10, 212, 14, ES_AUTOHSCROLL
+END
+
+@
