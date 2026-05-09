@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2026.05.09.12.11.23;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	10069FF246B62413B71;
 
 1.1
 date	2026.05.06.11.17.04;	author u0_a108;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: LispParen
+@feat: vim cmd in npplua
 @
 text
 @local function _range()
@@ -66,4 +72,45 @@ end
 npp.AddShortcut('SexpOp', 'Ctrl+E', sexp_op)
 npp.AddShortcut('InnerBrace', 'Ctrl+Alt+E', innerBrace)
 
+
+--------------------- vim cmd ---------------------
+local function wrapPair(c)
+  local t = editor:GetSelText()
+  if c == "(" then
+    t = fmtf("(%s)", t)
+  elseif c == "[" then
+    t = fmtf("[%s]", t)
+  elseif c == "{" then
+    t = fmtf("{%s}", t)
+  elseif c == "'" then
+    t = fmtf("'%s'", t)
+  elseif c == '"' then
+    t = fmtf('"%s"', t)
+  else
+    print(fmtf("unknown char: %s", c))
+  end
+  editor:ReplaceSel(t)
+end
+
+local function excVimCmd()
+  local cmd = my_ext.inputbox("cmd: y[wrap char]")
+  if "y" == cmd:at(1) then
+    wrapPair(cmd:at(2))
+  else
+    print(fmtf("unknown cmd: %s", cmd))
+  end
+end
+
+npp.AddShortcut('excVimCmd', 'Ctrl+Alt+W', excVimCmd)
+
 @
+
+
+1.1
+log
+@feat: LispParen
+@
+text
+@d46 31
+@
+

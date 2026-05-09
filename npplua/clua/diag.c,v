@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.2
+date	2026.05.09.11.59.12;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	10069FF219061F0FA85;
 
 1.1
 date	2026.05.07.16.11.45;	author u0_a108;	state Exp;
@@ -16,9 +22,9 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: npplua diag.c
+@fix: get dll HANDLE
 @
 text
 @// win32_inputbox.c - 纯键盘输入框
@@ -110,21 +116,25 @@ static INT_PTR CALLBACK InputBoxDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
 /* Lua: inputbox(prompt, title, defaultText) -> string 或 nil(对话框失败) */
 static int l_inputbox(lua_State *L)
 {
-    const char *prompt      = luaL_optstring(L, 1, "Prompt");
-    const char *title       = luaL_optstring(L, 2, "Title");
-    const char *defaultText = luaL_optstring(L, 3, "");
+    const char *title       = luaL_optstring(L, 1, "Npp_Param");
+    const char *defaultText = luaL_optstring(L, 2, "");
 
-    char buf[256] = {0};  /*TODO*/
+#define BUF_SIZE 256
+    char buf[BUF_SIZE] = {0};
     strncpy(buf, defaultText, BUF_SIZE - 1);
     buf[BUF_SIZE - 1] = '\0';
 
     InputBoxContext ctx;
     ctx.title   = title;
-    ctx.prompt  = prompt;
+    ctx.prompt  = NULL;
     ctx.buf     = buf;
     ctx.bufSize = BUF_SIZE;
 
-    HINSTANCE hInst = GetModuleHandleA(NULL);
+    HMODULE hModule = NULL;
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+            (LPCSTR)&l_inputbox,
+            &hModule);
+    HINSTANCE hInst = (HINSTANCE)hModule;
 
     INT_PTR ret = DialogBoxParamA(
         hInst,
@@ -145,7 +155,7 @@ static int l_inputbox(lua_State *L)
 }
 
 static const luaL_Reg win32_inputbox_funcs[] = {
-    { "input", l_inputbox },
+    { "inputbox", l_inputbox },
     { NULL, NULL }
 };
 
@@ -157,3 +167,29 @@ int luaopen_win_diag(lua_State *L)
 }
 
 @
+
+
+1.1
+log
+@feat: npplua diag.c
+@
+text
+@d90 2
+a91 3
+    const char *prompt      = luaL_optstring(L, 1, "Prompt");
+    const char *title       = luaL_optstring(L, 2, "Title");
+    const char *defaultText = luaL_optstring(L, 3, "");
+d93 2
+a94 1
+    char buf[256] = {0};  /*TODO*/
+d100 1
+a100 1
+    ctx.prompt  = prompt;
+d104 5
+a108 1
+    HINSTANCE hInst = GetModuleHandleA(NULL);
+d129 1
+a129 1
+    { "input", l_inputbox },
+@
+
