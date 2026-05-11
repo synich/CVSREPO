@@ -1,0 +1,43 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2026.05.11.16.18.05;	author u0_a108;	state Exp;
+branches;
+next	;
+commitid	1006A02013D1F3C5352;
+
+
+desc
+@@
+
+
+1.1
+log
+@feat: simple snip
+@
+text
+@local DICT_STR = [[
+{
+  "lua" : {"fn" : "local function ()\nend"},
+  "fnl" : {"fn" : "(fn []\n (let []\n ()\n))"}
+}
+]]
+local DICT = JSON.parse(DICT_STR)
+
+local function snip()
+  local kw = npp:GetCurrentWord()
+  local ft = npp:GetExtPart():sub(2)
+  if DICT[ft] then
+    local subt = DICT[ft][kw]
+    if subt then editor:ReplaceSel(subt) end
+  end
+end
+
+npp.AddShortcut('snip', 'Ctrl+M', snip)
+
+@

@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2026.05.11.16.18.05;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	1006A02013D1F3C5352;
 
 1.3
 date	2026.05.06.11.17.03;	author u0_a108;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@feat: LispParen
+@feat: simple snip
 @
 text
 @-- Startup script
@@ -39,10 +45,23 @@ local plugConfDir = npp:GetPluginsConfigDir()
 package.path = plugConfDir.."\\lua\\?.lua;"..package.path
 package.cpath = plugConfDir.."\\clua\\?.dll;"..package.cpath
 
+require 'pb'
+-- my_ext = require 'win_diag'
+
 require 'LispParen'
 require 'Bracket'
 require 'Bookmark'
 require 'HighlightOccurrences'
+@
+
+
+1.3
+log
+@feat: LispParen
+@
+text
+@d7 3
+a13 2
 require 'Md2tidwiki'
 -- my_ext = require 'win_diag'
 @
