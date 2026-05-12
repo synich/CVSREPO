@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2026.05.12.01.38.09;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	1006A028481359153DE;
 
 1.4
 date	2026.05.11.16.18.05;	author u0_a108;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@feat: simple snip
+@remove old Bracket
 @
 text
 @-- Startup script
@@ -49,9 +55,20 @@ require 'pb'
 -- my_ext = require 'win_diag'
 
 require 'LispParen'
-require 'Bracket'
+require 'Snip'
 require 'Bookmark'
 require 'HighlightOccurrences'
+@
+
+
+1.4
+log
+@feat: simple snip
+@
+text
+@d11 1
+a11 1
+require 'Bracket'
 @
 
 
