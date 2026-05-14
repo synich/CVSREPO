@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.3
+date	2026.05.14.12.05.58;	author u0_a108;	state Exp;
+branches;
+next	1.2;
+commitid	1006A05BAA63F0931C9;
 
 1.2
 date	2026.05.09.12.11.23;	author u0_a108;	state Exp;
@@ -22,20 +28,20 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@feat: vim cmd in npplua
+@fix: npplua lispparen on bracket
 @
 text
 @local function _range()
-  local pos = editor.CurrentPos
+  local pos = editor.CurrentPos-1  -- avoid (|) strange action
   local ycnt, fcnt, hcnt = 0, 0, 0
   while pos>=0 do
     local ch = editor.CharAt[pos]
     if ch==41 then ycnt=ycnt+1 end
     if ch==93 then fcnt=fcnt+1 end
     if ch==125 then hcnt=hcnt+1 end
-    -- lonely pair break
+    -- find lonely left pair then break
     if ch==40 then ycnt=ycnt-1 if ycnt<0 then break end end
     if ch==91 then fcnt=fcnt-1 if fcnt<0 then break end end
     if ch==123 then hcnt=hcnt-1 if hcnt<0 then break end end
@@ -103,6 +109,20 @@ end
 
 npp.AddShortcut('excVimCmd', 'Ctrl+Alt+W', excVimCmd)
 
+@
+
+
+1.2
+log
+@feat: vim cmd in npplua
+@
+text
+@d2 1
+a2 1
+  local pos = editor.CurrentPos
+d9 1
+a9 1
+    -- lonely pair break
 @
 
 
