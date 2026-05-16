@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.4
+date	2026.05.16.16.26.45;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	1006A089AC440A95839;
 
 1.3
 date	2026.05.14.12.05.58;	author u0_a108;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@fix: npplua lispparen on bracket
+@fix: up with pb fmt
 @
 text
 @local function _range()
@@ -83,17 +89,17 @@ npp.AddShortcut('InnerBrace', 'Ctrl+Alt+E', innerBrace)
 local function wrapPair(c)
   local t = editor:GetSelText()
   if c == "(" then
-    t = fmtf("(%s)", t)
+    t = fmt("(%s)", t)
   elseif c == "[" then
-    t = fmtf("[%s]", t)
+    t = fmt("[%s]", t)
   elseif c == "{" then
-    t = fmtf("{%s}", t)
+    t = fmt("{%s}", t)
   elseif c == "'" then
-    t = fmtf("'%s'", t)
+    t = fmt("'%s'", t)
   elseif c == '"' then
-    t = fmtf('"%s"', t)
+    t = fmt('"%s"', t)
   else
-    print(fmtf("unknown char: %s", c))
+    print(fmt("unknown char: %s", c))
   end
   editor:ReplaceSel(t)
 end
@@ -103,12 +109,41 @@ local function excVimCmd()
   if "y" == cmd:at(1) then
     wrapPair(cmd:at(2))
   else
-    print(fmtf("unknown cmd: %s", cmd))
+    print(fmt("unknown cmd: %s", cmd))
   end
 end
 
 npp.AddShortcut('excVimCmd', 'Ctrl+Alt+W', excVimCmd)
 
+@
+
+
+1.3
+log
+@fix: npplua lispparen on bracket
+@
+text
+@d51 1
+a51 1
+    t = fmtf("(%s)", t)
+d53 1
+a53 1
+    t = fmtf("[%s]", t)
+d55 1
+a55 1
+    t = fmtf("{%s}", t)
+d57 1
+a57 1
+    t = fmtf("'%s'", t)
+d59 1
+a59 1
+    t = fmtf('"%s"', t)
+d61 1
+a61 1
+    print(fmtf("unknown char: %s", c))
+d71 1
+a71 1
+    print(fmtf("unknown cmd: %s", cmd))
 @
 
 
