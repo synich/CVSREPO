@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2026.05.16.16.33.06;	author u0_a108;	state Exp;
+branches;
+next	1.9;
+commitid	1006A089C424143EB86;
 
 1.9
 date	2026.02.23.15.11.39;	author u0_a108;	state Exp;
@@ -63,9 +69,9 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@fix: hint when match/like no result
+@fix: more hint on search
 @
 text
 @--define global
@@ -107,7 +113,7 @@ local function hanzi_sep(s)
   local ch_seq, str_seq, pre_ch_bel = {}, {}, 0 -- 0:other 1:ascii 2:hanzi
   for pos, c in utf8.codes(s) do
     if (pre_ch_bel==1 and c>=128) or (pre_ch_bel==2 and _isw(c)) then
-      table.insert(str_seq, utf8.char(unpack(ch_seq)).." ")
+      table.insert(str_seq, utf8.char(table.unpack(ch_seq)).." ")
       ch_seq = {}
     end
     table.insert(ch_seq, c)
@@ -119,7 +125,7 @@ local function hanzi_sep(s)
       pre_ch_bel=0
     end
   end
-  return table.concat(str_seq)..utf8.char(unpack(ch_seq))
+  return table.concat(str_seq)..utf8.char(table.unpack(ch_seq))
 end
 
 local function curday() -- 6 digit date
@@ -268,7 +274,7 @@ local function fts_rowid(db, rowid)
   if tbl:sub(1,1)=="b" then
     return fetchone(db, "select date, substr(content, 1, 40), content||' #'||attr from blog where date="..id)
   elseif tbl:sub(1,1)=="t" then
-    return fetchone(db, "select date, content, content from tmrec where date="..id)
+    return fetchone(db, "select date, attr, group_concat(date||': '||content) from tmrec where date like "..fmt("'{}%'",id))
   else
     return fetchone(db, "select rowid, tag, content from memo where rowid="..id)
   end
@@ -292,7 +298,11 @@ local function fts_modify(db, tbl, dml, rowid, txt, attr)
     end
     ret = db:exec(sql)
     if "i"==dml then act=act.." rowid="..db:last_insert_rowid() end
-  else -- blog or tmrec
+  elseif "t"==tbl:sub(1,1) then --tmrec
+    local sql = fmt("insert or replace into tmrec values({}, '{}', '')", rowid, txt)
+    act = "up tmrec "..rowid
+    ret = db:exec(sql)
+  else -- blog
     local sql = "update "..tbl.." set content='"..txt.."' where date="..rowid
     act = "update "..tbl..rowid
     if "i"==dml then
@@ -304,7 +314,7 @@ local function fts_modify(db, tbl, dml, rowid, txt, attr)
     end
     ret = db:exec(sql)
   end
-  return ret==0 and "OK "..act or "Fail"..act
+  return ret==0 and "OK "..act or "Fail "..act
 end
 
 
@@ -355,11 +365,16 @@ local function clientry(arg)
   local lst, short = nil, ""
   if "rowid"==arg[1] then  -- rowid
     lst = fts_rowid(db, arg[2])
-    if #lst >0 then
-      local simi_id = find_simi_tag(db, lst[2])
-      _wc(hint_name, fmt("find rowid {}. similar:\n{}", lst[1], simi_id) )
-      _wc(full_name, lst[3])
-    else rc = 1
+    if #lst >=1 then
+      if arg[2]:match("^%d+$") then
+        local simi_id = find_simi_tag(db, lst[2])
+        _wc(hint_name, fmt("find rowid {}. similar:\n{}", lst[1], simi_id) )
+        _wc(full_name, lst[3])
+      else
+        _wc(full_name, lst[3])
+      end
+    else
+      rc = 1
       _wc(hint_name, fmt("no find rowid {}", arg[2]) )
       _wc(full_name, fmt("no find rowid {}", arg[2]) )
     end
@@ -421,6 +436,36 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.9
+log
+@fix: hint when match/like no result
+@
+text
+@d40 1
+a40 1
+      table.insert(str_seq, utf8.char(unpack(ch_seq)).." ")
+d52 1
+a52 1
+  return table.concat(str_seq)..utf8.char(unpack(ch_seq))
+d201 1
+a201 1
+    return fetchone(db, "select date, content, content from tmrec where date="..id)
+d225 5
+a229 1
+  else -- blog or tmrec
+d241 1
+a241 1
+  return ret==0 and "OK "..act or "Fail"..act
+d292 10
+a301 5
+    if #lst >0 then
+      local simi_id = find_simi_tag(db, lst[2])
+      _wc(hint_name, fmt("find rowid {}. similar:\n{}", lst[1], simi_id) )
+      _wc(full_name, lst[3])
+    else rc = 1
 @
 
 
