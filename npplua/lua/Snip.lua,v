@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2026.05.18.10.22.07;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	1006A0AE84F28D58323;
 
 1.1
 date	2026.05.11.16.18.05;	author u0_a108;	state Exp;
@@ -16,15 +22,15 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: simple snip
+@fix: no need on fnl snip
 @
 text
 @local DICT_STR = [[
 {
   "lua" : {"fn" : "local function ()\nend"},
-  "fnl" : {"fn" : "(fn []\n (let []\n ()\n))"}
+  "fnl" : {"fn" : "(fn []\n (let []\n))"}
 }
 ]]
 local DICT = JSON.parse(DICT_STR)
@@ -41,3 +47,15 @@ end
 npp.AddShortcut('snip', 'Ctrl+M', snip)
 
 @
+
+
+1.1
+log
+@feat: simple snip
+@
+text
+@d4 1
+a4 1
+  "fnl" : {"fn" : "(fn []\n (let []\n ()\n))"}
+@
+
