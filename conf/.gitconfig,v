@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2026.05.22.12.36.39;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	1006A104DD72022C204;
 
 1.4
 date	2022.05.29.09.10.20;	author android;	state Exp;
@@ -31,15 +37,17 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@adjust conftool.sh,drop git useless alias
+@fix: git on win always use LF
 @
 text
 @# This is Git's per-user configuration file.
 [user]
 	name = synich
 	email = shu_wang@@163.com
+[core]
+	autocrlf = false
 [credential]
 	helper = store
 [alias]
@@ -50,6 +58,15 @@ text
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [http]
 	sslVerify = false
+@
+
+
+1.4
+log
+@adjust conftool.sh,drop git useless alias
+@
+text
+@d5 2
 @
 
 
