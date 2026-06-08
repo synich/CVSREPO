@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2026.06.08.09.49.00;	author u0_a108;	state Exp;
+branches;
+next	1.10;
+commitid	1006A26900C3C5AC722;
 
 1.10
 date	2026.05.16.16.33.06;	author u0_a108;	state Exp;
@@ -69,9 +75,9 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@fix: more hint on search
+@fix: pb use json instead of JSON
 @
 text
 @--define global
@@ -161,7 +167,7 @@ end
 
 local function find_simi_tag(db, t)
   if t=='' then return '' end
-  local tbl = JSON.parse(t)
+  local tbl = pb.json.parse(t)
   local rowid_set = {}
   for i, v in ipairs(tbl) do
     local cmd = "select rowid||':'||substr(content,1,45) from memo where tag match '\""..v:gsub("'", "''") .."*\"'"
@@ -436,6 +442,17 @@ if nil ~= arg[0]:find("dbop.lua") then
 else
   return {fts_match=fts_match, fts_rowid=fts_rowid, fts_like=fts_like, fts_modify=fts_modify, fts_ramble=fts_ramble, hanzi_sep=hanzi_sep, hint_name=hint_name, full_name=full_name}
 end
+@
+
+
+1.10
+log
+@fix: more hint on search
+@
+text
+@d88 1
+a88 1
+  local tbl = JSON.parse(t)
 @
 
 
