@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@:: @;
 
+
+1.2
+date	2026.07.01.17.06.26;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	1006A45491221D5B713;
 
 1.1
 date	2026.05.07.05.20.14;	author u0_a108;	state Exp;
@@ -16,23 +22,50 @@ desc
 @@
 
 
+1.2
+log
+@fix: lua not export
+@
+text
+@@@echo off
+setlocal
+set DEPATH=D:\code\watool
+set CFLAGS=-O2 -std=c99 -I%DEPATH%\bin\inc\lua53 -I%DEPATH%\lib -DSUPPORT_LUA -DLUA_BUILD_AS_DLL -DLUA_LIB
+
+
+call :px %*
+exit /b 0
+
+:px
+  gcc -c %CFLAGS% extlua.c
+  gcc -shared -o px.dll extlua.o  -L%DEPATH%\lib -lwa -lws2_32 Lua.dll
+  rem windres -i diag.rc -o diag.res -O coff
+  rem gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
+  strip px.dll
+  exit /b 0
+
+endlocal
+
+@
+
+
 1.1
 log
 @feat: win_diag script
 @
 text
-@@@echo off
-setlocal
+@d3 2
+a4 1
 set CFLAGS=-O2 -std=c99 -Ilua53
-
+d6 2
+a7 1
 call :diag %*
-exit /b 0
-
+d10 6
+a15 4
 :diag
   call gcc -c %CFLAGS% diag.c
   windres -i diag.rc -o diag.res -O coff
   call gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
-  exit /b 0
-
-
+d18 1
 @
+
