@@ -1,9 +1,15 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.2
+date	2026.07.02.16.06.02;	author u0_a108;	state Exp;
+branches;
+next	1.1;
+commitid	1006A468C6A3CF14E64;
 
 1.1
 date	2026.05.07.05.20.14;	author u0_a108;	state Exp;
@@ -16,22 +22,42 @@ desc
 @@
 
 
-1.1
+1.2
 log
-@feat: win_diag script
+@fix: diag has static text
 @
 text
 @#include <windows.h>
 
 #define IDD_INPUTBOX 101
-#define IDC_INPUT    1001
+#define IDC_STATIC   1001
+#define IDC_INPUT    1002
 
-IDD_INPUTBOX DIALOGEX 0,0,220,40
+IDD_INPUTBOX DIALOGEX 0,0,220,60
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
 CAPTION "Input"
 FONT 10, "MS Shell Dlg"
 BEGIN
-  EDITTEXT IDC_INPUT, 4, 10, 212, 14, ES_AUTOHSCROLL
+  EDITTEXT IDC_STATIC, 4, 4, 212, 30, ES_MULTILINE | ES_READONLY | SS_LEFT
+  EDITTEXT IDC_INPUT, 4, 40, 212, 14, ES_AUTOHSCROLL
 END
 
 @
+
+
+1.1
+log
+@feat: win_diag script
+@
+text
+@d4 2
+a5 1
+#define IDC_INPUT    1001
+d7 1
+a7 1
+IDD_INPUTBOX DIALOGEX 0,0,220,40
+d12 2
+a13 1
+  EDITTEXT IDC_INPUT, 4, 10, 212, 14, ES_AUTOHSCROLL
+@
+

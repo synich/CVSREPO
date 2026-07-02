@@ -1,9 +1,15 @@
-head	1.4;
+head	1.5;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.5
+date	2026.07.02.16.06.02;	author u0_a108;	state Exp;
+branches;
+next	1.4;
+commitid	1006A468C6A3CF14E64;
 
 1.4
 date	2026.05.16.16.26.45;	author u0_a108;	state Exp;
@@ -34,9 +40,9 @@ desc
 @@
 
 
-1.4
+1.5
 log
-@fix: up with pb fmt
+@fix: diag has static text
 @
 text
 @local function _range()
@@ -105,7 +111,7 @@ local function wrapPair(c)
 end
 
 local function excVimCmd()
-  local cmd = my_ext.inputbox("cmd: y[wrap char]")
+  local cmd = diag.inputbox("cmd: y[wrap char]")
   if "y" == cmd:at(1) then
     wrapPair(cmd:at(2))
   else
@@ -115,6 +121,17 @@ end
 
 npp.AddShortcut('excVimCmd', 'Ctrl+Alt+W', excVimCmd)
 
+@
+
+
+1.4
+log
+@fix: up with pb fmt
+@
+text
+@d67 1
+a67 1
+  local cmd = my_ext.inputbox("cmd: y[wrap char]")
 @
 
 

@@ -222,3 +222,7 @@ M6a104dd7|u0_a108|~/src/*0|conf|1.5|.gitconfig
 M6a26900c|u0_a108|~/src/*0|mmm|1.11|dbop.lua
 M6a454912|u0_a108|~/src/*0|npplua|1.6|startup.lua
 M6a454912|u0_a108|~/src/npp*8|npplua/clua|1.2|mk.bat
+M6a468c6a|u0_a108|~/src/*0|npplua|1.7|startup.lua
+M6a468c6a|u0_a108|~/src/npp*8|npplua/clua|1.3|diag.c
+M6a468c6a|u0_a108|~/src/npp*8|npplua/clua|1.2|diag.rc
+M6a468c6a|u0_a108|~/src/npp*7|npplua/lua|1.5|LispParen.lua

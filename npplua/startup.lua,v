@@ -1,9 +1,15 @@
-head	1.6;
+head	1.7;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.7
+date	2026.07.02.16.06.02;	author u0_a108;	state Exp;
+branches;
+next	1.6;
+commitid	1006A468C6A3CF14E64;
 
 1.6
 date	2026.07.01.17.06.26;	author u0_a108;	state Exp;
@@ -46,9 +52,9 @@ desc
 @@
 
 
-1.6
+1.7
 log
-@fix: lua not export
+@fix: diag has static text
 @
 text
 @-- Startup script
@@ -58,12 +64,23 @@ package.path = plugConfDir.."\\lua\\?.lua;"..package.path
 package.cpath = plugConfDir.."\\clua\\?.dll;"..package.cpath
 
 pb = require 'pb'
--- my_ext = require 'win_diag'
+-- diag = require 'win_diag'
 
 require 'LispParen'
 require 'Snip'
 require 'Bookmark'
 require 'HighlightOccurrences'
+@
+
+
+1.6
+log
+@fix: lua not export
+@
+text
+@d8 1
+a8 1
+-- my_ext = require 'win_diag'
 @
 
 
