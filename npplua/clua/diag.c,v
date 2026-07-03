@@ -1,9 +1,15 @@
-head	1.3;
+head	1.4;
 access;
 symbols;
 locks; strict;
 comment	@ * @;
 
+
+1.4
+date	2026.07.03.05.07.28;	author u0_a108;	state Exp;
+branches;
+next	1.3;
+commitid	1006A4743904A1D8CF8;
 
 1.3
 date	2026.07.02.16.06.02;	author u0_a108;	state Exp;
@@ -28,9 +34,9 @@ desc
 @@
 
 
-1.3
+1.4
 log
-@fix: diag has static text
+@fix: title and static by sep
 @
 text
 @// win32_inputbox.c - 纯键盘输入框
@@ -51,8 +57,8 @@ text
 #define IDC_INPUT    1002
 
 typedef struct {
-    const char *title;   /* 窗口标题(可选) */
-    const char *prompt;  /* 提示文本(这里简化:放在窗口标题里) */
+    const char *title;   /* 窗口标题 */
+    const char *prompt;  /* 提示文本 */
     char *buf;           /* 输入缓冲区 */
     int   bufSize;       /* 缓冲区大小 */
 } InputBoxContext;
@@ -67,7 +73,7 @@ static INT_PTR CALLBACK InputBoxDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
         ctx = (InputBoxContext *)lParam;
         SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)ctx);
 
-        /* 用 title + prompt 组成窗口标题, 简单粗暴, 避免再加静态控件 */
+        /* 用 title + prompt 组成窗口标题, 避免再加静态控件 */
         {
             char titleBuf[256];
             lstrcpynA(titleBuf, ctx->title ? ctx->title : "Input", sizeof(titleBuf));
@@ -76,7 +82,8 @@ static INT_PTR CALLBACK InputBoxDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
                 lstrcatA(titleBuf, ctx->prompt);
             }
             SetWindowTextA(hDlg, titleBuf);
-            SetDlgItemTextA(hDlg, IDC_STATIC, titleBuf);
+            char *more = strstr(titleBuf, "\r\n");
+            if (more) {SetDlgItemTextA(hDlg, IDC_STATIC, more+2);}
         }
 
         /* 设置默认内容 */
@@ -173,6 +180,24 @@ int luaopen_win_diag(lua_State *L)
     return 1;
 }
 
+@
+
+
+1.3
+log
+@fix: diag has static text
+@
+text
+@d19 2
+a20 2
+    const char *title;   /* 窗口标题(可选) */
+    const char *prompt;  /* 提示文本(这里简化:放在窗口标题里) */
+d35 1
+a35 1
+        /* 用 title + prompt 组成窗口标题, 简单粗暴, 避免再加静态控件 */
+d44 2
+a45 1
+            SetDlgItemTextA(hDlg, IDC_STATIC, titleBuf);
 @
 
 
