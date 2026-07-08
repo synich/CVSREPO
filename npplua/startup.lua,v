@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2026.07.08.13.26.29;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	1006A4E5005699F7492;
 
 1.7
 date	2026.07.02.16.06.02;	author u0_a108;	state Exp;
@@ -52,9 +58,9 @@ desc
 @@
 
 
-1.7
+1.8
 log
-@fix: diag has static text
+@px in npplua
 @
 text
 @-- Startup script
@@ -64,12 +70,22 @@ package.path = plugConfDir.."\\lua\\?.lua;"..package.path
 package.cpath = plugConfDir.."\\clua\\?.dll;"..package.cpath
 
 pb = require 'pb'
+-- px = require 'px'
 -- diag = require 'win_diag'
 
 require 'LispParen'
 require 'Snip'
 require 'Bookmark'
 require 'HighlightOccurrences'
+@
+
+
+1.7
+log
+@fix: diag has static text
+@
+text
+@d8 1
 @
 
 
