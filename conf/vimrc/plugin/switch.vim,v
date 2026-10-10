@@ -1,9 +1,15 @@
-head	1.14;
+head	1.15;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.15
+date	2026.10.10.05.04.41;	author u0_a108;	state Exp;
+branches;
+next	1.14;
+commitid	1006AC9C76970610B98;
 
 1.14
 date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
@@ -94,12 +100,21 @@ desc
 @@
 
 
+1.15
+log
+@fix: move native setting to init.vim
+@
+text
+@@
+
+
 1.14
 log
 @doc: new hotkey and cmd
 @
 text
-@" Modeline and Notes {
+@a0 28
+" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker :
 " }
 

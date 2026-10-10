@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2026.10.10.05.04.41;	author u0_a108;	state Exp;
+branches;
+next	1.18;
+commitid	1006AC9C76970610B98;
 
 1.18
 date	2026.02.02.11.17.39;	author u0_a108;	state Exp;
@@ -118,9 +124,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@doc: new hotkey and cmd
+@fix: move native setting to init.vim
 @
 text
 @" Modeline and Notes {
@@ -323,6 +329,40 @@ function MvcfApc()
   augroup END
 endfunction
 
+
+" config for third plugin
+function s:has_plug(nam)
+  return isdirectory(expand(g:mvcf_path."pack/*/start/".a:nam)) + isdirectory(expand(g:mvcf_path."pack/*/opt/".a:nam))
+endfunction
+
+if filereadable(expand(g:mvcf_path.'ext.vim.local'))
+  execute 'source '.g:mvcf_path.'ext.vim.local'
+endif
+
+if !s:has_plug('vim-easycomplete')
+  call MvcfApc()
+endif
+
+if s:has_plug('tagbar')
+  nnoremap <silent> <leader>tt :TagbarToggle<CR>
+  set tags=./tags;/,~/.vimtags
+  " Make tags placed in .git/tags file available in all levels of a repository
+  let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+  if gitroot != ''
+      let &tags = &tags . ',' . gitroot . '/.git/tags'
+  endif
+  unlet gitroot
+endif
+
+@
+
+
+1.18
+log
+@doc: new hotkey and cmd
+@
+text
+@d201 25
 @
 
 

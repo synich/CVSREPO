@@ -228,3 +228,8 @@ M6a468c6a|u0_a108|~/src/npp*8|npplua/clua|1.2|diag.rc
 M6a468c6a|u0_a108|~/src/npp*7|npplua/lua|1.5|LispParen.lua
 M6a474390|u0_a108|~/src/*0|npplua/clua|1.4|diag.c
 M6a4e5005|u0_a108|~/src/*0|npplua|1.8|startup.lua
+M6ac9c769|u0_a108|~/src/*0|conf|1.18|init.vim.tpl
+M6ac9c769|u0_a108|~/src/conf|conf/vimrc/plugin|1.49|kbd.vim
+M6ac9c769|u0_a108|~/src/conf|conf/vimrc/plugin|1.19|ld_plg.vim
+M6ac9c769|u0_a108|~/src/conf|conf/vimrc/plugin|1.8|style.vim
+M6ac9c769|u0_a108|~/src/conf|conf/vimrc/plugin|1.15|switch.vim

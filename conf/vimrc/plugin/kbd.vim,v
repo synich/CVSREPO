@@ -1,9 +1,15 @@
-head	1.48;
+head	1.49;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.49
+date	2026.10.10.05.04.41;	author u0_a108;	state Exp;
+branches;
+next	1.48;
+commitid	1006AC9C76970610B98;
 
 1.48
 date	2026.03.26.10.21.37;	author u0_a108;	state Exp;
@@ -298,28 +304,13 @@ desc
 @@
 
 
-1.48
+1.49
 log
-@feat: add TPT cmd to change term position
+@fix: move native setting to init.vim
 @
 text
 @" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker :
-" }
-
-" Formatting {
-
-    set wrap                        " Do not wrap long lines
-    set autoindent                  " Indent at the same level of the previous line
-    set shiftwidth=4                " Use indents of 4 spaces
-    set expandtab                   " Tabs are spaces, not tabs
-    set tabstop=4                   " An indentation every four columns
-    set softtabstop=4               " Let backspace delete indent
-    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
-    set splitright                  " Puts new vsplit windows to the right of the current
-    set splitbelow                  " Puts new split windows to the bottom of the current
-    "set matchpairs+=<:>             " Match, to be used with %
-    "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 " }
 
 " Key (re)Mappings {
@@ -327,15 +318,8 @@ text
   if v:version < 800
     inoremap <expr><Tab>   pumvisible() ? "\<C-n>" : "\<C-x>\<C-n>"
     inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-x>\<C-o>"
-  endif
     "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-    if exists('g:spf13_map_cr_omni_complete')
-        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
-    endif
-    inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-    inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-    inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-    inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+  endif
 
     nnoremap <leader>cs :call rv#showsnipcode()<cr>
     nnoremap <leader>ct :call rv#gototopdir()<CR>
@@ -431,6 +415,40 @@ text
     " }
 " }
 
+@
+
+
+1.48
+log
+@feat: add TPT cmd to change term position
+@
+text
+@a4 15
+" Formatting {
+
+    set wrap                        " Do not wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    "set matchpairs+=<:>             " Match, to be used with %
+    "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+" }
+
+d10 1
+a11 8
+    "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+    if exists('g:spf13_map_cr_omni_complete')
+        inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
+    endif
+    inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+    inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+    inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 @
 
 

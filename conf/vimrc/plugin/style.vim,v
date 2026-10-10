@@ -1,9 +1,15 @@
-head	1.7;
+head	1.8;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.8
+date	2026.10.10.05.04.41;	author u0_a108;	state Exp;
+branches;
+next	1.7;
+commitid	1006AC9C76970610B98;
 
 1.7
 date	2026.01.23.15.33.42;	author u0_a108;	state Exp;
@@ -52,12 +58,21 @@ desc
 @@
 
 
+1.8
+log
+@fix: move native setting to init.vim
+@
+text
+@@
+
+
 1.7
 log
 @fix: let switch as 3rd plugin
 @
 text
-@" Modeline and Notes {
+@a0 96
+" Modeline and Notes {
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=1 foldmethod=marker spell:
 " }
 

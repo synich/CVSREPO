@@ -1,9 +1,15 @@
-head	1.17;
+head	1.18;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.18
+date	2026.10.10.05.04.41;	author u0_a108;	state Exp;
+branches;
+next	1.17;
+commitid	1006AC9C76970610B98;
 
 1.17
 date	2026.01.17.16.41.57;	author u0_a108;	state Exp;
@@ -112,9 +118,9 @@ desc
 @@
 
 
-1.17
+1.18
 log
-@fix: replace e. cmd
+@fix: move native setting to init.vim
 @
 text
 @" Modeline and Notes {
@@ -272,11 +278,127 @@ text
     set background=dark             " Assume a dark background
 " }
 
+" Formatting {
+    set wrap                        " Do not wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    "set matchpairs+=<:>             " Match, to be used with %
+    "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+" }
+
 " Load all rc config {
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
 " }
 
+" Style {
+
+    set shortmess+=filmnrxoOtTc     " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+    set virtualedit=onemore         " Allow for cursor beyond last character
+    set history=1000                " Store a ton of history (default is 20)
+    set nospell                     " Spell checking off
+    set hidden                      " Allow buffer switching without saving
+    set iskeyword-=.                " '.' is an end of word designator
+    set iskeyword-=#                " '#' is an end of word designator
+    set iskeyword-=-                " '-' is an end of word designator
+    set timeoutlen=600              " make timeout wait faster
+    set complete=.,w,b,t,k          " no need unloaded buffer complete
+    set completeopt=menu,menuone    " preview,longest
+    if v:version >= 800
+      set completeopt+=noselect
+    endif
+    set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+    if has('persistent_undo')
+        set noundofile              " So is persistent undo ...
+        set undolevels=1000         " Maximum number of changes that can be undone
+        set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
+    endif
+
+    if has('clipboard')
+        if has('unnamedplus')  " When possible use + register for copy-paste
+            set clipboard=unnamed,unnamedplus
+        else         " On mac and Windows, use * register for copy-paste
+            set clipboard=unnamed
+        endif
+    endif
+
+    " Always switch to the current file directory
+    "autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+    " Automatically open and close the popup menu / preview window
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+" }
+
+" Vim UI {
+
+    set tabpagemax=15               " Only show 15 tabs
+    set showmode                    " Display the current mode
+    set cursorline                  " Highlight current line
+
+    highlight clear SignColumn      " SignColumn should match background
+    highlight clear LineNr          " Current line number row will have same background color in relative mode
+    "highlight clear CursorLineNr    " Remove highlight color from current line number
+    hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+    hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+    hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
+
+    if has('cmdline_info')
+        set ruler                   " Show the ruler
+        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+        set showcmd                 " Show partial commands in status line and
+    endif
+
+    set backspace=indent,eol,start  " Backspace for dummies
+    set linespace=0                 " No extra spaces between rows
+    set smartcase                   " Case sensitive when uc present
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set scrolljump=3                " Lines to scroll when cursor leaves screen
+    set scrolloff=2                 " Minimum lines to keep above and below cursor
+    set foldenable                  " Auto fold code
+    set list
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+" }
+
+" GUI Settings {
+
+    " GVIM- (here instead of .gvimrc)
+    if has('gui_running')
+        winpos 50 5
+        set lines=50 columns=120
+        set guioptions-=m
+        set guioptions-=T
+        set guioptions-=e
+        set guifont=Consolas:h14:cANSI:qDRAFT
+        color koehler
+    else
+        if &term == 'xterm' || &term == 'screen'
+            set t_Co=256   " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+        endif
+        "set term=builtin_ansi  " Make arrow and other keys work
+    endif
+
+" }
+
+@
+
+
+1.17
+log
+@fix: replace e. cmd
+@
+text
+@d156 14
+d175 92
 @
 
 
