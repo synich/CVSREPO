@@ -1,9 +1,15 @@
-head	1.9;
+head	1.10;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.10
+date	2026.10.24.08.00.18;	author u0_a108;	state Exp;
+branches;
+next	1.9;
+commitid	1006ADC659135B55BD9;
 
 1.9
 date	2026.03.11.05.21.07;	author u0_a108;	state Exp;
@@ -64,13 +70,13 @@ desc
 @@
 
 
-1.9
+1.10
 log
-@fix: some typo
+@feat: pre_url affect ajax/awax
 @
 text
-@/*251011;SEP entry*/
-// Util: b64, lodash, ajax, awax
+@/*261024;SEP entry*/
+// Util: b64, lodash, ajax/awax(pre_url)
 // DOM&UI: jq, ko/ko_obj.$pen(vdom,[id]), hxdom
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
 !(function(top){"use strict";
@@ -113,6 +119,7 @@ function ajax(method, url, data, cb_func, timeout=10000) {
   if (method === "GET" && data) { url=`${url}?${data}`; data = null }
 
   let xhr = new XMLHttpRequest();
+  if (_G.pre_url) {url=_G.pre_url+url}
   xhr.open(method, url, true);// async true
   xhr.setRequestHeader("Content-Type", use_json===0?"application/x-www-form-urlencoded":"application/json");
   let timer = setTimeout(function() {
@@ -276,11 +283,26 @@ _G.chain=chain;
 _G.ss=ss;
 _G.ajax=ajax;
 _G.awax=awax;
+_G.pre_url = null;
 _G.jq=jq;
 _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.9
+log
+@fix: some typo
+@
+text
+@d1 2
+a2 2
+/*251011;SEP entry*/
+// Util: b64, lodash, ajax, awax
+d45 1
+d209 1
 @
 
 
