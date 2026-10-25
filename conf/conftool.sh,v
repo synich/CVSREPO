@@ -1,9 +1,15 @@
-head	1.23;
+head	1.24;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.24
+date	2026.10.25.15.17.57;	author u0_a108;	state Exp;
+branches;
+next	1.23;
+commitid	1006ADE1DA5608DACBF;
 
 1.23
 date	2026.03.17.04.05.22;	author u0_a108;	state Exp;
@@ -146,9 +152,9 @@ desc
 @@
 
 
-1.23
+1.24
 log
-@fix: syntax err on pip subsitute
+@fix: var slice change to dash/posix syntax
 @
 text
 @#!/bin/sh
@@ -160,7 +166,7 @@ CARGO_MIRROR="sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 PIP_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 GO_MIRROR="https://goproxy.cn,direct"
 DFT_PACK_NAME=envconf.tar.gz
-CONFVER=V20260316
+CONFVER=V20261025
 
 
 if [ $# -eq 0 ]; then
@@ -177,10 +183,12 @@ fixdir() {
   sed -i -e "s/\.FAVORITE_DIRNAME/.${FAVORITE_DIRNAME}/" ~/.${FAVORITE_DIRNAME}/bash.sh
   sed -i -e "s/\.FAVORITE_DIRNAME/.${FAVORITE_DIRNAME}/" ~/.${FAVORITE_DIRNAME}/init.vim
   sed -i -e "s/\.FAVORITE_DIRNAME/.${FAVORITE_DIRNAME}/" ~/.${FAVORITE_DIRNAME}/nvim/init.lua
-  if [ ${HOME:0:21} = "/data/data/com.termux" ]; then
+  case "${HOME}" in
+    /data/data/com.termux*)
       sed -i -e "s%#!/bin/bash%#!/data/data/com.termux/files/usr/bin/bash%" ~/.${FAVORITE_DIRNAME}/bin/goto
       sed -i -e "s%#!/bin/bash%#!/data/data/com.termux/files/usr/bin/bash%" ~/.${FAVORITE_DIRNAME}/bin/pkg
-  fi
+    ;;
+esac
 }
 
 # $1 source name
@@ -327,6 +335,23 @@ main() {
 
 main $@@
 
+@
+
+
+1.23
+log
+@fix: syntax err on pip subsitute
+@
+text
+@d10 1
+a10 1
+CONFVER=V20260316
+d27 2
+a28 1
+  if [ ${HOME:0:21} = "/data/data/com.termux" ]; then
+d31 2
+a32 1
+  fi
 @
 
 
