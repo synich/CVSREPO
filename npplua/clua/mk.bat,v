@@ -1,9 +1,15 @@
-head	1.2;
+head	1.3;
 access;
 symbols;
 locks; strict;
 comment	@:: @;
 
+
+1.3
+date	2026.10.31.16.14.28;	author u0_a108;	state Exp;
+branches;
+next	1.2;
+commitid	1006AE613E4380720C8;
 
 1.2
 date	2026.07.01.17.06.26;	author u0_a108;	state Exp;
@@ -22,30 +28,52 @@ desc
 @@
 
 
-1.2
+1.3
 log
-@fix: lua not export
+@feat: npplua clua mk
 @
 text
 @@@echo off
+
 setlocal
 set DEPATH=D:\code\watool
 set CFLAGS=-O2 -std=c99 -I%DEPATH%\bin\inc\lua53 -I%DEPATH%\lib -DSUPPORT_LUA -DLUA_BUILD_AS_DLL -DLUA_LIB
 
-
-call :px %*
+call :diag %*
 exit /b 0
 
 :px
   gcc -c %CFLAGS% extlua.c
   gcc -shared -o px.dll extlua.o  -L%DEPATH%\lib -lwa -lws2_32 Lua.dll
-  rem windres -i diag.rc -o diag.res -O coff
-  rem gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
   strip px.dll
+  exit /b 0
+
+:diag
+  windres -i diag.rc -o diag.res -O coff
+  gcc -c %CFLAGS% diag.c
+  gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
+  strip win_diag.dll
   exit /b 0
 
 endlocal
 
+@
+
+
+1.2
+log
+@fix: lua not export
+@
+text
+@d2 1
+d7 1
+a7 2
+
+call :px %*
+a12 2
+  rem windres -i diag.rc -o diag.res -O coff
+  rem gcc -shared -o win_diag.dll diag.o diag.res Lua.dll
+d16 7
 @
 
 
