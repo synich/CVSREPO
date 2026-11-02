@@ -1,9 +1,15 @@
-head	1.15;
+head	1.16;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.16
+date	2026.11.02.16.07.21;	author u0_a108;	state Exp;
+branches;
+next	1.15;
+commitid	1006AE8B539140D19AA;
 
 1.15
 date	2026.02.24.16.09.43;	author u0_a108;	state Exp;
@@ -97,28 +103,28 @@ desc
 @@
 
 
-1.15
+1.16
 log
-@fix: resp-btn
+@fix: update mel
 @
 text
-@/*ver260224*/
-:root{--mel-max-width:80rem;}
+@/*ver261102*/
+:root{--mel-max-width:90rem;}
 /*---base elem---*/
 html{box-sizing:border-box;}
 *,*::before,*::after{box-sizing:inherit;}
 
 body{color:#111;background:#f2f2f2;}
-header{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
-nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
-main{}
-article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
-footer{text-align: center;}
+header{max-width:var(--mel-max-width);font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
+nav {background: #202020;padding:0 32px;margin:0 auto;display: flex;}
+main{max-width:var(--mel-max-width);}
+article{background:#ececec;margin:0 auto;padding:0 1rem;}
+footer{max-width:var(--mel-max-width);text-align: center;}
 
-h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.5em;}
-h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
-h3{color:#409eff;}
-h4{color:#40aaff;}
+h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.1em;}
+h2{font-size:1.7em;color:#037;padding-top:0.2em;padding-left:0.2em;margin:0.2em;}
+h3{font-size:1.3em;color:#409eff;padding-left:0.3em;}
+h4{color:#40aaff;padding-left:0.4em;}
 
 p{font-family:sans-serif;font-size:1.2em;}
 em{color:#00f;font-style:normal;}strong{color:#f00;font-style:normal;}
@@ -163,24 +169,25 @@ textarea,select {
 textarea{width:100%;min-height:6rem;font-size:1.1em}
 /*----class----*/
 .col {margin-left: 0.2%;}
-.c1  {width: 7.3%; }
-.c2  {width: 15.6%;}
-.c3  {width: 23.5%;}
-.c4  {width: 32%;}
-.c5  {width: 40.5%;}
-.c6  {width: 49%;}
-.c7  {width: 57.3%;}
-.c8  {width: 65.5%;}
-.c9  {width: 74%;}
+ .c1 {width: 7.3%; }
+ .c2 {width: 15.6%;}
+ .c3 {width: 23.5%;}
+ .c4 {width: 32%;}
+ .c5 {width: 40.5%;}
+ .c6 {width: 49%;}
+ .c7 {width: 57.3%;}
+ .c8 {width: 65.5%;}
+ .c9 {width: 74%;}
 .c10 {width: 82.2%;}
 .c11 {width: 90.5%;}
 .c12 {width: 100%; margin-left: 0;}
-.r2  {height: 2rem;}
-.r3  {height: 3rem;}
-.inblk {display:inline-block;}
-.hide {visibility:hidden;}
-.midm {margin: 0 auto;}
-.midt {text-align: center}
+.r2 {height: 2rem;}
+.r3 {height: 3rem;}
+
+.inblk{display:inline-block;}
+.hide{visibility:hidden;}
+.midm{margin: 0 auto;}
+.midt{text-align: center}
 .bgr{background:#FEE2E2;}
 .bgy{background:#FEF9C3;}
 .bgb{background:#DBEAFE;}
@@ -192,8 +199,59 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 .flexc {display:flex;flex-direction:column;
  gap:1rem;padding:0.5rem;}
 /*----media more large more bottom----*/
-@@media screen and (min-width: 400px)  {}
+@@media screen and (min-width: 400px){}
 .resp-btn {width:25%;}
+@@media screen and (min-width: 800px){body{padding:0 2rem;} .resp-btn{width:15%;}}
+@@media screen and (min-width: 1200px){body{padding:0 4rem;}}
+@
+
+
+1.15
+log
+@fix: resp-btn
+@
+text
+@d1 2
+a2 2
+/*ver260224*/
+:root{--mel-max-width:80rem;}
+d8 5
+a12 5
+header{font-size:2em;background:#202020;color:#e7e7e7;margin:0;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
+nav {background: #202020;max-width:var(--mel-max-width);padding:0 32px;margin:0 auto;display: flex;}
+main{}
+article{background:#ececec;max-width:var(--mel-max-width);margin:0 auto;padding:0 1rem;}
+footer{text-align: center;}
+d14 4
+a17 4
+h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.5em;}
+h2{font-size:1.7em;color:#037;padding-top:0.2em;margin:0.2em;}
+h3{color:#409eff;}
+h4{color:#40aaff;}
+d62 9
+a70 9
+.c1  {width: 7.3%; }
+.c2  {width: 15.6%;}
+.c3  {width: 23.5%;}
+.c4  {width: 32%;}
+.c5  {width: 40.5%;}
+.c6  {width: 49%;}
+.c7  {width: 57.3%;}
+.c8  {width: 65.5%;}
+.c9  {width: 74%;}
+d74 7
+a80 6
+.r2  {height: 2rem;}
+.r3  {height: 3rem;}
+.inblk {display:inline-block;}
+.hide {visibility:hidden;}
+.midm {margin: 0 auto;}
+.midt {text-align: center}
+d92 1
+a92 1
+@@media screen and (min-width: 400px)  {}
+d94 2
+a95 2
 @@media screen and (min-width: 800px)  {body{padding:0 2rem;} .resp-btn{width:15%;}}
 @@media screen and (min-width: 1200px) {body{padding:0 4rem;}}
 @

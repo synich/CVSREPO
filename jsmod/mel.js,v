@@ -1,9 +1,15 @@
-head	1.10;
+head	1.11;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.11
+date	2026.11.02.16.07.21;	author u0_a108;	state Exp;
+branches;
+next	1.10;
+commitid	1006AE8B539140D19AA;
 
 1.10
 date	2026.10.24.08.00.18;	author u0_a108;	state Exp;
@@ -70,12 +76,12 @@ desc
 @@
 
 
-1.10
+1.11
 log
-@feat: pre_url affect ajax/awax
+@fix: update mel
 @
 text
-@/*261024;SEP entry*/
+@/*261101;SEP entry*/
 // Util: b64, lodash, ajax/awax(pre_url)
 // DOM&UI: jq, ko/ko_obj.$pen(vdom,[id]), hxdom
 // ko: receive top elem id, return vm with all elems(include top itself) who has db attr
@@ -175,6 +181,7 @@ function jq(elemId){
   ret.vis = (b)=>{el.style.visibility = b?"visible":"hidden"};
   return ret
 }
+function show(eId,vis){_get_el(eId).classList.toggle("hide", !vis)}
 // take React
 function isPlainObject(target){ return Object.prototype.toString.call(target) === '[object Object]' }
 function createElement(tag, props, ...children){
@@ -283,12 +290,29 @@ _G.chain=chain;
 _G.ss=ss;
 _G.ajax=ajax;
 _G.awax=awax;
-_G.pre_url = null;
+_G.pre_url=null;
 _G.jq=jq;
+_G.show=show;
 _G.ko=ko;
 _G.hxdom=hxdom;
 top.React={createElement:createElement}
 })(this)
+@
+
+
+1.10
+log
+@feat: pre_url affect ajax/awax
+@
+text
+@d1 1
+a1 1
+/*261024;SEP entry*/
+d101 1
+d210 1
+a210 1
+_G.pre_url = null;
+d212 1
 @
 
 
