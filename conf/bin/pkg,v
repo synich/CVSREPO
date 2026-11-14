@@ -1,9 +1,15 @@
-head	1.16;
+head	1.17;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.17
+date	2026.11.14.17.24.27;	author u0_a108;	state Exp;
+branches;
+next	1.16;
+commitid	1006AF8994B71CE1413;
 
 1.16
 date	2024.12.02.14.52.07;	author u0_a157;	state Exp;
@@ -106,9 +112,9 @@ desc
 @@
 
 
-1.16
+1.17
 log
-@feat: pkg add npm
+@fix: pkg -js
 @
 text
 @#!/bin/bash
@@ -294,11 +300,11 @@ pkgjs(){
 case "$CMD" in
   he*) show_help;;
   add|ins*) npm install $@@;;
-  li*|ha*) npm ls;;
+  li*|ha*) npm ls; npm ls -g;;
   se*) npm search "$@@";;
   sh*|inf*) npm show "$@@";;
   un*|rm|del*) npm uninstall "$@@";;
-  up*) npm update;;
+  up*) npm update "$@@";;
   *) echo "Unknown command: '$CMD' (run 'pkg help' for usage information)"; exit 1;;
 esac
 }
@@ -319,6 +325,20 @@ main(){
 
 main $@@
 
+@
+
+
+1.16
+log
+@feat: pkg add npm
+@
+text
+@d184 1
+a184 1
+  li*|ha*) npm ls;;
+d188 1
+a188 1
+  up*) npm update;;
 @
 
 
