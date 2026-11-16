@@ -1,9 +1,15 @@
-head	1.18;
+head	1.19;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.19
+date	2026.11.16.16.12.01;	author u0_a108;	state Exp;
+branches;
+next	1.18;
+commitid	1006AFB2B517A58FDB6;
 
 1.18
 date	2026.11.15.16.11.12;	author u0_a108;	state Exp;
@@ -115,9 +121,9 @@ desc
 @@
 
 
-1.18
+1.19
 log
-@fix: let font more unify
+@fix: nav color
 @
 text
 @/*ver261115*/
@@ -125,14 +131,12 @@ text
 /*---base elem---*/
 html{box-sizing:border-box;}
 *,*::before,*::after{box-sizing:inherit;}
-
 body{max-width:var(--mel-max-width);color:#111;background:#f2f2f2;margin:0 auto;}
 header{font-size:2em;background:#4a51a9;color:#e0e7ff;padding-top:0.5em;padding-left:0.5em;font-weight:bold;}
-nav {background: #202020;padding:0 32px;margin:0 auto;display: flex;}
+nav {background: #0770dd;padding:0 0.5em;margin:0 auto;display: flex;}
 main{}
 article{background:#ececec;margin:0 auto;padding:0 1rem;}
 footer{text-align: center;}
-
 h1{font-size:2em;background:#f0f0f0;color:#026;margin:0;padding-top:0.5em;padding-left:0.1em;}
 h2{font-size:1.7em;color:#037;padding-top:0.2em;padding-left:0.2em;margin:0.2em;}
 h3{font-size:1.4em;color:#409eff;padding-left:0.3em;}
@@ -144,10 +148,11 @@ pre{white-space:pre-wrap;font-size:1.1em;}
 code{background-color:#f1f1f1;font-size:1.1em;color:#d73737;}
 pre code{display: block;border: 1px solid #cccccc;}
 blockquote{border-left:4px solid #bbb;padding-left:0.5em;}
-ul li{list-style:circle;}ol li{list-style:hiragana;}
+ul li{list-style:circle inside;}ol li{list-style:decimal inside;}
 table{border-collapse:collapse;border:1px solid;width:100%}th{border:1px solid;}td{border:1px solid;}
 img {max-width: 100%;}
 
+/*----input----*/
 button,input[type='button'],input[type='submit'] {
   color: #fff;  background-color: #9b4dca;
   border: 0.1rem solid #9b4dca;  border-radius: .4rem;
@@ -215,6 +220,25 @@ box-shadow: 0 4px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2);}
 .resp-btn {width:25%;}
 @@media screen and (min-width: 800px){body{padding:0 2rem;} .resp-btn{width:15%;}}
 @@media screen and (min-width: 1200px){body{padding:0 4rem;}}
+@
+
+
+1.18
+log
+@fix: let font more unify
+@
+text
+@a5 1
+
+d8 1
+a8 1
+nav {background: #202020;padding:0 32px;margin:0 auto;display: flex;}
+a11 1
+
+d23 1
+a23 1
+ul li{list-style:circle;}ol li{list-style:hiragana;}
+d27 1
 @
 
 
